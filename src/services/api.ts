@@ -1,3 +1,6 @@
+
+
+
 import axios from 'axios';
 
 // Base API configuration
@@ -26,10 +29,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // Handle specific error cases if needed
     if (error.response && error.response.status === 401) {
-       // Optional: Handle token expiration / logout logic here
-       // But be careful with circular dependencies if importing authService
+      // Optional: Handle token expiration / logout logic here
     }
     return Promise.reject(error);
   }
