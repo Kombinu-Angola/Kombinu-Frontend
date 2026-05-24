@@ -4,6 +4,16 @@
  */
 
 // Tipos relacionados ao usuário
+
+
+
+
+export interface RegisterData {
+  nome: string;
+  email: string;
+  senha: string;
+  tipo: 'criador' | 'aprendiz';
+}
 export interface Usuario {
   id: string;
   nome: string;

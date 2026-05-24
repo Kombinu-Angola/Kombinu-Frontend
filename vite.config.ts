@@ -3,8 +3,8 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react()],
-  optimizeDeps: { 
-    exclude: ['lucide-react'], 
+  optimizeDeps: {
+    exclude: ['lucide-react'],
   },
   server: {
     proxy: {
