@@ -1,89 +1,101 @@
-# Changelog (Frontend)
+<!-- markdownlint-disable MD024 -->
+# Changelog — KOMBINU Frontend
 
-Todas as mudanças notáveis do Frontend Kombinu serão documentadas neste arquivo.
+Todas as alteracoes notaveis neste projecto serao documentadas neste ficheiro.
 
-O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
-
----
-
-## [1.2.2] - Correções Adicionais do MVP (Março 2026)
-
-### ✨ Adicionado
-
-- Rodapé (Footer) atualizado com dados de contacto reais da Kombinu (Email, Telefone, e Localização em Angola).
-- Formulário de subscrição da newsletter no frontend funcional e redigido corretamente para o novo e-mail da Kombinu.
-
-### 🐛 Corrigido:
-
-- Implementação end-to-end do fluxo de Criação Manual de Quizzes sem uso de IA, permitindo aos criadores submeterem perguntas digitadas manualmente para os servidores.
-- Player de Quizzes consertado:
-  - Resolvido Erro 500 no carregamento inicial devido a URLs e Lookup Fields descompassados no backend.
-  - Sincronização de propriedades (ID vs PK) no modelo frontend-backend para resolver problemas visuais (temporizador `NaN` e inputs radio marcando todos simultaneamente).
-  - Ajuste no envio de respostas do Quiz para garantir pontuação fiel ao modelo do backend.
-
-## [1.2.1] - Criar um Ficheiro  `vercel.json` para Configurações de Deploy (Março 2026)
-
-### ✨ Adicionado
-
-- Ficheiro `vercel.json` criado para configurar o comportamento de deploy no Vercel, incluindo:
-  - Redirecionamentos e rewrites para SPA
-  - Variáveis de ambiente para produção
-
-## [1.2.0] - Funcionalidades Finais do MVP (Março 2026)
-
-### ✨ Adicionado
-
-- Botão interativo para **Gerar Quiz via Inteligência Artificial (OpenTDB)** associado a conteúdos criados.
-- Ligação de interface completa e limpa da página de `/courses/:id`, agora a renderizar os iFrames e textos descritivos inseridos pelos criadores.
-
-### 🐛 Corrigido
-
-- Correção de erro Crítico `undefined.toLocaleString()` no Marketplace quando o preço é vazio ou indefinido.
-- O Frontend agora suporta corretamente a **Paginação do DRF**, garantindo que as listagens do Marketplace são populosas através do array `results`.
-- Componente estático Ranking ligado de forma dinâmica via chamada API a `/api/rankings/global/`, calculando Score diretamente do Backend.
-- Correção na Visualização de conteúdo provocada pelo parse incorreto das Tags armazenadas em formato CSV no lado do servidor (`.map is not a function`).
-- Correção da configuração base global do Axios em `main.tsx` para se orientar corretamente através de `VITE_API_URL` usando instâncias em Vite para Deploys no _Vercel_.
+O formato e baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
+e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR/).
 
 ---
 
-## [1.1.0] - 2026-01-11 (MVP Release)
+## [Nao Lancado]
 
-### ✨ Adicionado
+<!-- Registar aqui as alteracoes que estao em desenvolvimento e ainda nao foram lancadas. -->
+<!-- Quando houver um release, mover esta seccao para um bloco com versao e data. -->
 
-- **Arquitetura**
-  - Migração completa de HTML legado para React 18 + TypeScript + Vite
-  - Configuração de Tailwind CSS para estilização
-  - React Router v7 para navegação SPA
+---
 
-- **Serviços de API** (`src/services/`)
-  - `authService.ts` - Autenticação JWT (login/register)
-  - `contentService.ts` - CRUD de conteúdos/cursos
-  - `dashboardService.ts` - Estatísticas de Learner/Creator
-  - `quizService.ts` - Geração e submissão de quizzes
-  - `rankingService.ts` - Leaderboard global
+## [1.2.2] - 2026-03-xx — Correccoes Adicionais do MVP
 
-- **Páginas Implementadas**
-  - `LandingPage.tsx` - Página inicial com Dark Mode
-  - `Login.tsx` / `Register.tsx` - Autenticação completa
-  - `DashboardAprendiz.tsx` / `DashboardCriador.tsx` - Dashboards por role
-  - `Marketplace.tsx` - Listagem de cursos com filtros
-  - `Quiz.tsx` - Interface interativa de quizzes
-  - `Ranking.tsx` - Leaderboard com tendências
+### Adicionado
 
-- **UI/UX**
-  - Dark Mode global com persistência
-  - Componentes reutilizáveis (Card, Button, Header)
-  - Design responsivo mobile-first
+- Rodape (Footer) actualizado com dados de contacto reais da Kombinu: email, telefone e localizacao em Angola.
+- Formulario de subscricao da newsletter no frontend funcional e redigido para o email da Kombinu.
 
-### 🐛 Corrigido
+### Corrigido
 
-- Links de navegação do Dashboard (404 errors)
-- Erros de compilação TypeScript em múltiplas páginas
-- Configuração de proxy Vite para API local
-- Imports ausentes de ícones Lucide
+- Implementacao end-to-end do fluxo de criacao manual de quizzes sem uso de IA, permitindo aos criadores submeterem perguntas digitadas manualmente para os servidores.
+- Player de quizzes corrigido:
+  - Resolvido erro 500 no carregamento inicial por causa de URLs e lookup fields incorrectos no backend.
+  - Sincronizacao de propriedades (ID vs PK) no modelo frontend-backend para resolver problemas visuais (temporizador NaN e inputs radio marcando todos simultaneamente).
+  - Corrigido envio de respostas do quiz para garantir pontuacao fiel ao modelo do backend.
 
-### 🔄 Alterado
+---
 
-- `dashboardService` atualizado para consumir endpoints reais
-- `rankingService` conectado à API `/rankings/global/`
-- `quizService` integrado com backend para submissão real
+## [1.2.1] - 2026-03-xx — Configuracao de Deploy no Vercel
+
+### Adicionado
+
+- Ficheiro `vercel.json` criado para configurar o comportamento de deploy no Vercel, incluindo redireccoes e rewrites para SPA.
+
+---
+
+## [1.2.0] - 2026-03-xx — Funcionalidades Finais do MVP
+
+### Adicionado
+
+- Botao interativo para gerar quiz via Inteligencia Artificial (OpenTDB) associado a conteudos criados.
+- Ligacao de interface completa na pagina `/courses/:id`, agora a renderizar iFrames e textos descritivos inseridos pelos criadores.
+
+### Corrigido
+
+- Corrigido erro critico `undefined.toLocaleString()` no Marketplace quando o preco esta vazio ou indefinido.
+- O frontend passa a suportar correctamente a paginacao do DRF, garantindo que as listagens do Marketplace sao populadas atraves do array `results`.
+- Componente de Ranking ligado de forma dinamica via chamada API a `/api/rankings/global/`, calculando o score directamente do backend.
+- Corrigido parse incorrecto de tags armazenadas em formato CSV no servidor (`.map is not a function`).
+- Corrigida configuracao base do Axios para se orientar correctamente atraves de `VITE_API_URL` em deploys no Vercel.
+
+---
+
+## [1.1.0] - 2026-01-11 — MVP Release
+
+### Adicionado
+
+- Arquitectura migrada completamente de HTML legado para React 18 com TypeScript e Vite.
+- Configuracao de Tailwind CSS para estilizacao.
+- React Router v7 para navegacao SPA.
+- Servicos de API em `src/services/`:
+  - `authService.ts` — Autenticacao JWT com login e registo.
+  - `contentService.ts` — CRUD de conteudos e cursos.
+  - `dashboardService.ts` — Estatisticas de Aprendiz e Criador.
+  - `quizService.ts` — Geracao e submissao de quizzes.
+  - `rankingService.ts` — Leaderboard global.
+- Paginas implementadas:
+  - `LandingPage.tsx` — Pagina inicial com suporte a dark mode.
+  - `Login.tsx` e `Register.tsx` — Autenticacao completa.
+  - `DashboardAprendiz.tsx` e `DashboardCriador.tsx` — Dashboards diferenciados por role.
+  - `Marketplace.tsx` — Listagem de cursos com filtros.
+  - `Quiz.tsx` — Interface interativa de quizzes com timer.
+  - `Ranking.tsx` — Leaderboard com indicadores de tendencia.
+- Dark mode global com persistencia via ThemeContext.
+- Componentes reutilizaveis: `Card`, `Button`, `Header`, `Footer`, `Logo`.
+- Design responsivo mobile-first.
+- Routing com proteccao por role via `ProtectedRoute`.
+
+### Corrigido
+
+- Links de navegacao do Dashboard que geravam erros 404.
+- Erros de compilacao TypeScript em multiplas paginas.
+- Configuracao de proxy Vite para API local.
+- Imports em falta de icones Lucide.
+
+### Alterado
+
+- `dashboardService` actualizado para consumir endpoints reais do backend.
+- `rankingService` ligado ao endpoint `/rankings/global/`.
+- `quizService` integrado com o backend para submissao real de respostas.
+
+---
+
+_Changelog mantido pela equipa de Frontend do KOMBINU._
+_Ultima actualizacao: 24 de Maio de 2025_
