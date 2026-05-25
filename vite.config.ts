@@ -1,10 +1,15 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import * as path from 'node:path'
 
 export default defineConfig({
-  plugins: [react()],
-  optimizeDeps: {
-    exclude: ['lucide-react'],
+  plugins: [react(),
+
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   server: {
     proxy: {
@@ -12,9 +17,7 @@ export default defineConfig({
         target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/api')
-      }
-    }
-    // hmr: false // Reabilitado
-  }
+      },
+    },
+  },
 })

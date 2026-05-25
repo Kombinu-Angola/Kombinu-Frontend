@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+
 import { BookOpen, Calendar, Eye, Heart, Plus, Star, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Header } from '../components/layout/Header';
+
 import { useAuth } from '../contexts/AuthContext';
 import { dashboardService } from '../services/dashboardService';
-import { contentService, Content } from '../services/contentService';
+import { contentService } from '../services/contentService';
 import { quizService } from '../services/quizService';
+import type { Content } from '../services/contentService';
 
 export default function DashboardCriador() {
   const { usuario } = useAuth();
@@ -54,7 +56,7 @@ export default function DashboardCriador() {
     };
     fetchData();
   }, [usuario?.id]);
-  
+
   const totalVisualizacoes = stats.totalStudents;
   const totalLikes = 0;
   const conteudosPublicos = meusConteudos.length;
@@ -69,7 +71,7 @@ export default function DashboardCriador() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Cabeçalho */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
@@ -81,7 +83,7 @@ export default function DashboardCriador() {
               Gerencie seus conteúdos e acompanhe o desempenho
             </p>
           </div>
-          
+
           <Link
             to="/courses/create"
             className="mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors transform hover:scale-105 flex items-center space-x-2 shadow-lg"
@@ -147,7 +149,7 @@ export default function DashboardCriador() {
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Seus Conteúdos</h2>
           </div>
-          
+
           <div className="p-6">
             {meusConteudos.length === 0 ? (
               <div className="text-center py-12">
@@ -179,17 +181,16 @@ export default function DashboardCriador() {
                           <span className={`px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400`}>
                             Público
                           </span>
-                          <span className={`px-2 py-1 text-xs rounded-full ${
-                            conteudo.has_quiz ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
-                          }`}>
+                          <span className={`px-2 py-1 text-xs rounded-full ${conteudo.has_quiz ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
+                            }`}>
                             {conteudo.has_quiz ? 'Quiz' : 'Conteúdo'}
                           </span>
                         </div>
-                        
+
                         <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
                           {conteudo.description}
                         </p>
-                        
+
                         <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-500">
                           <div className="flex items-center space-x-1">
                             <Eye className="w-4 h-4" />
@@ -205,7 +206,7 @@ export default function DashboardCriador() {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-4 ml-4">
                         {!conteudo.has_quiz && conteudo.type !== 'quiz' && (
                           <button

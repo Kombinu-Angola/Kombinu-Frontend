@@ -26,7 +26,7 @@ export interface Content {
   quiz?: Question[];
   creatorName?: string;
   creator?: { id: number | string; name: string };
-  tags?: string[];
+  tags?: string[] | string;
   created_at?: string;
   has_quiz?: boolean;
   quiz_id?: string;
@@ -38,18 +38,18 @@ export const contentService = {
       const response = await api.get('/contents/');
       // Lida com a paginação do DRF: os itens estão em response.data.results ou na raiz (se a view não for paginada)
       const results = response.data.results ? response.data.results : response.data;
-      
+
       return results.map((item: any) => ({
         ...item,
         // Ensure defaults for missing fields
         level: item.level || 'Iniciante',
         rating: item.rating || 0,
         students: item.students || 0,
-        thumbnail: item.thumbnail || 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500' 
+        thumbnail: item.thumbnail || 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500'
       }));
     } catch (error) {
       console.error('Failed to fetch contents:', error);
-      return []; 
+      return [];
     }
   },
 
@@ -61,7 +61,7 @@ export const contentService = {
         level: item.level || 'Iniciante',
         rating: item.rating || 0,
         students: item.students || 0,
-        thumbnail: item.thumbnail || 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500' 
+        thumbnail: item.thumbnail || 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500'
       }));
     } catch (error) {
       console.error(`Failed to fetch contents for creator ${creatorId}:`, error);
@@ -70,13 +70,13 @@ export const contentService = {
   },
 
   getById: async (id: string): Promise<Content | undefined> => {
-     try {
-       const response = await api.get(`/contents/${id}/`);
-       return response.data;
-     } catch (error) {
-       console.error(`Failed to fetch content ${id}:`, error);
-       return undefined;
-     }
+    try {
+      const response = await api.get(`/contents/${id}/`);
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to fetch content ${id}:`, error);
+      return undefined;
+    }
   },
 
   getCategories: async (): Promise<string[]> => {
@@ -85,7 +85,7 @@ export const contentService = {
   },
 
   create: async (content: Omit<Content, 'id'>): Promise<Content> => {
-      const response = await api.post('/contents/', content);
-      return response.data;
+    const response = await api.post('/contents/', content);
+    return response.data;
   }
 };
