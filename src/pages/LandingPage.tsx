@@ -2,7 +2,7 @@
 
 import { Footer } from '../components/layout/Footer';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
+
 
 import {
   Trophy,
@@ -582,25 +582,24 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ========================= CTA FINAL ========================= */}
+
 
       <section className="relative py-24 overflow-hidden bg-white dark:bg-dark-bg-primary transition-colors duration-300">
 
-        {/* Background gradients suaves */}
+
         <div className="absolute inset-0 bg-gradient-to-br from-kombinu-neon-blue/5 via-transparent to-kombinu-dark-blue/10 dark:from-dark-bg-secondary dark:to-dark-bg-tertiary"></div>
 
-        {/* Glow effects */}
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-kombinu-neon-blue/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-kombinu-dark-blue/10 rounded-full blur-3xl"></div>
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
 
-          {/* Icon */}
+
           <div className="w-24 h-24 rounded-full bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-dark-border-primary backdrop-blur-xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
             <Globe className="w-10 h-10 text-kombinu-dark-blue dark:text-dark-interactive-primary" />
           </div>
 
-          {/* Title */}
+
           <h2 className="font-montserrat text-5xl md:text-6xl font-bold text-gray-900 dark:text-dark-text-primary mb-8 leading-tight">
             Junte-se à
             <br />
@@ -610,13 +609,13 @@ export default function LandingPage() {
             </span>
           </h2>
 
-          {/* Description */}
+
           <p className="font-lato text-xl md:text-2xl text-gray-600 dark:text-dark-text-secondary mb-12 leading-relaxed max-w-3xl mx-auto">
             Transforme a forma como aprende, ensina e evolui.
             Faça parte da maior comunidade de educação gamificada de Angola.
           </p>
 
-          {/* Buttons */}
+
           <div className="flex flex-col sm:flex-row gap-5 justify-center mb-12">
 
             <Link to="/register">

@@ -40,20 +40,22 @@ export default function DashboardCriador() {
   useEffect(() => {
     const fetchData = async () => {
       if (!usuario?.id) return;
+
+      setLoading(true);
+
       try {
-        setLoading(true);
-        const [statsData, contentsData] = await Promise.all([
-          dashboardService.getCreatorStats(),
-          contentService.getByCreator(usuario.id)
-        ]);
-        setStats(statsData);
+        const contentsData = await contentService.getByCreator(usuario.id);
         setMeusConteudos(contentsData);
+
+        const statsData = await dashboardService.getCreatorStats();
+        setStats(statsData);
       } catch (error) {
         console.error("Erro ao carregar dashboard:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [usuario?.id]);
 

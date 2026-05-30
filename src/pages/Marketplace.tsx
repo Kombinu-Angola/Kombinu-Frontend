@@ -52,13 +52,13 @@ export default function Marketplace() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-900 dark:to-indigo-900 text-white py-16">
+      <div className="bg-gradient-to-r  dark:bg-blue-600 bg-blue-600 text-white py-7">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold font-montserrat mb-6">
+            <h1 className="text-4xl font-bold font-montserrat mb-4">
               Explore Conhecimento Sem Limites
             </h1>
-            <p className="text-xl text-blue-100 font-lato mb-8">
+            <p className="text-xl text-blue-100 font-lato mb-5">
               Encontre os melhores cursos e quizzes gamificados para impulsionar sua carreira
             </p>
 
@@ -69,7 +69,7 @@ export default function Marketplace() {
                 placeholder="O que você quer aprender hoje?"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-6 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-500/30 shadow-lg pl-12 dark:bg-gray-800 dark:text-white border-0"
+                className="w-full px-8 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-500/30 shadow-lg pl-12 dark:bg-gray-800 dark:text-white border-0"
               />
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             </div>
