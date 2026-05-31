@@ -23,7 +23,6 @@
   /* Global styles */
   * {
     @apply border-gray-200 outline-none;
-    transition: all 0.3s ease;
   }
 
   body {
