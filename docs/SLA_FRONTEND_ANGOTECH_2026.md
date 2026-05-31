@@ -1,9 +1,9 @@
-# SLA — Frontend KOMBINU · AngoTic 2025
+# SLA — Frontend KOMBINU · AngoTic 2026
 
 **Documento:** Sprint Agreement & Development Standards
 **Versao:** 1.0.0
-**Data de Emissao:** 24 de Maio de 2025
-**Validade:** 24 Mai - 13 Jun 2025 (3 semanas)
+**Data de Emissao:** 24 de Maio de 2026
+**Validade:** 24 Mai - 13 Jun 2026 (3 semanas)
 **Emitido por:** Anderson Cafurica — TechLead / CTO
 **Destinatarios:** Carlos Avelino · Augusto Manuel
 **Revisao:** Este documento deve ser lido, compreendido e confirmado por ambos os developers antes do inicio do sprint.
@@ -31,7 +31,7 @@
 
 ## 1. Contexto e Objectivo
 
-O KOMBINU participara na **AngoTic 2025**, a maior feira de tecnologia e inovacao de Angola, em **13 de Junho de 2025**. Para esse evento, e necessario apresentar um MVP funcional, visualmente impactante e tecnicamente robusto, capaz de demonstrar o valor da plataforma para potenciais investidores, parceiros e utilizadores.
+O KOMBINU participara na **AngoTic 2026**, a maior feira de tecnologia e inovacao de Angola, em **13 de Junho de 2026**. Para esse evento, e necessario apresentar um MVP funcional, visualmente impactante e tecnicamente robusto, capaz de demonstrar o valor da plataforma para potenciais investidores, parceiros e utilizadores.
 
 Este documento estabelece os acordos de trabalho, padroes tecnicos e cronograma de entregaveis que a equipa de frontend devera seguir durante as tres semanas de sprint.
 
@@ -537,7 +537,7 @@ O ficheiro `CHANGELOG.md` deve seguir este formato:
 
 ---
 
-## [0.2.0] - 2025-06-13
+## [0.2.0] - 2026-06-13
 
 ### Adicionado
 - ...
@@ -608,7 +608,7 @@ Ao assinar, o developer declara que leu, compreendeu e concorda com todos os pad
 
 | Nome | Funcao | Estado | Data |
 |------|--------|--------|------|
-| Anderson Cafurica | TechLead / CTO | Emitido | 24 Mai 2025 |
+| Anderson Cafurica | TechLead / CTO | Emitido | 24 Mai 2026 |
 | Augusto Manuel | Frontend Developer Senior | Pendente | ___ |
 | Carlos Avelino | Frontend Developer Junior | Pendente | ___ |
 
@@ -625,5 +625,5 @@ Ao assinar, o developer declara que leu, compreendeu e concorda com todos os pad
 
 ---
 
-*Documento emitido por Anderson Cafurica — TechLead / CTO · KOMBINU · 24 de Maio de 2025*
+*Documento emitido por Anderson Cafurica — TechLead / CTO · KOMBINU · 24 de Maio de 2026*
 *Versao 1.0.0 — Quaisquer alteracoes a este documento devem ser comunicadas a toda a equipa antes de entrarem em vigor.*
