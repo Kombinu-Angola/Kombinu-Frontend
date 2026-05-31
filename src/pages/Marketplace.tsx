@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Star, Clock, Users } from 'lucide-react';
-import { Header } from '../components/layout/Header';
-import { contentService, Content } from '../services/contentService';
+
+import { contentService } from '../services/contentService';
+import type { Content } from '../services/contentService';
 import { Link } from 'react-router-dom';
 
 /**
@@ -33,34 +34,34 @@ export default function Marketplace() {
 
   const filteredContents = contents.filter(content => {
     const matchesSearch = content.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          content.description.toLowerCase().includes(searchTerm.toLowerCase());
+      content.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || content.category === selectedCategory;
-    
+
     return matchesSearch && matchesCategory;
   });
 
   if (loading) {
-     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-     );
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      
+
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-900 dark:to-indigo-900 text-white py-16">
+      <div className="bg-gradient-to-r  dark:bg-blue-600 bg-blue-600 text-white py-7">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold font-montserrat mb-6">
+            <h1 className="text-4xl font-bold font-montserrat mb-4">
               Explore Conhecimento Sem Limites
             </h1>
-            <p className="text-xl text-blue-100 font-lato mb-8">
+            <p className="text-xl text-blue-100 font-lato mb-5">
               Encontre os melhores cursos e quizzes gamificados para impulsionar sua carreira
             </p>
-            
+
             {/* Barra de Pesquisa */}
             <div className="relative max-w-2xl mx-auto">
               <input
@@ -68,7 +69,7 @@ export default function Marketplace() {
                 placeholder="O que você quer aprender hoje?"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-6 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-500/30 shadow-lg pl-12 dark:bg-gray-800 dark:text-white border-0"
+                className="w-full px-8 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-500/30 shadow-lg pl-12 dark:bg-gray-800 dark:text-white border-0"
               />
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             </div>
@@ -83,11 +84,10 @@ export default function Marketplace() {
             <button
               key={categoria}
               onClick={() => setSelectedCategory(categoria)}
-              className={`px-4 py-2 rounded-full whitespace-nowrap transition-all text-sm font-medium ${
-                selectedCategory === categoria
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-white text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
-              }`}
+              className={`px-4 py-2 rounded-full whitespace-nowrap transition-all text-sm font-medium ${selectedCategory === categoria
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'bg-white text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
+                }`}
             >
               {categoria}
             </button>
@@ -100,8 +100,8 @@ export default function Marketplace() {
             <div key={conteudo.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden group flex flex-col h-full">
               {/* Thumbnail */}
               <div className="relative h-48 overflow-hidden">
-                <img 
-                  src={conteudo.thumbnail} 
+                <img
+                  src={conteudo.thumbnail}
                   alt={conteudo.title}
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                 />
@@ -140,7 +140,7 @@ export default function Marketplace() {
                   <span className="font-montserrat font-bold text-lg text-green-600 dark:text-green-400">
                     {(conteudo.price || 0) === 0 ? 'Gratuito' : `Kz ${(conteudo.price || 0).toLocaleString()}`}
                   </span>
-                  <Link 
+                  <Link
                     to={`/courses/${conteudo.id}`}
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg text-sm"
                   >

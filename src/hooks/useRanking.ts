@@ -1,41 +1,75 @@
 /**
  * Hook personalizado para gerenciar rankings dinâmicos
- * 
+ *
  * RESPONSABILIDADES:
  * - Fornecer interface React para o RankingService
  * - Gerenciar estado local dos rankings
  * - Atualizar automaticamente quando há mudanças
  * - Fornecer funções utilitárias para componentes
- * 
+ *
  * USO:
- * const { rankings, posicaoUsuario, atualizarRanking } = useRanking(usuario?.id);
+ * const {
+ *   rankings,
+ *   posicaoUsuario,
+ *   atualizarRanking
+ * } = useRanking(usuario?.id);
  */
 
-import { useCallback, useEffect, useState } from 'react';
-import { RankingData, RankingEntry, rankingService } from '../services/rankingService';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
+
+import { rankingService } from '../services/rankingService';
+
+import type {
+  RankingData,
+  RankingEntry
+} from '../services/rankingService';
+
 import { logger } from '../utils/logger';
 
 /**
- * Tipo para filtros de ranking
+ * Filtros de ranking
  */
-type FiltroRanking = 'global' | 'semanal' | 'mensal';
+type FiltroRanking =
+  | 'global'
+  | 'semanal'
+  | 'mensal';
+
+/**
+ * Estatísticas reais do ranking
+ * (compatível com rankingService.obterEstatisticasGerais)
+ */
+interface EstatisticasRanking {
+  totalUsuarios: number;
+  usuariosAtivosUltimaSemana: number;
+  usuariosAtivosUltimoMes: number;
+  categorias: number;
+  ultimaAtualizacao: Date;
+}
 
 /**
  * Interface de retorno do hook
  */
 interface UseRankingReturn {
-  // Estados dos rankings
+  // Estado
   rankings: RankingData;
   rankingAtual: RankingEntry[];
   filtroAtivo: FiltroRanking;
   carregando: boolean;
-  
-  // Informações do usuário atual
+
+  // Usuário atual
   posicaoUsuario: number;
-  entradaUsuario: RankingEntry | undefined;
-  
-  // Funções de controle
-  alterarFiltro: (filtro: FiltroRanking) => void;
+  entradaUsuario?: RankingEntry;
+
+  // Controle
+  alterarFiltro: (
+    filtro: FiltroRanking
+  ) => void;
+
   atualizarRanking: (
     usuarioId: string,
     quizId: string,
@@ -45,227 +79,395 @@ interface UseRankingReturn {
     total: number,
     tempoGasto: number
   ) => void;
-  
-  // Funções utilitárias
-  obterPosicaoAnterior: (usuarioId: string) => number;
-  obterTendencia: (usuarioId: string) => 'subiu' | 'desceu' | 'manteve' | 'novo';
-  obterEstatisticas: () => any;
+
+  // Utilidades
+  obterPosicaoAnterior: (
+    usuarioId: string
+  ) => number;
+
+  obterTendencia: (
+    usuarioId: string
+  ) =>
+    | 'subiu'
+    | 'desceu'
+    | 'manteve'
+    | 'novo';
+
+  obterEstatisticas: () => EstatisticasRanking;
 }
 
 /**
- * Hook principal para rankings
+ * Hook principal
  */
-export const useRanking = (usuarioId?: string): UseRankingReturn => {
-  // Estados locais
-  const [rankings, setRankings] = useState<RankingData>({
-    global: [],
-    semanal: [],
-    mensal: [],
-    categoria: {}
-  });
-  
-  const [filtroAtivo, setFiltroAtivo] = useState<FiltroRanking>('global');
-  const [carregando, setCarregando] = useState(true);
-
+export const useRanking = (
+  usuarioId?: string
+): UseRankingReturn => {
   /**
-   * Função para atualizar rankings locais
+   * Estado dos rankings
    */
-  const atualizarRankingsLocais = useCallback((novosRankings: RankingData) => {
-    setRankings(novosRankings);
-    setCarregando(false);
-    
-    logger.debug('Rankings atualizados no hook', 'useRanking', {
-      totalGlobal: novosRankings.global.length,
-      totalSemanal: novosRankings.semanal.length,
-      totalMensal: novosRankings.mensal.length
+  const [rankings, setRankings] =
+    useState<RankingData>({
+      global: [],
+      semanal: [],
+      mensal: [],
+      categoria: {}
     });
-  }, []);
+
+  const [filtroAtivo, setFiltroAtivo] =
+    useState<FiltroRanking>('global');
+
+  const [carregando, setCarregando] =
+    useState(true);
 
   /**
-   * Inicialização do hook
+   * Atualiza rankings localmente
+   */
+  const atualizarRankingsLocais =
+    useCallback(
+      (novosRankings: RankingData) => {
+        setRankings(novosRankings);
+
+        setCarregando(false);
+
+        logger.debug(
+          'Rankings atualizados no hook',
+          'useRanking',
+          {
+            totalGlobal:
+              novosRankings.global.length,
+            totalSemanal:
+              novosRankings.semanal.length,
+            totalMensal:
+              novosRankings.mensal.length
+          }
+        );
+      },
+      []
+    );
+
+  /**
+   * Inicialização
    */
   useEffect(() => {
-    logger.debug('Inicializando useRanking hook', 'useRanking', { usuarioId });
-    
-    // Carrega rankings iniciais de forma assíncrona
-    const carregarRankings = async () => {
-      try {
-        const rankingsIniciais: RankingData = {
-          global: rankingService.obterRankingGlobal(),
-          semanal: rankingService.obterRankingSemanal(),
-          mensal: rankingService.obterRankingMensal(),
-          categoria: {}
-        };
-        
-        setRankings(rankingsIniciais);
-        setCarregando(false);
-      } catch (error) {
-        logger.error('Erro ao carregar rankings no hook', 'useRanking', {}, error as Error);
-        setCarregando(false);
-      }
-    };
-    
+    let mounted = true;
+
+    logger.debug(
+      'Inicializando hook useRanking',
+      'useRanking',
+      { usuarioId }
+    );
+
+    const carregarRankings =
+      async (): Promise<void> => {
+        try {
+          const rankingsIniciais: RankingData =
+          {
+            global:
+              rankingService.obterRankingGlobal,
+
+            semanal:
+              rankingService.obterRankingSemanal,
+
+            mensal:
+              rankingService.obterRankingMensal,
+
+            categoria: {}
+          };
+
+          if (mounted) {
+            setRankings(
+              rankingsIniciais
+            );
+
+            setCarregando(false);
+          }
+        } catch (error) {
+          logger.error(
+            'Erro ao carregar rankings',
+            'useRanking',
+            {},
+            error as Error
+          );
+
+          if (mounted) {
+            setCarregando(false);
+          }
+        }
+      };
+
     carregarRankings();
-    
-    // Adiciona listener para atualizações automáticas
-    rankingService.adicionarListener(atualizarRankingsLocais);
-    
-    // Cleanup
+
+    /**
+     * Listener automático
+     */
+    rankingService.adicionarListener(
+      atualizarRankingsLocais
+    );
+
+    /**
+     * Cleanup
+     */
     return () => {
-      rankingService.removerListener(atualizarRankingsLocais);
-      logger.debug('useRanking hook desmontado', 'useRanking');
+      mounted = false;
+
+      rankingService.removerListener(
+        atualizarRankingsLocais
+      );
+
+      logger.debug(
+        'Hook desmontado',
+        'useRanking'
+      );
     };
-  }, [atualizarRankingsLocais, usuarioId]);
+  }, [
+    atualizarRankingsLocais,
+    usuarioId
+  ]);
 
   /**
-   * Obtém ranking atual baseado no filtro ativo
+   * Ranking atual
    */
-  const rankingAtual = (() => {
-    switch (filtroAtivo) {
-      case 'semanal':
-        return rankings.semanal;
-      case 'mensal':
-        return rankings.mensal;
-      default:
-        return rankings.global;
-    }
-  })();
+  const rankingAtual =
+    useMemo<RankingEntry[]>(() => {
+      switch (filtroAtivo) {
+        case 'semanal':
+          return rankings.semanal;
 
-  /**
-   * Obtém posição do usuário atual
-   */
-  const posicaoUsuario = usuarioId ? rankingService.obterPosicaoUsuario(usuarioId) : 0;
+        case 'mensal':
+          return rankings.mensal;
 
-  /**
-   * Obtém entrada completa do usuário atual
-   */
-  const entradaUsuario = usuarioId ? rankingService.obterEntradaUsuario(usuarioId) : undefined;
-
-  /**
-   * Altera filtro ativo
-   */
-  const alterarFiltro = useCallback((novoFiltro: FiltroRanking) => {
-    setFiltroAtivo(novoFiltro);
-    logger.debug('Filtro de ranking alterado', 'useRanking', { 
-      filtroAnterior: filtroAtivo, 
-      novoFiltro 
-    });
-  }, [filtroAtivo]);
-
-  /**
-   * Função para processar conclusão de quiz
-   * INTEGRAÇÃO PRINCIPAL - chamada quando um quiz é completado
-   */
-  const atualizarRanking = useCallback((
-    usuarioIdParam: string,
-    quizId: string,
-    categoria: string,
-    pontos: number,
-    acertos: number,
-    total: number,
-    tempoGasto: number
-  ) => {
-    logger.info(
-      'Processando atualização de ranking via hook',
-      'useRanking.atualizarRanking',
-      {
-        usuarioId: usuarioIdParam,
-        quizId,
-        categoria,
-        pontos,
-        acertos,
-        total,
-        tempoGasto
+        default:
+          return rankings.global;
       }
+    }, [filtroAtivo, rankings]);
+
+  /**
+   * Posição do usuário
+   */
+  const posicaoUsuario =
+    useMemo<number>(() => {
+      if (!usuarioId) {
+        return 0;
+      }
+
+      return rankingService.obterPosicaoUsuario(
+        usuarioId
+      );
+    }, [usuarioId, rankings]);
+
+  /**
+   * Entrada do usuário
+   */
+  const entradaUsuario =
+    useMemo<
+      RankingEntry | undefined
+    >(() => {
+      if (!usuarioId) {
+        return undefined;
+      }
+
+      return rankingService.obterEntradaUsuario(
+        usuarioId
+      );
+    }, [usuarioId, rankings]);
+
+  /**
+   * Alterar filtro
+   */
+  const alterarFiltro =
+    useCallback(
+      (
+        novoFiltro: FiltroRanking
+      ): void => {
+        setFiltroAtivo(
+          (filtroAnterior) => {
+            logger.debug(
+              'Filtro alterado',
+              'useRanking',
+              {
+                filtroAnterior,
+                novoFiltro
+              }
+            );
+
+            return novoFiltro;
+          }
+        );
+      },
+      []
     );
 
-    // Aqui precisamos obter o objeto usuário completo
-    // Em uma implementação real, isso viria do contexto de autenticação
-    const usuarioCompleto = {
-      id: usuarioIdParam,
-      nome: 'Usuário', // Seria obtido do contexto
-      email: '',
-      tipo: 'aprendiz' as const,
-      pontos: pontos,
-      nivel: Math.floor(pontos / 1000) + 1,
-      dataCriacao: new Date()
-    };
+  /**
+   * Atualizar ranking
+   */
+  const atualizarRanking =
+    useCallback(
+      (
+        usuarioIdParam: string,
+        quizId: string,
+        categoria: string,
+        pontos: number,
+        acertos: number,
+        total: number,
+        tempoGasto: number
+      ): void => {
+        logger.info(
+          'Atualizando ranking',
+          'useRanking.atualizarRanking',
+          {
+            usuarioId:
+              usuarioIdParam,
+            quizId,
+            categoria,
+            pontos,
+            acertos,
+            total,
+            tempoGasto
+          }
+        );
 
-    // Chama o serviço para processar o quiz
-    rankingService.processarQuizCompletado(
-      usuarioCompleto,
-      quizId,
-      categoria,
-      pontos,
-      acertos,
-      total,
-      tempoGasto
+
+
+        rankingService.processarQuizCompletado(
+          usuarioIdParam,
+          quizId,
+          categoria,
+          pontos,
+          acertos,
+          total,
+          tempoGasto
+        );
+      },
+      []
     );
-  }, []);
 
   /**
-   * Obtém posição anterior de um usuário
+   * Posição anterior
    */
-  const obterPosicaoAnterior = useCallback((usuarioIdParam: string): number => {
-    const entrada = rankingService.obterEntradaUsuario(usuarioIdParam);
-    return entrada?.posicaoAnterior || 0;
-  }, []);
+  const obterPosicaoAnterior =
+    useCallback(
+      (
+        usuarioIdParam: string
+      ): number => {
+        const entrada =
+          rankingService.obterEntradaUsuario(
+            usuarioIdParam
+          );
+
+        return (
+          entrada?.posicaoAnterior ??
+          0
+        );
+      },
+      []
+    );
 
   /**
-   * Obtém tendência de um usuário
+   * Tendência
    */
-  const obterTendencia = useCallback((usuarioIdParam: string) => {
-    const entrada = rankingService.obterEntradaUsuario(usuarioIdParam);
-    return entrada?.tendencia || 'novo';
-  }, []);
+  const obterTendencia =
+    useCallback(
+      (
+        usuarioIdParam: string
+      ):
+        | 'subiu'
+        | 'desceu'
+        | 'manteve'
+        | 'novo' => {
+        const entrada =
+          rankingService.obterEntradaUsuario(
+            usuarioIdParam
+          );
+
+        return (
+          entrada?.tendencia ??
+          'novo'
+        );
+      },
+      []
+    );
 
   /**
-   * Obtém estatísticas gerais
+   * Estatísticas
    */
-  const obterEstatisticas = useCallback(() => {
-    return rankingService.obterEstatisticasGerais();
-  }, []);
+  const obterEstatisticas =
+    useCallback(
+      (): EstatisticasRanking => {
+        return rankingService.obterEstatisticasGerais();
+      },
+      []
+    );
 
-  return {
-    // Estados
-    rankings,
-    rankingAtual,
-    filtroAtivo,
-    carregando,
-    
-    // Informações do usuário
-    posicaoUsuario,
-    entradaUsuario,
-    
-    // Funções de controle
-    alterarFiltro,
-    atualizarRanking,
-    
-    // Funções utilitárias
-    obterPosicaoAnterior,
-    obterTendencia,
-    obterEstatisticas
-  };
+  /**
+   * Retorno memoizado
+   */
+  return useMemo(
+    () => ({
+      rankings,
+      rankingAtual,
+      filtroAtivo,
+      carregando,
+
+      posicaoUsuario,
+      entradaUsuario,
+
+      alterarFiltro,
+      atualizarRanking,
+
+      obterPosicaoAnterior,
+      obterTendencia,
+      obterEstatisticas
+    }),
+    [
+      rankings,
+      rankingAtual,
+      filtroAtivo,
+      carregando,
+
+      posicaoUsuario,
+      entradaUsuario,
+
+      alterarFiltro,
+      atualizarRanking,
+
+      obterPosicaoAnterior,
+      obterTendencia,
+      obterEstatisticas
+    ]
+  );
 };
 
 /**
- * Hook especializado para estatísticas de ranking
+ * Hook para estatísticas
  */
-export const useRankingStats = () => {
-  const [estatisticas, setEstatisticas] = useState(rankingService.obterEstatisticasGerais());
+export const useRankingStats =
+  (): EstatisticasRanking => {
+    const [
+      estatisticas,
+      setEstatisticas
+    ] =
+      useState<EstatisticasRanking>(
+        rankingService.obterEstatisticasGerais()
+      );
 
-  useEffect(() => {
-    const atualizarEstatisticas = () => {
-      setEstatisticas(rankingService.obterEstatisticasGerais());
-    };
+    useEffect(() => {
+      const atualizarEstatisticas =
+        () => {
+          setEstatisticas(
+            rankingService.obterEstatisticasGerais()
+          );
+        };
 
-    // Atualiza estatísticas quando rankings mudam
-    rankingService.adicionarListener(atualizarEstatisticas);
+      rankingService.adicionarListener(
+        atualizarEstatisticas
+      );
 
-    return () => {
-      rankingService.removerListener(atualizarEstatisticas);
-    };
-  }, []);
+      return () => {
+        rankingService.removerListener(
+          atualizarEstatisticas
+        );
+      };
+    }, []);
 
-  return estatisticas;
-};
+    return estatisticas;
+  };

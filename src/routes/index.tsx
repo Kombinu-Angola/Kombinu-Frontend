@@ -12,6 +12,7 @@ import CriarConteudo from '../pages/CriarConteudo';
 import VisualizarConteudo from '../pages/VisualizarConteudo';
 import PainelAdmin from '../pages/PainelAdmin';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import AuthLayout from '@/components/layout/authLayout';
 
 export const router = createBrowserRouter([
   {
@@ -19,8 +20,7 @@ export const router = createBrowserRouter([
     element: <LandingPage />,
   },
   {
-    path: '/',
-    element: <BaseLayout />,
+    element: <AuthLayout />,
     children: [
       {
         path: 'login',
@@ -30,6 +30,14 @@ export const router = createBrowserRouter([
         path: 'register',
         element: <Register />,
       },
+
+    ]
+  },
+  {
+    path: '/',
+    element: <BaseLayout />,
+    children: [
+
       {
         path: 'dashboard',
         children: [

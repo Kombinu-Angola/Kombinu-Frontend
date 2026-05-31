@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface LogoProps {
   /** Tamanho do logo - afeta tanto ícone quanto texto */
@@ -22,11 +23,11 @@ interface LogoProps {
  * Componente Logo reutilizável
  * Mantém consistência visual em toda aplicação
  */
-export const Logo: React.FC<LogoProps> = ({ 
-  size = 'md', 
-  iconOnly = false, 
+export const Logo: React.FC<LogoProps> = ({
+  size = 'md',
+  iconOnly = false,
   className = '',
-  clickable = false 
+  clickable = false
 }) => {
   // Configurações de tamanho baseadas na prop size
   const sizeConfig = {
@@ -65,7 +66,7 @@ export const Logo: React.FC<LogoProps> = ({
       <div className={`${config.iconContainer} bg-gradient-to-br from-kombinu-neon-blue via-kombinu-dark-blue to-kombinu-golden-yellow rounded-xl flex items-center justify-center shadow-lg transform transition-transform hover:scale-105`}>
         <BookOpen className={`${config.icon} text-white`} />
       </div>
-      
+
       {/* Texto do logo (se não for iconOnly) */}
       {!iconOnly && (
         <span className={`${config.text} font-montserrat font-bold bg-gradient-to-r from-kombinu-neon-blue via-kombinu-dark-blue to-kombinu-golden-yellow bg-clip-text text-transparent`}>
@@ -78,13 +79,13 @@ export const Logo: React.FC<LogoProps> = ({
   // Se for clicável, envolve em um link
   if (clickable) {
     return (
-      <a 
-        href="/" 
+      <Link
+        to="/"
         className="transition-opacity hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
         aria-label="Ir para página inicial do KOMBINU"
       >
         {logoContent}
-      </a>
+      </Link>
     );
   }
 

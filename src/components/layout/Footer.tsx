@@ -5,13 +5,13 @@
 
 import React from 'react';
 import { Logo } from '../ui/Logo';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Facebook, 
-  Twitter, 
-  Instagram, 
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
   Linkedin,
   Heart,
   ExternalLink,
@@ -94,7 +94,9 @@ export const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white dark:bg-dark-bg-primary dark:text-dark-text-primary">
+    <footer
+      id='contacto'
+      className="bg-gray-900 text-white dark:bg-dark-bg-primary dark:text-dark-text-primary">
       {/* Seção principal do footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -103,9 +105,9 @@ export const Footer: React.FC = () => {
             <div className="mb-6">
               <Logo size="lg" className="text-white" />
             </div>
-            
+
             <p className="text-gray-300 mb-6 leading-relaxed dark:text-dark-text-secondary font-lato">
-              Plataforma líder em educação gamificada para o mundo lusófono. 
+              Plataforma líder em educação gamificada para o mundo lusófono.
               Conectamos educadores e estudantes através de tecnologia inovadora e metodologias comprovadas.
             </p>
 
@@ -199,7 +201,7 @@ export const Footer: React.FC = () => {
                 Receba insights educacionais, novidades da plataforma e dicas exclusivas
               </p>
             </div>
-            
+
             <div className="flex w-full md:w-auto">
               <input
                 type="email"
@@ -207,7 +209,7 @@ export const Footer: React.FC = () => {
                 id="newsletter-email"
                 className="flex-1 md:w-80 px-4 py-3 bg-gray-800 border border-gray-700 rounded-l-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-dark-bg-secondary dark:border-dark-border-primary dark:text-dark-text-primary font-lato"
               />
-              <button 
+              <button
                 onClick={() => {
                   const email = (document.getElementById('newsletter-email') as HTMLInputElement)?.value;
                   if (email) {
@@ -235,7 +237,7 @@ export const Footer: React.FC = () => {
               <Heart className="w-4 h-4 text-red-500 fill-current" />
               <span>para o mundo lusófono.</span>
             </div>
-            
+
             <div className="flex space-x-6 text-sm">
               <a href="#privacidade" className="text-gray-400 hover:text-white transition-colors dark:text-dark-text-muted dark:hover:text-dark-text-primary font-lato">
                 Política de Privacidade

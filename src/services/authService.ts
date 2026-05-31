@@ -1,7 +1,12 @@
 import { api } from "./api";
-import { Usuario, RegisterData } from "../types";
+import type { Usuario, RegisterData } from "@/types";
 
 const API_URL = "/auth";
+
+const userTypeMap: Record<RegisterData["tipo"], string> = {
+  criador: "creator",
+  aprendiz: "learner",
+};
 
 export const authService = {
   async login(email: string, senha: string): Promise<Usuario> {
@@ -36,11 +41,6 @@ export const authService = {
   },
 
   async register(data: RegisterData): Promise<Usuario> {
-    const userTypeMap = {
-      criador: "creator",
-      aprendiz: "learner",
-    };
-
     await api.post(`${API_URL}/register/`, {
       email: data.email,
       password: data.senha,
