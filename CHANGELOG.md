@@ -13,6 +13,28 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 <!-- Registar aqui as alteracoes que estao em desenvolvimento e ainda nao foram lancadas. -->
 <!-- Quando houver um release, mover esta seccao para um bloco com versao e data. -->
 
+### Adicionado
+
+- Interceptor de resposta 401 em `src/services/api.ts` com logica de refresh token automatico:
+  - Sistema de fila para requests concorrentes durante o refresh, evitando multiplas chamadas simultaneas ao endpoint de refresh.
+  - Suporte a rotacao de refresh token — se o backend emitir um novo token, e guardado automaticamente.
+  - Logout forcado com limpeza do localStorage (`accessToken`, `refreshToken`, `kombinu_usuario`) e redireccao para `/login` quando o refresh falha.
+- `SplashScreen` de entrada na aplicacao com duracao de 2.5 segundos.
+- `AuthLayout` separado para as paginas de Login e Registo, sem Header de navegacao.
+
+### Alterado
+
+- `BaseLayout` actualizado para servir apenas as paginas autenticadas (Dashboard, Marketplace, Quiz, Ranking, etc.), com Header presente em todas.
+- `sonner.tsx` migrado de `next-themes` para o `ThemeContext` existente no projecto, eliminando dependencia conflituante.
+- Header reescrito com menu hamburger para mobile e navegacao diferenciada por role (Aprendiz, Criador, Admin).
+- Landing page redesenhada com nova paleta de cores e estrutura de seccoes actualizada.
+
+### Corrigido
+
+- Removida dependencia `next-themes` que conflituava com o `ThemeContext` do projecto.
+- Removido selector `* { transition: all 0.3s ease; }` do CSS global que causava degradacao de performance em dispositivos lentos.
+- Corrigido mapeamento de `tags` em `contentService` para aceitar `string[] | string`, resolvendo erro `.map is not a function`.
+
 ---
 
 ## [1.2.2] - 2026-03-xx — Correccoes Adicionais do MVP
@@ -98,4 +120,4 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 ---
 
 _Changelog mantido pela equipa de Frontend do KOMBINU._
-_Ultima actualizacao: 24 de Maio de 2025_
+_Ultima actualizacao: 31 de Maio de 2026_
