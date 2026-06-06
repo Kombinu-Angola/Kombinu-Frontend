@@ -58,9 +58,19 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Pedidos de autenticação não devem accionar a lógica de refresh.
+    // Um 401 no login = credenciais erradas, não sessão expirada.
+    const url = originalRequest?.url ?? "";
+    const isAuthEndpoint =
+      url.includes("/auth/login") || url.includes("/auth/refresh");
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isAuthEndpoint
+    ) {
       if (isRefreshing) {
-        return new Promise((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
           .then((token) => {
