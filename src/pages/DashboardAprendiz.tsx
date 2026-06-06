@@ -16,6 +16,7 @@ export default function DashboardAprendiz() {
     const fetchData = async () => {
       try {
         const statsData = await dashboardService.getLearnerStats();
+
         const coursesData = await dashboardService.getEnrolledCourses();
         setStats(statsData);
         setEnrolledCourses(coursesData);

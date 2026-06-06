@@ -20,24 +20,27 @@ export default function Login() {
 
     try {
       const usuarioLogado = await login(email, senha);
-      if (usuarioLogado) {
-        // Redireciona baseado no tipo do usuário recém logado
-        if (usuarioLogado.tipo === 'criador') {
-          navigate('/dashboard/creator');
-        } else if (usuarioLogado.tipo === 'admin') {
-          navigate('/dashboard/admin');
-        } else {
-          navigate('/dashboard/learner');
-        }
-      } else {
+
+      if (!usuarioLogado) {
         setErro('Email ou senha incorretos');
+        return;
       }
+
+      if (usuarioLogado.tipo === 'criador') {
+        navigate('/dashboard/creator');
+      } else if (usuarioLogado.tipo === 'admin') {
+        navigate('/dashboard/admin');
+      } else {
+        navigate('/dashboard/learner');
+      }
+
     } catch (error) {
       setErro('Erro ao fazer login. Tente novamente.');
     } finally {
       setCarregando(false);
     }
   };
+
 
   return (
     <div
