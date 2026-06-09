@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // LOGIN
   const login = async (email: string, senha: string) => {
     return executeWithErrorHandling(async () => {
-      setLoading(true);
+
 
       const user = await authService.login(email, senha);
 
