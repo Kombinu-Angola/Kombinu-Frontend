@@ -29,6 +29,11 @@ export default function DashboardAprendiz() {
     fetchData();
   }, []);
 
+  const pontos = stats?.totalPoints ?? 0;
+  const progressoNoNivel = pontos % 1000;              // pontos feitos dentro do nível atual
+  const percentagem = (progressoNoNivel / 1000) * 100; // largura real da barra
+  const faltam = 1000 - progressoNoNivel;
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -198,14 +203,14 @@ export default function DashboardAprendiz() {
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                   <div
                     className="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full relative"
-                    style={{ width: '75%' }}
+                    style={{ width: `${percentagem}%` }}
                   >
                     <div className="absolute inset-0 bg-white/30 animate-pulse rounded-full"></div>
                   </div>
                 </div>
 
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Faltam 250 pontos para o nível {stats ? stats.currentLevel + 1 : 1}
+                  Faltam {faltam} pontos para o nível {stats ? stats.currentLevel + 1 : 1}
                 </p>
               </div>
             </div>
