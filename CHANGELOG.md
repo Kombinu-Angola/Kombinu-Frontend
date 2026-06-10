@@ -15,6 +15,24 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- `Ranking.tsx`: podio visual para o top 3 com coroa, medalhas e blocos de altura diferenciada; header com gradiente azul/indigo; empty state quando sem dados (S3-05/S3-06).
+- `index.html`: meta tags SEO completas — description, keywords, Open Graph (og:title, og:description, og:type, og:locale), theme-color e novo titulo "Aprende. Compete. Cresce." (S3-11).
+- `Quiz.tsx`: ecra de resultados redesenhado com 3 cards de estatisticas (Correctas / Precisao / XP ganhos), barra de progresso animada e faixa de cor no topo (S3-01).
+- `api.ts`: tratamento do erro 403 com forceLogout automatico, prevenindo estados inconsistentes na sessao (S2-19).
+- `VisualizarConteudo.tsx`: aviso em amarelo quando `quiz_id` e nulo mas `has_quiz` e verdadeiro, evitando navegacao para URL errado (S2-16).
+
+### Alterado
+
+- `contentService.ts`: mapeamento completo de campos do backend — `video_url` -> `videoUrl`, `text_content` -> `textContent`, objecto `creator` -> `creatorName`; categorias reais do backend (`tecnologia`, `negocios`, `design`) com labels em portugues (S2-20).
+- `Marketplace.tsx`: filtros de categoria agora usam valores reais do backend com labels formatadas; botoes com `type="button"` (S2-20).
+- `authService.ts`: login le `pontos` e `nivel` reais do backend em vez de inicializar a 0 e 1.
+- `Quiz.tsx`: `atualizarPontos` chamado apos submissao bem-sucedida para reflectir XP em tempo real no dashboard (S2-18); `handleSubmitQuiz` envolto em `useCallback` eliminando warnings de dependencias no `useEffect` do timer (S3-04).
+- `DashboardAprendiz.tsx`: threshold de nivel corrigido de 1000 para 100 pontos, alinhado com formula do backend `(total_points // 100) + 1`; barras de progresso migradas para `BarraDinamica` (useRef+useEffect) eliminando inline styles (S2-02).
+- `Ranking.tsx`: formula de nivel corrigida de `/ 1000` para `/ 100` para consistencia com o backend.
+- `package.json` e `pnpm-lock.yaml`: dependencia `motion` (Framer Motion) nao utilizada removida; `pnpm-lock.yaml` eliminado para evitar conflito de package manager no build do Vercel.
+
+### Corrigido
+
 - Interceptor de resposta 401 em `src/services/api.ts` com logica de refresh token automatico:
   - Sistema de fila para requests concorrentes durante o refresh, evitando multiplas chamadas simultaneas ao endpoint de refresh.
   - Suporte a rotacao de refresh token — se o backend emitir um novo token, e guardado automaticamente.
