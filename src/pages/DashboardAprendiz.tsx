@@ -1,5 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+function BarraDinamica({ pct, className }: { pct: number; className: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (ref.current) ref.current.style.width = `${Math.min(100, pct)}%`;
+  }, [pct]);
+  return <div ref={ref} className={className} />;
+}
 
 import { useAuth } from '../contexts/AuthContext';
 import { dashboardService, } from '@/services/dashboardService';
@@ -29,10 +37,11 @@ export default function DashboardAprendiz() {
     fetchData();
   }, []);
 
+  const PONTOS_POR_NIVEL = 100;
   const pontos = stats?.totalPoints ?? 0;
-  const progressoNoNivel = pontos % 1000;              // pontos feitos dentro do nível atual
-  const percentagem = (progressoNoNivel / 1000) * 100; // largura real da barra
-  const faltam = 1000 - progressoNoNivel;
+  const progressoNoNivel = pontos % PONTOS_POR_NIVEL;
+  const percentagem = (progressoNoNivel / PONTOS_POR_NIVEL) * 100;
+  const faltam = PONTOS_POR_NIVEL - progressoNoNivel;
 
   if (loading) {
     return (
@@ -158,10 +167,7 @@ export default function DashboardAprendiz() {
                               {course.title}
                             </h3>
                             <div className="w-48 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
-                              <div
-                                className="bg-blue-600 h-2 rounded-full"
-                                style={{ width: `${course.progress}%` }}
-                              ></div>
+                              <BarraDinamica pct={course.progress} className="bg-blue-600 h-2 rounded-full" />
                             </div>
                             <p className="text-sm text-gray-500 dark:text-gray-400">
                               {course.progress}% completo • Último acesso: {new Date(course.lastAccessed).toLocaleDateString()}
@@ -201,12 +207,10 @@ export default function DashboardAprendiz() {
                 </div>
 
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                  <div
-                    className="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full relative"
-                    style={{ width: `${percentagem}%` }}
-                  >
-                    <div className="absolute inset-0 bg-white/30 animate-pulse rounded-full"></div>
-                  </div>
+                  <BarraDinamica
+                    pct={percentagem}
+                    className="bg-gradient-to-r from-blue-500 to-indigo-500 h-3 rounded-full transition-all duration-700"
+                  />
                 </div>
 
                 <p className="text-sm text-gray-600 dark:text-gray-400">
