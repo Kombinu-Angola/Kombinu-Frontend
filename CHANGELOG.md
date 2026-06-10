@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- `CriarConteudo.tsx`: botao "Gerar com IA" agora guarda o conteudo e chama `/quizzes/contents/<id>/generate-quiz/` (OpenTDB); trata erros 503 (rate limit) com mensagem explicativa (S3-09).
 - `Ranking.tsx`: podio visual para o top 3 com coroa, medalhas e blocos de altura diferenciada; header com gradiente azul/indigo; empty state quando sem dados (S3-05/S3-06).
 - `index.html`: meta tags SEO completas — description, keywords, Open Graph (og:title, og:description, og:type, og:locale), theme-color e novo titulo "Aprende. Compete. Cresce." (S3-11).
 - `Quiz.tsx`: ecra de resultados redesenhado com 3 cards de estatisticas (Correctas / Precisao / XP ganhos), barra de progresso animada e faixa de cor no topo (S3-01).
