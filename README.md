@@ -29,23 +29,37 @@
 ### Pré-requisitos
 
 - Node.js 18+
-- npm ou yarn
-- Backend Django rodando em `localhost:8000`
+- npm (gestor de pacotes oficial do projecto)
+- Backend Django a correr (ver repositório `kombinu-backend`)
 
 ### Instalação
 
 ```bash
-# Clone e navegue até o diretório
-cd project
-
 # Instale as dependências
 npm install
+
+# Copie o ficheiro de variáveis de ambiente
+cp .env.example .env.local
+# Edite .env.local com o URL do backend
 
 # Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
 A aplicação estará disponível em `http://localhost:5173`.
+
+---
+
+## ⚙️ Variáveis de Ambiente
+
+Copie `.env.example` para `.env.local` e preencha os valores:
+
+| Variável       | Descrição                         | Exemplo                      |
+| :------------- | :-------------------------------- | :--------------------------- |
+| `VITE_API_URL` | URL base da API do backend Django | `http://localhost:8000/api`  |
+| `VITE_ENV`     | Ambiente da aplicação             | `development` / `production` |
+
+> **Nota:** `.env.local` nunca deve ser commitado. Está listado no `.gitignore`.
 
 ---
 

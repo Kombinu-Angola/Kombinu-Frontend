@@ -1,11 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Logo } from '../components/ui/Logo';
+import { useEffect, useRef } from 'react';
+
 import { Footer } from '../components/layout/Footer';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
+
+
 import {
   Trophy,
   Users,
@@ -18,21 +16,59 @@ import {
   Sparkles,
   BookOpen,
   Target,
-  Award,
-  TrendingUp,
-  Shield,
+
   Smartphone,
   Monitor,
   Tablet,
-  LogOut,
-  User,
-  Sun,
-  Moon
+
+
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Header } from '@/components/layout/Header';
+
+/**
+ * Hook de animação de entrada (scroll reveal).
+ * Observa todos os elementos com a classe .reveal dentro do container
+ * e adiciona .is-visible quando entram no ecrã (anima uma vez).
+ * Respeita "prefers-reduced-motion" e degrada com segurança.
+ */
+function useScrollReveal() {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const els = Array.from(root.querySelectorAll<HTMLElement>('.reveal'));
+
+    const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (semMovimento || !('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  return rootRef;
+}
 
 export default function LandingPage() {
-  const { usuario, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+
+  const rootRef = useScrollReveal();
 
   // Enhanced statistics with more professional metrics
   const stats = [
@@ -101,77 +137,9 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen dark-bg-primary overflow-hidden">
-      {/* Enhanced Header */}
-      <header className="dark-bg-primary/95 backdrop-blur-sm shadow-sm sticky top-0 z-50 border-b border-kombinu-neon-blue/20 dark:border-dark-border-primary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Logo size="md" clickable />
-            
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="#sobre" className="font-lato dark-text-secondary hover:text-kombinu-dark-blue font-medium transition-colors dark:hover:text-dark-interactive-primary">Sobre</a>
-              <a href="#funcionalidades" className="font-lato dark-text-secondary hover:text-kombinu-dark-blue font-medium transition-colors dark:hover:text-dark-interactive-primary">Funcionalidades</a>
-              <a href="#testemunhos" className="font-lato dark-text-secondary hover:text-kombinu-dark-blue font-medium transition-colors dark:hover:text-dark-interactive-primary">Testemunhos</a>
-              <a href="#contacto" className="font-lato dark-text-secondary hover:text-kombinu-dark-blue font-medium transition-colors dark:hover:text-dark-interactive-primary">Contacto</a>
-            </nav>
-            
-            <div className="flex items-center space-x-4">
-              {/* Dark Mode Toggle */}
-              <button
-                onClick={toggleTheme}
-                className="p-2 dark-text-muted hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all duration-200 dark:hover:bg-dark-bg-hover dark:hover:text-dark-interactive-primary"
-                aria-label="Alternar tema"
-              >
-                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
+    <div ref={rootRef} className="min-h-screen dark-bg-primary overflow-hidden">
+      <Header />
 
-              {usuario ? (
-                <div className="flex items-center space-x-4">
-                  <div className="hidden sm:flex items-center space-x-3">
-                    <div className="text-right">
-                      <p className="text-sm font-semibold dark-text-primary truncate max-w-32 font-montserrat">
-                        {usuario.nome}
-                      </p>
-                      <div className="flex items-center space-x-2 text-xs dark-text-muted font-lato">
-                        <span className="flex items-center space-x-1">
-                          <Trophy className="w-3 h-3" />
-                          <span>{usuario.pontos.toLocaleString()}</span>
-                        </span>
-                      </div>
-                    </div>
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 rounded-full flex items-center justify-center shadow-md">
-                      <User className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    variant="primary" 
-                    size="sm" 
-                    onClick={() => window.location.href = usuario.tipo === 'criador' ? '/dashboard/creator' : '/dashboard/learner'}
-                    className="font-poppins bg-kombinu-neon-blue text-gray-900 hover:bg-kombinu-dark-blue hover:text-white shadow-lg hover:shadow-xl transition-all dark:bg-dark-interactive-primary dark:text-white"
-                  >
-                    Ir para Dashboard
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <Button variant="ghost" size="sm" onClick={() => window.location.href = '/login'}>
-                    Entrar
-                  </Button>
-                  <Button 
-                    variant="primary" 
-                    size="sm" 
-                    onClick={() => window.location.href = '/register'}
-                    className="font-poppins bg-kombinu-neon-blue text-gray-900 hover:bg-kombinu-dark-blue hover:text-white shadow-lg hover:shadow-xl transition-all dark:bg-dark-interactive-primary dark:text-white"
-                  >
-                    Começar Gratuitamente
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
 
       {/* Enhanced Hero Section */}
       <section className="relative bg-gradient-to-br from-kombinu-neon-blue/5 via-white to-kombinu-golden-yellow/5 py-20 lg:py-32 overflow-hidden dark:from-dark-bg-secondary dark:via-dark-bg-primary dark:to-dark-bg-tertiary">
@@ -181,15 +149,15 @@ export default function LandingPage() {
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-kombinu-golden-yellow/20 to-kombinu-neon-blue/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-kombinu-neon-blue/10 to-kombinu-golden-yellow/10 rounded-full blur-2xl"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative z-10">
+            <div className="relative z-10 reveal">
               <div className="flex items-center space-x-2 dark-bg-primary/80 backdrop-blur-sm px-4 py-2 rounded-full border border-kombinu-neon-blue/30 mb-6 w-fit dark:border-dark-border-accent">
                 <Sparkles className="w-4 h-4 text-kombinu-dark-blue" />
                 <span className="text-sm font-medium font-lato text-kombinu-dark-blue dark:text-dark-interactive-primary">Plataforma Líder em Educação Gamificada</span>
               </div>
-              
+
               <h1 className="font-montserrat text-4xl md:text-5xl lg:text-6xl font-bold dark-text-primary mb-6 leading-tight">
                 Transforme
                 <br />
@@ -197,24 +165,26 @@ export default function LandingPage() {
                   Educação em Experiência
                 </span>
               </h1>
-              
+
               <p className="font-lato text-xl md:text-2xl dark-text-secondary mb-8 leading-relaxed">
-                A primeira plataforma de aprendizado gamificado de Angola. 
+                A primeira plataforma de aprendizado gamificado de Angola.
                 Conecte, aprenda e cresça numa comunidade nacional de conhecimento.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button 
-                  variant="primary" 
-                  size="lg" 
-                  onClick={() => window.location.href = '/register'}
-                  className="font-poppins shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 bg-gradient-to-r from-kombinu-neon-blue to-kombinu-dark-blue text-gray-900 hover:text-white"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Começar Gratuitamente
-                </Button>
-                <Button 
-                  variant="ghost" 
+                <Link to="/register">
+                  <Button
+                    variant="primary"
+                    size="lg"
+
+                    className="font-poppins shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 bg-gradient-to-r from-kombinu-neon-blue to-kombinu-dark-blue text-gray-900 hover:text-white"
+                  >
+                    <Play className="w-5 h-5 mr-2" />
+                    Começar Gratuitamente
+                  </Button>
+                </Link>
+                <Button
+                  variant="ghost"
                   size="lg"
                   onClick={() => document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' })}
                   className="font-poppins border-2 border-kombinu-neon-blue/30 hover:border-kombinu-neon-blue hover:text-kombinu-dark-blue hover:bg-kombinu-neon-blue/5 dark:border-dark-border-accent dark:hover:bg-dark-bg-hover"
@@ -227,7 +197,7 @@ export default function LandingPage() {
               {/* Trust indicators */}
               <div className="grid grid-cols-2 gap-4">
                 {odsSupported.map((ods, index) => (
-                  <div key={index} className="flex items-center space-x-2 text-sm dark-text-muted">
+                  <div key={index} className={`flex items-center space-x-2 text-sm dark-text-muted reveal reveal-delay-${index + 1}`}>
                     <ods.icon className="w-4 h-4 text-kombinu-golden-yellow" />
                     <span className="font-lato">{ods.text}</span>
                   </div>
@@ -236,7 +206,7 @@ export default function LandingPage() {
             </div>
 
             {/* Enhanced visual element */}
-            <div className="relative lg:block hidden">
+            <div className="relative lg:block hidden reveal reveal-delay-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow rounded-3xl transform rotate-6 opacity-20"></div>
                 <div className="relative dark-bg-primary rounded-3xl shadow-2xl p-8 transform -rotate-2 hover:rotate-0 transition-transform duration-500 dark:shadow-gray-900/50">
@@ -275,16 +245,16 @@ export default function LandingPage() {
       {/* Enhanced Statistics */}
       <section className="py-16 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 reveal">
             <h2 className="font-montserrat text-3xl font-bold text-gray-900 mb-4">Números que Falam por Si</h2>
             <p className="font-lato text-xl text-gray-600">A confiança de milhares de utilizadores em Angola</p>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <div key={index} className="text-center group">
+                <div key={index} className={`text-center group reveal reveal-delay-${index + 1}`}>
                   <div className="w-16 h-16 bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
                     <Icon className="w-8 h-8 text-white" />
                   </div>
@@ -298,214 +268,447 @@ export default function LandingPage() {
       </section>
 
       {/* Enhanced About Section */}
-      <section id="sobre" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        id="sobre"
+        className="py-12 bg-gradient-to-b from-gray-50 to-white dark:from-dark-bg-secondary dark:to-dark-bg-primary relative overflow-hidden"
+      >
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-kombinu-neon-blue/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-kombinu-golden-yellow/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+          {/* Heading */}
+          <div className="text-center mb-20 reveal">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-kombinu-neon-blue/10 text-kombinu-dark-blue text-sm font-semibold mb-6 dark:bg-dark-bg-hover dark:text-dark-interactive-primary">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Educação do Futuro
+            </span>
+
+            <h2 className="font-montserrat text-4xl md:text-5xl font-bold dark-text-primary mb-6">
+              Sobre o
+              <span className="bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow bg-clip-text text-transparent ml-3">
+                KOMBINU
+              </span>
+            </h2>
+
+            <p className="max-w-3xl mx-auto font-lato text-xl dark-text-secondary leading-relaxed">
+              Transformamos a educação em Angola através de experiências gamificadas,
+              tecnologia inteligente e uma comunidade nacional focada no crescimento
+              académico e profissional.
+            </p>
+          </div>
+
+          {/* Content */}
           <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+            {/* Left Side */}
             <div>
-              <h2 className="font-montserrat text-4xl font-bold text-gray-900 mb-6">
-                Sobre o KOMBINU
-              </h2>
-              <p className="font-lato text-xl text-gray-600 mb-6 leading-relaxed">
-                Somos pioneiros na criação de experiências educacionais gamificadas em Angola. 
-                A nossa missão é democratizar o acesso ao conhecimento através de tecnologia inovadora e 
-                metodologias comprovadas.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="w-6 h-6 text-kombinu-golden-yellow mt-1 flex-shrink-0" />
+
+              <div className="space-y-8">
+
+                <div className="flex items-start gap-4 group reveal reveal-delay-1">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-kombinu-neon-blue to-blue-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <CheckCircle className="w-7 h-7 text-white" />
+                  </div>
+
                   <div>
-                    <h4 className="font-montserrat font-semibold text-gray-900">Metodologia Comprovada</h4>
-                    <p className="font-lato text-gray-600 text-sm">Baseada em estudos da Universidade de Rochester sobre gamificação</p>
+                    <h4 className="font-montserrat text-xl font-bold dark-text-primary mb-2">
+                      Metodologia Científica
+                    </h4>
+
+                    <p className="font-lato dark-text-secondary leading-relaxed">
+                      Utilizamos técnicas de gamificação estudadas pela Universidade de
+                      Rochester para aumentar retenção, foco e motivação dos estudantes.
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="w-6 h-6 text-kombinu-golden-yellow mt-1 flex-shrink-0" />
+
+                <div className="flex items-start gap-4 group reveal reveal-delay-2">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-green-500 to-green-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <Zap className="w-7 h-7 text-white" />
+                  </div>
+
                   <div>
-                    <h4 className="font-montserrat font-semibold text-gray-900">Tecnologia Avançada</h4>
-                    <p className="font-lato text-gray-600 text-sm">Learning Analytics e IA baseada em pesquisas do MIT</p>
+                    <h4 className="font-montserrat text-xl font-bold dark-text-primary mb-2">
+                      Inteligência Artificial
+                    </h4>
+
+                    <p className="font-lato dark-text-secondary leading-relaxed">
+                      Learning Analytics e IA adaptativa inspiradas em pesquisas do MIT
+                      para personalizar o processo de aprendizagem.
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="w-6 h-6 text-kombinu-golden-yellow mt-1 flex-shrink-0" />
+
+                <div className="flex items-start gap-4 group reveal reveal-delay-3">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-purple-500 to-purple-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <Users className="w-7 h-7 text-white" />
+                  </div>
+
                   <div>
-                    <h4 className="font-montserrat font-semibold text-gray-900">Comunidade Nacional</h4>
-                    <p className="font-lato text-gray-600 text-sm">Conectando educadores e estudantes angolanos</p>
+                    <h4 className="font-montserrat text-xl font-bold dark-text-primary mb-2">
+                      Comunidade Angolana
+                    </h4>
+
+                    <p className="font-lato dark-text-secondary leading-relaxed">
+                      Conectamos estudantes, professores e criadores de conteúdo numa
+                      plataforma nacional colaborativa.
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="w-6 h-6 text-kombinu-golden-yellow mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-montserrat font-semibold text-gray-900">Resultados Mensuráveis</h4>
-                    <p className="font-lato text-gray-600 text-sm">Métricas baseadas em Learning Analytics comprovadas</p>
-                  </div>
-                </div>
+
               </div>
+
+
+
             </div>
-            
-            <div className="relative">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div className="bg-white p-6 rounded-2xl shadow-lg">
-                    <Monitor className="w-8 h-8 text-blue-500 mb-3" />
-                    <h4 className="font-semibold text-gray-900 mb-2">Desktop</h4>
-                    <p className="text-gray-600 text-sm">Experiência completa para criadores</p>
+
+            {/* Right Side */}
+            <div className="relative reveal reveal-delay-2">
+
+              <div className="absolute inset-0 bg-gradient-to-r from-kombinu-neon-blue/20 to-kombinu-golden-yellow/20 blur-3xl rounded-full"></div>
+
+              <div className="relative grid grid-cols-2 gap-6">
+
+                <div className="space-y-6">
+
+                  <div className="bg-white dark:bg-dark-bg-secondary p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-dark-border-primary hover:-translate-y-2 transition-all duration-300">
+                    <Monitor className="w-10 h-10 text-blue-500 mb-4" />
+
+                    <h4 className="font-montserrat text-xl font-bold dark-text-primary mb-2">
+                      Desktop
+                    </h4>
+
+                    <p className="font-lato dark-text-secondary">
+                      Experiência avançada para criadores e gestão de conteúdos.
+                    </p>
                   </div>
-                  <div className="bg-white p-6 rounded-2xl shadow-lg">
-                    <Tablet className="w-8 h-8 text-green-500 mb-3" />
-                    <h4 className="font-semibold text-gray-900 mb-2">Tablet</h4>
-                    <p className="text-gray-600 text-sm">Perfeito para estudos interativos</p>
+
+                  <div className="bg-gradient-to-r from-kombinu-neon-blue to-kombinu-dark-blue p-8 rounded-3xl text-white shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                    <Globe className="w-10 h-10 mb-4" />
+
+                    <h4 className="font-montserrat text-xl font-bold mb-2">
+                      Multi-plataforma
+                    </h4>
+
+                    <p className="font-lato text-white/90">
+                      Sincronização em tempo real entre dispositivos.
+                    </p>
                   </div>
+
                 </div>
-                <div className="space-y-4 mt-8">
-                  <div className="bg-white p-6 rounded-2xl shadow-lg">
-                    <Smartphone className="w-8 h-8 text-purple-500 mb-3" />
-                    <h4 className="font-semibold text-gray-900 mb-2">Mobile</h4>
-                    <p className="text-gray-600 text-sm">Aprenda em qualquer lugar</p>
+
+                <div className="space-y-6 mt-10">
+
+                  <div className="bg-white dark:bg-dark-bg-secondary p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-dark-border-primary hover:-translate-y-2 transition-all duration-300">
+                    <Tablet className="w-10 h-10 text-green-500 mb-4" />
+
+                    <h4 className="font-montserrat text-xl font-bold dark-text-primary mb-2">
+                      Tablet
+                    </h4>
+
+                    <p className="font-lato dark-text-secondary">
+                      Aprendizado interativo otimizado para produtividade.
+                    </p>
                   </div>
-                  <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-2xl text-white">
-                    <Globe className="w-8 h-8 mb-3" />
-                    <h4 className="font-semibold mb-2">Multi-plataforma</h4>
-                    <p className="text-blue-100 text-sm">Sincronização em tempo real</p>
+
+                  <div className="bg-white dark:bg-dark-bg-secondary p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-dark-border-primary hover:-translate-y-2 transition-all duration-300">
+                    <Smartphone className="w-10 h-10 text-purple-500 mb-4" />
+
+                    <h4 className="font-montserrat text-xl font-bold dark-text-primary mb-2">
+                      Mobile
+                    </h4>
+
+                    <p className="font-lato dark-text-secondary">
+                      Estude em qualquer lugar com total flexibilidade.
+                    </p>
                   </div>
+
                 </div>
+
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Enhanced Features Section */}
-      <section id="funcionalidades" className="py-20 dark-bg-primary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-montserrat text-4xl md:text-5xl font-bold dark-text-primary mb-6">
-              Funcionalidades Inovadoras
+      {/* ========================= FUNCIONALIDADES ========================= */}
+
+      <section
+        id="funcionalidades"
+        className="py-12 relative overflow-hidden  to-dark-bg-secondary"
+      >
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-kombinu-neon-blue/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-kombinu-golden-yellow/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+          {/* Header */}
+          <div className="text-center mb-20 reveal">
+
+            <div className="inline-flex items-center px-5 py-2 rounded-full bg-kombinu-neon-blue/10 border border-kombinu-neon-blue/20 mb-6">
+              <Sparkles className="w-4 h-4 text-kombinu-neon-blue mr-2" />
+
+              <span className="text-sm font-semibold text-kombinu-neon-blue font-lato">
+                Plataforma Inteligente
+              </span>
+            </div>
+
+            <h2 className="font-montserrat text-2xl  md:text-6xl  font-bold dark-text-primary mb-6">
+              Funcionalidades
+              <span className="bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow bg-clip-text text-transparent ml-4">
+                Inovadoras
+              </span>
             </h2>
-            <p className="font-lato text-xl dark-text-secondary max-w-3xl mx-auto">
-              Tecnologia de ponta ao serviço da educação, criando experiências de aprendizado únicas e eficazes
+
+            <p className="font-lato text-xl dark-text-secondary max-w-3xl mx-auto leading-relaxed">
+              Tecnologia de ponta combinada com metodologias científicas
+              para transformar completamente a experiência de aprendizagem.
             </p>
           </div>
 
+          {/* Cards */}
           <div className="grid md:grid-cols-3 gap-8">
+
             {features.map((feature, index) => {
               const Icon = feature.icon;
+
               return (
-                <Card key={index} variant="default" hoverable className="text-center h-full group">
-                  <div className="w-20 h-20 bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Icon className="w-10 h-10 text-white" />
+                <div
+                  key={index}
+                  className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 hover:-translate-y-3 hover:shadow-2xl transition-all duration-500 reveal reveal-delay-${index + 1}`}
+                >
+
+                  {/* Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-kombinu-neon-blue/0 via-transparent to-kombinu-golden-yellow/0 group-hover:from-kombinu-neon-blue/10 group-hover:to-kombinu-golden-yellow/10 transition-all duration-500"></div>
+
+                  {/* Icon */}
+                  <div className="relative z-10">
+
+                    <div className="w-20 h-20 rounded-3xl bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow flex items-center justify-center mb-8 shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                      <Icon className="w-10 h-10 text-white" />
+                    </div>
+
+                    <h3 className="font-montserrat text-2xl font-bold dark-text-primary mb-4">
+                      {feature.title}
+                    </h3>
+
+                    <p className="font-lato dark-text-secondary leading-relaxed mb-8">
+                      {feature.description}
+                    </p>
+
+                    {/* Benefits */}
+                    <div className="space-y-3">
+
+                      {feature.benefits.map((benefit, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-3 text-sm"
+                        >
+                          <div className="w-6 h-6 rounded-full bg-kombinu-golden-yellow/20 flex items-center justify-center">
+                            <CheckCircle className="w-4 h-4 text-kombinu-golden-yellow" />
+                          </div>
+
+                          <span className="dark-text-muted font-lato">
+                            {benefit}
+                          </span>
+                        </div>
+                      ))}
+
+                    </div>
+
                   </div>
-                  <h3 className="font-montserrat text-2xl font-bold dark-text-primary mb-4">{feature.title}</h3>
-                  <p className="font-lato dark-text-secondary leading-relaxed mb-6">{feature.description}</p>
-                  
-                  <div className="space-y-2">
-                    {feature.benefits.map((benefit, idx) => (
-                      <div key={idx} className="flex items-center justify-center space-x-2 text-sm dark-text-muted">
-                        <CheckCircle className="w-4 h-4 text-kombinu-golden-yellow" />
-                        <span className="font-lato">{benefit}</span>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
+                </div>
               );
             })}
+
           </div>
         </div>
       </section>
 
-      {/* Enhanced Testimonials */}
-      <section id="pesquisas" className="py-20 dark-bg-secondary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold dark-text-primary mb-6 font-montserrat">
-              Validação Científica
+      {/* ========================= PESQUISAS ========================= */}
+
+      <section
+        id="pesquisas"
+        className="py-12  from-dark-bg-secondary to-dark-bg-primary relative overflow-hidden"
+      >
+
+        {/* Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-kombinu-neon-blue/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+          {/* Header */}
+          <div className="text-center mb-20 reveal">
+
+            <div className="inline-flex items-center px-5 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
+              <Trophy className="w-4 h-4 text-purple-400 mr-2" />
+
+              <span className="text-sm font-semibold text-purple-300 font-lato">
+                Estudos Científicos
+              </span>
+            </div>
+
+            <h2 className="text-3xl   md:text-6xl font-bold dark-text-primary mb-6 font-montserrat">
+              Validação
+              <span className="bg-gradient-to-r from-kombinu-neon-blue to-purple-400 bg-clip-text text-transparent ml-4">
+                Científica
+              </span>
             </h2>
-            <p className="text-xl dark-text-secondary font-lato">
-              Pesquisas e estudos que comprovam a eficácia da nossa abordagem
+
+            <p className="text-xl dark-text-secondary font-lato max-w-3xl mx-auto leading-relaxed">
+              Pesquisas internacionais que comprovam o impacto da gamificação
+              e da aprendizagem interativa.
             </p>
           </div>
 
+          {/* Cards */}
           <div className="grid md:grid-cols-3 gap-8">
+
             {researchData.map((research, index) => (
-              <Card key={index} variant="elevated" className="text-center relative">
-                <div className="text-4xl mb-4">{research.icon}</div>
-                
-                <div className="mb-4">
-                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                    {research.metric}
-                  </span>
+
+              <div
+                key={index}
+                className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 reveal reveal-delay-${index + 1}`}
+              >
+
+                {/* Glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-kombinu-neon-blue/0 to-purple-500/0 hover:from-kombinu-neon-blue/10 hover:to-purple-500/10 transition-all duration-500"></div>
+
+                <div className="relative z-10">
+
+                  {/* Emoji */}
+                  <div className="text-5xl mb-6">
+                    {research.icon}
+                  </div>
+
+                  {/* Metric */}
+                  <div className="mb-6">
+                    <span className="bg-gradient-to-r from-kombinu-neon-blue to-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                      {research.metric}
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <p className="dark-text-secondary mb-8 italic leading-relaxed text-lg font-lato">
+                    "{research.content}"
+                  </p>
+
+                  {/* Footer */}
+                  <div className="border-t border-white/10 pt-6">
+
+                    <h4 className="font-semibold dark-text-primary text-xl font-montserrat mb-2">
+                      {research.title}
+                    </h4>
+
+                    <p className="text-sm dark-text-muted font-lato">
+                      {research.source}
+                    </p>
+
+                  </div>
+
                 </div>
-                
-                <p className="dark-text-secondary mb-6 italic leading-relaxed text-lg font-lato">
-                  "{research.content}"
-                </p>
-                
-                <div className="border-t dark-border-primary pt-4">
-                  <h4 className="font-semibold dark-text-primary text-lg font-montserrat">{research.title}</h4>
-                  <p className="text-sm dark-text-muted font-lato">{research.source}</p>
-                </div>
-              </Card>
+              </div>
+
             ))}
+
           </div>
         </div>
       </section>
-          
-      {/* Enhanced CTA Final */}
-      <section className="py-20 bg-gradient-to-r from-kombinu-neon-blue via-kombinu-dark-blue to-kombinu-golden-yellow relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10 dark:bg-black/30"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-kombinu-dark-blue/90 to-kombinu-neon-blue/90 dark:from-dark-bg-primary/90 dark:to-dark-bg-secondary/90"></div>
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Globe className="w-10 h-10 text-white" />
+
+
+
+      <section className="relative py-24 overflow-hidden bg-white dark:bg-dark-bg-primary transition-colors duration-300">
+
+
+        <div className="absolute inset-0 bg-gradient-to-br from-kombinu-neon-blue/5 via-transparent to-kombinu-dark-blue/10 dark:from-dark-bg-secondary dark:to-dark-bg-tertiary"></div>
+
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-kombinu-neon-blue/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-kombinu-dark-blue/10 rounded-full blur-3xl"></div>
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
+
+
+          <div className="w-24 h-24 rounded-full bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-dark-border-primary backdrop-blur-xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
+            <Globe className="w-10 h-10 text-kombinu-dark-blue dark:text-dark-interactive-primary" />
           </div>
-          
-          <h2 className="font-montserrat text-4xl md:text-5xl font-bold text-white mb-6 dark:text-dark-text-primary">
-            Junte-se à Revolução Educacional
+
+
+          <h2 className="font-montserrat text-5xl md:text-6xl font-bold text-gray-900 dark:text-dark-text-primary mb-8 leading-tight">
+            Junte-se à
+            <br />
+
+            <span className="bg-gradient-to-r from-kombinu-dark-blue to-kombinu-neon-blue bg-clip-text text-transparent">
+              Revolução Educacional
+            </span>
           </h2>
-          <p className="font-lato text-xl text-white/90 mb-8 leading-relaxed max-w-3xl mx-auto dark:text-dark-text-secondary">
-            Transforme a sua forma de aprender com o KOMBINU. 
-            Seja parte desta comunidade nacional de conhecimento e crescimento.
+
+
+          <p className="font-lato text-xl md:text-2xl text-gray-600 dark:text-dark-text-secondary mb-12 leading-relaxed max-w-3xl mx-auto">
+            Transforme a forma como aprende, ensina e evolui.
+            Faça parte da maior comunidade de educação gamificada de Angola.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button 
-              variant="secondary" 
+
+
+          <div className="flex flex-col sm:flex-row gap-5 justify-center mb-12">
+
+            <Link to="/register">
+              <Button
+                variant="secondary"
+                size="lg"
+                className="font-poppins bg-kombinu-neon-blue text-gray-900 hover:bg-kombinu-dark-blue hover:text-white shadow-2xl hover:scale-105 transition-all duration-300"
+              >
+                <CheckCircle className="w-5 h-5 mr-2" />
+                Começar Gratuitamente
+              </Button>
+            </Link>
+
+            <Button
+              variant="ghost"
               size="lg"
-              onClick={() => window.location.href = '/register'}
-              className="font-poppins bg-white text-kombinu-dark-blue hover:bg-kombinu-golden-yellow hover:text-gray-900 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all dark:bg-dark-text-primary dark:text-dark-bg-primary"
-            >
-              <CheckCircle className="w-5 h-5 mr-2" />
-              Começar Gratuitamente
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="lg"
-              className="font-poppins text-white border-white hover:bg-white/10 border-2 dark:text-dark-text-primary dark:border-dark-text-primary"
-              onClick={() => document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' })}
+              className="font-poppins text-gray-800 dark:text-dark-text-primary border-gray-300 dark:border-dark-border-primary hover:bg-gray-100 dark:hover:bg-dark-bg-hover border-2 backdrop-blur-sm transition-all duration-300"
+              onClick={() =>
+                document
+                  .getElementById('sobre')
+                  ?.scrollIntoView({ behavior: 'smooth' })
+              }
             >
               Saber Mais
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
+
           </div>
-          
-          <div className="flex items-center justify-center space-x-6 text-sm text-white/80 font-lato dark:text-dark-text-muted">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4" />
+
+
+          <div className="flex flex-wrap justify-center gap-8 font-lato">
+
+            <div className="flex items-center gap-2 text-gray-700 dark:text-dark-text-secondary">
+              <CheckCircle className="w-5 h-5 text-kombinu-neon-blue" />
               <span>Sem compromisso</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4" />
+
+            <div className="flex items-center gap-2 text-gray-700 dark:text-dark-text-secondary">
+              <CheckCircle className="w-5 h-5 text-kombinu-neon-blue" />
               <span>Cancelamento gratuito</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4" />
+
+            <div className="flex items-center gap-2 text-gray-700 dark:text-dark-text-secondary">
+              <CheckCircle className="w-5 h-5 text-kombinu-neon-blue" />
               <span>Suporte 24/7</span>
             </div>
+
           </div>
+
         </div>
       </section>
-
       <Footer />
     </div>
   );

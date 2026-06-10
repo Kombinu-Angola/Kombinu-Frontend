@@ -1,7 +1,8 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useErrorHandler } from '../hooks/useErrorHandler';
+import type { ReactNode } from "react";
 import { authService } from '../services/authService';
-import { Usuario } from '../types';
+import type { Usuario } from '@/types';
 
 
 interface AuthContextType {
@@ -48,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // LOGIN
   const login = async (email: string, senha: string) => {
     return executeWithErrorHandling(async () => {
-      setLoading(true);
+
 
       const user = await authService.login(email, senha);
 

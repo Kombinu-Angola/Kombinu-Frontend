@@ -1,7 +1,12 @@
 import { api } from "./api";
-import { Usuario, RegisterData } from "../types";
+import type { Usuario, RegisterData } from "@/types";
 
 const API_URL = "/auth";
+
+const userTypeMap: Record<RegisterData["tipo"], string> = {
+  criador: "creator",
+  aprendiz: "learner",
+};
 
 export const authService = {
   async login(email: string, senha: string): Promise<Usuario> {
@@ -26,21 +31,16 @@ export const authService = {
 
     return {
       id: String(user.id),
-      nome: user.first_name || user.email?.split("@")[0],
+      nome: user.nome || user.first_name || user.email?.split("@")[0],
       email: user.email,
       tipo: user.user_type === "creator" ? "criador" : "aprendiz",
-      pontos: 0,
-      nivel: 1,
+      pontos: user.pontos ?? 0,
+      nivel: user.nivel ?? 1,
       dataCriacao: new Date(),
     };
   },
 
   async register(data: RegisterData): Promise<Usuario> {
-    const userTypeMap = {
-      criador: "creator",
-      aprendiz: "learner",
-    };
-
     await api.post(`${API_URL}/register/`, {
       email: data.email,
       password: data.senha,

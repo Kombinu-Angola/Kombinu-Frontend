@@ -1,324 +1,216 @@
-/**
- * Página de Rankings Dinâmicos
- * Exibe rankings atualizados em tempo real baseados nos resultados dos quizzes
- */
-
-import React from 'react';
-import { 
-  Trophy, 
-  Medal, 
-  Award, 
-  TrendingUp, 
-  TrendingDown, 
-  Users, 
-  Calendar, 
-  Globe, 
-  Crown, 
-  ArrowUp, 
-  ArrowDown, 
-  Minus 
-} from 'lucide-react';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
-import { useRanking, useRankingStats } from '../hooks/useRanking';
-import { logger } from '../utils/logger';
-import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useState } from 'react';
-type PeriodoRanking = 'global' | 'semanal' | 'mensal';
+import { Crown, Medal, Trophy, ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 interface RankingUser {
   id: string;
   name: string;
   points: number;
   trend: 'up' | 'down' | 'same';
-  avatar?: string;
 }
 
-/**
- * Componente principal da página de Rankings
- */
 export default function Ranking() {
-  // Hooks para dados dinâmicos de ranking
-  const { 
-    rankingAtual,
-    filtroAtivo,
-    alterarFiltro,
-    carregando, 
-    obterTendencia 
-  } = useRanking();
-  
-  const { 
-    totalUsuarios, 
-    usuariosAtivosUltimaSemana, 
-    usuariosAtivosUltimoMes 
-  } = useRankingStats();
-
-  // Log da renderização da página
-  React.useEffect(() => {
-    logger.info(
-      `Página de Rankings renderizada - Período: ${filtroAtivo}`,
-      'Ranking',
-      { 
-        totalUsuarios: rankingAtual.length,
-        periodo: filtroAtivo,
-        carregando 
-      }
-    );
-  }, [filtroAtivo, rankingAtual.length, carregando]);
-
-  /**
-   * Renderiza o ícone de tendência baseado na posição anterior
-   */
-  const renderizarTendencia = (usuarioId: string) => {
-    const tendencia = obterTendencia(usuarioId);
-    
-    if (tendencia === 'subiu') {
-      return <TrendingUp className="w-4 h-4 text-green-500" />;
-    } else if (tendencia === 'desceu') {
-      return <TrendingDown className="w-4 h-4 text-red-500" />;
-    }
-    return null;
-  };
-
-  /**
-   * Renderiza o ícone da medalha baseado na posição
-   */
-  const renderizarMedalha = (posicao: number) => {
-    if (posicao === 1) {
-      return <Trophy className="w-6 h-6 text-yellow-500" />;
-    } else if (posicao === 2) {
-      return <Medal className="w-6 h-6 text-gray-400" />;
-    } else if (posicao === 3) {
-      return <Award className="w-6 h-6 text-amber-600" />;
-    }
-    return <span className="w-6 h-6 flex items-center justify-center text-sm font-bold text-gray-500">#{posicao}</span>;
-  };
-
-  /**
-   * Renderiza as estatísticas gerais
-   */
-  const renderizarEstatisticas = () => (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <Card className="p-4">
-        <div className="flex items-center space-x-3">
-          <Users className="w-8 h-8 text-blue-500" />
-          <div>
-            <p className="text-sm text-gray-600">Total de Usuários</p>
-            <p className="text-2xl font-bold text-gray-900">{totalUsuarios}</p>
-          </div>
-        </div>
-      </Card>
-      
-      <Card className="p-4">
-        <div className="flex items-center space-x-3">
-          <Calendar className="w-8 h-8 text-green-500" />
-          <div>
-            <p className="text-sm text-gray-600">Ativos (Semana)</p>
-            <p className="text-2xl font-bold text-gray-900">{usuariosAtivosUltimaSemana}</p>
-          </div>
-        </div>
-      </Card>
-      
-      <Card className="p-4">
-        <div className="flex items-center space-x-3">
-          <Globe className="w-8 h-8 text-purple-500" />
-          <div>
-            <p className="text-sm text-gray-600">Ativos (Mês)</p>
-            <p className="text-2xl font-bold text-gray-900">{usuariosAtivosUltimoMes}</p>
-          </div>
-        </div>
-      </Card>
-    </div>
-  );
-
-  /**
-   * Renderiza os filtros de período
-   */
-  const renderizarFiltros = () => (
-    <div className="flex space-x-2 mb-6">
-      {[
-        { key: 'global' as PeriodoRanking, label: 'Global', icon: Globe },
-        { key: 'semanal' as PeriodoRanking, label: 'Semanal', icon: Calendar },
-        { key: 'mensal' as PeriodoRanking, label: 'Mensal', icon: Calendar }
-      ].map(({ key, label, icon: Icon }) => (
-        <Button
-          key={key}
-          variant={filtroAtivo === key ? 'primary' : 'secondary'}
-          onClick={() => alterarFiltro(key)}
-          className="flex items-center space-x-2"
-        >
-          <Icon className="w-4 h-4" />
-          <span>{label}</span>
-        </Button>
-      ))}
-    </div>
-  );
   const { usuario } = useAuth();
-  // const { obterRanking } = useData();
   const [rankingData, setRankingData] = useState<RankingUser[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRanking = async () => {
-        setLoading(true);
-        try {
-          const { api } = await import('../services/api');
-          const response = await api.get('/rankings/global/');
-          // response.data shape is { top_users: [...], user_position: {...} }
-          
-          if (response.data && Array.isArray(response.data.top_users)) {
-             const realData: RankingUser[] = response.data.top_users.map((u: any, i: number) => ({
-                 id: String(u.user_id),
-                 name: u.email.split('@')[0], // Fallback se não vier o nome
-                 points: u.total_score,
-                 trend: 'same', // Simplificação para esta versão
-                 avatar: undefined
-             }));
-             
-             // Se o user estiver logado e tiver user_position, mas NÃO estiver nos top users mostrados, adicionamos no final manual
-             if (usuario && response.data.user_position && !realData.find(x => x.id === usuario.id)) {
-                 realData.push({
-                     id: usuario.id,
-                     name: usuario.nome,
-                     points: response.data.user_position.total_score,
-                     trend: 'same'
-                 });
-             }
-             
-             setRankingData(realData);
-          } else {
-             // Fallback local state se der erro de contrato
-             setRankingData([]);
-          }
-        } catch (error) {
-           console.error("Erro ao buscar ranking global", error);
-           setRankingData([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+      setLoading(true);
+      try {
+        const { api } = await import('../services/api');
+        const response = await api.get('/rankings/global/');
 
+        if (response.data && Array.isArray(response.data.top_users)) {
+          const data: RankingUser[] = response.data.top_users.map((u: any) => ({
+            id: String(u.user_id),
+            name: u.email?.split('@')[0] || 'user',
+            points: u.total_score,
+            trend: 'same' as const,
+          }));
+
+          if (
+            usuario &&
+            response.data.user_position &&
+            !data.find(x => x.id === usuario.id)
+          ) {
+            data.push({
+              id: usuario.id,
+              name: usuario.nome,
+              points: response.data.user_position.total_score,
+              trend: 'same',
+            });
+          }
+
+          data.sort((a, b) => b.points - a.points);
+          setRankingData(data);
+        } else {
+          setRankingData([]);
+        }
+      } catch {
+        setRankingData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchRanking();
   }, [usuario]);
 
-
-  const getPositionIcon = (index: number) => {
-    switch (index) {
-      case 0:
-        return <Crown className="w-8 h-8 text-yellow-500" />;
-      case 1:
-        return <Medal className="w-8 h-8 text-gray-400" />;
-      case 2:
-        return <Medal className="w-8 h-8 text-orange-400" />;
-      default:
-        return <span className="text-xl font-bold text-gray-500 w-8 text-center">{index + 1}</span>;
-    }
+  const getTrendIcon = (trend: RankingUser['trend']) => {
+    if (trend === 'up') return <ArrowUp className="w-4 h-4 text-green-500" />;
+    if (trend === 'down') return <ArrowDown className="w-4 h-4 text-red-500" />;
+    return <Minus className="w-4 h-4 text-gray-400" />;
   };
 
-  const getTrendIcon = (trend: 'up' | 'down' | 'same') => {
-    switch (trend) {
-      case 'up':
-        return <ArrowUp className="w-4 h-4 text-green-500" />;
-      case 'down':
-        return <ArrowDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <Minus className="w-4 h-4 text-gray-400" />;
-    }
-  };
+  const getAvatar = (name: string, isMe: boolean) => (
+    <div className={`rounded-full flex items-center justify-center text-white font-bold ${isMe
+      ? 'bg-gradient-to-br from-blue-500 to-indigo-600'
+      : 'bg-gradient-to-br from-gray-400 to-gray-600'}`}>
+      {name.charAt(0).toUpperCase()}
+    </div>
+  );
 
   if (loading) {
-     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-     );
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
+      </div>
+    );
   }
 
+  const top3 = rankingData.slice(0, 3);
+  const resto = rankingData.slice(3);
+  const podiumOrder = top3.length >= 3
+    ? [top3[1], top3[0], top3[2]]
+    : top3;
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Ranking Global 🏆
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
-            Veja quem são os maiores aprendizes da comunidade KOMBINU
-          </p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+
+      {/* Header com gradiente */}
+      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white pt-12 pb-24 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <Trophy className="w-12 h-12 mx-auto mb-3 text-yellow-300" />
+          <h1 className="text-4xl font-bold mb-2">Ranking Global</h1>
+          <p className="text-blue-200 text-lg">Classificação em tempo real dos melhores aprendizes</p>
         </div>
+      </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-          {/* Cabeçalho da Tabela */}
-          <div className="grid grid-cols-12 gap-4 p-6 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-            <div className="col-span-2 text-center">Posição</div>
-            <div className="col-span-6">Usuário</div>
-            <div className="col-span-2 text-center">Pontos</div>
-            <div className="col-span-2 text-center">Tendência</div>
-          </div>
+      <div className="max-w-4xl mx-auto px-4 -mt-16">
 
-          {/* Lista de Ranking */}
-          <div className="divide-y divide-gray-100 dark:divide-gray-700">
-            {rankingData.map((user, index) => (
-              <div 
-                key={user.id}
-                className={`grid grid-cols-12 gap-4 p-6 items-center transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/30 ${
-                  usuario?.id === user.id ? 'bg-blue-50 dark:bg-blue-900/10' : ''
-                }`}
-              >
-                <div className="col-span-2 flex justify-center items-center">
-                  {getPositionIcon(index)}
-                </div>
-                
-                <div className="col-span-6 flex items-center space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold shadow-md">
-                    {user.avatar ? (
-                      <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
-                    ) : (
-                      <span className="text-lg">{user.name.charAt(0)}</span>
-                    )}
+        {/* Pódio top 3 */}
+        {top3.length >= 2 && (
+          <div className="flex items-end justify-center gap-4 mb-8">
+            {podiumOrder.map((user, podiumIdx) => {
+              const realIndex = rankingData.findIndex(u => u.id === user.id);
+              const pos = realIndex + 1;
+              const isFirst = pos === 1;
+              const isMe = usuario?.id === user.id;
+
+              const heightClass = isFirst
+                ? 'h-36'
+                : podiumIdx === 0
+                  ? 'h-28'
+                  : 'h-24';
+
+              const avatarSize = isFirst ? 'w-16 h-16 text-2xl' : 'w-12 h-12 text-lg';
+              const cardBg = isFirst
+                ? 'bg-gradient-to-b from-yellow-50 to-white dark:from-yellow-900/20 dark:to-gray-800 border-yellow-300 dark:border-yellow-700'
+                : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700';
+
+              return (
+                <div key={user.id} className={`flex-1 max-w-[160px] flex flex-col items-center ${isFirst ? 'order-2' : podiumIdx === 0 ? 'order-1' : 'order-3'}`}>
+                  {/* Coroa para o 1.º */}
+                  {isFirst && <Crown className="w-8 h-8 text-yellow-500 mb-1" />}
+
+                  {/* Avatar */}
+                  <div className={`${avatarSize} ${isMe ? 'ring-4 ring-blue-400' : ''} rounded-full mb-2`}>
+                    {getAvatar(user.name, isMe)}
                   </div>
-                  <div>
-                    <p className={`font-bold ${
-                      usuario?.id === user.id ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white'
-                    }`}>
-                      {user.name} {usuario?.id === user.id && '(Você)'}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Nível {Math.floor(user.points / 1000) + 1}</p>
+
+                  <p className="text-sm font-bold text-gray-900 dark:text-white text-center truncate w-full px-1">
+                    {user.name}{isMe ? ' (Você)' : ''}
+                  </p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold mb-2">
+                    {user.points.toLocaleString()} XP
+                  </p>
+
+                  {/* Bloco do pódio */}
+                  <div className={`w-full ${heightClass} ${cardBg} border-2 rounded-t-xl flex items-center justify-center shadow-lg`}>
+                    <span className={`font-black ${isFirst ? 'text-4xl text-yellow-500' : 'text-3xl text-gray-400'}`}>
+                      {pos === 1 ? '🥇' : pos === 2 ? '🥈' : '🥉'}
+                    </span>
                   </div>
                 </div>
-                
-                <div className="col-span-2 text-center font-bold text-gray-900 dark:text-white">
-                  {user.points.toLocaleString()}
-                </div>
-                
-                <div className="col-span-2 flex justify-center items-center">
-                  {getTrendIcon(user.trend)}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </div>
-
-        {/* Card do Usuário (se não estiver no top 10) */}
-        {usuario && !rankingData.find(u => u.id === usuario.id) && (
-           <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-blue-100 dark:border-blue-900/30 p-6">
-             <div className="flex items-center justify-between">
-               <div className="flex items-center space-x-4">
-                 <div className="text-xl font-bold text-gray-500 dark:text-gray-400 w-8 text-center">42</div>
-                 <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl">
-                   {usuario.nome.charAt(0)}
-                 </div>
-                 <div>
-                   <p className="font-bold text-gray-900 dark:text-white">{usuario.nome} (Você)</p>
-                   <p className="text-sm text-gray-500 dark:text-gray-400">Continue aprendendo para subir no ranking!</p>
-                 </div>
-               </div>
-               <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                 {usuario.pontos} pts
-               </div>
-             </div>
-           </div>
         )}
+
+        {/* Tabela restante (posição 4+) ou tabela completa se < 3 */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden mb-10">
+
+          {rankingData.length === 0 ? (
+            <div className="py-20 text-center">
+              <Trophy className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 text-lg">Ainda não há utilizadores no ranking.</p>
+              <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Faz o teu primeiro quiz para aparecer aqui!</p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-12 px-6 py-4 bg-gray-50 dark:bg-gray-700/50 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700">
+                <div className="col-span-2 text-center">Posição</div>
+                <div className="col-span-6">Utilizador</div>
+                <div className="col-span-2 text-center">XP</div>
+                <div className="col-span-2 text-center">Tendência</div>
+              </div>
+
+              {(top3.length >= 2 ? resto : rankingData).map((user, idx) => {
+                const realIndex = rankingData.findIndex(u => u.id === user.id);
+                const pos = realIndex + 1;
+                const isMe = usuario?.id === user.id;
+
+                return (
+                  <div
+                    key={user.id}
+                    className={`grid grid-cols-12 px-6 py-4 items-center border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors
+                      ${isMe
+                        ? 'bg-blue-50 dark:bg-blue-900/10 hover:bg-blue-100 dark:hover:bg-blue-900/20'
+                        : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'}`}
+                  >
+                    <div className="col-span-2 flex justify-center">
+                      <span className={`text-sm font-bold ${isMe ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                        #{pos}
+                      </span>
+                    </div>
+
+                    <div className="col-span-6 flex items-center gap-3">
+                      <div className={`w-9 h-9 text-sm rounded-full flex-shrink-0 ${isMe ? 'ring-2 ring-blue-400' : ''}`}>
+                        {getAvatar(user.name, isMe)}
+                      </div>
+                      <div>
+                        <p className={`font-semibold text-sm ${isMe ? 'text-blue-700 dark:text-blue-300' : 'text-gray-900 dark:text-white'}`}>
+                          {user.name}{isMe ? ' (Você)' : ''}
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">
+                          Nível {Math.floor(user.points / 100) + 1}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className={`col-span-2 text-center font-bold text-sm ${isMe ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white'}`}>
+                      {user.points.toLocaleString()}
+                    </div>
+
+                    <div className="col-span-2 flex justify-center">
+                      {getTrendIcon(user.trend)}
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

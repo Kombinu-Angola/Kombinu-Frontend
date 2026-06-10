@@ -1,70 +1,109 @@
+@import "@fontsource-variable/geist";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Dark Mode Base Styles */
+/* =========================
+   BASE THEME
+========================= */
 @layer base {
-  /* Light mode (default) */
   :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --text-primary: #0f172a;
-    --text-secondary: #334155;
-    --text-muted: #64748b;
-    --border-primary: #e2e8f0;
-    --border-secondary: #cbd5e1;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
   }
 
-  /* Dark mode */
   .dark {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
-    --bg-tertiary: #333333;
-    --text-primary: #ffffff;
-    --text-secondary: #f5f5f5;
-    --text-muted: #b0b0b0;
-    --border-primary: #404040;
-    --border-secondary: #4a4a4a;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
   }
 
-  /* Smooth transitions for theme switching */
+  /* Global styles */
   * {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    @apply border-gray-200 outline-none;
+  }
+
+  body {
+    @apply bg-white text-black dark:bg-black dark:text-white;
+  }
+
+  html {
+    @apply font-sans;
   }
 }
 
-/* Dark mode utility classes */
+/* =========================
+   UTILITIES (SIMPLIFICADO)
+========================= */
 @layer utilities {
   .dark-bg-primary {
-    @apply bg-white dark:bg-dark-bg-primary;
+    @apply bg-white dark:bg-gray-900;
   }
-  
+
   .dark-bg-secondary {
-    @apply bg-gray-50 dark:bg-dark-bg-secondary;
+    @apply bg-gray-100 dark:bg-gray-800;
   }
-  
-  .dark-bg-tertiary {
-    @apply bg-gray-100 dark:bg-dark-bg-tertiary;
-  }
-  
+
   .dark-text-primary {
-    @apply text-gray-900 dark:text-dark-text-primary;
+    @apply text-black dark:text-white;
   }
-  
+
   .dark-text-secondary {
-    @apply text-gray-600 dark:text-dark-text-secondary;
+    @apply text-gray-600 dark:text-gray-300;
   }
-  
-  .dark-text-muted {
-    @apply text-gray-500 dark:text-dark-text-muted;
+
+  .dark-border {
+    @apply border-gray-200 dark:border-gray-700;
   }
-  
-  .dark-border-primary {
-    @apply border-gray-200 dark:border-dark-border-primary;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
   }
-  
-  .dark-border-secondary {
-    @apply border-gray-300 dark:border-dark-border-secondary;
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* estado inicial: escondido até entrar no ecrã */
+.reveal {
+  opacity: 0;
+}
+
+/* quando o observer adiciona .is-visible, anima */
+.reveal.is-visible {
+  animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* atrasos para os itens aparecerem em cascata (um a seguir ao outro) */
+.reveal-delay-1.is-visible {
+  animation-delay: 0.1s;
+}
+
+.reveal-delay-2.is-visible {
+  animation-delay: 0.2s;
+}
+
+.reveal-delay-3.is-visible {
+  animation-delay: 0.3s;
+}
+
+.reveal-delay-4.is-visible {
+  animation-delay: 0.4s;
+}
+
+/* acessibilidade: quem pediu menos movimento não leva animação */
+@media (prefers-reduced-motion: reduce) {
+
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    animation: none;
   }
 }
