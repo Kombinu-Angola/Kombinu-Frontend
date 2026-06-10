@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import { BookOpen, Calendar, Eye, Heart, Plus, Star, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -61,6 +60,10 @@ export default function DashboardCriador() {
 
   const totalVisualizacoes = stats.totalStudents;
   const totalLikes = 0;
+  const CURTIDAS_ACTIVAS = false;
+
+
+
   const conteudosPublicos = meusConteudos.length;
 
   if (loading) {
@@ -96,7 +99,7 @@ export default function DashboardCriador() {
         </div>
 
         {/* Estatísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className={` grid grid-cols-1 ${CURTIDAS_ACTIVAS ? 'md:grid-cols-4 ' : 'md:grid-cols-3'} gap-6  mb-8`}>
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center">
               <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30">
@@ -109,6 +112,7 @@ export default function DashboardCriador() {
             </div>
           </div>
 
+
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center">
               <div className="p-3 rounded-lg bg-green-100 dark:bg-green-900/30">
@@ -120,18 +124,20 @@ export default function DashboardCriador() {
               </div>
             </div>
           </div>
+          {CURTIDAS_ACTIVAS && (
 
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-            <div className="flex items-center">
-              <div className="p-3 rounded-lg bg-red-100 dark:bg-red-900/30">
-                <Heart className="w-6 h-6 text-red-600 dark:text-red-400" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Curtidas</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalLikes.toLocaleString()}</p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+              <div className="flex items-center">
+                <div className="p-3 rounded-lg bg-red-100 dark:bg-red-900/30">
+                  <Heart className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Curtidas</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalLikes.toLocaleString()}</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center">
@@ -199,7 +205,7 @@ export default function DashboardCriador() {
                             <span>{conteudo.students || 0}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Heart className="w-4 h-4" />
+                            <Star className="w-4 h-4" />
                             <span>{conteudo.rating || 0}</span>
                           </div>
                           <div className="flex items-center space-x-1">

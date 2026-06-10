@@ -1,4 +1,4 @@
-
+import { useEffect, useRef } from 'react';
 
 import { Footer } from '../components/layout/Footer';
 import { Button } from '../components/ui/Button';
@@ -26,7 +26,49 @@ import {
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 
+/**
+ * Hook de animação de entrada (scroll reveal).
+ * Observa todos os elementos com a classe .reveal dentro do container
+ * e adiciona .is-visible quando entram no ecrã (anima uma vez).
+ * Respeita "prefers-reduced-motion" e degrada com segurança.
+ */
+function useScrollReveal() {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const els = Array.from(root.querySelectorAll<HTMLElement>('.reveal'));
+
+    const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (semMovimento || !('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  return rootRef;
+}
+
 export default function LandingPage() {
+
+  const rootRef = useScrollReveal();
 
   // Enhanced statistics with more professional metrics
   const stats = [
@@ -95,7 +137,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen dark-bg-primary overflow-hidden">
+    <div ref={rootRef} className="min-h-screen dark-bg-primary overflow-hidden">
       <Header />
 
 
@@ -110,7 +152,7 @@ export default function LandingPage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative z-10">
+            <div className="relative z-10 reveal">
               <div className="flex items-center space-x-2 dark-bg-primary/80 backdrop-blur-sm px-4 py-2 rounded-full border border-kombinu-neon-blue/30 mb-6 w-fit dark:border-dark-border-accent">
                 <Sparkles className="w-4 h-4 text-kombinu-dark-blue" />
                 <span className="text-sm font-medium font-lato text-kombinu-dark-blue dark:text-dark-interactive-primary">Plataforma Líder em Educação Gamificada</span>
@@ -155,7 +197,7 @@ export default function LandingPage() {
               {/* Trust indicators */}
               <div className="grid grid-cols-2 gap-4">
                 {odsSupported.map((ods, index) => (
-                  <div key={index} className="flex items-center space-x-2 text-sm dark-text-muted">
+                  <div key={index} className={`flex items-center space-x-2 text-sm dark-text-muted reveal reveal-delay-${index + 1}`}>
                     <ods.icon className="w-4 h-4 text-kombinu-golden-yellow" />
                     <span className="font-lato">{ods.text}</span>
                   </div>
@@ -164,7 +206,7 @@ export default function LandingPage() {
             </div>
 
             {/* Enhanced visual element */}
-            <div className="relative lg:block hidden">
+            <div className="relative lg:block hidden reveal reveal-delay-2">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow rounded-3xl transform rotate-6 opacity-20"></div>
                 <div className="relative dark-bg-primary rounded-3xl shadow-2xl p-8 transform -rotate-2 hover:rotate-0 transition-transform duration-500 dark:shadow-gray-900/50">
@@ -203,7 +245,7 @@ export default function LandingPage() {
       {/* Enhanced Statistics */}
       <section className="py-16 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 reveal">
             <h2 className="font-montserrat text-3xl font-bold text-gray-900 mb-4">Números que Falam por Si</h2>
             <p className="font-lato text-xl text-gray-600">A confiança de milhares de utilizadores em Angola</p>
           </div>
@@ -212,7 +254,7 @@ export default function LandingPage() {
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <div key={index} className="text-center group">
+                <div key={index} className={`text-center group reveal reveal-delay-${index + 1}`}>
                   <div className="w-16 h-16 bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
                     <Icon className="w-8 h-8 text-white" />
                   </div>
@@ -239,7 +281,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
           {/* Heading */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-20 reveal">
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-kombinu-neon-blue/10 text-kombinu-dark-blue text-sm font-semibold mb-6 dark:bg-dark-bg-hover dark:text-dark-interactive-primary">
               <Sparkles className="w-4 h-4 mr-2" />
               Educação do Futuro
@@ -267,7 +309,7 @@ export default function LandingPage() {
 
               <div className="space-y-8">
 
-                <div className="flex items-start gap-4 group">
+                <div className="flex items-start gap-4 group reveal reveal-delay-1">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-kombinu-neon-blue to-blue-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                     <CheckCircle className="w-7 h-7 text-white" />
                   </div>
@@ -284,7 +326,7 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4 group">
+                <div className="flex items-start gap-4 group reveal reveal-delay-2">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-green-500 to-green-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                     <Zap className="w-7 h-7 text-white" />
                   </div>
@@ -301,7 +343,7 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4 group">
+                <div className="flex items-start gap-4 group reveal reveal-delay-3">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-purple-500 to-purple-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                     <Users className="w-7 h-7 text-white" />
                   </div>
@@ -325,7 +367,7 @@ export default function LandingPage() {
             </div>
 
             {/* Right Side */}
-            <div className="relative">
+            <div className="relative reveal reveal-delay-2">
 
               <div className="absolute inset-0 bg-gradient-to-r from-kombinu-neon-blue/20 to-kombinu-golden-yellow/20 blur-3xl rounded-full"></div>
 
@@ -408,7 +450,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
           {/* Header */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-20 reveal">
 
             <div className="inline-flex items-center px-5 py-2 rounded-full bg-kombinu-neon-blue/10 border border-kombinu-neon-blue/20 mb-6">
               <Sparkles className="w-4 h-4 text-kombinu-neon-blue mr-2" />
@@ -418,7 +460,7 @@ export default function LandingPage() {
               </span>
             </div>
 
-            <h2 className="font-montserrat text-4xl md:text-6xl font-bold dark-text-primary mb-6">
+            <h2 className="font-montserrat text-2xl  md:text-6xl  font-bold dark-text-primary mb-6">
               Funcionalidades
               <span className="bg-gradient-to-r from-kombinu-neon-blue to-kombinu-golden-yellow bg-clip-text text-transparent ml-4">
                 Inovadoras
@@ -440,7 +482,7 @@ export default function LandingPage() {
               return (
                 <div
                   key={index}
-                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 hover:-translate-y-3 hover:shadow-2xl transition-all duration-500"
+                  className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 hover:-translate-y-3 hover:shadow-2xl transition-all duration-500 reveal reveal-delay-${index + 1}`}
                 >
 
                   {/* Glow */}
@@ -505,7 +547,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
           {/* Header */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-20 reveal">
 
             <div className="inline-flex items-center px-5 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
               <Trophy className="w-4 h-4 text-purple-400 mr-2" />
@@ -515,7 +557,7 @@ export default function LandingPage() {
               </span>
             </div>
 
-            <h2 className="text-4xl md:text-6xl font-bold dark-text-primary mb-6 font-montserrat">
+            <h2 className="text-3xl   md:text-6xl font-bold dark-text-primary mb-6 font-montserrat">
               Validação
               <span className="bg-gradient-to-r from-kombinu-neon-blue to-purple-400 bg-clip-text text-transparent ml-4">
                 Científica
@@ -535,7 +577,7 @@ export default function LandingPage() {
 
               <div
                 key={index}
-                className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500"
+                className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 reveal reveal-delay-${index + 1}`}
               >
 
                 {/* Glow */}
@@ -592,7 +634,7 @@ export default function LandingPage() {
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-kombinu-neon-blue/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-kombinu-dark-blue/10 rounded-full blur-3xl"></div>
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
 
 
           <div className="w-24 h-24 rounded-full bg-white dark:bg-dark-bg-secondary border border-gray-200 dark:border-dark-border-primary backdrop-blur-xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
