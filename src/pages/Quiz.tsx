@@ -242,7 +242,7 @@ export default function Quiz() {
               </h2>
             </div>
 
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 leading-relaxed">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 leading-relaxed break-words">
               {currentQuestion.text}
             </h3>
 
