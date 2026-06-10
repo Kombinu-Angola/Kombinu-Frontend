@@ -154,7 +154,7 @@ export default function Ranking() {
                   </p>
 
                   <p className="text-xs text-gray-500">
-                    Nível {Math.floor(user.points / 1000) + 1}
+                    Nível {Math.floor(user.points / 100) + 1}
                   </p>
                 </div>
               </div>

@@ -19,7 +19,6 @@ export interface Content {
   rating: number;
   students: number;
   price: number;
-  // Detailed fields
   type?: 'video' | 'quiz' | 'text';
   videoUrl?: string;
   textContent?: string;
@@ -32,21 +31,45 @@ export interface Content {
   quiz_id?: string;
 }
 
+const CATEGORIAS_DISPLAY: Record<string, string> = {
+  tecnologia: 'Tecnologia',
+  negocios: 'Negócios',
+  design: 'Design',
+};
+
+const THUMBNAIL_FALLBACK =
+  'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500';
+
+function mapItem(item: any): Content {
+  const creatorObj = item.creator;
+  const creatorName =
+    typeof creatorObj === 'object' && creatorObj !== null
+      ? `${creatorObj.first_name || ''} ${creatorObj.last_name || ''}`.trim() ||
+        creatorObj.email?.split('@')[0] ||
+        'Kombinu'
+      : typeof creatorObj === 'string'
+        ? creatorObj
+        : 'Kombinu';
+
+  return {
+    ...item,
+    videoUrl: item.videoUrl || item.video_url || '',
+    textContent: item.textContent || item.text_content || '',
+    creatorName,
+    level: item.level || 'Iniciante',
+    rating: item.rating || 0,
+    students: item.students || 0,
+    price: item.price || 0,
+    thumbnail: item.thumbnail || THUMBNAIL_FALLBACK,
+  };
+}
+
 export const contentService = {
   getAll: async (): Promise<Content[]> => {
     try {
       const response = await api.get('/contents/');
-      // Lida com a paginação do DRF: os itens estão em response.data.results ou na raiz (se a view não for paginada)
-      const results = response.data.results ? response.data.results : response.data;
-
-      return results.map((item: any) => ({
-        ...item,
-        // Ensure defaults for missing fields
-        level: item.level || 'Iniciante',
-        rating: item.rating || 0,
-        students: item.students || 0,
-        thumbnail: item.thumbnail || 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500'
-      }));
+      const results = response.data.results ?? response.data;
+      return (Array.isArray(results) ? results : []).map(mapItem);
     } catch (error) {
       console.error('Failed to fetch contents:', error);
       return [];
@@ -56,13 +79,8 @@ export const contentService = {
   getByCreator: async (creatorId: string | number): Promise<Content[]> => {
     try {
       const response = await api.get(`/contents/?creator=${creatorId}`);
-      return response.data.results.map((item: any) => ({
-        ...item,
-        level: item.level || 'Iniciante',
-        rating: item.rating || 0,
-        students: item.students || 0,
-        thumbnail: item.thumbnail || 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500'
-      }));
+      const results = response.data.results ?? response.data;
+      return (Array.isArray(results) ? results : []).map(mapItem);
     } catch (error) {
       console.error(`Failed to fetch contents for creator ${creatorId}:`, error);
       return [];
@@ -72,7 +90,7 @@ export const contentService = {
   getById: async (id: string): Promise<Content | undefined> => {
     try {
       const response = await api.get(`/contents/${id}/`);
-      return response.data;
+      return mapItem(response.data);
     } catch (error) {
       console.error(`Failed to fetch content ${id}:`, error);
       return undefined;
@@ -80,12 +98,15 @@ export const contentService = {
   },
 
   getCategories: async (): Promise<string[]> => {
-    // This could also be an endpoint
-    return ['Programação', 'Marketing', 'Design', 'Finanças', 'Idiomas', 'Ciências'];
+    return Object.keys(CATEGORIAS_DISPLAY);
+  },
+
+  getCategoryLabel: (category: string): string => {
+    return CATEGORIAS_DISPLAY[category] ?? category;
   },
 
   create: async (content: Omit<Content, 'id'>): Promise<Content> => {
     const response = await api.post('/contents/', content);
-    return response.data;
-  }
+    return mapItem(response.data);
+  },
 };
