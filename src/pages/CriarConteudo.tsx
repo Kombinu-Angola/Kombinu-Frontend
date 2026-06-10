@@ -74,20 +74,40 @@ export default function CriarConteudo() {
   };
 
   const gerarQuizIA = async () => {
+    if (!titulo.trim() || !descricao.trim()) {
+      alert('Preenche o Título e a Descrição antes de gerar o quiz com IA.');
+      return;
+    }
+
     try {
-       setGerandoIA(true);
-       // Como OpenTDB no backend usa gerar quiz para UM conteudo existente (id), 
-       // para o escopo do form local vamos simplificar com uma rota customizada ou mock. 
-       // Como o MVP foca na integração: 
-       // O endpoint correto do backend exige um content_id (ex: /api/quizzes/contents/<id>/generate-quiz/).
-       // Nós ainda não gravámos o conteúdo. Para permitir gerar o quiz "na criação", faríamos o generate via um helper ou salvaríamos o conteúdo primeiro.
-       
-       alert("Gravação de Quiz Automático no MVP: Crie o conteúdo como tipo 'Texto' ou 'Vídeo' e depois a opção 'Gerar Quiz' estará disponível no Dashboard!");
-    } catch (error) {
-       console.error("Erro ao gerar quiz IA", error);
-       alert("Ocorreu um erro ao conectar com o serviço de IA.");
+      setGerandoIA(true);
+
+      const createdContent = await contentService.create({
+        title: titulo,
+        description: descricao,
+        category: categoria,
+        thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500',
+        level: dificuldade,
+        duration: `${tempoEstimado}h`,
+        type: 'quiz',
+        tags: tags.join(','),
+      } as any);
+
+      await quizService.generateQuiz(createdContent.id);
+
+      navigate('/dashboard/creator');
+    } catch (error: any) {
+      console.error('Erro ao gerar quiz IA', error);
+      const backendMsg = error?.response?.data?.error;
+      if (error?.response?.status === 503) {
+        alert('A API de perguntas está temporariamente sobrecarregada. Aguarda alguns segundos e tenta novamente.');
+      } else if (backendMsg) {
+        alert(`Erro: ${backendMsg}`);
+      } else {
+        alert('Ocorreu um erro ao gerar o quiz com IA. Tenta novamente.');
+      }
     } finally {
-       setGerandoIA(false);
+      setGerandoIA(false);
     }
   };
 
