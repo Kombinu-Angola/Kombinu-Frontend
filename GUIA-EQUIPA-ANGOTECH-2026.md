@@ -24,7 +24,7 @@ O **KOMBINU** é uma plataforma educacional gamificada angolana que conecta **qu
 
 ## Como aceder à plataforma
 
-**Link de produção:** https://kombinu-frontend.vercel.app
+**Link de produção:** [kombinu.vercel.app](https://kombinu.vercel.app)
 
 Abre no browser do telemóvel ou computador — funciona nos dois.
 
