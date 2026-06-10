@@ -47,7 +47,21 @@ export const quizService = {
    */
   getQuiz: async (quizId: string): Promise<QuizData> => {
     const response = await api.get(`/quizzes/${quizId}/`);
-    return response.data;
+    const data = response.data;
+
+    const decode = (s: string) => { try { return decodeURIComponent(s); } catch { return s; } };
+
+    return {
+      ...data,
+      questions: (data.questions ?? []).map((q: any) => ({
+        ...q,
+        text: decode(q.text ?? q.question_text ?? ''),
+        options: (q.options ?? []).map((o: any) => ({
+          ...o,
+          text: decode(o.text ?? ''),
+        })),
+      })),
+    };
   },
 
   /**
