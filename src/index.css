@@ -58,3 +58,52 @@
     @apply border-gray-200 dark:border-gray-700;
   }
 }
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* estado inicial: escondido até entrar no ecrã */
+.reveal {
+  opacity: 0;
+}
+
+/* quando o observer adiciona .is-visible, anima */
+.reveal.is-visible {
+  animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* atrasos para os itens aparecerem em cascata (um a seguir ao outro) */
+.reveal-delay-1.is-visible {
+  animation-delay: 0.1s;
+}
+
+.reveal-delay-2.is-visible {
+  animation-delay: 0.2s;
+}
+
+.reveal-delay-3.is-visible {
+  animation-delay: 0.3s;
+}
+
+.reveal-delay-4.is-visible {
+  animation-delay: 0.4s;
+}
+
+/* acessibilidade: quem pediu menos movimento não leva animação */
+@media (prefers-reduced-motion: reduce) {
+
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    animation: none;
+  }
+}
