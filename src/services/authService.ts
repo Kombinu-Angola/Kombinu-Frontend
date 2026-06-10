@@ -31,11 +31,11 @@ export const authService = {
 
     return {
       id: String(user.id),
-      nome: user.first_name || user.email?.split("@")[0],
+      nome: user.nome || user.first_name || user.email?.split("@")[0],
       email: user.email,
       tipo: user.user_type === "creator" ? "criador" : "aprendiz",
-      pontos: 0,
-      nivel: 1,
+      pontos: user.pontos ?? 0,
+      nivel: user.nivel ?? 1,
       dataCriacao: new Date(),
     };
   },

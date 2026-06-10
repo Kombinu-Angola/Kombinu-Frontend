@@ -97,6 +97,11 @@ api.interceptors.response.use(
       }
     }
 
+    if (error.response?.status === 403) {
+      forceLogout();
+      return Promise.reject(error);
+    }
+
     return Promise.reject(error);
   }
 );

@@ -5,13 +5,16 @@ import { contentService } from '../services/contentService';
 import type { Content } from '../services/contentService';
 import { Link } from 'react-router-dom';
 
+const TODOS = 'Todos';
+
+
 /**
  * Página principal de funcionalidades (antigo Marketplace)
  * Lista todos os cursos/conteúdos disponíveis
  */
 export default function Marketplace() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [selectedCategory, setSelectedCategory] = useState(TODOS);
   const [contents, setContents] = useState<Content[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +25,7 @@ export default function Marketplace() {
         const data = await contentService.getAll();
         setContents(Array.isArray(data) ? data : []);
         const cats = await contentService.getCategories();
-        setCategories(['Todos', ...(Array.isArray(cats) ? cats : [])]); // Add 'Todos' option
+        setCategories(Array.isArray(cats) ? cats : []);
       } catch (error) {
         console.error("Failed to fetch content", error);
       } finally {
@@ -35,8 +38,7 @@ export default function Marketplace() {
   const filteredContents = contents.filter(content => {
     const matchesSearch = content.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       content.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'Todos' || content.category === selectedCategory;
-
+    const matchesCategory = selectedCategory === TODOS || content.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -80,16 +82,17 @@ export default function Marketplace() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Categorias */}
         <div className="flex overflow-x-auto pb-4 mb-8 space-x-2 scrollbar-hide">
-          {categories.map((categoria) => (
+          {[TODOS, ...categories].map((categoria) => (
             <button
               key={categoria}
+              type="button"
               onClick={() => setSelectedCategory(categoria)}
               className={`px-4 py-2 rounded-full whitespace-nowrap transition-all text-sm font-medium ${selectedCategory === categoria
                 ? 'bg-blue-600 text-white shadow-md'
                 : 'bg-white text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
                 }`}
             >
-              {categoria}
+              {categoria === TODOS ? 'Todos' : contentService.getCategoryLabel(categoria)}
             </button>
           ))}
         </div>

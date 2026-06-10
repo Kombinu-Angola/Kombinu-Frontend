@@ -43,6 +43,9 @@ export default function VisualizarConteudo() {
   const [concluido, setConcluido] =
     useState<boolean>(false);
 
+  const [quizIndisponivel, setQuizIndisponivel] =
+    useState<boolean>(false);
+
   /**
    * Buscar conteúdo
    */
@@ -96,7 +99,7 @@ export default function VisualizarConteudo() {
           `/quiz/${conteudo.quiz_id}`
         );
       } else {
-        navigate(`/quiz/${id}`);
+        setQuizIndisponivel(true);
       }
     };
 
@@ -185,6 +188,7 @@ export default function VisualizarConteudo() {
         {/* Navegação */}
         <div className="mb-6">
           <button
+            type="button"
             onClick={() =>
               navigate(-1)
             }
@@ -316,6 +320,7 @@ export default function VisualizarConteudo() {
             <div className="flex flex-col space-y-3 lg:ml-8 mt-6 lg:mt-0">
 
               <button
+                type="button"
                 onClick={
                   handleCurtir
                 }
@@ -340,6 +345,7 @@ export default function VisualizarConteudo() {
 
               {!concluido ? (
                 <button
+                  type="button"
                   onClick={
                     marcarComoConcluido
                   }
@@ -395,7 +401,14 @@ export default function VisualizarConteudo() {
                 ranking!
               </p>
 
+              {quizIndisponivel && (
+                <p className="text-sm text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg px-4 py-2 mb-4">
+                  O quiz está temporariamente indisponível. Tente novamente mais tarde.
+                </p>
+              )}
+
               <button
+                type="button"
                 onClick={
                   handleIniciarQuiz
                 }
@@ -512,6 +525,7 @@ export default function VisualizarConteudo() {
               </p>
 
               <button
+                type="button"
                 onClick={
                   handleIniciarQuiz
                 }
