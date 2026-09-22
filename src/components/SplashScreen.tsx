@@ -1,14 +1,14 @@
-import { Logo } from "./ui/Logo";
+import logoTipo from "./assets/Kombinu logo. .png"
 
 export const SplashScreen = () => {
     return (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white dark:bg-dark-bg-primary">
+        <div className="fixed inset-0 z-[9999] bg-accent flex flex-col items-center justify-center  dark:bg-dark-bg-primary">
 
             <div className="animate-pulse">
-                <Logo size="xl" />
+                <img src={logoTipo} className="w-30 h-30" alt="logotipo" />
             </div>
 
-            <p className="mt-4 text-lg font-lato text-gray-600 dark:text-gray-300">
+            <p className=" text-lg font-lato text-white dark:text-gray-300">
                 Plataforma de Educação Gamificada
             </p>
 
