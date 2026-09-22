@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { quizService } from '../services/quizService';
-import { Header } from '../components/layout/Header';
+import { Header } from '@/components/layout/Header';
 import { useAuth } from '../contexts/AuthContext';
 import { contentService } from '../services/contentService';
 import { Save, Plus, Trash2, BookOpen, Video, FileText, Clock, Target, Tag, Cpu } from 'lucide-react';
@@ -49,14 +49,14 @@ export default function CriarConteudo() {
   };
 
   const atualizarPergunta = (id: string, campo: string, valor: any) => {
-    setQuiz(quiz.map(p => 
+    setQuiz(quiz.map(p =>
       p.id === id ? { ...p, [campo]: valor } : p
     ));
   };
 
   const atualizarOpcao = (perguntaId: string, opcaoIndex: number, valor: string) => {
-    setQuiz(quiz.map(p => 
-      p.id === perguntaId 
+    setQuiz(quiz.map(p =>
+      p.id === perguntaId
         ? { ...p, options: p.options.map((opcao, index) => index === opcaoIndex ? valor : opcao) }
         : p
     ));
@@ -113,41 +113,41 @@ export default function CriarConteudo() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate
     if (tipo === 'quiz' && quiz.some(q => !q.question.trim())) {
-        alert('Por favor, preencha todas as perguntas do quiz.');
-        return;
+      alert('Por favor, preencha todas as perguntas do quiz.');
+      return;
     }
 
     try {
-        const createdContent = await contentService.create({
-            title: titulo,
-            description: descricao,
-            category: categoria,
-            thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500', // Mock thumbnail
-            level: dificuldade,
-            duration: `${tempoEstimado}h`,
-            type: tipo,
-            textContent: tipo === 'text' ? conteudo : undefined,
-            videoUrl: tipo === 'video' ? conteudo : undefined,
-            tags: tags.join(','), // Backend is expecting a CSV string
-        } as any);
+      const createdContent = await contentService.create({
+        title: titulo,
+        description: descricao,
+        category: categoria,
+        thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500', // Mock thumbnail
+        level: dificuldade,
+        duration: `${tempoEstimado}h`,
+        type: tipo,
+        textContent: tipo === 'text' ? conteudo : undefined,
+        videoUrl: tipo === 'video' ? conteudo : undefined,
+        tags: tags.join(','), // Backend is expecting a CSV string
+      } as any);
 
-        if (tipo === 'quiz') {
-            await quizService.createManualQuiz(createdContent.id, quiz);
-        }
+      if (tipo === 'quiz') {
+        await quizService.createManualQuiz(createdContent.id, quiz);
+      }
 
-        navigate('/dashboard/creator');
+      navigate('/dashboard/creator');
     } catch (error) {
-        console.error("Failed to create content", error);
-        alert("Erro ao criar conteúdo. Tente novamente.");
+      console.error("Failed to create content", error);
+      alert("Erro ao criar conteúdo. Tente novamente.");
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -162,7 +162,7 @@ export default function CriarConteudo() {
           {/* Informações Básicas */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Informações Básicas</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -216,37 +216,34 @@ export default function CriarConteudo() {
                   <button
                     type="button"
                     onClick={() => setTipo('text')}
-                    className={`p-3 border-2 rounded-lg text-center transition-all ${
-                      tipo === 'text'
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
-                        : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500'
-                    }`}
+                    className={`p-3 border-2 rounded-lg text-center transition-all ${tipo === 'text'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
+                      : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500'
+                      }`}
                   >
                     <FileText className={`w-6 h-6 mx-auto mb-1 ${tipo === 'text' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
                     <div className={`text-sm font-medium ${tipo === 'text' ? 'text-blue-900 dark:text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>Texto</div>
                   </button>
-                  
+
                   <button
                     type="button"
                     onClick={() => setTipo('video')}
-                    className={`p-3 border-2 rounded-lg text-center transition-all ${
-                      tipo === 'video'
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
-                        : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500'
-                    }`}
+                    className={`p-3 border-2 rounded-lg text-center transition-all ${tipo === 'video'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
+                      : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500'
+                      }`}
                   >
                     <Video className={`w-6 h-6 mx-auto mb-1 ${tipo === 'video' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
                     <div className={`text-sm font-medium ${tipo === 'video' ? 'text-blue-900 dark:text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>Vídeo</div>
                   </button>
-                  
+
                   <button
                     type="button"
                     onClick={() => setTipo('quiz')}
-                    className={`p-3 border-2 rounded-lg text-center transition-all ${
-                      tipo === 'quiz'
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
-                        : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500'
-                    }`}
+                    className={`p-3 border-2 rounded-lg text-center transition-all ${tipo === 'quiz'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400'
+                      : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500'
+                      }`}
                   >
                     <BookOpen className={`w-6 h-6 mx-auto mb-1 ${tipo === 'quiz' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
                     <div className={`text-sm font-medium ${tipo === 'quiz' ? 'text-blue-900 dark:text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>Quiz</div>
@@ -346,7 +343,7 @@ export default function CriarConteudo() {
                 </button>
               )}
             </div>
-            
+
             {tipo !== 'quiz' ? (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -359,7 +356,7 @@ export default function CriarConteudo() {
                   rows={12}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   placeholder={
-                    tipo === 'video' 
+                    tipo === 'video'
                       ? 'Cole aqui o link do YouTube, Vimeo ou outro serviço de vídeo'
                       : 'Escreva aqui o conteúdo educacional que será apresentado aos aprendizes'
                   }
@@ -461,7 +458,7 @@ export default function CriarConteudo() {
           {/* Configurações de Publicação */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Configurações de Publicação</h2>
-            
+
             <div className="flex items-center space-x-3">
               <input
                 type="checkbox"
