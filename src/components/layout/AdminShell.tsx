@@ -5,12 +5,12 @@ import { Icon, type IconName } from "../ui/Icon";
 export type AdminSection = "visao" | "estudantes" | "moderacao" | "insights" | "financeiro" | "gamificacao";
 
 const NAV: ReadonlyArray<{ id: AdminSection; label: string; href: string; icon: IconName }> = [
-  { id: "visao", label: "Visão executiva", href: "#/admin", icon: "grid" },
-  { id: "estudantes", label: "Estudantes e polos", href: "#/admin/estudantes", icon: "users" },
-  { id: "moderacao", label: "Moderação", href: "#/admin/moderacao", icon: "shield" },
-  { id: "insights", label: "Insights", href: "#/admin/insights", icon: "chart" },
-  { id: "financeiro", label: "Financeiro e Express", href: "#/admin/financeiro", icon: "wallet" },
-  { id: "gamificacao", label: "Gamificação e ligas", href: "#/admin/gamificacao", icon: "trophy" },
+  { id: "visao", label: "Visão executiva", href: "/v2/admin", icon: "grid" },
+  { id: "estudantes", label: "Estudantes e polos", href: "/v2/admin/estudantes", icon: "users" },
+  { id: "moderacao", label: "Moderação", href: "/v2/admin/moderacao", icon: "shield" },
+  { id: "insights", label: "Insights", href: "/v2/admin/insights", icon: "chart" },
+  { id: "financeiro", label: "Financeiro e Express", href: "/v2/admin/financeiro", icon: "wallet" },
+  { id: "gamificacao", label: "Gamificação e ligas", href: "/v2/admin/gamificacao", icon: "trophy" },
 ];
 
 type AdminShellProps = {
@@ -65,7 +65,7 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
       <nav aria-label="Backoffice" className="fixed inset-y-0 left-0 z-40 hidden w-[260px] flex-col justify-between border-r-2 border-border-cloud bg-surface-canvas lg:flex">
         <div>
           <div className="flex h-16 items-center justify-between border-b-2 border-border-cloud px-5">
-            <a href="#/admin" className="font-montserrat text-headline-h3 font-extrabold text-primary">
+            <a href="/v2/admin" className="font-montserrat text-headline-h3 font-extrabold text-primary">
               Kombinu
             </a>
             <span className="rounded-full bg-brand-ocean px-2 py-0.5 text-overline text-white uppercase">Admin</span>

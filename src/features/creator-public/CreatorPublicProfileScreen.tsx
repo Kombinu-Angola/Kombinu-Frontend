@@ -37,7 +37,7 @@ export default function CreatorPublicProfileScreen({ creator, userName }: Creato
   return (
     <AppShell active="sebentas" userName={userName} campus={creator.university}>
       <div className="mx-auto max-w-[1240px] px-4 py-6 md:px-6 lg:py-8">
-        <a href="#/marketplace" className="mb-4 inline-flex min-h-11 items-center gap-1.5 text-caption font-bold text-text-secondary hover:text-primary">
+        <a href="/v2/marketplace" className="mb-4 inline-flex min-h-11 items-center gap-1.5 text-caption font-bold text-text-secondary hover:text-primary">
           <Icon name="arrow-left" size={16} />
           Voltar às sebentas
         </a>

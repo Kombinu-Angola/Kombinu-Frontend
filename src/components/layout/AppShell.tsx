@@ -9,10 +9,10 @@ import { Icon, type IconName } from "../ui/Icon";
 export type AppSection = "trilhas" | "simulados" | "ligas" | "sebentas" | "painel";
 
 const NAV: ReadonlyArray<{ id: AppSection; label: string; href: string; icon: IconName }> = [
-  { id: "trilhas", label: "Trilhas", href: "#/trilhas", icon: "book" },
-  { id: "simulados", label: "Simulados", href: "#/desafio", icon: "bolt" },
-  { id: "ligas", label: "Ligas", href: "#/ligas", icon: "trophy" },
-  { id: "sebentas", label: "Sebentas", href: "#/marketplace", icon: "bag" },
+  { id: "trilhas", label: "Trilhas", href: "/v2/trilhas", icon: "book" },
+  { id: "simulados", label: "Simulados", href: "/v2/desafio", icon: "bolt" },
+  { id: "ligas", label: "Ligas", href: "/v2/ligas", icon: "trophy" },
+  { id: "sebentas", label: "Sebentas", href: "/v2/marketplace", icon: "bag" },
 ];
 
 type AppShellProps = {
@@ -44,7 +44,7 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
       <header className="sticky top-0 z-50 border-b-2 border-border-cloud bg-surface-canvas/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-4 px-4 md:h-20 md:px-6">
           <span className="flex min-w-0 items-center gap-3">
-            <a href="#/trilhas" className="font-montserrat text-headline-h2 font-extrabold tracking-tight text-primary">
+            <a href="/v2/trilhas" className="font-montserrat text-headline-h2 font-extrabold tracking-tight text-primary">
               Kombinu
             </a>
             {campus && (
@@ -88,7 +88,7 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
               <span aria-hidden="true">{formatInt(gems)}</span>
               <span className="sr-only">{formatInt(gems)} gemas</span>
             </p>
-            <a href="#/painel" aria-label={`Painel e perfil de ${userName}`} className="relative rounded-full">
+            <a href="/v2/painel" aria-label={`Painel e perfil de ${userName}`} className="relative rounded-full">
               <Avatar name={userName} />
               <span
                 aria-hidden="true"

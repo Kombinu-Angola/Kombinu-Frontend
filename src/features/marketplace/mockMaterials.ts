@@ -13,4 +13,4 @@ const base: Omit<Material, "id" | "href">[] = [
   { title: "Álgebra Linear: exames de anos anteriores", kind: "Exames resolvidos", area: "engenharia", university: "ISPTEC", author: "Paulo F.", rating: 4.9, reviews: 101, priceKz: 1500 },
 ];
 
-export const MOCK_MATERIALS: Material[] = base.map((m, i) => ({ ...m, id: `mat-${i + 1}`, href: `#/marketplace/${i + 1}` }));
+export const MOCK_MATERIALS: Material[] = base.map((m, i) => ({ ...m, id: `mat-${i + 1}`, href: `/v2/marketplace/${i + 1}` }));

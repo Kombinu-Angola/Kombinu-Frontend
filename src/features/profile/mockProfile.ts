@@ -24,7 +24,7 @@ export const MOCK_PROFILE: StudentProfile = {
       at: daysAgo(1),
       score: "10/10",
       xp: 50,
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
     {
       id: "a2",
@@ -34,7 +34,7 @@ export const MOCK_PROFILE: StudentProfile = {
       at: daysAgo(3),
       score: "9/10",
       xp: 40,
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
     {
       id: "a3",
@@ -44,17 +44,17 @@ export const MOCK_PROFILE: StudentProfile = {
       at: daysAgo(5),
       score: "10/10",
       xp: 60,
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
   ],
   saved: [
-    { id: "s1", title: "Sebenta de política cambial", subject: "Macroeconomia I", sizeKb: 320, offline: true, href: "#/sebenta" },
-    { id: "s2", title: "Algoritmos em Python: da teoria ao exame", subject: "Programação I", sizeKb: 480, offline: true, href: "#/sebenta" },
-    { id: "s3", title: "Contabilidade Geral I: lançamentos e PGC", subject: "Contabilidade", sizeKb: 260, offline: false, href: "#/sebenta" },
+    { id: "s1", title: "Sebenta de política cambial", subject: "Macroeconomia I", sizeKb: 320, offline: true, href: "/v2/sebenta" },
+    { id: "s2", title: "Algoritmos em Python: da teoria ao exame", subject: "Programação I", sizeKb: 480, offline: true, href: "/v2/sebenta" },
+    { id: "s3", title: "Contabilidade Geral I: lançamentos e PGC", subject: "Contabilidade", sizeKb: 260, offline: false, href: "/v2/sebenta" },
   ],
   exams: [
-    { id: "e1", title: "Simulado de Estruturas de Dados", at: daysAgo(2), accuracy: 90, minutes: 12, href: "#/desafio" },
-    { id: "e2", title: "Desafio relâmpago: macroeconomia", at: daysAgo(6), accuracy: 70, minutes: 5, href: "#/desafio" },
+    { id: "e1", title: "Simulado de Estruturas de Dados", at: daysAgo(2), accuracy: 90, minutes: 12, href: "/v2/desafio" },
+    { id: "e2", title: "Desafio relâmpago: macroeconomia", at: daysAgo(6), accuracy: 70, minutes: 5, href: "/v2/desafio" },
   ],
 };
 

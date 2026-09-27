@@ -7,10 +7,10 @@ import { Icon, type IconName } from "../ui/Icon";
 export type CreatorSection = "estudio" | "financeiro" | "publico" | "definicoes";
 
 const NAV: ReadonlyArray<{ id: CreatorSection; label: string; href: string; icon: IconName; hint: string }> = [
-  { id: "estudio", label: "Estúdio de criação", href: "#/estudio", icon: "edit", hint: "Rascunhos e publicações" },
-  { id: "financeiro", label: "Financeiro e vendas", href: "#/estudio/financeiro", icon: "wallet", hint: "Saldo, levantamentos e histórico" },
-  { id: "publico", label: "Perfil público", href: "#/criador", icon: "users", hint: "Como os estudantes te veem" },
-  { id: "definicoes", label: "Conta e subscrição", href: "#/estudio/definicoes", icon: "gear", hint: "Perfil, notificações e plano" },
+  { id: "estudio", label: "Estúdio de criação", href: "/v2/estudio", icon: "edit", hint: "Rascunhos e publicações" },
+  { id: "financeiro", label: "Financeiro e vendas", href: "/v2/estudio/financeiro", icon: "wallet", hint: "Saldo, levantamentos e histórico" },
+  { id: "publico", label: "Perfil público", href: "/v2/criador", icon: "users", hint: "Como os estudantes te veem" },
+  { id: "definicoes", label: "Conta e subscrição", href: "/v2/estudio/definicoes", icon: "gear", hint: "Perfil, notificações e plano" },
 ];
 
 type CreatorShellProps = {
@@ -46,7 +46,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
             >
               <Icon name="menu" size={20} />
             </button>
-            <a href="#/estudio" className="font-montserrat text-headline-h3 font-extrabold text-primary">
+            <a href="/v2/estudio" className="font-montserrat text-headline-h3 font-extrabold text-primary">
               Kombinu <span className="text-text-secondary">Estúdio</span>
             </a>
           </div>
@@ -54,13 +54,13 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
           <div className="flex items-center gap-2">
             {actions}
             <a
-              href="#/trilhas"
+              href="/v2/trilhas"
               className="hidden min-h-11 items-center gap-2 rounded-full border-2 border-border-cloud px-4 text-button text-text-secondary uppercase transition-[color,background-color] duration-150 hover:bg-surface-soft hover:text-primary sm:inline-flex"
             >
               <Icon name="refresh" size={18} />
               Modo estudante
             </a>
-            <a href="#/criador" aria-label={`Perfil público de ${creatorName}`} className="rounded-full">
+            <a href="/v2/criador" aria-label={`Perfil público de ${creatorName}`} className="rounded-full">
               <Avatar name={creatorName} />
             </a>
           </div>
@@ -114,7 +114,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
             </ul>
 
             <div className="mt-auto border-t-2 border-border-cloud pt-4">
-              <Button3D variant="ghost" fullWidth onClick={() => (window.location.hash = "#/trilhas")}>
+              <Button3D variant="ghost" fullWidth onClick={() => (window.location.assign("/v2/trilhas"))}>
                 Voltar ao modo estudante
               </Button3D>
             </div>

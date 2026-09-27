@@ -158,7 +158,7 @@ export default function CourseScreen({ course, userName }: CourseScreenProps) {
               {course.myCourses.map((c) => (
                 <li key={c.id}>
                   <a
-                    href="#/marketplace"
+                    href="/v2/marketplace"
                     aria-current={c.active ? "true" : undefined}
                     className={cn(
                       "flex min-h-11 items-center gap-3 rounded-xl px-3 text-body-md transition-[background-color] duration-150 hover:bg-surface-soft",

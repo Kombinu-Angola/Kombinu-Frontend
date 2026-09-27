@@ -13,7 +13,7 @@ export const MOCK_FEED: StudyFeed = {
     sectionsTotal: 7,
     xp: 40,
     reviewedBy: "Prof. Kiala · UAN",
-    href: "#/leitura",
+    href: "/v2/leitura",
   },
   totalModules: 28,
   posts: [
@@ -29,7 +29,7 @@ export const MOCK_FEED: StudyFeed = {
       minutes: 5,
       hasQuiz: true,
       completions: 42,
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
     {
       id: "p2",
@@ -43,7 +43,7 @@ export const MOCK_FEED: StudyFeed = {
       minutes: 8,
       hasQuiz: true,
       completions: 118,
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
     {
       id: "p3",
@@ -57,7 +57,7 @@ export const MOCK_FEED: StudyFeed = {
       minutes: 6,
       hasQuiz: true,
       completions: 203,
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
     {
       id: "p4",
@@ -70,14 +70,14 @@ export const MOCK_FEED: StudyFeed = {
       minutes: 6,
       hasQuiz: true,
       completions: 311,
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
   ],
   student: { name: "João Kiala", course: "Economia", year: "2.º ano" },
   league: {
     name: "Liga Ouro",
     campus: "UAN · Luanda",
-    href: "#/ligas",
+    href: "/v2/ligas",
     rows: [
       { rank: 1, name: "Indira C.", xp: 3820 },
       { rank: 2, name: "Hélio M.", xp: 3410 },

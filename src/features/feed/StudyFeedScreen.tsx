@@ -109,7 +109,7 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
               <h2 id="posts-title" className="font-montserrat text-headline-h2 text-on-surface">
                 Módulos recentes
               </h2>
-              <a href="#/marketplace" className="flex min-h-11 items-center gap-1 text-button text-primary uppercase hover:underline">
+              <a href="/v2/marketplace" className="flex min-h-11 items-center gap-1 text-button text-primary uppercase hover:underline">
                 Ver os {feed.totalModules}
                 <Icon name="arrow-right" size={16} />
               </a>

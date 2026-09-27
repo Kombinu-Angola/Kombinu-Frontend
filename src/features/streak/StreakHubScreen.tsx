@@ -35,9 +35,9 @@ const DAY_LABEL: Record<StreakDayState, string> = {
 };
 
 const LINKS: ReadonlyArray<{ href: string; icon: IconName; title: string; hint: string }> = [
-  { href: "#/desafio", icon: "bolt", title: "Desafio 24h", hint: "Bónus rápido de XP" },
-  { href: "#/ligas", icon: "trophy", title: "Liga universitária", hint: "A tua posição esta semana" },
-  { href: "#/medalhas", icon: "seal", title: "Medalhas", hint: "O que falta desbloquear" },
+  { href: "/v2/desafio", icon: "bolt", title: "Desafio 24h", hint: "Bónus rápido de XP" },
+  { href: "/v2/ligas", icon: "trophy", title: "Liga universitária", hint: "A tua posição esta semana" },
+  { href: "/v2/medalhas", icon: "seal", title: "Medalhas", hint: "O que falta desbloquear" },
 ];
 
 type StreakHubScreenProps = { streak: StreakMonth; userName: string; studyHref: string };

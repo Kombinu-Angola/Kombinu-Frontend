@@ -99,5 +99,5 @@ export const MOCK_ARTICLE: Article = {
       text: "Para reduzir estes efeitos, os agentes económicos recorrem a estratégias de cobertura cambial, embora os instrumentos disponíveis no mercado local ainda tenham liquidez limitada face a mercados mais maduros.",
     },
   ],
-  next: { title: "Módulo 2: o sistema financeiro angolano", author: "Teresa Bento", minutes: 7, href: "#/leitura" },
+  next: { title: "Módulo 2: o sistema financeiro angolano", author: "Teresa Bento", minutes: 7, href: "/v2/leitura" },
 };

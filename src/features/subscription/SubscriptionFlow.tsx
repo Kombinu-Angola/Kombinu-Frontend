@@ -24,7 +24,7 @@ export default function SubscriptionFlow({
   defaultPhone,
   authorize,
   onPlanActivated,
-  studioHref = "#/estudio",
+  studioHref = "/v2/estudio",
 }: SubscriptionFlowProps) {
   const [stage, setStage] = useState<"plans" | "checkout" | "status">("plans");
   const [phone, setPhone] = useState(defaultPhone ?? "");
@@ -86,7 +86,7 @@ export default function SubscriptionFlow({
       creatorName={creatorName}
       onChoose={(plan) => {
         if (plan === "pro") setStage("checkout");
-        else window.location.hash = studioHref;
+        else window.location.assign(studioHref);
       }}
     />
   );

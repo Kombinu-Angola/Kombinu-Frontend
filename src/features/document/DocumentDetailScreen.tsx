@@ -52,11 +52,11 @@ export default function DocumentDetailScreen({ document: doc, userName, onPurcha
     <AppShell active="sebentas" userName={userName} campus={`${doc.subject} · ${doc.university}`}>
       <div className="mx-auto max-w-[1240px] px-4 py-6 md:px-6 lg:py-8">
         <nav aria-label="Caminho" className="mb-5 flex flex-wrap items-center gap-2 border-b-2 border-border-cloud pb-4 text-caption text-text-secondary">
-          <a href="#/marketplace" className="hover:text-primary">
+          <a href="/v2/marketplace" className="hover:text-primary">
             Sebentas
           </a>
           <span aria-hidden="true">/</span>
-          <a href="#/marketplace" className="hover:text-primary">
+          <a href="/v2/marketplace" className="hover:text-primary">
             {doc.faculty} — {doc.university}
           </a>
           <span aria-hidden="true">/</span>

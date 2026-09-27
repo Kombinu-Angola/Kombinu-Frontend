@@ -14,7 +14,7 @@ export const MOCK_COURSE: Course = {
     quizXp: 60,
     likes: 124,
     comments: 32,
-    href: "#/leitura",
+    href: "/v2/leitura",
   },
   modules: [
     {
@@ -23,7 +23,7 @@ export const MOCK_COURSE: Course = {
       summary: "Oferta e procura de moeda, e o efeito nas taxas de juro e na inflação estrutural.",
       minutes: 12,
       asset: "cover-economia",
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
     {
       id: "m3",
@@ -31,7 +31,7 @@ export const MOCK_COURSE: Course = {
       summary: "As transações internacionais de Angola, as reservas cambiais e a dívida externa.",
       minutes: 15,
       asset: "cover-direito",
-      href: "#/leitura",
+      href: "/v2/leitura",
     },
   ],
   myCourses: [

@@ -161,7 +161,7 @@ export default function TransactionStatusScreen({
                 <LinkButton3D href={studioHref} size="lg" fullWidth trailingIcon={<Icon name="arrow-right" size={20} />}>
                   Voltar ao estúdio
                 </LinkButton3D>
-                <LinkButton3D href="#/estudio/financeiro" variant="ghost" fullWidth>
+                <LinkButton3D href="/v2/estudio/financeiro" variant="ghost" fullWidth>
                   Ver o comprovativo no painel financeiro
                 </LinkButton3D>
               </div>
