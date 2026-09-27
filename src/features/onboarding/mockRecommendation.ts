@@ -13,6 +13,6 @@ export function mockRecommendation(profile: StudentProfile): Recommendation {
     quizXp: 30,
     author: "Dra. Teresa Bento (UAN)",
     sizeLabel: "leve · menos de 300 KB",
-    href: "/resumos/taxa-bna",
+    href: "/v2/leitura",
   };
 }
