@@ -28,7 +28,7 @@ const SIZES: Record<Size, string> = {
 export function button3DClasses({ variant = "primary", size = "md", fullWidth, className }: StyleProps = {}) {
   return cn(
     "inline-flex shrink-0 items-center justify-center gap-2 rounded-full text-center select-none",
-    "font-lato text-button uppercase",
+    "font-poppins text-button uppercase",
     "transition-[translate,box-shadow,background-color,color] duration-150 ease-out-quint",
     variant !== "ghost" && "active:translate-y-1 active:shadow-none",
     "disabled:pointer-events-none disabled:border-transparent disabled:bg-border-cloud disabled:text-text-tertiary disabled:shadow-none",
