@@ -81,6 +81,9 @@ export default function StudentProfileScreen({ profile, badgesHref }: StudentPro
               <Button3D onClick={() => toast.show("Edição de perfil em breve.")} leadingIcon={<Icon name="edit" size={18} />}>
                 Editar perfil
               </Button3D>
+              <LinkButton3D href="/v2/perfil/compras" variant="ghost" leadingIcon={<Icon name="wallet" size={18} />}>
+                Compras e recibos
+              </LinkButton3D>
             </div>
           </header>
 
@@ -216,9 +219,14 @@ export default function StudentProfileScreen({ profile, badgesHref }: StudentPro
 
           {tab === "sebentas" && (
             <section aria-labelledby="saved-title">
-              <h2 id="saved-title" className="mb-4 font-montserrat text-headline-h2 text-on-surface">
-                Sebentas guardadas
-              </h2>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <h2 id="saved-title" className="font-montserrat text-headline-h2 text-on-surface">
+                  Sebentas guardadas
+                </h2>
+                <LinkButton3D href="/v2/biblioteca" variant="ghost" trailingIcon={<Icon name="arrow-right" size={18} />}>
+                  Abrir a biblioteca
+                </LinkButton3D>
+              </div>
               <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
                 {profile.saved.map((doc) => (
                   <li key={doc.id} className="rounded-2xl border-2 border-border-cloud bg-surface-canvas p-4">

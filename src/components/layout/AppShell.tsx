@@ -6,13 +6,14 @@ import { Avatar } from "../ui/Avatar";
 import { DataSaverBadge } from "../ui/DataSaverBadge";
 import { Icon, type IconName } from "../ui/Icon";
 
-export type AppSection = "trilhas" | "simulados" | "ligas" | "sebentas" | "painel";
+export type AppSection = "trilhas" | "simulados" | "ligas" | "sebentas" | "biblioteca" | "painel";
 
 const NAV: ReadonlyArray<{ id: AppSection; label: string; href: string; icon: IconName }> = [
   { id: "trilhas", label: "Trilhas", href: "/v2/trilhas", icon: "book" },
   { id: "simulados", label: "Simulados", href: "/v2/desafio", icon: "bolt" },
   { id: "ligas", label: "Ligas", href: "/v2/ligas", icon: "trophy" },
   { id: "sebentas", label: "Sebentas", href: "/v2/marketplace", icon: "bag" },
+  { id: "biblioteca", label: "Biblioteca", href: "/v2/biblioteca", icon: "file" },
 ];
 
 type AppShellProps = {
@@ -127,7 +128,7 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
         aria-label="Principal"
         className="fixed inset-x-0 bottom-0 z-50 border-t-2 border-border-cloud bg-surface-canvas pb-[env(safe-area-inset-bottom)] md:hidden"
       >
-        <ul className="grid grid-cols-4">
+        <ul className="grid grid-cols-5">
           {NAV.map((item) => (
             <li key={item.id}>
               <a
@@ -140,7 +141,7 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
               >
                 <span
                   className={cn(
-                    "flex h-7 w-12 items-center justify-center rounded-full transition-[background-color] duration-150",
+                    "flex h-7 w-10 items-center justify-center rounded-full transition-[background-color] duration-150",
                     item.id === active && "bg-primary-fixed",
                   )}
                 >

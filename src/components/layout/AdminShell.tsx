@@ -2,12 +2,13 @@ import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Icon, type IconName } from "../ui/Icon";
 
-export type AdminSection = "visao" | "estudantes" | "moderacao" | "insights" | "financeiro" | "gamificacao";
+export type AdminSection = "visao" | "estudantes" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao";
 
 const NAV: ReadonlyArray<{ id: AdminSection; label: string; href: string; icon: IconName }> = [
   { id: "visao", label: "Visão executiva", href: "/v2/admin", icon: "grid" },
   { id: "estudantes", label: "Estudantes e polos", href: "/v2/admin/estudantes", icon: "users" },
-  { id: "moderacao", label: "Moderação", href: "/v2/admin/moderacao", icon: "shield" },
+  { id: "criadores", label: "Homologação de criadores", href: "/v2/admin/criadores", icon: "seal" },
+  { id: "moderacao", label: "Moderação de conteúdo", href: "/v2/admin/moderacao", icon: "shield" },
   { id: "insights", label: "Insights", href: "/v2/admin/insights", icon: "chart" },
   { id: "financeiro", label: "Financeiro e Express", href: "/v2/admin/financeiro", icon: "wallet" },
   { id: "gamificacao", label: "Gamificação e ligas", href: "/v2/admin/gamificacao", icon: "trophy" },

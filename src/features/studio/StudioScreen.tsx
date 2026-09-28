@@ -6,6 +6,7 @@ import { AddBlockMenu } from "./AddBlockMenu";
 import { BlockEditor } from "./BlockEditor";
 import { StudioPreview } from "./StudioPreview";
 import { useDraft, useSavedLabel, type Draft } from "./useDraft";
+import { PricingModal } from "../creator-content/PricingModal";
 
 type StudioScreenProps = {
   initialDraft: Draft;
@@ -28,6 +29,7 @@ export default function StudioScreen({
   const { draft, dispatch, savedAt, saving } = useDraft(initialDraft, onSave);
   const savedLabel = useSavedLabel(savedAt, saving);
   const [preview, setPreview] = useState(false);
+  const [pricing, setPricing] = useState(false);
 
   const incomplete = [
     !draft.title.trim() && "um título",
@@ -48,7 +50,7 @@ export default function StudioScreen({
             Ver como aluno
           </Button3D>
           <Button3D
-            onClick={() => onPublish?.(draft)}
+            onClick={() => setPricing(true)}
             disabled={incomplete.length > 0}
             aria-describedby={incomplete.length > 0 ? "publish-hint" : undefined}
           >
@@ -114,6 +116,37 @@ export default function StudioScreen({
           </p>
         )}
       </div>
+
+      {pricing && (
+        <PricingModal
+          plan="pro"
+          mode="publicar"
+          material={{
+            id: "draft",
+            title: draft.title || "Sem título",
+            subject: courseName,
+            university: "UAN",
+            year: "—",
+            pages: Math.max(1, Math.round(draft.blocks.length / 2)),
+            quizzes: draft.blocks.filter((b) => b.type === "checkpoint").length,
+            sizeKb: 120 + draft.blocks.length * 18,
+            priceKz: 0,
+            visibility: "publico",
+            sales: 0,
+            rating: null,
+            reviews: 0,
+            status: "rascunho",
+            updatedAt: new Date().toISOString(),
+            studioHref: "/v2/estudio",
+          }}
+          onClose={() => setPricing(false)}
+          onConfirm={() => {
+            setPricing(false);
+            onPublish?.(draft);
+            window.location.assign("/v2/estudio/materiais");
+          }}
+        />
+      )}
     </CreatorShell>
   );
 }
