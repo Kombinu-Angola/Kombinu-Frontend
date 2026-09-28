@@ -49,7 +49,7 @@ export default function ReadingPlayerScreen({
         Saltar para o artigo
       </a>
 
-      <header className="sticky top-0 z-50 border-b-2 border-border-cloud bg-surface-canvas/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b-2 border-border-cloud bg-surface-canvas">
         <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-3 px-4 md:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <button

@@ -112,9 +112,15 @@ export default function CourseScreen({ course, userName }: CourseScreenProps) {
           </article>
 
           <section aria-labelledby="modules-title">
-            <h2 id="modules-title" className="mb-5 font-montserrat text-headline-h2 text-on-surface">
-              Próximos módulos
-            </h2>
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <h2 id="modules-title" className="font-montserrat text-headline-h2 text-on-surface">
+                Próximos módulos
+              </h2>
+              <a href="/v2/trilha" className="flex min-h-11 items-center gap-1 text-button text-primary uppercase hover:underline">
+                Ver a trilha completa
+                <Icon name="arrow-right" size={16} />
+              </a>
+            </div>
             <ul className="flex flex-col gap-4">
               {course.modules.map((m) => (
                 <li key={m.id}>
