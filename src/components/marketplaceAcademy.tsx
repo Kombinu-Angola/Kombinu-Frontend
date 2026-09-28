@@ -43,7 +43,7 @@ export default function AcademicMarketplace() {
     ];
 
     return (
-        <section className="w-full py-12 sm:py-16 bg-background text-foreground">
+        <section id="marktplace" className="w-full py-12 sm:py-16 bg-background text-foreground">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 {/* Cabeçalho */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 sm:mb-12">
