@@ -230,6 +230,51 @@
   }
 }
 
+/* Tema escuro dos tokens das telas novas -- primeira passagem de contraste (WCAG AA),
+   por rever com o design quando houver decisão de marca formal para dark mode.
+   --color-*-fixed (Material 3) mantêm-se iguais nos dois temas por definição;
+   surface-ink/surface-forest são cor "tinta" fixa (contraste local), não texto do tema. */
+.dark {
+  --color-brand-ocean: #4f8ff0;
+  --color-brand-ocean-hover: #6ba3f5;
+  --color-brand-sky-ink: #4fc3f7;
+
+  --color-primary: #7ab8ff;
+
+  --color-feedback-success-ink: #7ee06a;
+  --color-feedback-success-soft: #16321a;
+  --color-feedback-error-ink: #ff6b6b;
+  --color-feedback-error-soft: #3a1414;
+  --color-feedback-streak-ink: #ffb347;
+  --color-feedback-gem-ink: #b48cff;
+
+  --color-background: #121516;
+  --color-surface-canvas: #1c2124;
+  --color-surface-soft: #202528;
+  --color-surface-sky: #16232e;
+  --color-surface-container-low: #1a1d1e;
+  --color-on-surface: #f2f2f2;
+  --color-text-secondary: #c9c9c9;
+  --color-text-tertiary: #9a9a9a;
+  --color-text-disabled: #6b6b6b;
+  --color-border-cloud: #2c3236;
+  --color-border-cloud-strong: #3d444a;
+  --color-border-input: #7d828a;
+
+  /* A sombra "clay" original simula luz vinda de cima com um brilho branco --
+     numa superfície escura isso lê-se como um traço a mais, não como profundidade. */
+  --shadow-clay:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    inset 0 -3px 6px rgb(0 0 0 / 0.2),
+    0 2px 4px rgb(0 0 0 / 0.2),
+    0 18px 40px -16px rgb(0 0 0 / 0.5);
+  --shadow-clay-hover:
+    inset 0 1px 0 rgb(255 255 255 / 0.08),
+    inset 0 -3px 6px rgb(0 0 0 / 0.2),
+    0 4px 8px rgb(0 0 0 / 0.25),
+    0 28px 56px -18px rgb(0 0 0 / 0.6);
+}
+
 @layer base {
   /* Restaura o anel de foco (o reset global acima usa outline-none) só para navegação por teclado. */
   :focus-visible {
