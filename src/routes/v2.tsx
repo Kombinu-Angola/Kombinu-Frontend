@@ -48,6 +48,16 @@ import ModerationScreen from '../features/admin/ModerationScreen';
 import FinanceScreen from '../features/admin/FinanceScreen';
 import InsightsScreen from '../features/admin/InsightsScreen';
 import GamificationScreen from '../features/admin/GamificationScreen';
+import CreatorQueueScreen from '../features/admin/CreatorQueueScreen';
+import { CREATOR_QUEUE } from '../features/admin/mockCreatorQueue';
+
+import StudentLibraryScreen from '../features/library/StudentLibraryScreen';
+import OfflineDownloadsScreen from '../features/library/OfflineDownloadsScreen';
+import { LIBRARY_ITEMS, DOWNLOAD_PREFERENCES, OFFLINE_STORAGE } from '../features/library/mockLibrary';
+import PurchaseHistoryScreen from '../features/purchases/PurchaseHistoryScreen';
+import { PURCHASES } from '../features/purchases/mockPurchases';
+import CreatorContentHubScreen from '../features/creator-content/CreatorContentHubScreen';
+import { CREATOR_MATERIALS } from '../features/creator-content/mockContent';
 
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
@@ -198,9 +208,26 @@ export const v2Routes: RouteObject = {
 
     { path: 'admin', element: <AdminOverviewScreen /> },
     { path: 'admin/estudantes', element: <StudentsScreen /> },
+    { path: 'admin/criadores', element: <CreatorQueueScreen applications={CREATOR_QUEUE} /> },
     { path: 'admin/moderacao', element: <ModerationScreen /> },
     { path: 'admin/insights', element: <InsightsScreen /> },
     { path: 'admin/financeiro', element: <FinanceScreen /> },
     { path: 'admin/gamificacao', element: <GamificationScreen /> },
+
+    { path: 'biblioteca', element: <StudentLibraryScreen items={LIBRARY_ITEMS} userName={STUDENT_NAME} downloadsHref="/v2/biblioteca/descargas" marketplaceHref="/v2/marketplace" /> },
+    {
+      path: 'biblioteca/descargas',
+      element: (
+        <OfflineDownloadsScreen
+          items={LIBRARY_ITEMS}
+          storage={OFFLINE_STORAGE}
+          preferences={DOWNLOAD_PREFERENCES}
+          userName={STUDENT_NAME}
+          libraryHref="/v2/biblioteca"
+        />
+      ),
+    },
+    { path: 'perfil/compras', element: <PurchaseHistoryScreen purchases={PURCHASES} userName={STUDENT_NAME} profileHref="/v2/perfil" /> },
+    { path: 'estudio/materiais', element: <CreatorContentHubScreen materials={CREATOR_MATERIALS} creatorName={CREATOR_NAME} plan="pro" /> },
   ],
 };
