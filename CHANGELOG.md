@@ -15,12 +15,19 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Biblioteca do estudante (`features/library/`: `StudentLibraryScreen`, `OfflineDownloadsScreen`), historico de compras e recibos (`features/purchases/PurchaseHistoryScreen`) e gestao de materiais do criador (`features/creator-content/`: `CreatorContentHubScreen`, `PricingModal`) e fila de homologacao de criadores no backoffice (`features/admin/CreatorQueueScreen`) — pecas identificadas em falta no `docs/kombinu-mapeamento.md`. Novas rotas em `routes/v2.tsx`: `/v2/biblioteca`, `/v2/biblioteca/descargas`, `/v2/perfil/compras`, `/v2/estudio/materiais`, `/v2/admin/criadores`.
+- `AppShell`/`CreatorShell`/`AdminShell`: novos itens de navegacao para as telas acima; `StudentProfileScreen` ganha atalhos para compras e biblioteca; `StudioScreen` mostra o `PricingModal` (preco e visibilidade) antes de publicar.
+- `lib/format.ts`: `formatSize` (KB/MB/GB), usado pelos ecras de biblioteca e materiais.
+- Dark mode nos tokens do design system (`src/index.css`, bloco `.dark {}`) — cobre as 39 telas ja integradas e as novas desta lista, conforme o SLA v2.0.0 (seccao 7.3). Primeira passagem de contraste, a validar com o design.
 - Integracao das 39 telas novas (docs/kombinu-mapeamento.md) em rotas paralelas `/v2/*`, sem tocar nas paginas e rotas actuais: `src/features/*` (20 dominios), `src/components/{ui,layout,charts}` do design system, `src/lib/{format,levels,assets3d}`, `src/contexts/GamificationContext`, `src/routes/v2.tsx` + `src/routes/V2Layout.tsx` (intercetor de navegacao interna e sessao de gamificacao partilhada). Detalhe completo em `docs/INTEGRACAO-TELAS.md`.
 - `src/services/creatorService.ts`: envio real do credenciamento de criador (multipart, `/creators/applications/`) usando a instancia `api` partilhada.
 - Migracao para Tailwind v4 (`@tailwindcss/vite`), mantendo a paleta e as cores legadas via `@config`.
 
 ### Corrigido
 
+- Botao "Comecar a ler" no fim do onboarding apontava para um caminho inexistente (`/resumos/taxa-bna`); corrigido para `/v2/leitura`.
+- Botoes (`Button3D`/`LinkButton3D`) usavam `font-lato` em vez de `font-poppins` (SLA 7.3: hierarquia de fontes obrigatoria para CTAs).
+- 4 ocorrencias de `window.location.hash = "#/..."` (nao navegam sob rotas por path): `CreatorShell`, `SubscriptionFlow`, `CreatorContentHubScreen`, `PurchaseHistoryScreen` -- trocadas por `window.location.assign`.
 - `src/components/ui/sonner.tsx`: nomes de icones lucide-react inexistentes na versao instalada (`CircleCheckIcon` etc.) corrigidos; o `<Toaster />` estava definido mas nunca montado -- montado agora em `App.tsx`.
 - `tsconfig.app.json`: `DOM.Iterable` em falta na `lib` (necessario para iterar `NodeListOf`).
 
