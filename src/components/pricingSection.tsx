@@ -4,7 +4,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 export default function PricingSection() {
     return (
-        <section className="w-full py-12 sm:py-16 lg:py-20 bg-background text-foreground">
+        <section id="prices" className="w-full py-12 sm:py-16 lg:py-20 bg-background text-foreground">
             <div className="max-w-5xl mx-auto px-4 sm:px-6">
                 {/* Cabeçalho */}
                 <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-16">

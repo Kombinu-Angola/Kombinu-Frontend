@@ -5,7 +5,7 @@ export const SplashScreen = () => {
         <div className="fixed inset-0 z-[9999] bg-accent flex flex-col items-center justify-center  dark:bg-dark-bg-primary">
 
             <div className="animate-pulse">
-                <img src={logoTipo} className="w-30 h-30" alt="logotipo" />
+                <img src={logoTipo} className="w    -30 h-30" alt="logotipo" />
             </div>
 
             <p className=" text-lg font-lato text-white dark:text-gray-300">

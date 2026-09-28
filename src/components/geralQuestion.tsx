@@ -11,7 +11,7 @@ export default function FaqSection() {
     };
 
     return (
-        <section className="w-full py-12 sm:py-16 lg:py-20 bg-background text-foreground">
+        <section id="how-it-works" className="w-full py-12 sm:py-16 lg:py-20 bg-background text-foreground">
             <div className="max-w-3xl mx-auto px-4 sm:px-6">
                 {/* Cabeçalho */}
                 <div className="text-center mb-10 sm:mb-12">

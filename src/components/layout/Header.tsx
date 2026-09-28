@@ -24,11 +24,11 @@ export function Header() {
           <img src={logoProfile} className=" h-25 w-25 sm:w-14 sm:h-14 object-contain" alt="logoTipo" />
         </Link>
         <nav className="hidden md:flex items-center gap-3 lg:gap-6 font-medium text-xs lg:text-sm text-muted-foreground whitespace-nowrap">
-          <Link to="/" className="text-primary md:text">Como Funciona</Link>
-          <Link to="/" className="hover:text-primary">Sebentas & Resumos</Link>
-          <Link to="/" className="hover:text-primary">Modo Data-Lean</Link>
-          <Link to="/" className="hover:text-primary">Preços</Link>
-          <Link to="/" className="hover:text-primary">Sobre Nós</Link>
+          <a href="#how-it-works" className="text-primary md:text">Como Funciona</a>
+          <a href="#marktplace" className="hover:text-primary">Sebentas & Resumos</a>
+          <a href="#data-learn" className="hover:text-primary">Modo Data-Lean</a>
+          <a href="#prices" className="hover:text-primary">Preços</a>
+          <a href="#" className="hover:text-primary">Sobre Nós</a>
         </nav>
 
         <div className="hidden md:flex items-center gap-3 shrink-0">

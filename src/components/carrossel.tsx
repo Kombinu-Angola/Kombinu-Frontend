@@ -3,6 +3,8 @@ import { School01Icon } from "@hugeicons/core-free-icons";
 
 const universities = ["UAN", "UCAN", "ISPTEC", "ISAF", "UGS", "UniPiaget"];
 
+
+
 export function Carrosel() {
     return (
         <section className="mt-10 py-6  w-full overflow-hidden">

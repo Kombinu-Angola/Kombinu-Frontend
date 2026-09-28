@@ -4,7 +4,7 @@ import { Quiz01Icon } from "@hugeicons/core-free-icons";
 
 export function WhyKombinu() {
     return (
-        <section className="mt-12 px-4 max-w-6xl mx-auto">
+        <section id="data-learn" className="mt-12 px-4 max-w-6xl mx-auto">
             {/* Cabeçalho */}
             <div className="text-center max-w-2xl mx-auto mb-8">
                 <span className="text-xs font-semibold uppercase tracking-wider text-primary">
