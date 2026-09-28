@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { quizService } from '../services/quizService';
-import { Header } from '@/components/layout/Header';
+import { Header } from '@/components/layout/PublicHeader';
 import { useAuth } from '../contexts/AuthContext';
 import { contentService } from '../services/contentService';
 import { Save, Plus, Trash2, BookOpen, Video, FileText, Clock, Target, Tag, Cpu } from 'lucide-react';
