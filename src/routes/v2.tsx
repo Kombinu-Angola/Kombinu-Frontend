@@ -59,6 +59,15 @@ import { PURCHASES } from '../features/purchases/mockPurchases';
 import CreatorContentHubScreen from '../features/creator-content/CreatorContentHubScreen';
 import { CREATOR_MATERIALS } from '../features/creator-content/mockContent';
 
+import StudentSettingsScreen from '../features/account/StudentSettingsScreen';
+import PhoneSecurityScreen from '../features/account/PhoneSecurityScreen';
+import { MOCK_ACCOUNT } from '../features/account/mockAccount';
+import LearningTrailScreen from '../features/trail/LearningTrailScreen';
+import AdaptiveTrailScreen from '../features/trail/AdaptiveTrailScreen';
+import { MOCK_TRAIL, MOCK_ADAPTIVE } from '../features/trail/mockTrail';
+import HomologationResultScreen, { type HomologationResult } from '../features/creator/HomologationResultScreen';
+import RenewalFailureScreen from '../features/subscription/RenewalFailureScreen';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -158,6 +167,74 @@ function AccountSettingsRoute() {
   return <AccountSettingsScreen settings={DEMO_SETTINGS} onChangePlan={() => navigate('/v2/estudio/plano')} />;
 }
 
+function StudentSettingsRoute() {
+  return (
+    <StudentSettingsScreen
+      account={MOCK_ACCOUNT}
+      phoneHref="/v2/conta/telemovel"
+      downloadsHref="/v2/biblioteca/descargas"
+    />
+  );
+}
+
+function PhoneSecurityRoute() {
+  return (
+    <PhoneSecurityScreen
+      currentPhone={MOCK_ACCOUNT.phone}
+      institutionalEmail={MOCK_ACCOUNT.institutionalEmail}
+      emailVerified={MOCK_ACCOUNT.emailVerified}
+      university={MOCK_ACCOUNT.university}
+      userName={MOCK_ACCOUNT.name}
+      settingsHref="/v2/definicoes"
+      onChangePhone={async (_novo, codeNew, codeCurrent) => codeNew === '842913' && codeCurrent === '100200'}
+    />
+  );
+}
+
+const HOMOLOGATION_CREATOR = {
+  name: CREATOR_NAME,
+  university: 'Universidade Agostinho Neto (UAN)',
+  faculty: 'Faculdade de Ciências',
+  specialty: 'Estruturas de Dados',
+  phone: '923456789',
+};
+
+const HOMOLOGATION_APROVADO: HomologationResult = {
+  status: 'aprovado',
+  protocol: 'PROT-CRE-2026-8942',
+  decidedAt: new Date().toISOString(),
+  creator: HOMOLOGATION_CREATOR,
+};
+
+const HOMOLOGATION_CORRECAO: HomologationResult = {
+  status: 'correcao',
+  protocol: 'PROT-CRE-2026-8944',
+  decidedAt: new Date(Date.now() - 86_400_000).toISOString(),
+  creator: HOMOLOGATION_CREATOR,
+  feedback:
+    'A declaração enviada tem a data de validade ilegível no canto inferior direito. A amostra está aprovada.',
+  required: ['Declaração institucional com a validade legível, em PDF ou fotografia nítida.'],
+};
+
+function RenewalFailureRoute() {
+  const navigate = useNavigate();
+  return (
+    <RenewalFailureScreen
+      creatorName={CREATOR_NAME}
+      priceKz={5000}
+      phone="923891024"
+      failedAt={new Date(Date.now() - 2 * 86_400_000).toISOString()}
+      graceEndsAt={new Date(Date.now() + 5 * 86_400_000).toISOString()}
+      authorize={async () => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        return { reference: 'EXP-2026-9014', approvedAt: new Date().toISOString() };
+      }}
+      onDowngrade={() => navigate('/v2/estudio/definicoes')}
+      changePhoneHref="/v2/conta/telemovel"
+    />
+  );
+}
+
 function SubscriptionRoute() {
   return (
     <SubscriptionFlow
@@ -229,5 +306,13 @@ export const v2Routes: RouteObject = {
     },
     { path: 'perfil/compras', element: <PurchaseHistoryScreen purchases={PURCHASES} userName={STUDENT_NAME} profileHref="/v2/perfil" /> },
     { path: 'estudio/materiais', element: <CreatorContentHubScreen materials={CREATOR_MATERIALS} creatorName={CREATOR_NAME} plan="pro" /> },
+
+    { path: 'definicoes', element: <StudentSettingsRoute /> },
+    { path: 'conta/telemovel', element: <PhoneSecurityRoute /> },
+    { path: 'trilha', element: <LearningTrailScreen trail={MOCK_TRAIL} userName={STUDENT_NAME} backHref="/v2/cadeira" /> },
+    { path: 'trilha/mista', element: <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={STUDENT_NAME} diagnosticHref="/v2/painel" /> },
+    { path: 'estudio/homologacao', element: <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={HOMOLOGATION_APROVADO} /> },
+    { path: 'estudio/homologacao/correcao', element: <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={HOMOLOGATION_CORRECAO} /> },
+    { path: 'estudio/renovacao', element: <RenewalFailureRoute /> },
   ],
 };
