@@ -1,4 +1,4 @@
-import logoTipo from "./assets/Kombinu logo. .png"
+import logoTipo from "./assets/kombinu-logo.png"
 
 export const SplashScreen = () => {
     return (

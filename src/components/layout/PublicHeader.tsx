@@ -1,4 +1,4 @@
-import logoProfile from "../assets/Kombinu logo. .png"
+import logoProfile from "../assets/kombinu-logo.png"
 
 import { Button } from "../ui/button";
 import { Menu, X } from "lucide-react";
