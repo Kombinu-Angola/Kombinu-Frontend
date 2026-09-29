@@ -19,6 +19,9 @@ import { QuizSection } from "@/components/quiz";
 
 
 export function LandingPage() {
+
+
+
   return (
     <main>
       <HeroSection />
