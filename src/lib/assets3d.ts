@@ -26,6 +26,7 @@ export const ASSETS_3D = {
   "figure-porto-luanda": { fallback: "chart" },
   "figure-escassez": { fallback: "cpu" },
   "sms-code": { fallback: "phone" },
+  "kombi-offline": { fallback: "cloud" },
 
 } as const satisfies Record<string, { fallback: IconName }>;
 
