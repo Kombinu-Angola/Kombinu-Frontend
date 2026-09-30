@@ -15,6 +15,28 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Analitica pedagogica por material (`features/analytics/MaterialAnalyticsScreen`), duvidas ancoradas ao conteudo (`features/qa/MaterialQaScreen`) e caderno de revisao espacada (`features/review/ReviewNotebookScreen`). `CreatorContentHubScreen` ganha atalho de analitica por material. Novas rotas: `/v2/estudio/analitica`, `/v2/duvidas`, `/v2/revisao`.
+- Central de notificacoes (`features/notifications/NotificationCenterScreen`) e pesquisa global (`features/search/GlobalSearchScreen`). `AppShell`: sino de notificacoes no cabecalho. Novas rotas: `/v2/notificacoes`, `/v2/pesquisa`.
+- Ecras de sistema (`features/system/`): `OfflineScreen` (sem ligacao, mostra o que continua a funcionar) e `RecoveryScreens` (`SessionExpiredScreen` — reentrada por SMS sem perder o sitio; `NotFoundScreen` — 404 com atalhos de volta). Novas rotas: `/v2/offline`, `/v2/sessao-expirada`, `/v2/404`. `lib/assets3d.ts`: novo asset `kombi-offline`.
+- Definicoes da conta do estudante (`features/account/`: `StudentSettingsScreen`, `PhoneSecurityScreen`), trilha de aprendizagem e trilha mista adaptativa (`features/trail/`: `LearningTrailScreen`, `AdaptiveTrailScreen`), resultado da homologacao de criador (`features/creator/HomologationResultScreen`) e falha de renovacao da subscricao Pro (`features/subscription/RenewalFailureScreen`). Novas rotas: `/v2/definicoes`, `/v2/conta/telemovel`, `/v2/trilha`, `/v2/trilha/mista`, `/v2/estudio/homologacao` (+ `/correcao`), `/v2/estudio/renovacao`.
+- `CourseScreen` ganha atalho "Ver a trilha completa"; `StudentProfileScreen` ganha atalho "Definições".
+- Biblioteca do estudante (`features/library/`: `StudentLibraryScreen`, `OfflineDownloadsScreen`), historico de compras e recibos (`features/purchases/PurchaseHistoryScreen`) e gestao de materiais do criador (`features/creator-content/`: `CreatorContentHubScreen`, `PricingModal`) e fila de homologacao de criadores no backoffice (`features/admin/CreatorQueueScreen`) — pecas identificadas em falta no `docs/kombinu-mapeamento.md`. Novas rotas em `routes/v2.tsx`: `/v2/biblioteca`, `/v2/biblioteca/descargas`, `/v2/perfil/compras`, `/v2/estudio/materiais`, `/v2/admin/criadores`.
+- `AppShell`/`CreatorShell`/`AdminShell`: novos itens de navegacao para as telas acima; `StudentProfileScreen` ganha atalhos para compras e biblioteca; `StudioScreen` mostra o `PricingModal` (preco e visibilidade) antes de publicar.
+- `lib/format.ts`: `formatSize` (KB/MB/GB), usado pelos ecras de biblioteca e materiais.
+- Integracao das 39 telas novas (docs/kombinu-mapeamento.md) em rotas paralelas `/v2/*`, sem tocar nas paginas e rotas actuais: `src/features/*` (20 dominios), `src/components/{ui,layout,charts}` do design system, `src/lib/{format,levels,assets3d}`, `src/contexts/GamificationContext`, `src/routes/v2.tsx` + `src/routes/V2Layout.tsx` (intercetor de navegacao interna e sessao de gamificacao partilhada). Detalhe completo em `docs/INTEGRACAO-TELAS.md`.
+- `src/services/creatorService.ts`: envio real do credenciamento de criador (multipart, `/creators/applications/`) usando a instancia `api` partilhada.
+- Migracao para Tailwind v4 (`@tailwindcss/vite`), mantendo a paleta e as cores legadas via `@config`.
+
+### Corrigido
+
+- Botao "Comecar a ler" no fim do onboarding apontava para um caminho inexistente (`/resumos/taxa-bna`); corrigido para `/v2/leitura`.
+- Botoes (`Button3D`/`LinkButton3D`) usavam `font-lato` em vez de `font-poppins` (SLA 7.3: hierarquia de fontes obrigatoria para CTAs).
+- 4 ocorrencias de `window.location.hash = "#/..."` (nao navegam sob rotas por path): `CreatorShell`, `SubscriptionFlow`, `CreatorContentHubScreen`, `PurchaseHistoryScreen` -- trocadas por `window.location.assign`.
+- `src/components/ui/sonner.tsx`: nomes de icones lucide-react inexistentes na versao instalada (`CircleCheckIcon` etc.) corrigidos; o `<Toaster />` estava definido mas nunca montado -- montado agora em `App.tsx`.
+- `tsconfig.app.json`: `DOM.Iterable` em falta na `lib` (necessario para iterar `NodeListOf`).
+
+### Adicionado
+
 - `CriarConteudo.tsx`: botao "Gerar com IA" agora guarda o conteudo e chama `/quizzes/contents/<id>/generate-quiz/` (OpenTDB); trata erros 503 (rate limit) com mensagem explicativa (S3-09).
 - `quizService.ts`: descodificacao automatica de URL encoding (`%20`, `%2C`, etc.) nas perguntas e opcoes ao carregar o quiz — garante compatibilidade enquanto o backend usa `encode=url3986` da OpenTDB.
 - `Quiz.tsx`: classe `break-words` adicionada ao titulo da pergunta para evitar que textos longos ultrapassem os limites do ecra em dispositivos moveis.
