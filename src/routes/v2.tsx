@@ -68,6 +68,9 @@ import { MOCK_TRAIL, MOCK_ADAPTIVE } from '../features/trail/mockTrail';
 import HomologationResultScreen, { type HomologationResult } from '../features/creator/HomologationResultScreen';
 import RenewalFailureScreen from '../features/subscription/RenewalFailureScreen';
 
+import { OfflineScreen } from '../features/system/OfflineScreen';
+import { SessionExpiredScreen, NotFoundScreen } from '../features/system/RecoveryScreens';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -235,6 +238,31 @@ function RenewalFailureRoute() {
   );
 }
 
+function SessionExpiredRoute() {
+  const navigate = useNavigate();
+  return (
+    <SessionExpiredScreen
+      phone="923891024"
+      onVerify={async (code) => code === '729104'}
+      onUseAnother={() => navigate('/v2/entrar')}
+    />
+  );
+}
+
+function NotFoundRoute() {
+  return (
+    <NotFoundScreen
+      searchHref="/v2/pesquisa"
+      homeHref="/v2/trilhas"
+      suggestions={[
+        { label: 'As minhas sebentas', href: '/v2/biblioteca' },
+        { label: 'Marketplace de sebentas', href: '/v2/marketplace' },
+        { label: 'Biblioteca livre', href: '/v2/biblioteca-livre' },
+      ]}
+    />
+  );
+}
+
 function SubscriptionRoute() {
   return (
     <SubscriptionFlow
@@ -314,5 +342,9 @@ export const v2Routes: RouteObject = {
     { path: 'estudio/homologacao', element: <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={HOMOLOGATION_APROVADO} /> },
     { path: 'estudio/homologacao/correcao', element: <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={HOMOLOGATION_CORRECAO} /> },
     { path: 'estudio/renovacao', element: <RenewalFailureRoute /> },
+
+    { path: 'offline', element: <OfflineScreen offlineItems={5} cachedKb={5_940} pendingAnswers={4} streakDays={12} libraryHref="/v2/biblioteca" /> },
+    { path: 'sessao-expirada', element: <SessionExpiredRoute /> },
+    { path: '404', element: <NotFoundRoute /> },
   ],
 };
