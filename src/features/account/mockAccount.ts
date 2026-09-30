@@ -39,3 +39,39 @@ export const SUBJECTS = [
   { value: "Econometria", label: "Econometria" },
   { value: "Contabilidade Nacional", label: "Contabilidade Nacional" },
 ];
+
+const hoursAgo = (h: number) => new Date(Date.now() - h * 3_600_000).toISOString();
+
+export const SESSIONS = [
+  {
+    id: "s1",
+    device: "Samsung Galaxy A14",
+    kind: "telemovel" as const,
+    app: "Kombinu na Web (PWA)",
+    location: "Luanda",
+    network: "Unitel",
+    maskedIp: "197.218.•••.•••",
+    lastActiveAt: hoursAgo(0),
+    current: true,
+  },
+  {
+    id: "s2",
+    device: "Chrome no Windows 11",
+    kind: "computador" as const,
+    app: "Kombinu na Web",
+    location: "Luanda",
+    network: "Wi-Fi UAN Central",
+    maskedIp: "197.218.•••.•••",
+    lastActiveAt: hoursAgo(20),
+  },
+  {
+    id: "s3",
+    device: "Tecno Spark 10 Pro",
+    kind: "telemovel" as const,
+    app: "Kombinu na Web (PWA)",
+    location: "Talatona, Luanda",
+    network: "Africell",
+    maskedIp: "41.223.•••.•••",
+    lastActiveAt: hoursAgo(312),
+  },
+];
