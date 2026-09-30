@@ -102,6 +102,9 @@ import PrivacyScreen from '../features/account/PrivacyScreen';
 import SessionsScreen from '../features/account/SessionsScreen';
 import { SESSIONS } from '../features/account/mockAccount';
 
+import SupportTicketsScreen from '../features/admin/SupportTicketsScreen';
+import { SUPPORT_TICKETS } from '../features/admin/mockSupport';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -418,5 +421,7 @@ export const v2Routes: RouteObject = {
         />
       ),
     },
+
+    { path: 'admin/suporte', element: <SupportTicketsScreen tickets={SUPPORT_TICKETS} agentName="Hamilton Kiala" /> },
   ],
 };
