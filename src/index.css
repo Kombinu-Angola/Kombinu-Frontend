@@ -1,8 +1,7 @@
+@import "tailwindcss";
 @import "@fontsource-variable/geist";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config "../tailwind.config.js";
 
 /* =========================
    BASE THEME
@@ -105,5 +104,145 @@
   .reveal.is-visible {
     opacity: 1;
     animation: none;
+  }
+}
+
+/* =========================
+   DESIGN SYSTEM KOMBINU — tokens das telas novas
+   Tipografia segue o SLA (font-montserrat/font-lato/font-poppins do
+   tailwind.config.js); aqui só a escala de tamanhos, cor, sombra e movimento.
+========================= */
+@theme {
+  --text-display-l: 44px;
+  --text-display-l--line-height: 1.08;
+  --text-display-l--font-weight: 800;
+  --text-headline-h1: 32px;
+  --text-headline-h1--line-height: 1.15;
+  --text-headline-h1--font-weight: 800;
+  --text-headline-h1-mobile: 28px;
+  --text-headline-h1-mobile--line-height: 1.15;
+  --text-headline-h1-mobile--font-weight: 800;
+  --text-headline-h2: 24px;
+  --text-headline-h2--line-height: 1.2;
+  --text-headline-h2--font-weight: 700;
+  --text-headline-h3: 19px;
+  --text-headline-h3--line-height: 1.3;
+  --text-headline-h3--font-weight: 700;
+  --text-body-lg: 17px;
+  --text-body-lg--line-height: 1.5;
+  --text-body-md: 15px;
+  --text-body-md--line-height: 1.5;
+  --text-caption: 13px;
+  --text-caption--line-height: 1.4;
+  --text-overline: 12px;
+  --text-overline--line-height: 1.2;
+  --text-overline--letter-spacing: 0.05em;
+  --text-overline--font-weight: 700;
+  --text-button: 15px;
+  --text-button--line-height: 1;
+  --text-button--letter-spacing: 0.04em;
+  --text-button--font-weight: 700;
+
+  /* ── Marca ── */
+  --color-brand-ocean: #1658b3;
+  --color-brand-ocean-hover: #124690;
+  --color-brand-ocean-shadow: #0d3c88;
+  --color-brand-sunbeam: #ffd500;
+  --color-brand-sunbeam-ink: #8a7300;
+  --color-brand-sky-ink: #077cb3;
+
+  --color-primary: #00418d;
+  --color-primary-fixed: #d8e2ff;
+  --color-on-primary-fixed: #001a41;
+  --color-secondary-fixed: #ffe174;
+  --color-secondary-container: #fed400;
+  --color-on-secondary-fixed-variant: #554500;
+
+  /* ── Feedback (base = preenchimento; -ink = texto/ícone < 24px) ── */
+  --color-feedback-success: #58cc02;
+  --color-feedback-success-ink: #327800;
+  --color-feedback-success-soft: #f2fbea;
+  --color-feedback-error: #ff4b4b;
+  --color-feedback-error-ink: #eb0000;
+  --color-feedback-error-soft: #fff1f1;
+  --color-feedback-streak: #ff9600;
+  --color-feedback-streak-ink: #aa6400;
+  --color-feedback-gem: #a570ff;
+  --color-feedback-gem-ink: #8d4aff;
+
+  /* ── Superfícies e texto ── */
+  --color-background: #fbf9f8;
+  --color-surface-canvas: #ffffff;
+  --color-surface-soft: #f7f7f7;
+  --color-surface-sky: #eef5ff;
+  --color-surface-container-low: #f5f3f2;
+  --color-surface-ink: #0b1215;
+  --color-surface-forest: #163300;
+  --color-on-surface: #1b1c1c;
+  --color-text-secondary: #4b4b4b;
+  --color-text-tertiary: #6b6b6b;
+  --color-text-disabled: #afafaf;
+  --color-border-cloud: #e5e5e5;
+  --color-border-cloud-strong: #d4d4d4;
+  --color-border-input: #8a8d96;
+
+  /* ── Profundidade ──
+     Controlos: sombra sólida 3D (tátil). Superfícies: sombra "clay" difusa. */
+  --shadow-3d-primary: 0 4px 0 0 var(--color-brand-ocean-shadow);
+  --shadow-3d-neutral: 0 4px 0 0 var(--color-border-cloud-strong);
+  --shadow-3d-success: 0 4px 0 0 var(--color-feedback-success-ink);
+  --shadow-elevation-1: 0 1px 2px rgb(11 18 21 / 0.04), 0 4px 12px -4px rgb(11 18 21 / 0.06);
+  --shadow-clay:
+    inset 0 2px 0 rgb(255 255 255 / 0.9),
+    inset 0 -3px 6px rgb(11 18 21 / 0.03),
+    0 2px 4px rgb(11 18 21 / 0.03),
+    0 18px 40px -16px rgb(22 88 179 / 0.16);
+  --shadow-clay-hover:
+    inset 0 2px 0 rgb(255 255 255 / 0.9),
+    inset 0 -3px 6px rgb(11 18 21 / 0.03),
+    0 4px 8px rgb(11 18 21 / 0.04),
+    0 28px 56px -18px rgb(22 88 179 / 0.26);
+
+  /* ── Movimento ── */
+  --ease-out-quint: cubic-bezier(0.2, 0, 0, 1);
+  --animate-feedback-in: feedback-in 200ms var(--ease-out-quint) both;
+  --animate-pop-in: pop-in 320ms var(--ease-out-quint) both;
+
+  @keyframes feedback-in {
+    from { opacity: 0; translate: 0 6px; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+  --animate-pulse-ring: pulse-ring 2.4s ease-in-out 3;
+  --animate-confetti-fall: confetti-fall 1.6s var(--ease-out-quint) both;
+
+  @keyframes confetti-fall {
+    0% { opacity: 0; translate: 0 -16px; }
+    15% { opacity: 1; }
+    100% { opacity: 0; translate: 0 220px; rotate: 200deg; }
+  }
+  @keyframes pulse-ring {
+    0%, 100% { scale: 0.92; opacity: 0.6; }
+    50% { scale: 1.12; opacity: 0.15; }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; scale: 0.9; filter: blur(4px); }
+    to   { opacity: 1; scale: 1; filter: blur(0); }
+  }
+}
+
+@layer base {
+  /* Restaura o anel de foco (o reset global acima usa outline-none) só para navegação por teclado. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-sky-ink);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
