@@ -13,6 +13,7 @@ import VisualizarConteudo from '../pages/VisualizarConteudo';
 import PainelAdmin from '../pages/PainelAdmin';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import AuthLayout from '@/components/layout/authLayout';
+import { v2Routes } from './v2';
 
 export const router = createBrowserRouter([
   {
@@ -82,4 +83,5 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  v2Routes,
 ]);

@@ -14,7 +14,7 @@ Antes de qualquer outra convenção deste ficheiro: segurança da plataforma e d
 - Nas PRs multi-tenant (Fase 2 da SLA), o isolamento de dados entre tenants é sempre verificado e documentado, nunca assumido.
 
 ## Stack
-React 18.3 · TypeScript 5.5 · Vite 5.4 · Tailwind 3.4 (tailwind.config.js, directivas @tailwind) · react-router-dom 7 · axios · lucide-react (único pacote de ícones) · Playwright.
+React 18.3 · TypeScript 5.5 · Vite 5.4 · Tailwind 4 (via @tailwindcss/vite; paleta legada mantida com `@config "../tailwind.config.js"` em src/index.css) · react-router-dom 7 · axios · lucide-react (único pacote de ícones) · Playwright.
 npm apenas. Alias `@` → `src/`. Não instalar libs de UI/ícones sem aprovação do CTO.
 
 ## Comandos
@@ -23,7 +23,7 @@ npx tsc -p tsconfig.app.json --noEmit
 Env: .env.example → .env.local (VITE_API_URL, VITE_ENV).
 
 ## Estrutura (src/)
-routes/ · pages/ (export default) · components/{layout,ui,auth,debug} · contexts/{Auth,Theme} · services/ · hooks/ · utils/ · types/index.ts
+routes/ (inclui routes/v2.tsx, rotas paralelas /v2/* das telas novas) · pages/ (export default, páginas actuais) · features/ (telas novas, organizadas por domínio — desvio aprovado do padrão pages/; ver docs/kombinu-mapeamento.md e docs/INTEGRACAO-TELAS.md) · components/{layout,ui,auth,debug,charts} · contexts/{Auth,Theme,Gamification} · services/ · hooks/ · lib/ · utils/ · types/index.ts
 LEGADO (não usar): DataContext, useContent, useProgress, storageService, progressService.
 
 ## API e auth
@@ -50,4 +50,4 @@ LEGADO (não usar): DataContext, useContent, useProgress, storageService, progre
 - Nunca adicionar Claude como co-author nos commits deste projecto.
 
 ## Dívida conhecida (não corrigir sem pedido)
-tsc e lint têm erros pré-existentes (não acrescentar novos) · Tailwind v4 instalado mas não usado · /dashboard/admin depende de DataProvider não montado e de um role que o backend não tem · Ranking.tsx chama a API directamente · refresh de token com URL errado · playwright-report/ e test-results/ versionados.
+tsc e lint têm erros pré-existentes (não acrescentar novos) · /dashboard/admin depende de DataProvider não montado e de um role que o backend não tem · Ranking.tsx chama a API directamente · refresh de token com URL errado · playwright-report/ e test-results/ versionados · rotas /v2/* usam dados mock (ver docs/INTEGRACAO-TELAS.md secção 6) e ainda não têm `dark:` nem code-splitting por ecrã.
