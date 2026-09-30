@@ -91,6 +91,11 @@ import { mockSeasonResult } from '../features/leagues/mockLeague';
 import FreeLibraryScreen from '../features/library/FreeLibraryScreen';
 import { FREE_MATERIALS } from '../features/library/mockFreeLibrary';
 
+import AudioPlayerScreen from '../features/audio/AudioPlayerScreen';
+import { MOCK_AUDIO } from '../features/audio/mockAudio';
+import CampusPageScreen from '../features/campus/CampusPageScreen';
+import { MOCK_CAMPUS } from '../features/campus/mockCampus';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -383,5 +388,8 @@ export const v2Routes: RouteObject = {
     { path: 'admin/subscricoes', element: <SubscriptionsReportScreen /> },
     { path: 'ligas/temporada', element: <SeasonFinaleScreen result={mockSeasonResult()} userName={STUDENT_NAME} leagueHref="/v2/ligas" /> },
     { path: 'biblioteca-livre', element: <FreeLibraryScreen materials={FREE_MATERIALS} userName={STUDENT_NAME} totalStudents={3420} /> },
+
+    { path: 'audio', element: <AudioPlayerScreen audio={MOCK_AUDIO} userName={STUDENT_NAME} /> },
+    { path: 'polo', element: <CampusPageScreen page={MOCK_CAMPUS} userName={STUDENT_NAME} /> },
   ],
 };
