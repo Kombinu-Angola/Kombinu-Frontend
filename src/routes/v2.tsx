@@ -71,6 +71,11 @@ import RenewalFailureScreen from '../features/subscription/RenewalFailureScreen'
 import { OfflineScreen } from '../features/system/OfflineScreen';
 import { SessionExpiredScreen, NotFoundScreen } from '../features/system/RecoveryScreens';
 
+import NotificationCenterScreen from '../features/notifications/NotificationCenterScreen';
+import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
+import GlobalSearchScreen from '../features/search/GlobalSearchScreen';
+import { MOCK_SEARCH } from '../features/search/mockSearch';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -346,5 +351,8 @@ export const v2Routes: RouteObject = {
     { path: 'offline', element: <OfflineScreen offlineItems={5} cachedKb={5_940} pendingAnswers={4} streakDays={12} libraryHref="/v2/biblioteca" /> },
     { path: 'sessao-expirada', element: <SessionExpiredRoute /> },
     { path: '404', element: <NotFoundRoute /> },
+
+    { path: 'notificacoes', element: <NotificationCenterScreen notifications={NOTIFICATIONS} userName={STUDENT_NAME} settingsHref="/v2/definicoes" /> },
+    { path: 'pesquisa', element: <GlobalSearchScreen results={MOCK_SEARCH} userName={STUDENT_NAME} /> },
   ],
 };
