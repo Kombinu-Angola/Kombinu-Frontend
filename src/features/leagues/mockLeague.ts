@@ -19,3 +19,41 @@ export const mockLeague = (): LeagueSeason => ({
     { rank: 7, name: "Teresa Ngola", university: "UCAN", course: "Contabilidade · 1.º ano", streakDays: 4, xp: 1520 },
   ],
 });
+
+export const mockSeasonResult = () => ({
+  season: "Temporada 7 de 2026",
+  outcome: "promovido" as const,
+  rank: 2,
+  totalPlayers: 450,
+  fromDivision: "Divisão Ouro",
+  toDivision: "Divisão Diamante",
+  campus: "UAN · Polo Luanda",
+  xp: 1450,
+  quizzes: 28,
+  streakDays: 7,
+  streakTarget: 7,
+  nextSeasonEndsAt: new Date(Date.now() + (6 * 24 + 21) * 3_600_000).toISOString(),
+  rewards: [
+    {
+      id: "gemas",
+      icon: "gem" as const,
+      label: "150 gemas",
+      detail: "Já estão na tua carteira, para trocares por proteções de gelo.",
+      tone: "text-feedback-gem-ink",
+    },
+    {
+      id: "gelo",
+      icon: "snow" as const,
+      label: "1 proteção de gelo",
+      detail: "Guarda a sequência num dia em que não consigas estudar.",
+      tone: "text-brand-sky-ink",
+    },
+    {
+      id: "medalha",
+      icon: "seal" as const,
+      label: "Medalha: campeão da Divisão Ouro",
+      detail: "Adicionada ao teu cofre de medalhas.",
+      tone: "text-brand-sunbeam-ink",
+    },
+  ],
+});
