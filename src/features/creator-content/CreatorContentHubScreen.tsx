@@ -285,6 +285,13 @@ export default function CreatorContentHubScreen({ materials: initial, creatorNam
                       >
                         <Icon name="edit" size={20} />
                       </a>
+                      <a
+                        href="/v2/estudio/analitica"
+                        aria-label={`Analítica de ${material.title}`}
+                        className="flex size-11 items-center justify-center rounded-lg text-primary transition-[background-color] duration-150 hover:bg-surface-sky"
+                      >
+                        <Icon name="chart" size={20} />
+                      </a>
                       <button
                         type="button"
                         onClick={() => setPricing(material)}
