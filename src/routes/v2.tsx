@@ -104,6 +104,7 @@ import { SESSIONS } from '../features/account/mockAccount';
 
 import SupportTicketsScreen from '../features/admin/SupportTicketsScreen';
 import { SUPPORT_TICKETS } from '../features/admin/mockSupport';
+import AdaptiveRulesScreen from '../features/admin/AdaptiveRulesScreen';
 
 import CreationHubScreen from '../features/authoring/CreationHubScreen';
 import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
@@ -454,5 +455,7 @@ export const v2Routes: RouteObject = {
     { path: 'estudio/trilha', element: <TrailComposerScreen topics={TOPICS} creatorName={CREATOR_NAME} subjectName="Macroeconomia I" readersOnCurrent={83} /> },
     { path: 'estudio/importar', element: <BulkImportScreen rows={IMPORTED_ROWS} topics={TOPICS} creatorName={CREATOR_NAME} /> },
     { path: 'estudio/versoes', element: <VersionHistoryScreen materialTitle="Manual de exercícios: Macroeconomia I" versions={VERSIONS} creatorName={CREATOR_NAME} /> },
+
+    { path: 'admin/adaptativo', element: <AdaptiveRulesScreen /> },
   ],
 };
