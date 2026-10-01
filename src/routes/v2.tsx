@@ -105,6 +105,15 @@ import { SESSIONS } from '../features/account/mockAccount';
 import SupportTicketsScreen from '../features/admin/SupportTicketsScreen';
 import { SUPPORT_TICKETS } from '../features/admin/mockSupport';
 
+import CreationHubScreen from '../features/authoring/CreationHubScreen';
+import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
+import QuestionBankScreen from '../features/authoring/QuestionBankScreen';
+import ExamComposerScreen from '../features/authoring/ExamComposerScreen';
+import TrailComposerScreen from '../features/authoring/TrailComposerScreen';
+import BulkImportScreen from '../features/authoring/BulkImportScreen';
+import VersionHistoryScreen from '../features/authoring/VersionHistoryScreen';
+import { TOPICS, QUESTIONS, VERSIONS, IMPORTED_ROWS } from '../features/authoring/mockAuthoring';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -423,5 +432,27 @@ export const v2Routes: RouteObject = {
     },
 
     { path: 'admin/suporte', element: <SupportTicketsScreen tickets={SUPPORT_TICKETS} agentName="Hamilton Kiala" /> },
+
+    { path: 'estudio/criar', element: <CreationHubScreen creatorName={CREATOR_NAME} questionCount={QUESTIONS.length} draftCount={2} /> },
+    {
+      path: 'estudio/comecar',
+      element: (
+        <StudioOnboardingScreen
+          creatorName={CREATOR_NAME}
+          university="UAN · Faculdade de Ciências"
+          steps={[
+            { id: 's1', label: 'Credenciais homologadas', detail: 'Aprovado pela equipa de auditoria.', done: true, href: '/v2/estudio/homologacao' },
+            { id: 's2', label: 'Publicar o primeiro material', detail: 'Começa por um modelo e adapta o conteúdo.', done: false, href: '/v2/estudio/criar' },
+            { id: 's3', label: 'Definir preço e visibilidade', detail: 'Entre 1.000 e 2.500 Kz na tua cadeira.', done: false, href: '/v2/estudio/materiais' },
+            { id: 's4', label: 'Confirmar o Multicaixa Express', detail: 'Teste de 1 Kz para validar a titularidade.', done: false, href: '/v2/estudio/financeiro' },
+          ]}
+        />
+      ),
+    },
+    { path: 'estudio/questoes', element: <QuestionBankScreen questions={QUESTIONS} topics={TOPICS} creatorName={CREATOR_NAME} subjectName="Macroeconomia I · UAN" /> },
+    { path: 'estudio/simulado', element: <ExamComposerScreen questions={QUESTIONS} topics={TOPICS} creatorName={CREATOR_NAME} subjectName="Macroeconomia I" /> },
+    { path: 'estudio/trilha', element: <TrailComposerScreen topics={TOPICS} creatorName={CREATOR_NAME} subjectName="Macroeconomia I" readersOnCurrent={83} /> },
+    { path: 'estudio/importar', element: <BulkImportScreen rows={IMPORTED_ROWS} topics={TOPICS} creatorName={CREATOR_NAME} /> },
+    { path: 'estudio/versoes', element: <VersionHistoryScreen materialTitle="Manual de exercícios: Macroeconomia I" versions={VERSIONS} creatorName={CREATOR_NAME} /> },
   ],
 };

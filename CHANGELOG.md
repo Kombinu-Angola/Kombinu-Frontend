@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Fluxo do estudio de criacao (`features/authoring/`): hub de criacao, onboarding do criador, banco de perguntas, compositor de simulados, compositor de trilhas, importacao em massa e historico de versoes. `CreatorShell` e `CreatorContentHubScreen`: "Estudio de criacao" passa a abrir o hub em vez do editor directo; novo atalho de historico de versoes por material. Novas rotas: `/v2/estudio/criar`, `/v2/estudio/comecar`, `/v2/estudio/questoes`, `/v2/estudio/simulado`, `/v2/estudio/trilha`, `/v2/estudio/importar`, `/v2/estudio/versoes`.
 - Central de suporte e disputas no backoffice (`features/admin/SupportTicketsScreen`). `AdminShell` ganha o item "Suporte e disputas". Nova rota: `/v2/admin/suporte`.
 - Convite de amigos (`features/referral/ReferralScreen`), privacidade e eliminacao de conta (`features/account/PrivacyScreen`, Lei n.o 22/11) e sessoes/dispositivos activos (`features/account/SessionsScreen`). `StudentSettingsScreen` ganha os atalhos "Sessões e dispositivos" e "Privacidade e dados". Novas rotas: `/v2/convidar`, `/v2/privacidade`, `/v2/conta/sessoes`.
 - Leitor de audio de materiais (`features/audio/AudioPlayerScreen`) e pagina publica de polo/instituicao (`features/campus/CampusPageScreen`). Novas rotas: `/v2/audio`, `/v2/polo`.
