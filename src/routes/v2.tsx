@@ -111,6 +111,8 @@ import TeamPermissionsScreen from '../features/governance/TeamPermissionsScreen'
 import SurveyComposerScreen from '../features/survey/SurveyComposerScreen';
 import SurveyResultsScreen from '../features/survey/SurveyResultsScreen';
 import { SURVEY_DRAFT, SURVEY_RESULT } from '../features/survey/mockSurvey';
+import ItemCalibrationScreen from '../features/authoring/ItemCalibrationScreen';
+import PeerReviewScreen from '../features/authoring/PeerReviewScreen';
 
 import CreationHubScreen from '../features/authoring/CreationHubScreen';
 import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
@@ -470,5 +472,8 @@ export const v2Routes: RouteObject = {
 
     { path: 'estudio/enquete', element: <SurveyComposerScreen draft={SURVEY_DRAFT} creatorName={CREATOR_NAME} /> },
     { path: 'estudio/enquete/resultados', element: <SurveyResultsScreen result={SURVEY_RESULT} creatorName={CREATOR_NAME} /> },
+
+    { path: 'estudio/calibracao', element: <ItemCalibrationScreen questions={QUESTIONS} topics={TOPICS} creatorName={CREATOR_NAME} subjectName="Macroeconomia I · UAN" /> },
+    { path: 'estudio/revisao', element: <PeerReviewScreen materialTitle="Sebenta e simulado: Mundell-Fleming e crise cambial" author="Teresa Bento" reviewerName={CREATOR_NAME} /> },
   ],
 };

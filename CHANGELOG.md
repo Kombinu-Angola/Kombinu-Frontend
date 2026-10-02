@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Calibracao de itens e revisao por pares no estudio (`features/authoring/`: `ItemCalibrationScreen`, `PeerReviewScreen`). `QuestionBankScreen` ganha o atalho "Calibração". Novas rotas: `/v2/estudio/calibracao`, `/v2/estudio/revisao`.
 - Enquetes no estudio de criacao (`features/survey/`: `SurveyComposerScreen`, `SurveyResultsScreen`) -- fecha a referencia `/estudio/enquete` deixada pendente no `CreationHubScreen` desde o lote anterior. Novas rotas: `/v2/estudio/enquete`, `/v2/estudio/enquete/resultados`.
 - Exportacao fiscal e equipa/permissoes no backoffice (`features/governance/`: `FiscalExportScreen`, `TeamPermissionsScreen`) e pagina publica de universidade parceira, sem sessao (`features/campus/PublicUniversityScreen`). `AdminShell` ganha 2 itens de navegacao. Novas rotas: `/v2/admin/fiscal`, `/v2/admin/equipa`, `/v2/u/:slug`.
 - Nivelamento adaptativo no backoffice (`features/admin/AdaptiveRulesScreen`). `AdminShell` ganha o item "Nivelamento adaptativo". Nova rota: `/v2/admin/adaptativo`.
