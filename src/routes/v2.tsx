@@ -95,6 +95,7 @@ import AudioPlayerScreen from '../features/audio/AudioPlayerScreen';
 import { MOCK_AUDIO } from '../features/audio/mockAudio';
 import CampusPageScreen from '../features/campus/CampusPageScreen';
 import { MOCK_CAMPUS } from '../features/campus/mockCampus';
+import PublicUniversityScreen from '../features/campus/PublicUniversityScreen';
 
 import ReferralScreen from '../features/referral/ReferralScreen';
 import { MOCK_REFERRAL } from '../features/referral/mockReferral';
@@ -105,6 +106,8 @@ import { SESSIONS } from '../features/account/mockAccount';
 import SupportTicketsScreen from '../features/admin/SupportTicketsScreen';
 import { SUPPORT_TICKETS } from '../features/admin/mockSupport';
 import AdaptiveRulesScreen from '../features/admin/AdaptiveRulesScreen';
+import FiscalExportScreen from '../features/governance/FiscalExportScreen';
+import TeamPermissionsScreen from '../features/governance/TeamPermissionsScreen';
 
 import CreationHubScreen from '../features/authoring/CreationHubScreen';
 import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
@@ -457,5 +460,9 @@ export const v2Routes: RouteObject = {
     { path: 'estudio/versoes', element: <VersionHistoryScreen materialTitle="Manual de exercícios: Macroeconomia I" versions={VERSIONS} creatorName={CREATOR_NAME} /> },
 
     { path: 'admin/adaptativo', element: <AdaptiveRulesScreen /> },
+    { path: 'admin/fiscal', element: <FiscalExportScreen entityName="Kombinu EdTech, Lda" nif="5412894210" /> },
+    { path: 'admin/equipa', element: <TeamPermissionsScreen /> },
+
+    { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
   ],
 };
