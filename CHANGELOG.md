@@ -15,6 +15,37 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Calibracao de itens e revisao por pares no estudio (`features/authoring/`: `ItemCalibrationScreen`, `PeerReviewScreen`). `QuestionBankScreen` ganha o atalho "Calibração". Novas rotas: `/v2/estudio/calibracao`, `/v2/estudio/revisao`.
+- Enquetes no estudio de criacao (`features/survey/`: `SurveyComposerScreen`, `SurveyResultsScreen`) -- fecha a referencia `/estudio/enquete` deixada pendente no `CreationHubScreen` desde o lote anterior. Novas rotas: `/v2/estudio/enquete`, `/v2/estudio/enquete/resultados`.
+- Exportacao fiscal e equipa/permissoes no backoffice (`features/governance/`: `FiscalExportScreen`, `TeamPermissionsScreen`) e pagina publica de universidade parceira, sem sessao (`features/campus/PublicUniversityScreen`). `AdminShell` ganha 2 itens de navegacao. Novas rotas: `/v2/admin/fiscal`, `/v2/admin/equipa`, `/v2/u/:slug`.
+- Nivelamento adaptativo no backoffice (`features/admin/AdaptiveRulesScreen`). `AdminShell` ganha o item "Nivelamento adaptativo". Nova rota: `/v2/admin/adaptativo`.
+- Fluxo do estudio de criacao (`features/authoring/`): hub de criacao, onboarding do criador, banco de perguntas, compositor de simulados, compositor de trilhas, importacao em massa e historico de versoes. `CreatorShell` e `CreatorContentHubScreen`: "Estudio de criacao" passa a abrir o hub em vez do editor directo; novo atalho de historico de versoes por material. Novas rotas: `/v2/estudio/criar`, `/v2/estudio/comecar`, `/v2/estudio/questoes`, `/v2/estudio/simulado`, `/v2/estudio/trilha`, `/v2/estudio/importar`, `/v2/estudio/versoes`.
+- Central de suporte e disputas no backoffice (`features/admin/SupportTicketsScreen`). `AdminShell` ganha o item "Suporte e disputas". Nova rota: `/v2/admin/suporte`.
+- Convite de amigos (`features/referral/ReferralScreen`), privacidade e eliminacao de conta (`features/account/PrivacyScreen`, Lei n.o 22/11) e sessoes/dispositivos activos (`features/account/SessionsScreen`). `StudentSettingsScreen` ganha os atalhos "Sessões e dispositivos" e "Privacidade e dados". Novas rotas: `/v2/convidar`, `/v2/privacidade`, `/v2/conta/sessoes`.
+- Leitor de audio de materiais (`features/audio/AudioPlayerScreen`) e pagina publica de polo/instituicao (`features/campus/CampusPageScreen`). Novas rotas: `/v2/audio`, `/v2/polo`.
+- Catalogo curricular (`features/admin/CurriculumCatalogScreen`), relatorio de subscricoes Pro (`features/admin/SubscriptionsReportScreen`), fim de temporada da liga (`features/leagues/SeasonFinaleScreen`) e biblioteca livre (`features/library/FreeLibraryScreen`). `AdminShell` ganha 2 itens de navegacao (Subscricoes Pro, Catalogo curricular); `StudentLibraryScreen` ganha atalho para a biblioteca livre. Novas rotas: `/v2/admin/catalogo`, `/v2/admin/subscricoes`, `/v2/ligas/temporada`, `/v2/biblioteca-livre`.
+- Analitica pedagogica por material (`features/analytics/MaterialAnalyticsScreen`), duvidas ancoradas ao conteudo (`features/qa/MaterialQaScreen`) e caderno de revisao espacada (`features/review/ReviewNotebookScreen`). `CreatorContentHubScreen` ganha atalho de analitica por material. Novas rotas: `/v2/estudio/analitica`, `/v2/duvidas`, `/v2/revisao`.
+- Central de notificacoes (`features/notifications/NotificationCenterScreen`) e pesquisa global (`features/search/GlobalSearchScreen`). `AppShell`: sino de notificacoes no cabecalho. Novas rotas: `/v2/notificacoes`, `/v2/pesquisa`.
+- Ecras de sistema (`features/system/`): `OfflineScreen` (sem ligacao, mostra o que continua a funcionar) e `RecoveryScreens` (`SessionExpiredScreen` — reentrada por SMS sem perder o sitio; `NotFoundScreen` — 404 com atalhos de volta). Novas rotas: `/v2/offline`, `/v2/sessao-expirada`, `/v2/404`. `lib/assets3d.ts`: novo asset `kombi-offline`.
+- Definicoes da conta do estudante (`features/account/`: `StudentSettingsScreen`, `PhoneSecurityScreen`), trilha de aprendizagem e trilha mista adaptativa (`features/trail/`: `LearningTrailScreen`, `AdaptiveTrailScreen`), resultado da homologacao de criador (`features/creator/HomologationResultScreen`) e falha de renovacao da subscricao Pro (`features/subscription/RenewalFailureScreen`). Novas rotas: `/v2/definicoes`, `/v2/conta/telemovel`, `/v2/trilha`, `/v2/trilha/mista`, `/v2/estudio/homologacao` (+ `/correcao`), `/v2/estudio/renovacao`.
+- `CourseScreen` ganha atalho "Ver a trilha completa"; `StudentProfileScreen` ganha atalho "Definições".
+- Biblioteca do estudante (`features/library/`: `StudentLibraryScreen`, `OfflineDownloadsScreen`), historico de compras e recibos (`features/purchases/PurchaseHistoryScreen`) e gestao de materiais do criador (`features/creator-content/`: `CreatorContentHubScreen`, `PricingModal`) e fila de homologacao de criadores no backoffice (`features/admin/CreatorQueueScreen`) — pecas identificadas em falta no `docs/kombinu-mapeamento.md`. Novas rotas em `routes/v2.tsx`: `/v2/biblioteca`, `/v2/biblioteca/descargas`, `/v2/perfil/compras`, `/v2/estudio/materiais`, `/v2/admin/criadores`.
+- `AppShell`/`CreatorShell`/`AdminShell`: novos itens de navegacao para as telas acima; `StudentProfileScreen` ganha atalhos para compras e biblioteca; `StudioScreen` mostra o `PricingModal` (preco e visibilidade) antes de publicar.
+- `lib/format.ts`: `formatSize` (KB/MB/GB), usado pelos ecras de biblioteca e materiais.
+- Integracao das 39 telas novas (docs/kombinu-mapeamento.md) em rotas paralelas `/v2/*`, sem tocar nas paginas e rotas actuais: `src/features/*` (20 dominios), `src/components/{ui,layout,charts}` do design system, `src/lib/{format,levels,assets3d}`, `src/contexts/GamificationContext`, `src/routes/v2.tsx` + `src/routes/V2Layout.tsx` (intercetor de navegacao interna e sessao de gamificacao partilhada). Detalhe completo em `docs/INTEGRACAO-TELAS.md`.
+- `src/services/creatorService.ts`: envio real do credenciamento de criador (multipart, `/creators/applications/`) usando a instancia `api` partilhada.
+- Migracao para Tailwind v4 (`@tailwindcss/vite`), mantendo a paleta e as cores legadas via `@config`.
+
+### Corrigido
+
+- Botao "Comecar a ler" no fim do onboarding apontava para um caminho inexistente (`/resumos/taxa-bna`); corrigido para `/v2/leitura`.
+- Botoes (`Button3D`/`LinkButton3D`) usavam `font-lato` em vez de `font-poppins` (SLA 7.3: hierarquia de fontes obrigatoria para CTAs).
+- 4 ocorrencias de `window.location.hash = "#/..."` (nao navegam sob rotas por path): `CreatorShell`, `SubscriptionFlow`, `CreatorContentHubScreen`, `PurchaseHistoryScreen` -- trocadas por `window.location.assign`.
+- `src/components/ui/sonner.tsx`: nomes de icones lucide-react inexistentes na versao instalada (`CircleCheckIcon` etc.) corrigidos; o `<Toaster />` estava definido mas nunca montado -- montado agora em `App.tsx`.
+- `tsconfig.app.json`: `DOM.Iterable` em falta na `lib` (necessario para iterar `NodeListOf`).
+
+### Adicionado
+
 - `CriarConteudo.tsx`: botao "Gerar com IA" agora guarda o conteudo e chama `/quizzes/contents/<id>/generate-quiz/` (OpenTDB); trata erros 503 (rate limit) com mensagem explicativa (S3-09).
 - `quizService.ts`: descodificacao automatica de URL encoding (`%20`, `%2C`, etc.) nas perguntas e opcoes ao carregar o quiz — garante compatibilidade enquanto o backend usa `encode=url3986` da OpenTDB.
 - `Quiz.tsx`: classe `break-words` adicionada ao titulo da pergunta para evitar que textos longos ultrapassem os limites do ecra em dispositivos moveis.
