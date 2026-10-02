@@ -108,6 +108,9 @@ import { SUPPORT_TICKETS } from '../features/admin/mockSupport';
 import AdaptiveRulesScreen from '../features/admin/AdaptiveRulesScreen';
 import FiscalExportScreen from '../features/governance/FiscalExportScreen';
 import TeamPermissionsScreen from '../features/governance/TeamPermissionsScreen';
+import SurveyComposerScreen from '../features/survey/SurveyComposerScreen';
+import SurveyResultsScreen from '../features/survey/SurveyResultsScreen';
+import { SURVEY_DRAFT, SURVEY_RESULT } from '../features/survey/mockSurvey';
 
 import CreationHubScreen from '../features/authoring/CreationHubScreen';
 import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
@@ -464,5 +467,8 @@ export const v2Routes: RouteObject = {
     { path: 'admin/equipa', element: <TeamPermissionsScreen /> },
 
     { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
+
+    { path: 'estudio/enquete', element: <SurveyComposerScreen draft={SURVEY_DRAFT} creatorName={CREATOR_NAME} /> },
+    { path: 'estudio/enquete/resultados', element: <SurveyResultsScreen result={SURVEY_RESULT} creatorName={CREATOR_NAME} /> },
   ],
 };
