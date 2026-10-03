@@ -1,0 +1,206 @@
+import type { RouteObject } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import V2Layout from './V2Layout';
+
+import OnboardingRoleScreen from '../features/onboarding/OnboardingRoleScreen';
+import StudentOnboardingFlow from '../features/onboarding/StudentOnboardingFlow';
+import { mockRecommendation } from '../features/onboarding/mockRecommendation';
+import { MOCK_DIAGNOSTIC } from '../features/quiz/mockDiagnostic';
+
+import AuthScreen from '../features/auth/AuthScreen';
+
+import CreatorApplicationFlow from '../features/creator/CreatorApplicationFlow';
+import { submitCreatorApplication } from '../services/creatorService';
+
+import DashboardScreen from '../features/dashboard/DashboardScreen';
+import { MOCK_DASHBOARD } from '../features/dashboard/mockDashboard';
+import StudyFeedScreen from '../features/feed/StudyFeedScreen';
+import { MOCK_FEED } from '../features/feed/mockFeed';
+import ChallengeFlow from '../features/challenge/ChallengeFlow';
+import MarketplaceScreen from '../features/marketplace/MarketplaceScreen';
+import { MOCK_MATERIALS } from '../features/marketplace/mockMaterials';
+import CourseScreen from '../features/course/CourseScreen';
+import { MOCK_COURSE } from '../features/course/mockCourse';
+import ReadingFlow from '../features/reading/ReadingFlow';
+import { MOCK_ARTICLE } from '../features/content/mockArticle';
+import LeaguesScreen from '../features/leagues/LeaguesScreen';
+import { mockLeague } from '../features/leagues/mockLeague';
+import StreakHubScreen from '../features/streak/StreakHubScreen';
+import { MOCK_STREAK } from '../features/streak/mockStreak';
+import StudentProfileScreen from '../features/profile/StudentProfileScreen';
+import BadgeVaultScreen from '../features/profile/BadgeVaultScreen';
+import { MOCK_PROFILE, BADGES } from '../features/profile/mockProfile';
+import DocumentDetailScreen from '../features/document/DocumentDetailScreen';
+import { MOCK_DOCUMENT } from '../features/document/mockDocument';
+import CreatorPublicProfileScreen from '../features/creator-public/CreatorPublicProfileScreen';
+import { MOCK_CREATOR } from '../features/creator-public/mockCreator';
+
+import StudioScreen from '../features/studio/StudioScreen';
+import { MOCK_DRAFT } from '../features/studio/mockDraft';
+import CreatorFinanceScreen from '../features/creator-finance/CreatorFinanceScreen';
+import { MOCK_FINANCE } from '../features/creator-finance/mockFinance';
+import SubscriptionFlow from '../features/subscription/SubscriptionFlow';
+import AccountSettingsScreen, { type AccountSettings } from '../features/subscription/AccountSettingsScreen';
+
+import AdminOverviewScreen from '../features/admin/AdminOverviewScreen';
+import StudentsScreen from '../features/admin/StudentsScreen';
+import ModerationScreen from '../features/admin/ModerationScreen';
+import FinanceScreen from '../features/admin/FinanceScreen';
+import InsightsScreen from '../features/admin/InsightsScreen';
+import GamificationScreen from '../features/admin/GamificationScreen';
+
+/** Nomes de sessão de demonstração (sem backend ligado ainda). */
+const STUDENT_NAME = 'João Kiala';
+const CREATOR_NAME = 'Orlando Fortuna';
+
+function OnboardingRoute() {
+  const navigate = useNavigate();
+  return (
+    <OnboardingRoleScreen
+      onSelectRole={(role) => navigate(role === 'creator' ? '/v2/credenciamento' : '/v2/onboarding/estudante')}
+    />
+  );
+}
+
+function StudentOnboardingRoute() {
+  const navigate = useNavigate();
+  return (
+    <StudentOnboardingFlow
+      onExit={() => navigate('/v2')}
+      getDiagnostic={() => MOCK_DIAGNOSTIC}
+      getRecommendation={mockRecommendation}
+      feedHref="/v2/trilhas"
+    />
+  );
+}
+
+function CreatorApplicationRoute() {
+  const navigate = useNavigate();
+  return (
+    <CreatorApplicationFlow
+      onExit={() => navigate('/v2')}
+      submit={submitCreatorApplication}
+      links={{ studio: '/v2/estudio', home: '/v2/painel', support: '/v2' }}
+    />
+  );
+}
+
+function AuthRoute() {
+  const navigate = useNavigate();
+  // Demo visual: sem tokens/sessao real (auth por SMS ainda sem endpoint no backend
+  // e a ligar autenticacao real precisa de aprovacao do CTO -- ver CLAUDE.md).
+  return <AuthScreen onAuthenticated={() => navigate('/v2/painel')} />;
+}
+
+function ReadingRoute() {
+  const navigate = useNavigate();
+  return (
+    <ReadingFlow
+      article={MOCK_ARTICLE}
+      onExit={() => navigate('/v2/cadeira')}
+      onNextArticle={() => navigate('/v2/cadeira')}
+    />
+  );
+}
+
+function DocumentRoute() {
+  const navigate = useNavigate();
+  return (
+    <DocumentDetailScreen
+      document={MOCK_DOCUMENT}
+      userName={STUDENT_NAME}
+      onRead={() => navigate('/v2/leitura')}
+      onPurchase={async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        return { reference: `DEMO-${Date.now()}` };
+      }}
+    />
+  );
+}
+
+function StudioRoute() {
+  return (
+    <StudioScreen
+      initialDraft={MOCK_DRAFT}
+      authorName={CREATOR_NAME}
+      courseName={MOCK_COURSE.hero.title}
+      onSave={async () => {
+        /* Backend de rascunhos ainda nao existe; useDraft guarda so em memoria. */
+      }}
+    />
+  );
+}
+
+const DEMO_SETTINGS: AccountSettings = {
+  name: CREATOR_NAME,
+  institution: 'uan-economia',
+  bio: 'Explico Economia e Macroeconomia de forma simples, com sebentas revistas e simulados semanais.',
+  phone: '923000302',
+  phoneVerified: true,
+  plan: 'pro',
+  planPriceKz: 5000,
+  renewsAt: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString(),
+  notifications: { streak: true, questions: true, sales: true },
+};
+
+function AccountSettingsRoute() {
+  const navigate = useNavigate();
+  return <AccountSettingsScreen settings={DEMO_SETTINGS} onChangePlan={() => navigate('/v2/estudio/plano')} />;
+}
+
+function SubscriptionRoute() {
+  return (
+    <SubscriptionFlow
+      creatorName={CREATOR_NAME}
+      currentPlan="free"
+      studioHref="/v2/estudio"
+      authorize={async (_phone, _amountKz) => {
+        await new Promise((resolve) => setTimeout(resolve, 2500));
+        return { reference: `EXP-${Date.now()}`, approvedAt: new Date().toISOString() };
+      }}
+    />
+  );
+}
+
+/**
+ * Rotas paralelas das 39 telas novas (docs/INTEGRACAO-TELAS.md, passo 11).
+ * Cada ecra usa o seu proprio mock (feature/mock*.ts); ligar aos servicos reais
+ * fica para "Depois de integrar" (secao 6 do documento), excepto AuthScreen
+ * (fica demo, ver AuthRoute) e CreatorApplicationFlow (ja usa creatorService real).
+ */
+export const v2Routes: RouteObject = {
+  path: 'v2',
+  element: <V2Layout />,
+  children: [
+    { index: true, element: <OnboardingRoute /> },
+    { path: 'onboarding/estudante', element: <StudentOnboardingRoute /> },
+    { path: 'credenciamento', element: <CreatorApplicationRoute /> },
+    { path: 'entrar', element: <AuthRoute /> },
+
+    { path: 'painel', element: <DashboardScreen data={MOCK_DASHBOARD} /> },
+    { path: 'trilhas', element: <StudyFeedScreen feed={MOCK_FEED} /> },
+    { path: 'desafio', element: <ChallengeFlow userName={STUDENT_NAME} /> },
+    { path: 'marketplace', element: <MarketplaceScreen materials={MOCK_MATERIALS} userName={STUDENT_NAME} /> },
+    { path: 'marketplace/:id', element: <DocumentRoute /> },
+    { path: 'sebenta', element: <DocumentRoute /> },
+    { path: 'cadeira', element: <CourseScreen course={MOCK_COURSE} userName={STUDENT_NAME} /> },
+    { path: 'leitura', element: <ReadingRoute /> },
+    { path: 'ligas', element: <LeaguesScreen league={mockLeague()} userName={STUDENT_NAME} /> },
+    { path: 'ofensiva', element: <StreakHubScreen streak={MOCK_STREAK} userName={STUDENT_NAME} studyHref="/v2/trilhas" /> },
+    { path: 'perfil', element: <StudentProfileScreen profile={MOCK_PROFILE} badgesHref="/v2/medalhas" /> },
+    { path: 'medalhas', element: <BadgeVaultScreen badges={BADGES} userName={STUDENT_NAME} seasonTotal={BADGES.length} /> },
+    { path: 'criador', element: <CreatorPublicProfileScreen creator={MOCK_CREATOR} userName={STUDENT_NAME} /> },
+
+    { path: 'estudio', element: <StudioRoute /> },
+    { path: 'estudio/financeiro', element: <CreatorFinanceScreen finance={MOCK_FINANCE} creatorName={CREATOR_NAME} /> },
+    { path: 'estudio/plano', element: <SubscriptionRoute /> },
+    { path: 'estudio/definicoes', element: <AccountSettingsRoute /> },
+
+    { path: 'admin', element: <AdminOverviewScreen /> },
+    { path: 'admin/estudantes', element: <StudentsScreen /> },
+    { path: 'admin/moderacao', element: <ModerationScreen /> },
+    { path: 'admin/insights', element: <InsightsScreen /> },
+    { path: 'admin/financeiro', element: <FinanceScreen /> },
+    { path: 'admin/gamificacao', element: <GamificationScreen /> },
+  ],
+};

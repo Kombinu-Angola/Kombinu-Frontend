@@ -15,6 +15,17 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Integracao das 39 telas novas (docs/kombinu-mapeamento.md) em rotas paralelas `/v2/*`, sem tocar nas paginas e rotas actuais: `src/features/*` (20 dominios), `src/components/{ui,layout,charts}` do design system, `src/lib/{format,levels,assets3d}`, `src/contexts/GamificationContext`, `src/routes/v2.tsx` + `src/routes/V2Layout.tsx` (intercetor de navegacao interna e sessao de gamificacao partilhada). Detalhe completo em `docs/INTEGRACAO-TELAS.md`.
+- `src/services/creatorService.ts`: envio real do credenciamento de criador (multipart, `/creators/applications/`) usando a instancia `api` partilhada.
+- Migracao para Tailwind v4 (`@tailwindcss/vite`), mantendo a paleta e as cores legadas via `@config`.
+
+### Corrigido
+
+- `src/components/ui/sonner.tsx`: nomes de icones lucide-react inexistentes na versao instalada (`CircleCheckIcon` etc.) corrigidos; o `<Toaster />` estava definido mas nunca montado -- montado agora em `App.tsx`.
+- `tsconfig.app.json`: `DOM.Iterable` em falta na `lib` (necessario para iterar `NodeListOf`).
+
+### Adicionado
+
 - `CriarConteudo.tsx`: botao "Gerar com IA" agora guarda o conteudo e chama `/quizzes/contents/<id>/generate-quiz/` (OpenTDB); trata erros 503 (rate limit) com mensagem explicativa (S3-09).
 - `quizService.ts`: descodificacao automatica de URL encoding (`%20`, `%2C`, etc.) nas perguntas e opcoes ao carregar o quiz — garante compatibilidade enquanto o backend usa `encode=url3986` da OpenTDB.
 - `Quiz.tsx`: classe `break-words` adicionada ao titulo da pergunta para evitar que textos longos ultrapassem os limites do ecra em dispositivos moveis.
