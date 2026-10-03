@@ -19,3 +19,13 @@ export function formatActivityTime(iso: string, now = new Date()) {
 /** Pesquisa sem acentos nem maiúsculas: "calculo" encontra "Cálculo". */
 export const normalize = (s: string) =>
   s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
+const mbFormat = new Intl.NumberFormat("pt-AO", { maximumFractionDigits: 1 });
+
+/** Tamanhos de ficheiro a partir de KB: abaixo de 1 MB mostra KB. */
+export function formatSize(kb: number): string {
+  if (kb < 1024) return `${Math.round(kb)} KB`;
+  const mb = kb / 1024;
+  if (mb < 1024) return `${mbFormat.format(mb)} MB`;
+  return `${mbFormat.format(mb / 1024)} GB`;
+}

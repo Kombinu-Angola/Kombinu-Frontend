@@ -4,10 +4,11 @@ import { Avatar } from "../ui/Avatar";
 import { Button3D } from "../ui/Button3D";
 import { Icon, type IconName } from "../ui/Icon";
 
-export type CreatorSection = "estudio" | "financeiro" | "publico" | "definicoes";
+export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" | "definicoes";
 
 const NAV: ReadonlyArray<{ id: CreatorSection; label: string; href: string; icon: IconName; hint: string }> = [
   { id: "estudio", label: "Estúdio de criação", href: "/v2/estudio", icon: "edit", hint: "Rascunhos e publicações" },
+  { id: "materiais", label: "Os meus materiais", href: "/v2/estudio/materiais", icon: "file", hint: "Preço, visibilidade e vendas" },
   { id: "financeiro", label: "Financeiro e vendas", href: "/v2/estudio/financeiro", icon: "wallet", hint: "Saldo, levantamentos e histórico" },
   { id: "publico", label: "Perfil público", href: "/v2/criador", icon: "users", hint: "Como os estudantes te veem" },
   { id: "definicoes", label: "Conta e subscrição", href: "/v2/estudio/definicoes", icon: "gear", hint: "Perfil, notificações e plano" },
@@ -106,7 +107,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
                     <Icon name={item.icon} size={22} className="shrink-0" />
                     <span>
                       <span className={cn("block text-body-md", item.id === active && "font-bold")}>{item.label}</span>
-                      <span className="block text-caption text-text-tertiary">{item.hint}</span>
+                      <span className={cn("block text-caption", item.id === active ? "text-primary" : "text-text-tertiary")}>{item.hint}</span>
                     </span>
                   </a>
                 </li>
