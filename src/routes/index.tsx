@@ -16,6 +16,7 @@ import AuthLayout from '@/components/layout/authLayout';
 import { LandingPage } from '@/pages/LandingPage';
 import { Error } from '@/pages/error';
 import { NotFound } from '@/pages/notFound';
+import { v2Routes } from './v2';
 
 export const router = createBrowserRouter([
   {
@@ -95,7 +96,7 @@ export const router = createBrowserRouter([
       },
     ],
   },
-
+  v2Routes,
   {
     path: "*",
     element: <NotFound />

@@ -2,7 +2,7 @@
 import { Button } from "./ui/button";
 import { Play, PlayCircle } from "lucide-react";
 import { TextGenerateEffect } from "./ui/text-generate-effect";
-import { easeOut, motion } from "motion/react";
+import { motion } from "motion/react";
 
 
 export function HeroSection() {

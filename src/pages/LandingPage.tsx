@@ -8,7 +8,7 @@ import AcademicMarketplace from "../components/marketplaceAcademy";
 
 import MethodologySection from "@/components/metodologySection";
 import PricingSection from "@/components/pricingSection";
-import TestimonialsSection from "@/components/ testimonials";
+import TestimonialsSection from "@/components/testimonials";
 import { WhyKombinu } from "@/components/whyKombinu";
 import { Carrosel } from "@/components/carrossel";
 import FinancialComparison from "@/components/financialComparison";

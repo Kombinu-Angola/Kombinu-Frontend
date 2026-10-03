@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar-shadcn";
 import { motion, AnimatePresence } from "motion/react";
 
 export function Header() {
