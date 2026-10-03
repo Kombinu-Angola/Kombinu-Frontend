@@ -15,6 +15,8 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Definicoes da conta do estudante (`features/account/`: `StudentSettingsScreen`, `PhoneSecurityScreen`), trilha de aprendizagem e trilha mista adaptativa (`features/trail/`: `LearningTrailScreen`, `AdaptiveTrailScreen`), resultado da homologacao de criador (`features/creator/HomologationResultScreen`) e falha de renovacao da subscricao Pro (`features/subscription/RenewalFailureScreen`). Novas rotas: `/v2/definicoes`, `/v2/conta/telemovel`, `/v2/trilha`, `/v2/trilha/mista`, `/v2/estudio/homologacao` (+ `/correcao`), `/v2/estudio/renovacao`.
+- `CourseScreen` ganha atalho "Ver a trilha completa"; `StudentProfileScreen` ganha atalho "Definições".
 - Biblioteca do estudante (`features/library/`: `StudentLibraryScreen`, `OfflineDownloadsScreen`), historico de compras e recibos (`features/purchases/PurchaseHistoryScreen`) e gestao de materiais do criador (`features/creator-content/`: `CreatorContentHubScreen`, `PricingModal`) e fila de homologacao de criadores no backoffice (`features/admin/CreatorQueueScreen`) — pecas identificadas em falta no `docs/kombinu-mapeamento.md`. Novas rotas em `routes/v2.tsx`: `/v2/biblioteca`, `/v2/biblioteca/descargas`, `/v2/perfil/compras`, `/v2/estudio/materiais`, `/v2/admin/criadores`.
 - `AppShell`/`CreatorShell`/`AdminShell`: novos itens de navegacao para as telas acima; `StudentProfileScreen` ganha atalhos para compras e biblioteca; `StudioScreen` mostra o `PricingModal` (preco e visibilidade) antes de publicar.
 - `lib/format.ts`: `formatSize` (KB/MB/GB), usado pelos ecras de biblioteca e materiais.

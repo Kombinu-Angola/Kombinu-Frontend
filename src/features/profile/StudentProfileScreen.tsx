@@ -84,6 +84,9 @@ export default function StudentProfileScreen({ profile, badgesHref }: StudentPro
               <LinkButton3D href="/v2/perfil/compras" variant="ghost" leadingIcon={<Icon name="wallet" size={18} />}>
                 Compras e recibos
               </LinkButton3D>
+              <LinkButton3D href="/v2/definicoes" variant="ghost" leadingIcon={<Icon name="gear" size={18} />}>
+                Definições
+              </LinkButton3D>
             </div>
           </header>
 
