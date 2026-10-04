@@ -91,9 +91,14 @@ export default function StudentLibraryScreen({
               </p>
             </div>
           </div>
-          <LinkButton3D href={downloadsHref} variant="secondary" leadingIcon={<Icon name="gear" size={18} />}>
-            Gerir descargas
-          </LinkButton3D>
+          <span className="flex flex-wrap gap-2">
+            <LinkButton3D href="/v2/biblioteca-livre" variant="ghost" leadingIcon={<Icon name="book" size={18} />}>
+              Biblioteca livre
+            </LinkButton3D>
+            <LinkButton3D href={downloadsHref} variant="secondary" leadingIcon={<Icon name="gear" size={18} />}>
+              Gerir descargas
+            </LinkButton3D>
+          </span>
         </section>
 
         <section className="mt-8 flex flex-col gap-4 border-b-2 border-border-cloud pb-5 lg:flex-row lg:items-center lg:justify-between">

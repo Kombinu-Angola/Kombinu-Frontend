@@ -83,6 +83,14 @@ import { MOCK_QA } from '../features/qa/mockQa';
 import ReviewNotebookScreen from '../features/review/ReviewNotebookScreen';
 import { MOCK_REVIEW } from '../features/review/mockReview';
 
+import CurriculumCatalogScreen from '../features/admin/CurriculumCatalogScreen';
+import { CATALOG } from '../features/admin/mockCatalog';
+import SubscriptionsReportScreen from '../features/admin/SubscriptionsReportScreen';
+import SeasonFinaleScreen from '../features/leagues/SeasonFinaleScreen';
+import { mockSeasonResult } from '../features/leagues/mockLeague';
+import FreeLibraryScreen from '../features/library/FreeLibraryScreen';
+import { FREE_MATERIALS } from '../features/library/mockFreeLibrary';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -370,5 +378,10 @@ export const v2Routes: RouteObject = {
     { path: 'estudio/analitica', element: <MaterialAnalyticsScreen analytics={MOCK_ANALYTICS} creatorName={CREATOR_NAME} materialsHref="/v2/estudio/materiais" /> },
     { path: 'duvidas', element: <MaterialQaScreen board={MOCK_QA} userName={STUDENT_NAME} /> },
     { path: 'revisao', element: <ReviewRoute /> },
+
+    { path: 'admin/catalogo', element: <CurriculumCatalogScreen institutions={CATALOG} /> },
+    { path: 'admin/subscricoes', element: <SubscriptionsReportScreen /> },
+    { path: 'ligas/temporada', element: <SeasonFinaleScreen result={mockSeasonResult()} userName={STUDENT_NAME} leagueHref="/v2/ligas" /> },
+    { path: 'biblioteca-livre', element: <FreeLibraryScreen materials={FREE_MATERIALS} userName={STUDENT_NAME} totalStudents={3420} /> },
   ],
 };

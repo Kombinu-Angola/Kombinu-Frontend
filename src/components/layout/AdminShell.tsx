@@ -2,7 +2,7 @@ import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Icon, type IconName } from "../ui/Icon";
 
-export type AdminSection = "visao" | "estudantes" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao";
+export type AdminSection = "visao" | "estudantes" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao" | "catalogo" | "subscricoes";
 
 const NAV: ReadonlyArray<{ id: AdminSection; label: string; href: string; icon: IconName }> = [
   { id: "visao", label: "Visão executiva", href: "/v2/admin", icon: "grid" },
@@ -11,7 +11,9 @@ const NAV: ReadonlyArray<{ id: AdminSection; label: string; href: string; icon: 
   { id: "moderacao", label: "Moderação de conteúdo", href: "/v2/admin/moderacao", icon: "shield" },
   { id: "insights", label: "Insights", href: "/v2/admin/insights", icon: "chart" },
   { id: "financeiro", label: "Financeiro e Express", href: "/v2/admin/financeiro", icon: "wallet" },
+  { id: "subscricoes", label: "Subscrições Pro", href: "/v2/admin/subscricoes", icon: "seal" },
   { id: "gamificacao", label: "Gamificação e ligas", href: "/v2/admin/gamificacao", icon: "trophy" },
+  { id: "catalogo", label: "Catálogo curricular", href: "/v2/admin/catalogo", icon: "school" },
 ];
 
 type AdminShellProps = {
