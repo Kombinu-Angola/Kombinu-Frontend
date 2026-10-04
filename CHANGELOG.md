@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Leitor de audio de materiais (`features/audio/AudioPlayerScreen`) e pagina publica de polo/instituicao (`features/campus/CampusPageScreen`). Novas rotas: `/v2/audio`, `/v2/polo`.
 - Catalogo curricular (`features/admin/CurriculumCatalogScreen`), relatorio de subscricoes Pro (`features/admin/SubscriptionsReportScreen`), fim de temporada da liga (`features/leagues/SeasonFinaleScreen`) e biblioteca livre (`features/library/FreeLibraryScreen`). `AdminShell` ganha 2 itens de navegacao (Subscricoes Pro, Catalogo curricular); `StudentLibraryScreen` ganha atalho para a biblioteca livre. Novas rotas: `/v2/admin/catalogo`, `/v2/admin/subscricoes`, `/v2/ligas/temporada`, `/v2/biblioteca-livre`.
 - Analitica pedagogica por material (`features/analytics/MaterialAnalyticsScreen`), duvidas ancoradas ao conteudo (`features/qa/MaterialQaScreen`) e caderno de revisao espacada (`features/review/ReviewNotebookScreen`). `CreatorContentHubScreen` ganha atalho de analitica por material. Novas rotas: `/v2/estudio/analitica`, `/v2/duvidas`, `/v2/revisao`.
 - Central de notificacoes (`features/notifications/NotificationCenterScreen`) e pesquisa global (`features/search/GlobalSearchScreen`). `AppShell`: sino de notificacoes no cabecalho. Novas rotas: `/v2/notificacoes`, `/v2/pesquisa`.
