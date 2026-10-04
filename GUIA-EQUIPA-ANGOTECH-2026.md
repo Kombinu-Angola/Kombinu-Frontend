@@ -47,18 +47,22 @@ Abre no browser do telemóvel ou computador — funciona nos dois.
 ## Para Aprendizes — o que explorar
 
 ### Dashboard
+
 Logo após o login vês o teu painel pessoal:
+
 - **Nível actual** e barra de progresso de XP
 - **Cursos em progresso**
 - Acesso rápido ao Marketplace e Ranking
 
 ### Marketplace
+
 - Lista de todos os cursos disponíveis
 - Filtra por categoria: **Tecnologia**, **Negócios** ou **Design**
 - Usa a barra de pesquisa para encontrar um conteúdo específico
 - Clica num curso para ver os detalhes e iniciar o quiz
 
 ### Fazer um Quiz
+
 1. Abre um curso no Marketplace
 2. Clica em **Iniciar Quiz**
 3. Responde às perguntas dentro do tempo (o cronómetro fica vermelho nos últimos 30 segundos)
@@ -66,6 +70,7 @@ Logo após o login vês o teu painel pessoal:
 5. O XP é adicionado automaticamente ao teu perfil
 
 ### Ranking
+
 - Clica em **Ranking** no menu
 - Vês o pódio dos 3 melhores e a tabela completa
 - O teu nome aparece destacado a azul
@@ -75,10 +80,12 @@ Logo após o login vês o teu painel pessoal:
 ## Para Criadores — o que explorar
 
 ### Dashboard
+
 - Estatísticas dos teus conteúdos: visualizações, quizzes submetidos
 - Lista dos conteúdos publicados
 
 ### Criar Conteúdo
+
 1. Clica em **Criar Conteúdo** no menu ou no botão do dashboard
 2. Preenche:
    - **Título** e **Descrição** do conteúdo
@@ -97,6 +104,7 @@ Logo após o login vês o teu painel pessoal:
 Antes ou durante o AngoTic, confirma que estas funcionalidades estão a funcionar:
 
 ### Fluxo Aprendiz
+
 - [ ] Criar conta como Aprendiz
 - [ ] Fazer login e ver o Dashboard
 - [ ] Explorar o Marketplace e filtrar por categoria
@@ -106,6 +114,7 @@ Antes ou durante o AngoTic, confirma que estas funcionalidades estão a funciona
 - [ ] Ver o Ranking e encontrar o teu nome
 
 ### Fluxo Criador
+
 - [ ] Criar conta como Criador
 - [ ] Fazer login e ver o Dashboard de Criador
 - [ ] Criar um conteúdo do tipo Texto ou Vídeo
@@ -114,6 +123,7 @@ Antes ou durante o AngoTic, confirma que estas funcionalidades estão a funciona
 - [ ] Confirmar que o conteúdo aparece no Marketplace
 
 ### Geral
+
 - [ ] Mudar para **dark mode** (ícone do sol/lua no canto superior direito)
 - [ ] Abrir a plataforma no telemóvel e confirmar que o layout está correcto
 - [ ] Fazer logout e login novamente
@@ -136,10 +146,10 @@ Para sermos honestos com o que temos:
 
 Cria as contas antes do evento para não perderes tempo no palco:
 
-| Papel | Email sugerido | Password |
-|---|---|---|
+| Papel         | Email sugerido             | Password       |
+| ------------- | -------------------------- | -------------- |
 | Aprendiz demo | `demo.aprendiz@kombinu.ao` | `Kombinu2026!` |
-| Criador demo | `demo.criador@kombinu.ao` | `Kombinu2026!` |
+| Criador demo  | `demo.criador@kombinu.ao`  | `Kombinu2026!` |
 
 > Cria estas contas antes do evento e confirma que funcionam.
 
@@ -147,12 +157,12 @@ Cria as contas antes do evento para não perderes tempo no palco:
 
 ## Em caso de problema no evento
 
-| Situação | O que fazer |
-|---|---|
-| Plataforma não carrega | Verifica a ligação à internet; o backend pode estar a reiniciar (Render tem cold start de ~30s) |
-| Login falha | Aguarda 30 segundos e tenta novamente; pode ser cold start do servidor |
-| Quiz não carrega | Volta ao Marketplace e abre o curso novamente |
-| Erro ao gerar quiz com IA | A OpenTDB tem rate limit; aguarda 10 segundos e tenta novamente |
+| Situação                  | O que fazer                                                                                     |
+| ------------------------- | ----------------------------------------------------------------------------------------------- |
+| Plataforma não carrega    | Verifica a ligação à internet; o backend pode estar a reiniciar (Render tem cold start de ~30s) |
+| Login falha               | Aguarda 30 segundos e tenta novamente; pode ser cold start do servidor                          |
+| Quiz não carrega          | Volta ao Marketplace e abre o curso novamente                                                   |
+| Erro ao gerar quiz com IA | A OpenTDB tem rate limit; aguarda 10 segundos e tenta novamente                                 |
 
 ---
 
@@ -166,4 +176,4 @@ Estamos prontos.
 
 ---
 
-*Documento interno · Versão AngoTic 2026 · Junho 2026*
+_Documento interno · Versão AngoTic 2026 · Junho 2026_
