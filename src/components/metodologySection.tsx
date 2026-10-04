@@ -128,12 +128,12 @@ export default function MethodologySection() {
                                 </motion.span>
 
                                 {/* Título */}
-                                <h3 className="mt-2 text-lg sm:text-xl font-bold text-foreground">
+                                <h3 className="mt-2 text-lg sm:text-xl font-bold text-card-foreground">
                                     {item.title}
                                 </h3>
 
                                 {/* Descrição */}
-                                <p className="mt-3 text-sm text-[#424752] leading-relaxed">
+                                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
                                     {item.description}
                                 </p>
 

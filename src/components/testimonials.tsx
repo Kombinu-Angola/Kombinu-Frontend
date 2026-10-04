@@ -149,7 +149,7 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-semibold text-sm text-foreground truncate">
+                                <h4 className="font-semibold text-sm text-card-foreground truncate">
                                     Hamilton K.
                                 </h4>
 
@@ -280,7 +280,7 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-semibold text-sm text-foreground truncate">
+                                <h4 className="font-semibold text-sm text-card-foreground truncate">
                                     Jéssica M.
                                 </h4>
 
@@ -411,7 +411,7 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-semibold text-sm text-foreground truncate">
+                                <h4 className="font-semibold text-sm text-card-foreground truncate">
                                     Mauro P.
                                 </h4>
 

@@ -43,13 +43,13 @@ export function HeroCard() {
                                 </div>
                             </CardHeader>
                             <CardContent className="space-y-3 pt-0">
-                                <h3 className="text-lg sm:text-xl font-bold text-foreground">
+                                <h3 className="text-lg sm:text-xl font-bold text-card-foreground">
                                     Equilíbrio Cambial e Taxa BNA
                                 </h3>
-                                <p className="text-[#424752]  text-xs sm:text-sm leading-relaxed">
+                                <p className="text-muted-foreground  text-xs sm:text-sm leading-relaxed">
                                     No modelo angolano, a estabilidade cambial depende criticamente das reservas internacionais líquidas geridas pelo Banco Nacional de Angola (BNA). Quando há um choque nos preços do crude, o canal da liquidez contrai a oferta de moeda estrangeira nos bancos comerciais.
                                 </p>
-                                <p className="text-[#424752]  text-xs sm:text-sm leading-relaxed">
+                                <p className="text-muted-foreground  text-xs sm:text-sm leading-relaxed">
                                     Para mitigar a depreciação abrupta do Kwanza sem esgotar o stock de divisas, as operações de mercado aberto e a elevação da taxa de cedência de liquidez funcionam como o principal mecanismo de absorção de massa monetária.
                                 </p>
                             </CardContent>
@@ -110,10 +110,10 @@ export function HeroCard() {
                                     <Trophy className="w-3.5 h-3.5" /> LIGA UNIVERSITÁRIA DE ANGOLA
                                 </span>
                             </div>
-                            <h2 className="text-base sm:text-lg font-extrabold text-foreground tracking-tight mt-2">
+                            <h2 className="text-base sm:text-lg font-extrabold text-card-foreground tracking-tight mt-2">
                                 Ranking Geral de Polos
                             </h2>
-                            <p className="text-xs text-[#424752] ">
+                            <p className="text-xs text-muted-foreground ">
                                 Temporada 2026 • Atualizado em tempo real
                             </p>
                         </CardHeader>
@@ -127,7 +127,7 @@ export function HeroCard() {
                                     </div>
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <p className="font-bold text-xs text-foreground">UAN - LUANDA</p>
+                                            <p className="font-bold text-xs text-card-foreground">UAN - LUANDA</p>
                                             <Badge variant="secondary" className="text-[10px] py-0 px-1.5 font-bold">Líder</Badge>
                                         </div>
                                         <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
@@ -145,14 +145,14 @@ export function HeroCard() {
                                         <span className="text-sm font-bold text-muted-foreground">02</span>
                                     </div>
                                     <div>
-                                        <p className="font-bold text-xs text-foreground">UCAN - PALANCA</p>
+                                        <p className="font-bold text-xs text-card-foreground">UCAN - PALANCA</p>
                                         <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
                                             <Users className="w-3 h-3" /> 980 alunos ativos
                                         </p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <span className="font-mono font-extrabold text-xs text-foreground block">128.400 XP</span>
+                                    <span className="font-mono font-extrabold text-xs text-card-foreground block">128.400 XP</span>
                                     <span className="text-red-400 text-[10px]">-14.450 XP</span>
                                 </div>
                             </div>
@@ -164,13 +164,13 @@ export function HeroCard() {
                                         <span className="text-sm font-bold text-muted-foreground">03</span>
                                     </div>
                                     <div>
-                                        <p className="font-bold text-xs text-foreground">ISAF - BENFICA</p>
+                                        <p className="font-bold text-xs text-card-foreground">ISAF - BENFICA</p>
                                         <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
                                             <Users className="w-3 h-3" /> 650 alunos ativos
                                         </p>
                                     </div>
                                 </div>
-                                <span className="font-mono font-extrabold text-xs text-foreground">94.200 XP</span>
+                                <span className="font-mono font-extrabold text-xs text-card-foreground">94.200 XP</span>
                             </div>
 
                             {/* Top 4 */}
@@ -180,13 +180,13 @@ export function HeroCard() {
                                         <span className="text-sm font-bold text-muted-foreground">04</span>
                                     </div>
                                     <div>
-                                        <p className="font-bold text-xs text-foreground">ISPTEC - LUANDA</p>
+                                        <p className="font-bold text-xs text-card-foreground">ISPTEC - LUANDA</p>
                                         <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
                                             <Users className="w-3 h-3" /> 510 alunos ativos
                                         </p>
                                     </div>
                                 </div>
-                                <span className="font-mono font-extrabold text-xs text-foreground">82.100 XP</span>
+                                <span className="font-mono font-extrabold text-xs text-card-foreground">82.100 XP</span>
                             </div>
 
                             {/* Top 5 */}
@@ -196,13 +196,13 @@ export function HeroCard() {
                                         <span className="text-sm font-bold text-muted-foreground">05</span>
                                     </div>
                                     <div>
-                                        <p className="font-bold text-xs text-foreground">UniPiaget - Viana</p>
+                                        <p className="font-bold text-xs text-card-foreground">UniPiaget - Viana</p>
                                         <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
                                             <Users className="w-3 h-3" /> 420 alunos ativos
                                         </p>
                                     </div>
                                 </div>
-                                <span className="font-mono font-extrabold text-xs text-foreground">80.250 XP</span>
+                                <span className="font-mono font-extrabold text-xs text-card-foreground">80.250 XP</span>
                             </div>
 
                             <p className="text-xs text-primary font-medium pt-1">

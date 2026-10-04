@@ -56,11 +56,11 @@ export function WhyKombinu() {
                             </CardHeader>
 
                             <CardContent className="p-4 sm:p-6 pt-0">
-                                <h3 className="text-lg sm:text-xl font-bold text-foreground">
+                                <h3 className="text-lg sm:text-xl font-bold text-card-foreground">
                                     Modo Ultra-Leve Data-Lean (&lt; 5MB/h)
                                 </h3>
 
-                                <p className="mt-2 text-xs sm:text-sm text-[#424752] leading-relaxed">
+                                <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
                                     Sem animações pesadas nem scripts inúteis. Estudamos
                                     o protocolo HTTP para que você possa rever 10 sebentas
                                     no engarrafamento da Deolinda Rodrigues sem ver o seu
@@ -186,11 +186,11 @@ export function WhyKombinu() {
                                 </div>
                             </CardHeader>
 
-                            <h3 className="text-lg px-4 sm:px-6 font-bold text-foreground">
+                            <h3 className="text-lg px-4 sm:px-6 font-bold text-card-foreground">
                                 Quizzes com Feedback Imediato
                             </h3>
 
-                            <p className="mt-2 px-4 sm:px-6 text-xs sm:text-sm text-[#424752] leading-relaxed">
+                            <p className="mt-2 px-4 sm:px-6 text-xs sm:text-sm text-muted-foreground leading-relaxed">
                                 Não espere a folha de exame para descobrir lacunas.
                                 Responda perguntas reais de testes anteriores e receba
                                 a justificativa teórica em duas linhas.

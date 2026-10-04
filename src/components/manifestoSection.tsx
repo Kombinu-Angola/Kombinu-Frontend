@@ -55,7 +55,7 @@ export default function ManifestoSection() {
                             O Nosso Manifesto
                         </motion.span>
 
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground">
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-card-foreground">
                             Por que estamos a construir a Kombinu em Luanda.
                         </h2>
                     </motion.div>
@@ -76,7 +76,7 @@ export default function ManifestoSection() {
                             Quem estuda no ensino superior em Luanda conhece o peso diário: passar 3 a 4 horas nos engarrafamentos entre o trabalho e a faculdade, disputar uma tomada no anfiteatro e tentar ler um PDF ilegível de 120 slides no telemóvel enquanto a bateria e o saldo de dados vão embora.
                         </p>
 
-                        <p className="font-medium text-foreground">
+                        <p className="font-medium text-card-foreground">
                             Acreditamos que a universidade em Angola não devia ser uma maratona de fotocópias desbotadas, grupos de WhatsApp desorganizados e gastos excessivos com recargas móveis.
                         </p>
 
@@ -118,7 +118,7 @@ export default function ManifestoSection() {
                             </motion.div>
 
                             <div>
-                                <h4 className="font-bold text-sm sm:text-base text-foreground">
+                                <h4 className="font-bold text-sm sm:text-base text-card-foreground">
                                     Orlando Fortuna & Equipa Fundadora
                                 </h4>
 

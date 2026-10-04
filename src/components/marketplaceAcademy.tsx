@@ -173,14 +173,14 @@ export default function AcademicMarketplace() {
                                                 ease: "easeOut",
                                             },
                                         }}
-                                        className="font-bold text-base sm:text-lg text-foreground leading-snug line-clamp-2 cursor-default"
+                                        className="font-bold text-base sm:text-lg text-card-foreground leading-snug line-clamp-2 cursor-default"
                                     >
                                         {item.title}
                                     </motion.h3>
 
-                                    <p className="mt-2 text-xs text-[#424752] leading-relaxed">
+                                    <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
                                         Por{" "}
-                                        <strong className="text-foreground font-medium">
+                                        <strong className="text-card-foreground font-medium">
                                             {item.author}
                                         </strong>
 
@@ -217,7 +217,7 @@ export default function AcademicMarketplace() {
                                         }}
                                         className={`text-base sm:text-lg font-extrabold ${item.isFree
                                             ? "text-emerald-500"
-                                            : "text-foreground"
+                                            : "text-card-foreground"
                                             }`}
                                     >
                                         {item.price}

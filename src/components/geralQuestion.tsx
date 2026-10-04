@@ -74,7 +74,7 @@ export default function FaqSection() {
                             onClick={() => toggle(0)}
                             className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                         >
-                            <span className="font-semibold text-sm sm:text-base text-foreground">
+                            <span className="font-semibold text-sm sm:text-base text-card-foreground">
                                 Como o Modo Data-Lean gasta menos de 5MB por hora?
                             </span>
 
@@ -134,7 +134,7 @@ export default function FaqSection() {
                             onClick={() => toggle(1)}
                             className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                         >
-                            <span className="font-semibold text-sm sm:text-base text-foreground">
+                            <span className="font-semibold text-sm sm:text-base text-card-foreground">
                                 Como funciona o pagamento via Multicaixa Express?
                             </span>
 
@@ -194,7 +194,7 @@ export default function FaqSection() {
                             onClick={() => toggle(2)}
                             className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                         >
-                            <span className="font-semibold text-sm sm:text-base text-foreground">
+                            <span className="font-semibold text-sm sm:text-base text-card-foreground">
                                 Como posso usar a Kombinu de forma totalmente gratuita?
                             </span>
 
@@ -254,7 +254,7 @@ export default function FaqSection() {
                             onClick={() => toggle(3)}
                             className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                         >
-                            <span className="font-semibold text-sm sm:text-base text-foreground">
+                            <span className="font-semibold text-sm sm:text-base text-card-foreground">
                                 Como posso vender as minhas próprias sebentas e resumos?
                             </span>
 

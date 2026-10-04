@@ -11,7 +11,7 @@ export function HeroSection() {
             <section className="">
 
                 <TextGenerateEffect
-                    className="font-heading font-extrabold mt-4 text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.1]"
+                    className="font-heading font-extrabold mt-4 text-3xl sm:text-5xl lg:text-6xl text-foreground tracking-tight leading-[1.1]"
                 >
                     Domina a tua cadeira mais{" "}
                     <span className="text-primary">difícil</span>{" "}

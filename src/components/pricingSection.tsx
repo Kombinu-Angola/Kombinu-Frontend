@@ -83,7 +83,7 @@ export default function PricingSection() {
                                             ease: "easeOut",
                                         },
                                     }}
-                                    className="mt-1 text-2xl font-bold text-foreground"
+                                    className="mt-1 text-2xl font-bold text-card-foreground"
                                 >
                                     Plano Básico
                                 </motion.h3>
@@ -97,7 +97,7 @@ export default function PricingSection() {
                                                 ease: "easeOut",
                                             },
                                         }}
-                                        className="text-3xl sm:text-4xl font-extrabold text-foreground"
+                                        className="text-3xl sm:text-4xl font-extrabold text-card-foreground"
                                     >
                                         0 AOA
                                     </motion.span>
@@ -125,7 +125,7 @@ export default function PricingSection() {
                                         />
                                     </span>
 
-                                    <span className="text-foreground">
+                                    <span className="text-card-foreground">
                                         Acesso a resumos e sebentas de livre acesso
                                     </span>
                                 </motion.li>
@@ -144,7 +144,7 @@ export default function PricingSection() {
                                         />
                                     </span>
 
-                                    <span className="text-foreground">
+                                    <span className="text-card-foreground">
                                         Quizzes básicos de fixação da comunidade
                                     </span>
                                 </motion.li>
@@ -163,7 +163,7 @@ export default function PricingSection() {
                                         />
                                     </span>
 
-                                    <span className="text-foreground">
+                                    <span className="text-card-foreground">
                                         Até 3 uploads de ficheiro IA por mês
                                     </span>
                                 </motion.li>
@@ -285,7 +285,7 @@ export default function PricingSection() {
                                             ease: "easeOut",
                                         },
                                     }}
-                                    className="mt-1 text-2xl font-bold text-foreground"
+                                    className="mt-1 text-2xl font-bold text-card-foreground"
                                 >
                                     Kombinu Pro
                                 </motion.h3>
@@ -299,7 +299,7 @@ export default function PricingSection() {
                                                 ease: "easeOut",
                                             },
                                         }}
-                                        className="text-3xl sm:text-4xl font-extrabold text-foreground"
+                                        className="text-3xl sm:text-4xl font-extrabold text-card-foreground"
                                     >
                                         5.000 AOA
                                     </motion.span>
@@ -318,7 +318,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.1 }}
-                                    className="flex items-start gap-3 text-foreground"
+                                    className="flex items-start gap-3 text-card-foreground"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -337,7 +337,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.2 }}
-                                    className="flex items-start gap-3 text-foreground"
+                                    className="flex items-start gap-3 text-card-foreground"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -356,7 +356,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.3 }}
-                                    className="flex items-start gap-3 text-foreground"
+                                    className="flex items-start gap-3 text-card-foreground"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -375,7 +375,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.4 }}
-                                    className="flex items-start gap-3 text-foreground"
+                                    className="flex items-start gap-3 text-card-foreground"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -394,7 +394,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.5 }}
-                                    className="flex items-start gap-3 text-foreground"
+                                    className="flex items-start gap-3 text-card-foreground"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon

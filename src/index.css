@@ -181,7 +181,10 @@
 
 :root {
   /* Paleta shadcn (apenas para os componentes ui/*.tsx novos da landing: card, dialog, sheet, sidebar, etc.) */
-  --foreground-shadcn: #fbf9f8;
+  /* Texto escuro (não o #fbf9f8 original do Augusto, pensado para o fundo escuro dele) —
+     --color-background aqui resolve para o claro do Braga (#fbf9f8), por isso o texto
+     tem de ser escuro para haver contraste. Mesmo tom usado em --color-on-surface. */
+  --foreground-shadcn: #1b1c1c;
 
   --card: #131d22;
   --card-foreground: #fbf9f8;

@@ -67,7 +67,7 @@ export function QuizSection() {
                                         duration: 0.5,
                                         delay: 0.3,
                                     }}
-                                    className="mt-4 text-lg sm:text-xl font-bold text-foreground"
+                                    className="mt-4 text-lg sm:text-xl font-bold text-card-foreground"
                                 >
                                     Gerador de Quizzes IA em (&lt; 10s)
                                 </motion.h3>
@@ -84,7 +84,7 @@ export function QuizSection() {
                                         duration: 0.5,
                                         delay: 0.4,
                                     }}
-                                    className="mt-2 text-xs sm:text-sm text-[#424752] leading-relaxed"
+                                    className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed"
                                 >
                                     Carregue qualquer sebenta ou anotação de caderno
                                     em PDF ou foto e veja o nosso motor de inteligência
@@ -247,7 +247,7 @@ export function QuizSection() {
                                     duration: 0.5,
                                     delay: 0.3,
                                 }}
-                                className="text-lg px-6 sm:text-xl font-bold text-foreground"
+                                className="text-lg px-6 sm:text-xl font-bold text-card-foreground"
                             >
                                 Ligas Universitárias: Honre a sua Faculdade
                             </motion.h3>
@@ -264,7 +264,7 @@ export function QuizSection() {
                                     duration: 0.5,
                                     delay: 0.4,
                                 }}
-                                className="mt-2 mb-12 px-6 text-xs sm:text-sm text-[#424752] leading-relaxed"
+                                className="mt-2 mb-12 px-6 text-xs sm:text-sm text-muted-foreground leading-relaxed"
                             >
                                 Cada quiz concluído soma pontos de prestígio para a sua
                                 instituição na tabela geral semanal de Luanda.
