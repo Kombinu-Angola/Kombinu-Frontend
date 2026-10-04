@@ -76,6 +76,13 @@ import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
 import GlobalSearchScreen from '../features/search/GlobalSearchScreen';
 import { MOCK_SEARCH } from '../features/search/mockSearch';
 
+import MaterialAnalyticsScreen from '../features/analytics/MaterialAnalyticsScreen';
+import { MOCK_ANALYTICS } from '../features/analytics/mockAnalytics';
+import MaterialQaScreen from '../features/qa/MaterialQaScreen';
+import { MOCK_QA } from '../features/qa/mockQa';
+import ReviewNotebookScreen from '../features/review/ReviewNotebookScreen';
+import { MOCK_REVIEW } from '../features/review/mockReview';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -224,6 +231,11 @@ const HOMOLOGATION_CORRECAO: HomologationResult = {
   required: ['Declaração institucional com a validade legível, em PDF ou fotografia nítida.'],
 };
 
+function ReviewRoute() {
+  const navigate = useNavigate();
+  return <ReviewNotebookScreen queue={MOCK_REVIEW} userName={STUDENT_NAME} onStartSession={() => navigate('/v2/desafio')} />;
+}
+
 function RenewalFailureRoute() {
   const navigate = useNavigate();
   return (
@@ -354,5 +366,9 @@ export const v2Routes: RouteObject = {
 
     { path: 'notificacoes', element: <NotificationCenterScreen notifications={NOTIFICATIONS} userName={STUDENT_NAME} settingsHref="/v2/definicoes" /> },
     { path: 'pesquisa', element: <GlobalSearchScreen results={MOCK_SEARCH} userName={STUDENT_NAME} /> },
+
+    { path: 'estudio/analitica', element: <MaterialAnalyticsScreen analytics={MOCK_ANALYTICS} creatorName={CREATOR_NAME} materialsHref="/v2/estudio/materiais" /> },
+    { path: 'duvidas', element: <MaterialQaScreen board={MOCK_QA} userName={STUDENT_NAME} /> },
+    { path: 'revisao', element: <ReviewRoute /> },
   ],
 };

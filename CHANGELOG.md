@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Analitica pedagogica por material (`features/analytics/MaterialAnalyticsScreen`), duvidas ancoradas ao conteudo (`features/qa/MaterialQaScreen`) e caderno de revisao espacada (`features/review/ReviewNotebookScreen`). `CreatorContentHubScreen` ganha atalho de analitica por material. Novas rotas: `/v2/estudio/analitica`, `/v2/duvidas`, `/v2/revisao`.
 - Central de notificacoes (`features/notifications/NotificationCenterScreen`) e pesquisa global (`features/search/GlobalSearchScreen`). `AppShell`: sino de notificacoes no cabecalho. Novas rotas: `/v2/notificacoes`, `/v2/pesquisa`.
 - Ecras de sistema (`features/system/`): `OfflineScreen` (sem ligacao, mostra o que continua a funcionar) e `RecoveryScreens` (`SessionExpiredScreen` — reentrada por SMS sem perder o sitio; `NotFoundScreen` — 404 com atalhos de volta). Novas rotas: `/v2/offline`, `/v2/sessao-expirada`, `/v2/404`. `lib/assets3d.ts`: novo asset `kombi-offline`.
 - Definicoes da conta do estudante (`features/account/`: `StudentSettingsScreen`, `PhoneSecurityScreen`), trilha de aprendizagem e trilha mista adaptativa (`features/trail/`: `LearningTrailScreen`, `AdaptiveTrailScreen`), resultado da homologacao de criador (`features/creator/HomologationResultScreen`) e falha de renovacao da subscricao Pro (`features/subscription/RenewalFailureScreen`). Novas rotas: `/v2/definicoes`, `/v2/conta/telemovel`, `/v2/trilha`, `/v2/trilha/mista`, `/v2/estudio/homologacao` (+ `/correcao`), `/v2/estudio/renovacao`.
