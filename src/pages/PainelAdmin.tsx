@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Header } from '../components/layout/Header';
+import { Header } from '../components/layout/PublicHeader';
 import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';
 import { Shield, Users, BookOpen, Flag, Eye, Trash2, CheckCircle, XCircle, BarChart3, TrendingUp } from 'lucide-react';
@@ -47,7 +47,7 @@ export default function PainelAdmin() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Cabeçalho */}
         <div className="mb-8">
@@ -126,7 +126,7 @@ export default function PainelAdmin() {
               <h2 className="text-xl font-semibold text-gray-900">
                 Moderação de Conteúdos
               </h2>
-              
+
               {/* Filtros */}
               <div className="flex space-x-2">
                 {[
@@ -138,11 +138,10 @@ export default function PainelAdmin() {
                   <button
                     key={filtro.key}
                     onClick={() => setFiltroConteudo(filtro.key as any)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      filtroConteudo === filtro.key
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${filtroConteudo === filtro.key
                         ? 'bg-blue-500 text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     {filtro.label} ({filtro.count})
                   </button>
@@ -172,24 +171,22 @@ export default function PainelAdmin() {
                           <h3 className="text-lg font-medium text-gray-900">
                             {conteudo.titulo}
                           </h3>
-                          <span className={`px-2 py-1 text-xs rounded-full ${
-                            conteudo.publico 
-                              ? 'bg-green-100 text-green-800' 
+                          <span className={`px-2 py-1 text-xs rounded-full ${conteudo.publico
+                              ? 'bg-green-100 text-green-800'
                               : 'bg-yellow-100 text-yellow-800'
-                          }`}>
+                            }`}>
                             {conteudo.publico ? 'Aprovado' : 'Pendente'}
                           </span>
-                          <span className={`px-2 py-1 text-xs rounded-full ${
-                            conteudo.tipo === 'quiz' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
-                          }`}>
+                          <span className={`px-2 py-1 text-xs rounded-full ${conteudo.tipo === 'quiz' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
+                            }`}>
                             {conteudo.tipo === 'quiz' ? 'Quiz' : 'Conteúdo'}
                           </span>
                         </div>
-                        
+
                         <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                           {conteudo.descricao}
                         </p>
-                        
+
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
                           <span>Criador: {conteudo.criadorNome}</span>
                           <span>Categoria: {conteudo.categoria}</span>
@@ -197,7 +194,7 @@ export default function PainelAdmin() {
                           <span>Curtidas: {conteudo.likes}</span>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2 ml-4">
                         <button
                           onClick={() => window.open(`/conteudo/${conteudo.id}`, '_blank')}
@@ -206,7 +203,7 @@ export default function PainelAdmin() {
                         >
                           <Eye className="w-4 h-4" />
                         </button>
-                        
+
                         {!conteudo.publico && (
                           <button
                             onClick={() => handleAprovarConteudo(conteudo.id)}
@@ -216,7 +213,7 @@ export default function PainelAdmin() {
                             <CheckCircle className="w-4 h-4" />
                           </button>
                         )}
-                        
+
                         <button
                           onClick={() => handleRejeitarConteudo(conteudo.id)}
                           className="p-2 text-yellow-600 hover:text-yellow-800 hover:bg-yellow-50 rounded-lg transition-colors"
@@ -224,7 +221,7 @@ export default function PainelAdmin() {
                         >
                           <XCircle className="w-4 h-4" />
                         </button>
-                        
+
                         <button
                           onClick={() => handleRemoverConteudo(conteudo.id)}
                           className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
@@ -287,7 +284,7 @@ export default function PainelAdmin() {
                   <div className="bg-green-500 h-2 rounded-full" style={{ width: '78%' }}></div>
                 </div>
               </div>
-              
+
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Tempo Médio por Conteúdo</span>
@@ -297,7 +294,7 @@ export default function PainelAdmin() {
                   <div className="bg-blue-500 h-2 rounded-full" style={{ width: '60%' }}></div>
                 </div>
               </div>
-              
+
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Retenção de Usuários (7 dias)</span>
