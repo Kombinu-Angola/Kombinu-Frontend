@@ -96,6 +96,12 @@ import { MOCK_AUDIO } from '../features/audio/mockAudio';
 import CampusPageScreen from '../features/campus/CampusPageScreen';
 import { MOCK_CAMPUS } from '../features/campus/mockCampus';
 
+import ReferralScreen from '../features/referral/ReferralScreen';
+import { MOCK_REFERRAL } from '../features/referral/mockReferral';
+import PrivacyScreen from '../features/account/PrivacyScreen';
+import SessionsScreen from '../features/account/SessionsScreen';
+import { SESSIONS } from '../features/account/mockAccount';
+
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 const STUDENT_NAME = 'João Kiala';
 const CREATOR_NAME = 'Orlando Fortuna';
@@ -391,5 +397,26 @@ export const v2Routes: RouteObject = {
 
     { path: 'audio', element: <AudioPlayerScreen audio={MOCK_AUDIO} userName={STUDENT_NAME} /> },
     { path: 'polo', element: <CampusPageScreen page={MOCK_CAMPUS} userName={STUDENT_NAME} /> },
+
+    { path: 'convidar', element: <ReferralScreen program={MOCK_REFERRAL} userName={STUDENT_NAME} university="UAN" subject="Macroeconomia I" /> },
+    { path: 'conta/sessoes', element: <SessionsScreen sessions={SESSIONS} userName={MOCK_ACCOUNT.name} securityHref="/v2/definicoes" /> },
+    {
+      path: 'privacidade',
+      element: (
+        <PrivacyScreen
+          userName={MOCK_ACCOUNT.name}
+          settings={{ ranking: true, recommendations: true, telemetry: true }}
+          walletKz={0}
+          settingsHref="/v2/definicoes"
+          financeHref="/v2/estudio/financeiro"
+          exportContents={[
+            'Histórico de simulados, respostas e XP',
+            'Comprovativos e recibos Multicaixa Express em PDF',
+            'Sebentas compradas e notas guardadas no leitor',
+            'Extrato de criador, quando aplicável',
+          ]}
+        />
+      ),
+    },
   ],
 };

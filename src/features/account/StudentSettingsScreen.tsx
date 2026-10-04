@@ -268,6 +268,15 @@ export default function StudentSettingsScreen({ account: initial, phoneHref, dow
             )}
           </div>
 
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <LinkButton3D href="/v2/conta/sessoes" variant="ghost" fullWidth leadingIcon={<Icon name="phone" size={18} />}>
+              Sessões e dispositivos
+            </LinkButton3D>
+            <LinkButton3D href="/v2/privacidade" variant="ghost" fullWidth leadingIcon={<Icon name="shield" size={18} />}>
+              Privacidade e dados
+            </LinkButton3D>
+          </div>
+
           <div className="mt-6 rounded-2xl border-2 border-border-cloud p-4">
             {deleting ? (
               <div className="flex flex-col gap-3">
