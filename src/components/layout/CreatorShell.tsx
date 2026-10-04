@@ -7,7 +7,7 @@ import { Icon, type IconName } from "../ui/Icon";
 export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" | "definicoes";
 
 const NAV: ReadonlyArray<{ id: CreatorSection; label: string; href: string; icon: IconName; hint: string }> = [
-  { id: "estudio", label: "Estúdio de criação", href: "/v2/estudio", icon: "edit", hint: "Rascunhos e publicações" },
+  { id: "estudio", label: "Estúdio de criação", href: "/v2/estudio/criar", icon: "edit", hint: "Criar artigo, simulado ou trilha" },
   { id: "materiais", label: "Os meus materiais", href: "/v2/estudio/materiais", icon: "file", hint: "Preço, visibilidade e vendas" },
   { id: "financeiro", label: "Financeiro e vendas", href: "/v2/estudio/financeiro", icon: "wallet", hint: "Saldo, levantamentos e histórico" },
   { id: "publico", label: "Perfil público", href: "/v2/criador", icon: "users", hint: "Como os estudantes te veem" },

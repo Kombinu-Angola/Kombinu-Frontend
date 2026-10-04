@@ -107,7 +107,7 @@ export default function CreatorContentHubScreen({ materials: initial, creatorNam
       active="materiais"
       creatorName={creatorName}
       actions={
-        <Button3D onClick={() => (window.location.assign("/v2/estudio"))} leadingIcon={<Icon name="plus" size={18} />}>
+        <Button3D onClick={() => (window.location.assign("/v2/estudio/criar"))} leadingIcon={<Icon name="plus" size={18} />}>
           Novo material
         </Button3D>
       }
@@ -284,6 +284,13 @@ export default function CreatorContentHubScreen({ materials: initial, creatorNam
                         className="flex size-11 items-center justify-center rounded-lg text-primary transition-[background-color] duration-150 hover:bg-surface-sky"
                       >
                         <Icon name="edit" size={20} />
+                      </a>
+                      <a
+                        href="/v2/estudio/versoes"
+                        aria-label={`Histórico de versões de ${material.title}`}
+                        className="flex size-11 items-center justify-center rounded-lg text-primary transition-[background-color] duration-150 hover:bg-surface-sky"
+                      >
+                        <Icon name="refresh" size={20} />
                       </a>
                       <a
                         href="/v2/estudio/analitica"
