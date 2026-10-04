@@ -2,7 +2,7 @@ import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Icon, type IconName } from "../ui/Icon";
 
-export type AdminSection = "visao" | "estudantes" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao" | "catalogo" | "subscricoes" | "suporte" | "adaptativo";
+export type AdminSection = "visao" | "estudantes" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao" | "catalogo" | "subscricoes" | "suporte" | "adaptativo" | "equipa" | "fiscal";
 
 const NAV: ReadonlyArray<{ id: AdminSection; label: string; href: string; icon: IconName }> = [
   { id: "visao", label: "Visão executiva", href: "/v2/admin", icon: "grid" },
@@ -16,6 +16,8 @@ const NAV: ReadonlyArray<{ id: AdminSection; label: string; href: string; icon: 
   { id: "adaptativo", label: "Nivelamento adaptativo", href: "/v2/admin/adaptativo", icon: "target" },
   { id: "catalogo", label: "Catálogo curricular", href: "/v2/admin/catalogo", icon: "school" },
   { id: "suporte", label: "Suporte e disputas", href: "/v2/admin/suporte", icon: "comment" },
+  { id: "fiscal", label: "Exportação fiscal", href: "/v2/admin/fiscal", icon: "file" },
+  { id: "equipa", label: "Equipa e permissões", href: "/v2/admin/equipa", icon: "users" },
 ];
 
 type AdminShellProps = {
