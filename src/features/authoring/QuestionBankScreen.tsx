@@ -75,9 +75,6 @@ export default function QuestionBankScreen({ questions: initial, topics, creator
       creatorName={creatorName}
       actions={
         <>
-          <Button3D variant="ghost" onClick={() => (window.location.assign("/v2/estudio/calibracao"))} leadingIcon={<Icon name="chart" size={18} />}>
-            Calibração
-          </Button3D>
           <Button3D variant="ghost" onClick={() => (window.location.assign("/v2/estudio/importar"))} leadingIcon={<Icon name="download" size={18} />}>
             Importar
           </Button3D>
