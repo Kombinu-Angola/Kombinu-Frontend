@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Enquetes no estudio de criacao (`features/survey/`: `SurveyComposerScreen`, `SurveyResultsScreen`) -- fecha a referencia `/estudio/enquete` deixada pendente no `CreationHubScreen` desde o lote anterior. Novas rotas: `/v2/estudio/enquete`, `/v2/estudio/enquete/resultados`.
 - Exportacao fiscal e equipa/permissoes no backoffice (`features/governance/`: `FiscalExportScreen`, `TeamPermissionsScreen`) e pagina publica de universidade parceira, sem sessao (`features/campus/PublicUniversityScreen`). `AdminShell` ganha 2 itens de navegacao. Novas rotas: `/v2/admin/fiscal`, `/v2/admin/equipa`, `/v2/u/:slug`.
 - Nivelamento adaptativo no backoffice (`features/admin/AdaptiveRulesScreen`). `AdminShell` ganha o item "Nivelamento adaptativo". Nova rota: `/v2/admin/adaptativo`.
 - Fluxo do estudio de criacao (`features/authoring/`): hub de criacao, onboarding do criador, banco de perguntas, compositor de simulados, compositor de trilhas, importacao em massa e historico de versoes. `CreatorShell` e `CreatorContentHubScreen`: "Estudio de criacao" passa a abrir o hub em vez do editor directo; novo atalho de historico de versoes por material. Novas rotas: `/v2/estudio/criar`, `/v2/estudio/comecar`, `/v2/estudio/questoes`, `/v2/estudio/simulado`, `/v2/estudio/trilha`, `/v2/estudio/importar`, `/v2/estudio/versoes`.
