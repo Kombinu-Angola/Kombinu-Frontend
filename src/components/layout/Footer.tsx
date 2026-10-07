@@ -12,7 +12,7 @@ export default function Footer() {
               Kombinu Plataforma
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
-              <li>
+              <li>  
                 <a href="#como-funciona" className="hover:text-foreground transition-colors">
                   Como Funciona
                 </a>

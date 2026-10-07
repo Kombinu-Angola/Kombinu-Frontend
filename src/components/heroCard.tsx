@@ -210,7 +210,7 @@ export function HeroCard() {
                             </p>
 
                             {/* CTA */}
-                            <Button className="w-full h-11 rounded-full font-bold text-xs sm:text-sm cursor-pointer flex items-center justify-center gap-2 mt-3">
+                            <Button className="w-full mt-6 h-11 rounded-full font-bold text-xs sm:text-sm cursor-pointer flex items-center justify-center gap-2 ">
                                 <PlayCircle className="w-4 h-4 text-white" />
                                 <span>Entrar & Pontuar Pela Tua Faculdade</span>
                                 <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-medium ml-1">
