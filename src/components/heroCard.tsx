@@ -32,7 +32,7 @@ export function HeroCard() {
                         }
                     }}>
 
-                    <Card className=" bg-card shadow-none flex flex-col justify-between">
+                    <Card className="bg-card border-0 shadow-sm flex flex-col justify-between">
                         <div>
                             <CardHeader className="flex flex-row items-center justify-between pb-3">
                                 <CardTitle className="text-xs font-bold tracking-wider text-primary">
@@ -42,7 +42,7 @@ export function HeroCard() {
                                     5 min de leitura
                                 </div>
                             </CardHeader>
-                            <CardContent className="space-y-3 pt-0">
+                            <CardContent className="space-y-3 pt-0 ">
                                 <h3 className="text-lg sm:text-xl font-bold text-card-foreground">
                                     Equilíbrio Cambial e Taxa BNA
                                 </h3>
@@ -55,8 +55,8 @@ export function HeroCard() {
                             </CardContent>
                         </div>
 
-                        <CardFooter className="pt-2">
-                            <div className="w-full bg-background/70 border border-border p-4 rounded-xl space-y-3">
+                        <CardFooter className="pt-2 border-0 w-full">
+                            <div className="w-full border-x border-b border-border/70 bg-card p-4 rounded-xl space-y-3">
                                 <div className="flex items-center justify-between">
                                     <div className="bg-secondary/20 border border-secondary/30 px-2.5 py-0.5 rounded-full">
                                         <span className="text-[11px] font-bold text-secondary">+20 XP GANHOS</span>
@@ -66,12 +66,12 @@ export function HeroCard() {
                                     </div>
                                 </div>
 
-                                <p className="text-xs sm:text-sm font-semibold text-foreground">
+                                <p className="text-xs sm:text-sm font-semibold text-white">
                                     Como o BNA contém a pressão inflacionária em cenário de volatilidade cambial?
                                 </p>
 
                                 <div className="flex items-center justify-between border border-emerald-500/40 bg-emerald-500/10 rounded-xl px-4 py-2.5">
-                                    <p className="text-xs font-medium text-foreground">Aumento da taxa básica de juro (Taxa BNA)</p>
+                                    <p className="text-xs font-medium text-white">Aumento da taxa básica de juro (Taxa BNA)</p>
                                     <span className="text-xs font-bold text-emerald-400 shrink-0">Opção Correcta</span>
                                 </div>
 

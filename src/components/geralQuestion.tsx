@@ -13,7 +13,7 @@ export default function FaqSection() {
     return (
         <section
             id="how-it-works"
-            className="w-full py-12 sm:py-16 lg:py-20 bg-background text-foreground"
+            className="w-full py-12 sm:py-16 lg:py-20  text-foreground"
         >
             <div className="max-w-3xl mx-auto px-4 sm:px-6">
 
@@ -42,7 +42,7 @@ export default function FaqSection() {
                         Tire as suas Dúvidas
                     </motion.span>
 
-                    <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight">
+                    <h2 className="mt-2 text-2xl sm:text-3xl text-white font-extrabold tracking-tight">
                         Perguntas Frequentes
                     </h2>
                 </motion.div>

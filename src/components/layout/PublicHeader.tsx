@@ -18,7 +18,7 @@ export function Header() {
         duration: 0.5,
         ease: "easeOut",
       }}
-      className="sticky top-0 z-50 bg-background/90 border-0 w-full border-border backdrop-blur-md"
+      className="sticky top-0 z-50  border-0 w-full border-border backdrop-blur-md"
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
 

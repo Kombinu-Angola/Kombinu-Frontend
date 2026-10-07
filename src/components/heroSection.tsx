@@ -7,11 +7,11 @@ import { motion } from "motion/react";
 
 export function HeroSection() {
     return (
-        <div className="mx-auto lg:px-50 md:px-16 sm-px-8 px-4  bg-background lg:min-h-screen lg:mt-6 mt-8  text-center">
+        <div className="mx-auto lg:px-50 md:px-16 sm-px-8 px-4   lg:min-h-screen lg:mt-6 mt-8  text-center">
             <section className="">
 
                 <TextGenerateEffect
-                    className="font-heading font-extrabold mt-4 text-3xl sm:text-5xl lg:text-6xl text-foreground tracking-tight leading-[1.1]"
+                    className="font-heading font-extrabold mt-4 text-3xl text-white sm:text-5xl lg:text-6xl  tracking-tight leading-[1.1]"
                 >
                     Domina a tua cadeira mais{" "}
                     <span className="text-primary">difícil</span>{" "}

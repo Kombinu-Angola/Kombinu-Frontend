@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 
 export default function ManifestoSection() {
     return (
-        <section className="w-full py-16 sm:py-20 lg:py-24 bg-background text-foreground">
+        <section className="w-full py-16 sm:py-20 lg:py-24  text-foreground">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
                 <motion.div

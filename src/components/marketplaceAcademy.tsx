@@ -53,7 +53,7 @@ export default function AcademicMarketplace() {
     return (
         <section
             id="marktplace"
-            className="w-full py-12 sm:py-16 bg-background text-foreground"
+            className="w-full py-12 sm:py-16     text-foreground"
         >
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
@@ -82,7 +82,7 @@ export default function AcademicMarketplace() {
                             Marketplace Académico
                         </span>
 
-                        <h2 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight">
+                        <h2 className="mt-1 text-2xl sm:text-3xl text-white font-extrabold tracking-tight">
                             Sebentas em Destaque Esta Semana
                         </h2>
                     </div>

@@ -22,7 +22,7 @@ export function WhyKombinu() {
                     Porquê a Kombinu?
                 </span>
 
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground tracking-tight mt-2">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight mt-2">
                     Feito para a realidade do estudante angolano
                 </h2>
 
@@ -69,13 +69,13 @@ export function WhyKombinu() {
                             </CardContent>
                         </div>
 
-                        <CardFooter className="p-4 sm:p-6 pt-0">
-                            <div className="w-full bg-background/80 border border-border p-4 rounded-xl space-y-3">
+                        <CardFooter className="p-4 sm:p-6 pt-0 border-0">
+                            <div className="w-full bg-card border border-border p-4 rounded-xl space-y-3">
 
                                 {/* Item 1 */}
                                 <div>
                                     <div className="flex w-full items-center justify-between text-xs mb-1.5">
-                                        <span className="font-medium text-foreground truncate pr-2">
+                                        <span className="font-bold   text-white truncate pr-2">
                                             Vídeo-aulas no YouTube / TikTok
                                         </span>
 
@@ -102,7 +102,7 @@ export function WhyKombinu() {
                                 {/* Item 2 */}
                                 <div>
                                     <div className="flex w-full items-center justify-between text-xs mb-1.5">
-                                        <span className="font-medium text-foreground truncate pr-2">
+                                        <span className="font-bold text-white truncate pr-2">
                                             PDFs digitalizados em grupos
                                         </span>
 
@@ -199,7 +199,7 @@ export function WhyKombinu() {
                             <CardContent className="p-4 sm:p-6" />
                         </div>
 
-                        <CardFooter className="p-4 sm:p-6 pt-0">
+                        <CardFooter className="p-4 sm:p-6 pt-0 border-0">
                             <motion.div
                                 initial={{ opacity: 0, y: 15 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -209,14 +209,14 @@ export function WhyKombinu() {
                                     delay: 0.5,
                                     ease: "easeOut",
                                 }}
-                                className="w-full bg-background/80 border border-border p-4 rounded-xl space-y-2"
+                                className="w-full bg-card    border border-border p-4 rounded-xl space-y-2"
                             >
                                 <span className="text-emerald-400 text-[11px] font-bold tracking-wider uppercase inline-flex items-center gap-1.5">
                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                                     Resposta Confirmada
                                 </span>
 
-                                <p className="font-semibold text-xs text-foreground mt-1">
+                                <p className="font-semibold text-xs text-white mt-1">
                                     Artigo 483º do Código Civil Angolano:
                                 </p>
 

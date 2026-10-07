@@ -8,7 +8,7 @@ import { motion } from "motion/react";
 
 export default function FinancialComparison() {
     return (
-        <section className="w-full py-12 sm:py-16 bg-background text-foreground">
+        <section className="w-full py-12 sm:py-16 text-foreground">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
                 {/* Cabeçalho */}
@@ -38,7 +38,7 @@ export default function FinancialComparison() {
                         A Quebra da Objeção Financeira
                     </span>
 
-                    <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight">
+                    <h2 className="mt-2 text-2xl sm:text-3xl text-white font-extrabold tracking-tight">
                         A matemática simples da sua poupança mensal
                     </h2>
                 </motion.div>
@@ -111,7 +111,7 @@ export default function FinancialComparison() {
                                         Fotocópias em centros de reprografia:
                                     </span>
 
-                                    <span className="font-medium text-foreground shrink-0">
+                                    <span className="font-medium text-white shrink-0">
                                         ~4.500 AOA
                                     </span>
                                 </motion.li>
@@ -133,7 +133,7 @@ export default function FinancialComparison() {
                                         Pacotes de dados descarregando PDFs:
                                     </span>
 
-                                    <span className="font-medium text-foreground shrink-0">
+                                    <span className="font-medium text-white shrink-0">
                                         ~3.000 AOA
                                     </span>
                                 </motion.li>
@@ -155,7 +155,7 @@ export default function FinancialComparison() {
                                         Aulas de explicação avulsas:
                                     </span>
 
-                                    <span className="font-medium text-foreground shrink-0">
+                                    <span className="font-medium text-white shrink-0">
                                         ~5.000 AOA
                                     </span>
                                 </motion.li>
@@ -229,7 +229,7 @@ export default function FinancialComparison() {
 
                                 <div className="flex items-center gap-2 min-w-0">
 
-                                    <h3 className="font-bold text-base sm:text-lg text-foreground">
+                                    <h3 className="font-bold text-base sm:text-lg text-white">
                                         Com a Plataforma
                                     </h3>
 
@@ -282,7 +282,7 @@ export default function FinancialComparison() {
                                         Acesso ilimitado a sebentas & IA:
                                     </span>
 
-                                    <span className="font-medium text-foreground shrink-0">
+                                    <span className="font-medium text-white shrink-0">
                                         5.000 AOA
                                     </span>
                                 </motion.li>
@@ -310,7 +310,7 @@ export default function FinancialComparison() {
                                         Saldo de dados (Modo Data-Lean &lt; 5MB/h):
                                     </span>
 
-                                    <span className="font-medium text-foreground shrink-0">
+                                    <span className="font-medium text-white shrink-0">
                                         &lt; 500 AOA
                                     </span>
                                 </motion.li>
@@ -399,7 +399,7 @@ export default function FinancialComparison() {
                         delay: 0.3,
                         ease: "easeOut",
                     }}
-                    className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10 text-center text-xs sm:text-sm text-foreground font-medium"
+                    className="mt-6 p-4 rounded-xl bg-primary/5  text-center text-xs sm:text-sm text-white font-medium"
                 >
                     🎯{" "}
                     <strong className="text-primary">

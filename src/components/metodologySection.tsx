@@ -35,7 +35,7 @@ export default function MethodologySection() {
     ];
 
     return (
-        <section className="w-full py-12 sm:py-16 lg:py-20 bg-background text-foreground">
+        <section className="w-full py-12 sm:py-16 lg:py-20  text-foreground">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
                 {/* Cabeçalho */}
@@ -65,7 +65,7 @@ export default function MethodologySection() {
                         Metodologia Comprovada
                     </span>
 
-                    <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+                    <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
                         Do desespero da matéria ao domínio em 3 passos.
                     </h2>
                 </motion.div>

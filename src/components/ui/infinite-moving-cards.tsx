@@ -90,9 +90,9 @@ export const InfiniteMovingCards = ({
       ref={containerRef}
       className={cn(
         "scroller relative z-20 w-full overflow-hidden",
-        "[mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]",
 
-        className
+
+
       )}
     >
       <ul
@@ -114,7 +114,7 @@ export const InfiniteMovingCards = ({
               "shadow-xs",
               "transition-all duration-200",
               "hover:border-primary/60",
-              "hover:bg-muted/40"
+              "hover:bg-muted/40 "
             )}
           >
             <HugeiconsIcon
@@ -126,7 +126,7 @@ export const InfiniteMovingCards = ({
             <span
               className={cn(
                 "font-heading text-sm font-bold",
-                "text-foreground sm:text-base"
+                "text-white sm:text-base"
               )}
             >
               {university}

@@ -59,7 +59,7 @@ export default function CallToActionSection() {
                             delay: 0.2,
                             ease: "easeOut",
                         }}
-                        className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground max-w-2xl mx-auto"
+                        className="text-2xl sm:text-3xl lg:text-4xl text-white font-extrabold tracking-tight  max-w-2xl mx-auto"
                     >
                         Pronto para estudar menos tempo e tirar notas melhores?
                     </motion.h2>

@@ -10,7 +10,7 @@ export default function PricingSection() {
     return (
         <section
             id="prices"
-            className="w-full py-12 sm:py-16 lg:py-20 bg-background text-foreground"
+            className="w-full py-12 sm:py-16 lg:py-20  text-foreground"
         >
             <div className="max-w-5xl mx-auto px-4 sm:px-6">
 
@@ -25,7 +25,7 @@ export default function PricingSection() {
                     }}
                     className="text-center max-w-2xl mx-auto mb-10 sm:mb-16"
                 >
-                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary">
+                    <span className="text-xs sm:text-sm font-bold  tracking-wider uppercase text-primary">
                         Planos Transparentes
                     </span>
 
@@ -37,7 +37,7 @@ export default function PricingSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight"
+                        className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold  text-white tracking-tight"
                     >
                         Transparência total. Sem surpresas.
                     </motion.h2>

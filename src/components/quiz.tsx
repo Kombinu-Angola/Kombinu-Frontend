@@ -67,7 +67,7 @@ export function QuizSection() {
                                         duration: 0.5,
                                         delay: 0.3,
                                     }}
-                                    className="mt-4 text-lg sm:text-xl font-bold text-card-foreground"
+                                    className="mt-4 text-lg sm:text-xl  font-bold text-card-foreground"
                                 >
                                     Gerador de Quizzes IA em (&lt; 10s)
                                 </motion.h3>
@@ -94,7 +94,7 @@ export function QuizSection() {
                             </CardContent>
 
                             {/* Área do ficheiro */}
-                            <CardFooter className="p-4 sm:p-6 pt-0">
+                            <CardFooter className="p-6  sm:p-6 pt-0 border-0">
 
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
@@ -108,7 +108,7 @@ export function QuizSection() {
                                         delay: 0.5,
                                         ease: "easeOut",
                                     }}
-                                    className="w-full bg-background/80 border border-border p-4 rounded-xl space-y-3"
+                                    className="w-full bg-card border border-border p-4 rounded-xl space-y-3"
                                 >
 
                                     {/* Ficheiro + tempo */}
@@ -122,7 +122,7 @@ export function QuizSection() {
                                                 className="text-red-500 shrink-0"
                                             />
 
-                                            <span className="text-xs sm:text-sm font-medium text-foreground truncate">
+                                            <span className="text-xs sm:text-sm font-medium text-white truncate">
                                                 Apontamentos_Contabilidade_Geral.pdf
                                             </span>
 
@@ -271,7 +271,7 @@ export function QuizSection() {
                             </motion.p>
 
                             {/* Ranking */}
-                            <CardFooter className="p-4 sm:p-6 pt-0">
+                            <CardFooter className="p-4 sm:p-6 pt-0 border-0">
 
                                 <motion.div
                                     initial={{ opacity: 0, y: 25 }}
@@ -285,7 +285,7 @@ export function QuizSection() {
                                         delay: 0.5,
                                         ease: "easeOut",
                                     }}
-                                    className="w-full bg-background/80 border border-border p-6 sm:p-10 rounded-xl space-y-2"
+                                    className="w-full bg-card border border-border p-6 sm:p-10 mt-14 rounded-xl space-y-2"
                                 >
 
                                     {/* 1º Lugar */}
@@ -308,7 +308,7 @@ export function QuizSection() {
                                                 1º
                                             </span>
 
-                                            <span className="font-semibold text-foreground">
+                                            <span className="font-semibold text-white">
                                                 Economia UAN
                                             </span>
 
@@ -340,7 +340,7 @@ export function QuizSection() {
                                                 2º
                                             </span>
 
-                                            <span className="font-semibold text-foreground">
+                                            <span className="font-semibold text-second">
                                                 Direito UCAN
                                             </span>
 
@@ -372,7 +372,7 @@ export function QuizSection() {
                                                 3º
                                             </span>
 
-                                            <span className="font-semibold text-foreground">
+                                            <span className="font-semibold text-second">
                                                 Engenharia ISPTEC
                                             </span>
 
