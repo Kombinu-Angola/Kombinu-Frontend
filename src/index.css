@@ -1,8 +1,13 @@
+@import "tailwindcss";
 @import "@fontsource-variable/geist";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource/montserrat/700.css";
+@import "@fontsource/montserrat/800.css";
+@import "@fontsource/rubik/500.css";
+@import "@fontsource/rubik/700.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config "../tailwind.config.js";
 
 /* =========================
    BASE THEME
@@ -105,5 +110,341 @@
   .reveal.is-visible {
     opacity: 1;
     animation: none;
+  }
+}
+
+/* =========================================================
+   Landing (#19) — carrossel infinito e tokens shadcn locais
+   Os tokens --background/--foreground/--primary/etc. aqui só
+   alimentam os componentes shadcn novos (button.tsx, card.tsx,
+   dialog.tsx, ...); onde o nome colide com um token já usado
+   pelos ecrãs /v2 (--color-background, --color-primary), o
+   bloco "DESIGN SYSTEM KOMBINU" mais abaixo tem a palavra final
+   porque vem depois no ficheiro.
+   ========================================================= */
+
+@keyframes scroll {
+  to {
+    transform: translate(calc(-50% - 0.5rem));
+  }
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused;
+}
+
+.animate-scroll {
+  animation: scroll var(--animation-duration, 40s)
+    var(--animation-direction, forwards) linear infinite;
+}
+
+@theme inline {
+  /* Tipografia Dual-Voice (apenas para os componentes shadcn da landing) */
+  --font-heading: "Montserrat", sans-serif;
+  --font-sans-landing: "Rubik", sans-serif;
+
+  /* Variáveis Base Shadcn */
+  --color-foreground: var(--foreground-shadcn);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border-shadcn);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Sidebar Tokens */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Escala de Raio (shadcn) */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+}
+
+:root {
+  /* Paleta shadcn (apenas para os componentes ui/*.tsx novos da landing: card, dialog, sheet, sidebar, etc.) */
+  /* Texto escuro (não o #fbf9f8 original do Augusto, pensado para o fundo escuro dele) —
+     --color-background aqui resolve para o claro do Braga (#fbf9f8), por isso o texto
+     tem de ser escuro para haver contraste. Mesmo tom usado em --color-on-surface. */
+  --foreground-shadcn: #1b1c1c;
+
+  --card: #131d22;
+  --card-foreground: #fbf9f8;
+
+  --popover: #131d22;
+  --popover-foreground: #fbf9f8;
+
+  --primary-foreground: #ffffff;
+
+  --secondary: #fed400;
+  --secondary-foreground: #221b00;
+
+  --muted: #1a262d;
+  --muted-foreground: #94a3b8;
+
+  --accent: #1a262d;
+  --accent-foreground: #fbf9f8;
+
+  --destructive: #ff4b4b;
+
+  --border-shadcn: #24343d;
+  --input: #24343d;
+  --ring: #3b82f6;
+
+  --radius: 0.75rem;
+
+  /* Sidebar */
+  --sidebar: #0b1215;
+  --sidebar-foreground: #fbf9f8;
+  --sidebar-primary: #1658b3;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #131d22;
+  --sidebar-accent-foreground: #fbf9f8;
+  --sidebar-border: #24343d;
+  --sidebar-ring: #3b82f6;
+}
+
+@utility btn-3d {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  user-select: none;
+  transition-property: all;
+  transition-duration: 75ms;
+}
+
+@utility btn-3d-primary {
+  background-color: var(--brand-ocean);
+  color: white;
+  border-width: 2px;
+  border-color: var(--brand-ocean);
+  box-shadow: 0 4px 0 var(--brand-ocean-shadow);
+
+  &:active {
+    box-shadow: none;
+    transform: translateY(0.25rem);
+  }
+}
+
+@utility btn-3d-secondary {
+  background-color: var(--brand-sunbeam);
+  color: #221b00;
+  border-width: 2px;
+  border-color: var(--brand-sunbeam);
+  box-shadow: 0 4px 0 var(--brand-sunbeam-ink);
+
+  &:active {
+    box-shadow: none;
+    transform: translateY(0.25rem);
+  }
+}
+
+@utility btn-3d-success {
+  background-color: var(--feedback-success);
+  color: white;
+  border-width: 2px;
+  border-color: var(--feedback-success);
+  box-shadow: 0 4px 0 var(--feedback-success-ink);
+
+  &:active {
+    box-shadow: none;
+    transform: translateY(0.25rem);
+  }
+}
+
+@utility btn-3d-outline {
+  background-color: var(--surface-soft);
+  color: #fbf9f8;
+  border-width: 2px;
+  border-color: var(--border-cloud);
+  box-shadow: 0 4px 0 var(--border-cloud);
+
+  &:active {
+    box-shadow: none;
+    transform: translateY(0.25rem);
+  }
+}
+
+/* =========================================================
+   Badge Data-Saver
+   ========================================================= */
+
+@utility badge-data-saver {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.25rem;
+  border-radius: 9999px;
+  background-color: var(--surface-forest);
+  color: var(--feedback-success);
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =========================
+   DESIGN SYSTEM KOMBINU — tokens das telas novas (/v2)
+   Tipografia segue o SLA (font-montserrat/font-lato/font-poppins do
+   tailwind.config.js); aqui só a escala de tamanhos, cor, sombra e movimento.
+   Vem depois do bloco shadcn da landing de propósito: para os nomes que
+   colidem (--color-background, --color-primary, --color-brand-*), esta
+   é a definição que fica a valer em todo o site.
+========================= */
+@theme {
+  --text-display-l: 44px;
+  --text-display-l--line-height: 1.08;
+  --text-display-l--font-weight: 800;
+  --text-headline-h1: 32px;
+  --text-headline-h1--line-height: 1.15;
+  --text-headline-h1--font-weight: 800;
+  --text-headline-h1-mobile: 28px;
+  --text-headline-h1-mobile--line-height: 1.15;
+  --text-headline-h1-mobile--font-weight: 800;
+  --text-headline-h2: 24px;
+  --text-headline-h2--line-height: 1.2;
+  --text-headline-h2--font-weight: 700;
+  --text-headline-h3: 19px;
+  --text-headline-h3--line-height: 1.3;
+  --text-headline-h3--font-weight: 700;
+  --text-body-lg: 17px;
+  --text-body-lg--line-height: 1.5;
+  --text-body-md: 15px;
+  --text-body-md--line-height: 1.5;
+  --text-caption: 13px;
+  --text-caption--line-height: 1.4;
+  --text-overline: 12px;
+  --text-overline--line-height: 1.2;
+  --text-overline--letter-spacing: 0.05em;
+  --text-overline--font-weight: 700;
+  --text-button: 15px;
+  --text-button--line-height: 1;
+  --text-button--letter-spacing: 0.04em;
+  --text-button--font-weight: 700;
+
+  /* ── Marca ── */
+  --color-brand-ocean: #1658b3;
+  --color-brand-ocean-hover: #124690;
+  --color-brand-ocean-shadow: #0d3c88;
+  --color-brand-sunbeam: #ffd500;
+  --color-brand-sunbeam-ink: #8a7300;
+  --color-brand-sky-ink: #077cb3;
+
+  --color-primary: #00418d;
+  --color-primary-fixed: #d8e2ff;
+  --color-on-primary-fixed: #001a41;
+  --color-secondary-fixed: #ffe174;
+  --color-secondary-container: #fed400;
+  --color-on-secondary-fixed-variant: #554500;
+
+  /* ── Feedback (base = preenchimento; -ink = texto/ícone < 24px) ── */
+  --color-feedback-success: #58cc02;
+  --color-feedback-success-ink: #327800;
+  --color-feedback-success-soft: #f2fbea;
+  --color-feedback-error: #ff4b4b;
+  --color-feedback-error-ink: #eb0000;
+  --color-feedback-error-soft: #fff1f1;
+  --color-feedback-streak: #ff9600;
+  --color-feedback-streak-ink: #aa6400;
+  --color-feedback-gem: #a570ff;
+  --color-feedback-gem-ink: #8d4aff;
+
+  /* ── Superfícies e texto ── */
+  --color-background: #fbf9f8;
+  --color-surface-canvas: #ffffff;
+  --color-surface-soft: #f7f7f7;
+  --color-surface-sky: #eef5ff;
+  --color-surface-container-low: #f5f3f2;
+  --color-surface-ink: #0b1215;
+  --color-surface-forest: #163300;
+  --color-on-surface: #1b1c1c;
+  --color-text-secondary: #4b4b4b;
+  --color-text-tertiary: #6b6b6b;
+  --color-text-disabled: #afafaf;
+  --color-border-cloud: #e5e5e5;
+  --color-border-cloud-strong: #d4d4d4;
+  --color-border-input: #8a8d96;
+
+  /* ── Profundidade ──
+     Controlos: sombra sólida 3D (tátil). Superfícies: sombra "clay" difusa. */
+  --shadow-3d-primary: 0 4px 0 0 var(--color-brand-ocean-shadow);
+  --shadow-3d-neutral: 0 4px 0 0 var(--color-border-cloud-strong);
+  --shadow-3d-success: 0 4px 0 0 var(--color-feedback-success-ink);
+  --shadow-elevation-1: 0 1px 2px rgb(11 18 21 / 0.04), 0 4px 12px -4px rgb(11 18 21 / 0.06);
+  --shadow-clay:
+    inset 0 2px 0 rgb(255 255 255 / 0.9),
+    inset 0 -3px 6px rgb(11 18 21 / 0.03),
+    0 2px 4px rgb(11 18 21 / 0.03),
+    0 18px 40px -16px rgb(22 88 179 / 0.16);
+  --shadow-clay-hover:
+    inset 0 2px 0 rgb(255 255 255 / 0.9),
+    inset 0 -3px 6px rgb(11 18 21 / 0.03),
+    0 4px 8px rgb(11 18 21 / 0.04),
+    0 28px 56px -18px rgb(22 88 179 / 0.26);
+
+  /* ── Movimento ── */
+  --ease-out-quint: cubic-bezier(0.2, 0, 0, 1);
+  --animate-feedback-in: feedback-in 200ms var(--ease-out-quint) both;
+  --animate-pop-in: pop-in 320ms var(--ease-out-quint) both;
+
+  @keyframes feedback-in {
+    from { opacity: 0; translate: 0 6px; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+  --animate-pulse-ring: pulse-ring 2.4s ease-in-out 3;
+  --animate-confetti-fall: confetti-fall 1.6s var(--ease-out-quint) both;
+
+  @keyframes confetti-fall {
+    0% { opacity: 0; translate: 0 -16px; }
+    15% { opacity: 1; }
+    100% { opacity: 0; translate: 0 220px; rotate: 200deg; }
+  }
+  @keyframes pulse-ring {
+    0%, 100% { scale: 0.92; opacity: 0.6; }
+    50% { scale: 1.12; opacity: 0.15; }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; scale: 0.9; filter: blur(4px); }
+    to   { opacity: 1; scale: 1; filter: blur(0); }
+  }
+}
+
+@layer base {
+  /* Restaura o anel de foco (o reset global acima usa outline-none) só para navegação por teclado. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-sky-ink);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

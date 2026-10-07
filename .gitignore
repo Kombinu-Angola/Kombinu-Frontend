@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Claude Code: definições pessoais, nunca partilhadas com a equipa
+.claude/settings.local.json
