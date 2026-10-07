@@ -64,7 +64,7 @@ export function Header() {
                 ease: "easeOut",
               },
             }}
-            className="hover:text-primary"
+            className="hover:text-primary text-white"
           >
             Sebentas & Resumos
           </motion.a>
@@ -78,7 +78,7 @@ export function Header() {
                 ease: "easeOut",
               },
             }}
-            className="hover:text-primary"
+            className="hover:text-primary text-white"
           >
             Modo Data-Lean
           </motion.a>
@@ -92,7 +92,7 @@ export function Header() {
                 ease: "easeOut",
               },
             }}
-            className="hover:text-primary"
+            className="hover:text-primary text-white"
           >
             Preços
           </motion.a>
@@ -106,7 +106,7 @@ export function Header() {
                 ease: "easeOut",
               },
             }}
-            className="hover:text-primary"
+            className="hover:text-primary text-white"
           >
             Sobre Nós
           </motion.a>
