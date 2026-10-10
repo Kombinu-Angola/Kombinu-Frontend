@@ -69,7 +69,7 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
       </a>
 
       {/* Navegação lateral (desktop) */}
-      <nav aria-label="Backoffice" className="fixed inset-y-0 left-0 z-40 hidden w-[260px] flex-col justify-between border-r-2 border-border-cloud bg-surface-canvas lg:flex">
+      <nav aria-label="Backoffice" className="fixed inset-y-0 left-0 z-40 hidden w-[260px] flex-col justify-between border-r-2 border-border-cloud bg-surface-canvas md:flex">
         <div>
           <div className="flex h-16 items-center justify-between border-b-2 border-border-cloud px-5">
             <a href="/v2/admin" className="font-montserrat text-headline-h3 font-extrabold text-primary">
@@ -93,7 +93,7 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
       </nav>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-50 md:hidden">
           <button
             type="button"
             aria-label="Fechar menu"
@@ -120,7 +120,7 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
         </div>
       )}
 
-      <div className="lg:pl-[260px]">
+      <div className="md:pl-[260px]">
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b-2 border-border-cloud bg-surface-canvas px-4 md:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <button
@@ -128,7 +128,7 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
               onClick={() => setMenuOpen(true)}
               aria-label="Abrir menu do backoffice"
               aria-expanded={menuOpen}
-              className="flex size-11 shrink-0 items-center justify-center rounded-lg border-2 border-border-cloud text-text-secondary hover:bg-surface-soft lg:hidden"
+              className="flex size-11 shrink-0 items-center justify-center rounded-lg border-2 border-border-cloud text-text-secondary hover:bg-surface-soft md:hidden"
             >
               <Icon name="menu" size={20} />
             </button>
