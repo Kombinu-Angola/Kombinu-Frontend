@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Coluna 1: Plataforma */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+            <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-primary">
               Kombinu Plataforma
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
@@ -37,7 +37,7 @@ export default function Footer() {
 
           {/* Coluna 2: Faculdades */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+            <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-primary">
               Faculdades Cobertas
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
@@ -66,7 +66,7 @@ export default function Footer() {
 
           {/* Coluna 3: Criadores */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+            <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-primary">
               Criadores de Conteúdo
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
@@ -95,7 +95,7 @@ export default function Footer() {
 
           {/* Coluna 4: Legal & Status */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+            <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-primary">
               Legal & Segurança
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
@@ -123,7 +123,7 @@ export default function Footer() {
         {/* Barra Inferior: Logo, Links Rápidos e Copyright */}
         <div className="pt-8  flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           {/* Marca */}
-          <img src={logoProfile} className=" h-30 w-30  sm:w-14 sm:h-14 object-contain" alt="logoTipo" />
+          <img src={logoProfile} className="h-10 w-10 sm:w-14 sm:h-14 object-contain" alt="Kombinu" />
 
 
           <div className="flex  justify-center gap-x-5 gap-y-2">
@@ -131,7 +131,7 @@ export default function Footer() {
           </div>
 
           <p className="text-center md:text-right">
-            © 2025 Kombinu Angola. Todos os direitos reservados.
+            © 2026 Kombinu Angola. Todos os direitos reservados.
           </p>
         </div>
       </div>
