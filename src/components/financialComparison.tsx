@@ -23,22 +23,13 @@ export default function FinancialComparison() {
                         duration: 0.7,
                         ease: "easeOut",
                     }}
-
-                    whileHover={{
-                        y: -20,
-                        scale: 1.01,
-                        transition: {
-                            duration: 0.7,
-                            ease: "easeOut",
-                        }
-                    }}
                     className="text-center max-w-xl mx-auto mb-10"
                 >
                     <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary">
                         A Quebra da Objeção Financeira
                     </span>
 
-                    <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight">
+                    <h2 className="font-heading mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight">
                         A matemática simples da sua poupança mensal
                     </h2>
                 </motion.div>
@@ -65,7 +56,7 @@ export default function FinancialComparison() {
                             ease: "easeOut",
                         }}
                         whileHover={{
-                            y: -20,
+                            y: -6,
                             transition: {
                                 duration: 0.2,
                                 ease: "easeOut",
@@ -78,7 +69,7 @@ export default function FinancialComparison() {
                             {/* Header */}
                             <div className="flex items-center justify-between pb-4 border-b border-border/60">
 
-                                <h3 className="font-bold text-base sm:text-lg text-muted-foreground">
+                                <h3 className="font-heading font-bold text-base sm:text-lg text-muted-foreground">
                                     Método Tradicional
                                 </h3>
 
@@ -229,7 +220,7 @@ export default function FinancialComparison() {
 
                                 <div className="flex items-center gap-2 min-w-0">
 
-                                    <h3 className="font-bold text-base sm:text-lg text-foreground">
+                                    <h3 className="font-heading font-bold text-base sm:text-lg text-foreground">
                                         Com a Plataforma
                                     </h3>
 

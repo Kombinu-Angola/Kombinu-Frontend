@@ -22,7 +22,7 @@ export default function TestimonialsSection() {
                         Verdade Radical
                     </span>
 
-                    <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+                    <h2 className="font-heading mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
                         O que dizem os estudantes que já passaram nos testes
                     </h2>
                 </motion.div>
@@ -55,13 +55,6 @@ export default function TestimonialsSection() {
                             <div className="flex items-center justify-between mb-4">
 
                                 <motion.div
-                                    whileHover={{
-                                        scale: 1.05,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
                                     className="flex text-amber-500 gap-0.5"
                                 >
                                     {[...Array(5)].map((_, i) => (
@@ -87,23 +80,11 @@ export default function TestimonialsSection() {
                                     ))}
                                 </motion.div>
 
-                                <motion.div
-                                    whileHover={{
-                                        y: -3,
-                                        rotate: -5,
-                                        scale: 1.05,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                >
-                                    <HugeiconsIcon
-                                        icon={QuoteUpIcon}
-                                        size={20}
-                                        className="text-primary/30"
-                                    />
-                                </motion.div>
+                                <HugeiconsIcon
+                                    icon={QuoteUpIcon}
+                                    size={20}
+                                    className="text-primary/30"
+                                />
 
                             </div>
 
@@ -149,7 +130,7 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-semibold text-sm text-card-foreground truncate">
+                                <h4 className="font-heading font-semibold text-sm text-card-foreground truncate">
                                     Hamilton K.
                                 </h4>
 
@@ -186,13 +167,6 @@ export default function TestimonialsSection() {
                             <div className="flex items-center justify-between mb-4">
 
                                 <motion.div
-                                    whileHover={{
-                                        scale: 1.05,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
                                     className="flex text-amber-500 gap-0.5"
                                 >
                                     {[...Array(5)].map((_, i) => (
@@ -218,23 +192,11 @@ export default function TestimonialsSection() {
                                     ))}
                                 </motion.div>
 
-                                <motion.div
-                                    whileHover={{
-                                        y: -3,
-                                        rotate: -5,
-                                        scale: 1.05,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                >
-                                    <HugeiconsIcon
-                                        icon={QuoteUpIcon}
-                                        size={20}
-                                        className="text-primary/30"
-                                    />
-                                </motion.div>
+                                <HugeiconsIcon
+                                    icon={QuoteUpIcon}
+                                    size={20}
+                                    className="text-primary/30"
+                                />
 
                             </div>
 
@@ -280,7 +242,7 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-semibold text-sm text-card-foreground truncate">
+                                <h4 className="font-heading font-semibold text-sm text-card-foreground truncate">
                                     Jéssica M.
                                 </h4>
 
@@ -317,13 +279,6 @@ export default function TestimonialsSection() {
                             <div className="flex items-center justify-between mb-4">
 
                                 <motion.div
-                                    whileHover={{
-                                        scale: 1.05,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
                                     className="flex text-amber-500 gap-0.5"
                                 >
                                     {[...Array(5)].map((_, i) => (
@@ -349,23 +304,11 @@ export default function TestimonialsSection() {
                                     ))}
                                 </motion.div>
 
-                                <motion.div
-                                    whileHover={{
-                                        y: -3,
-                                        rotate: -5,
-                                        scale: 1.05,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                >
-                                    <HugeiconsIcon
-                                        icon={QuoteUpIcon}
-                                        size={20}
-                                        className="text-primary/30"
-                                    />
-                                </motion.div>
+                                <HugeiconsIcon
+                                    icon={QuoteUpIcon}
+                                    size={20}
+                                    className="text-primary/30"
+                                />
 
                             </div>
 
@@ -411,7 +354,7 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-semibold text-sm text-card-foreground truncate">
+                                <h4 className="font-heading font-semibold text-sm text-card-foreground truncate">
                                     Mauro P.
                                 </h4>
 
