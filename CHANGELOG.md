@@ -37,6 +37,8 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Corrigido
 
+- `AdminShell`: sidebar fixa so aparecia a partir de `lg:` (1024px), deixando o intervalo de tablet (768-1023px) preso ao padrao mobile; promovida para `md:` (nav fixa, overlay da gaveta, padding do conteudo e botao de hamburguer).
+- `CreatorShell`: navegacao so existia dentro da gaveta, sem nenhuma promocao para desktop (ao contrario do `AppShell` em `md:` e do `AdminShell` em `lg:`); adicionada sidebar fixa a partir de `lg:`, reaproveitando a lista de navegacao (com os hints) entre a gaveta e a sidebar via um `NavList` partilhado.
 - Botao "Comecar a ler" no fim do onboarding apontava para um caminho inexistente (`/resumos/taxa-bna`); corrigido para `/v2/leitura`.
 - Botoes (`Button3D`/`LinkButton3D`) usavam `font-lato` em vez de `font-poppins` (SLA 7.3: hierarquia de fontes obrigatoria para CTAs).
 - 4 ocorrencias de `window.location.hash = "#/..."` (nao navegam sob rotas por path): `CreatorShell`, `SubscriptionFlow`, `CreatorContentHubScreen`, `PurchaseHistoryScreen` -- trocadas por `window.location.assign`.
