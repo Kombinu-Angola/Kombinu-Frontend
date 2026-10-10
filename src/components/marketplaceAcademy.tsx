@@ -52,7 +52,7 @@ export default function AcademicMarketplace() {
 
     return (
         <section
-            id="marktplace"
+            id="marketplace"
             className="w-full py-12 sm:py-16 bg-background text-foreground"
         >
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -82,7 +82,7 @@ export default function AcademicMarketplace() {
                             Marketplace Académico
                         </span>
 
-                        <h2 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight">
+                        <h2 className="font-heading mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight">
                             Sebentas em Destaque Esta Semana
                         </h2>
                     </div>
@@ -164,19 +164,9 @@ export default function AcademicMarketplace() {
                                 {/* Título & Autor */}
                                 <div className="mt-4">
 
-                                    {/* TÍTULO COM MOVIMENTO */}
-                                    <motion.h3
-                                        whileHover={{
-                                            x: 5,
-                                            transition: {
-                                                duration: 0.2,
-                                                ease: "easeOut",
-                                            },
-                                        }}
-                                        className="font-bold text-base sm:text-lg text-card-foreground leading-snug line-clamp-2 cursor-default"
-                                    >
+                                    <h3 className="font-heading font-bold text-base sm:text-lg text-card-foreground leading-snug line-clamp-2">
                                         {item.title}
-                                    </motion.h3>
+                                    </h3>
 
                                     <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
                                         Por{" "}
@@ -208,20 +198,14 @@ export default function AcademicMarketplace() {
                                         Preço
                                     </span>
 
-                                    <motion.span
-                                        whileHover={{
-                                            scale: 1.05,
-                                            transition: {
-                                                duration: 0.2,
-                                            },
-                                        }}
-                                        className={`text-base sm:text-lg font-extrabold ${item.isFree
+                                    <span
+                                        className={`font-heading text-base sm:text-lg font-extrabold ${item.isFree
                                             ? "text-emerald-500"
                                             : "text-card-foreground"
                                             }`}
                                     >
                                         {item.price}
-                                    </motion.span>
+                                    </span>
 
                                 </div>
 
@@ -237,7 +221,7 @@ export default function AcademicMarketplace() {
                                         duration: 0.15,
                                     }}
                                     type="button"
-                                    className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${item.isFree
+                                    className={`font-sans-landing inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${item.isFree
                                         ? "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 dark:text-emerald-400"
                                         : "bg-primary text-primary-foreground hover:bg-primary/90"
                                         }`}
