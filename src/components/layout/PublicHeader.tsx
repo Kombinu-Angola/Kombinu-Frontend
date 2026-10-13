@@ -1,6 +1,6 @@
-import logoProfile from "../assets/kombinu-logo.png";
+import logoProfile from "../assets/kombinu-mark.svg";
 
-import { Button } from "../ui/button";
+import { Button3D } from "../ui/Button3D";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -18,7 +18,7 @@ export function Header() {
         duration: 0.5,
         ease: "easeOut",
       }}
-      className="sticky top-0 z-50 bg-background/90 border-0 w-full border-border backdrop-blur-md"
+      className="sticky top-0 z-50 bg-background/90 w-full border-b-2 border-border-cloud backdrop-blur-md"
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
 
@@ -33,13 +33,13 @@ export function Header() {
               },
             }}
             src={logoProfile}
-            className="h-25 w-25 sm:w-14 sm:h-14 object-contain"
-            alt="logoTipo"
+            className="h-10 w-10 sm:h-14 sm:w-14 object-contain"
+            alt="Kombinu"
           />
         </Link>
 
         {/* Navegação Desktop */}
-        <nav className="hidden md:flex items-center gap-3 lg:gap-6 font-medium text-xs lg:text-sm text-muted-foreground whitespace-nowrap">
+        <nav className="hidden md:flex items-center gap-3 lg:gap-6 font-medium text-xs lg:text-sm text-text-secondary whitespace-nowrap">
 
           <motion.a
             href="#how-it-works"
@@ -70,7 +70,7 @@ export function Header() {
           </motion.a>
 
           <motion.a
-            href="#data-learn"
+            href="#data-lean"
             whileHover={{
               y: -2,
               transition: {
@@ -133,25 +133,9 @@ export function Header() {
             </Link>
           </motion.div>
 
-          <motion.div
-            whileHover={{
-              scale: 1.04,
-              transition: {
-                duration: 0.2,
-                ease: "easeOut",
-              },
-            }}
-            whileTap={{
-              scale: 0.97,
-            }}
-          >
-            <Button
-              size="sm"
-              className="cursor-pointer text-xs lg:text-sm"
-            >
-              Começar Grátis
-            </Button>
-          </motion.div>
+          <Button3D className="text-xs lg:text-sm">
+            Começar Grátis
+          </Button3D>
 
           <motion.div
             whileHover={{
@@ -162,7 +146,7 @@ export function Header() {
               },
             }}
           >
-            <Avatar className="h-8 w-8 lg:h-10 lg:w-10 border-2 border-border bg-primary">
+            <Avatar className="h-8 w-8 lg:h-10 lg:w-10 border-2 border-border-cloud bg-primary">
               <AvatarImage src="" />
               <AvatarFallback className="bg-primary text-white text-xs">
                 CN
@@ -179,12 +163,10 @@ export function Header() {
           }}
           className="md:hidden"
         >
-          <Button
-            size="icon"
-            variant="ghost"
+          <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="text-slate-700 focus:outline-none p-2 hover:text-primary"
+            className="flex size-11 items-center justify-center rounded-lg border-2 border-border-cloud text-text-secondary transition-colors hover:bg-surface-soft hover:text-primary"
             aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -210,7 +192,7 @@ export function Header() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </Button>
+          </button>
         </motion.div>
 
       </div>
@@ -238,10 +220,10 @@ export function Header() {
               duration: 0.25,
               ease: "easeOut",
             }}
-            className="md:hidden border-t bg-card px-4 pt-3 pb-6 flex flex-col gap-4 shadow-lg overflow-hidden"
+            className="md:hidden border-t bg-surface-canvas px-4 pt-3 pb-6 flex flex-col gap-4 shadow-lg overflow-hidden"
           >
 
-            <nav className="flex flex-col gap-3 font-medium text-muted-foreground">
+            <nav className="flex flex-col gap-3 font-medium text-text-secondary">
 
               <motion.a
                 href="#how-it-works"
@@ -262,7 +244,7 @@ export function Header() {
               </motion.a>
 
               <motion.a
-                href="#data-learn"
+                href="#data-lean"
                 onClick={() => setIsOpen(false)}
                 whileHover={{ x: 4 }}
                 className="py-1 hover:text-primary"
@@ -299,20 +281,15 @@ export function Header() {
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="block text-center font-medium text-foreground hover:bg-muted py-2 rounded-md"
+                  className="block text-center font-medium text-foreground hover:bg-surface-soft py-2 rounded-md"
                 >
                   Iniciar Sessão
                 </Link>
               </motion.div>
 
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Button className="w-full rounded-full cursor-pointer">
-                  Começar Grátis
-                </Button>
-              </motion.div>
+              <Button3D fullWidth>
+                Começar Grátis
+              </Button3D>
 
             </div>
 
