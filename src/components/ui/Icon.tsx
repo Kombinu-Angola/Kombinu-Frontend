@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 import {
-  Check, X, ArrowRight, ArrowLeft, HelpCircle, Zap, BookOpen, BadgeCheck, Target, Trophy,
+  Check, X, ArrowRight, ArrowLeft, ArrowUp, ArrowDown, HelpCircle, Zap, BookOpen, BadgeCheck, Target, Trophy,
   Snowflake, Signal, Lock, Upload, FileText, Shield, Clock, Hourglass, Paperclip, Phone,
   MessageCircle, Pencil, Sparkles, Cloud, Plus, GraduationCap, Wallet, AlertTriangle, BarChart3,
   Headphones, Flame, Bell, LayoutGrid, ShoppingBag, Star, Search, TrendingUp, Gem, Heart, Scale,
@@ -20,6 +20,8 @@ const ICONS = {
   x: X,
   "arrow-right": ArrowRight,
   "arrow-left": ArrowLeft,
+  "arrow-up": ArrowUp,
+  "arrow-down": ArrowDown,
   help: HelpCircle,
   bolt: Zap,
   book: BookOpen,
