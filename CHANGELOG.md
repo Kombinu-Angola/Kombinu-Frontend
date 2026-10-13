@@ -15,6 +15,8 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- `useDialogBehavior` (`src/hooks/`): hook partilhado de acessibilidade para modais/gavetas (foco inicial, Escape fecha, bloqueia o scroll do fundo, devolve o foco a quem abriu), extraido do `PricingModal` e aplicado tambem a gaveta movel do `CreatorShell` e aos dialogos de pausar/republicar (`CreatorContentHubScreen`) e restaurar versao (`VersionHistoryScreen`), que nao tinham nenhuma gestao de foco.
+- `Icon`: `trend-down`, `arrow-up`, `arrow-down`.
 - Enquetes no estudio de criacao (`features/survey/`: `SurveyComposerScreen`, `SurveyResultsScreen`) -- fecha a referencia `/estudio/enquete` deixada pendente no `CreationHubScreen` desde o lote anterior. Novas rotas: `/v2/estudio/enquete`, `/v2/estudio/enquete/resultados`.
 - Exportacao fiscal e equipa/permissoes no backoffice (`features/governance/`: `FiscalExportScreen`, `TeamPermissionsScreen`) e pagina publica de universidade parceira, sem sessao (`features/campus/PublicUniversityScreen`). `AdminShell` ganha 2 itens de navegacao. Novas rotas: `/v2/admin/fiscal`, `/v2/admin/equipa`, `/v2/u/:slug`.
 - Nivelamento adaptativo no backoffice (`features/admin/AdaptiveRulesScreen`). `AdminShell` ganha o item "Nivelamento adaptativo". Nova rota: `/v2/admin/adaptativo`.
@@ -37,6 +39,9 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Corrigido
 
+- `CreatorShell` (gaveta movel), `CreatorContentHubScreen` (dialogo de pausar/republicar) e `VersionHistoryScreen` (dialogo de restaurar versao): sem gestao de foco -- ver `useDialogBehavior` acima.
+- `ExamComposerScreen`/`TrailComposerScreen`: botoes "mover para cima/baixo" simulavam um icone vertical rodando `arrow-right`; usam agora `arrow-up`/`arrow-down`.
+- `CreatorFinanceScreen`: `Math.max(...finance.weekly)` sem guarda para array vazio (devolveria `-Infinity`).
 - Botao "Comecar a ler" no fim do onboarding apontava para um caminho inexistente (`/resumos/taxa-bna`); corrigido para `/v2/leitura`.
 - Botoes (`Button3D`/`LinkButton3D`) usavam `font-lato` em vez de `font-poppins` (SLA 7.3: hierarquia de fontes obrigatoria para CTAs).
 - 4 ocorrencias de `window.location.hash = "#/..."` (nao navegam sob rotas por path): `CreatorShell`, `SubscriptionFlow`, `CreatorContentHubScreen`, `PurchaseHistoryScreen` -- trocadas por `window.location.assign`.
