@@ -62,18 +62,18 @@ export default function FinancialComparison() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="flex flex-col justify-between p-6 rounded-2xl bg-card/60 shadow-sm"
+                        className="flex flex-col justify-between p-6 rounded-2xl border-2 border-border-cloud bg-surface-soft"
                     >
                         <div>
 
                             {/* Header */}
-                            <div className="flex items-center justify-between pb-4 border-b border-border/60">
+                            <div className="flex items-center justify-between pb-4 border-b border-border-cloud">
 
-                                <h3 className="font-heading font-bold text-base sm:text-lg text-muted-foreground">
+                                <h3 className="font-heading font-bold text-base sm:text-lg text-text-secondary">
                                     Método Tradicional
                                 </h3>
 
-                                <span className="w-8 h-8 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center">
+                                <span className="w-8 h-8 rounded-full bg-feedback-error-soft text-feedback-error-ink flex items-center justify-center">
                                     <HugeiconsIcon
                                         icon={Cancel01Icon}
                                         size={18}
@@ -98,7 +98,7 @@ export default function FinancialComparison() {
                                     }}
                                     className="flex justify-between items-start gap-2"
                                 >
-                                    <span className="text-muted-foreground">
+                                    <span className="text-text-secondary">
                                         Fotocópias em centros de reprografia:
                                     </span>
 
@@ -120,7 +120,7 @@ export default function FinancialComparison() {
                                     }}
                                     className="flex justify-between items-start gap-2"
                                 >
-                                    <span className="text-muted-foreground">
+                                    <span className="text-text-secondary">
                                         Pacotes de dados descarregando PDFs:
                                     </span>
 
@@ -142,7 +142,7 @@ export default function FinancialComparison() {
                                     }}
                                     className="flex justify-between items-start gap-2"
                                 >
-                                    <span className="text-muted-foreground">
+                                    <span className="text-text-secondary">
                                         Aulas de explicação avulsas:
                                     </span>
 
@@ -172,13 +172,13 @@ export default function FinancialComparison() {
                                 duration: 0.5,
                                 delay: 0.5,
                             }}
-                            className="mt-6 pt-4 border-t border-border/60 flex items-center justify-between"
+                            className="mt-6 pt-4 border-t border-border-cloud flex items-center justify-between"
                         >
-                            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
                                 Custo Médio Mensal
                             </span>
 
-                            <span className="text-lg sm:text-xl font-bold text-red-500">
+                            <span className="text-lg sm:text-xl font-bold text-feedback-error-ink">
                                 ~12.500 AOA
                             </span>
                         </motion.div>
@@ -236,7 +236,7 @@ export default function FinancialComparison() {
 
                                 </div>
 
-                                <span className="w-8 h-8 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                                <span className="w-8 h-8 rounded-full bg-feedback-success-soft text-feedback-success-ink flex items-center justify-center shrink-0">
 
                                     <HugeiconsIcon
                                         icon={CheckmarkCircle02Icon}
@@ -269,7 +269,7 @@ export default function FinancialComparison() {
                                     }}
                                     className="flex justify-between items-start gap-2"
                                 >
-                                    <span className="text-muted-foreground">
+                                    <span className="text-text-secondary">
                                         Acesso ilimitado a sebentas & IA:
                                     </span>
 
@@ -297,7 +297,7 @@ export default function FinancialComparison() {
                                     }}
                                     className="flex justify-between items-start gap-2"
                                 >
-                                    <span className="text-muted-foreground">
+                                    <span className="text-text-secondary">
                                         Saldo de dados (Modo Data-Lean &lt; 5MB/h):
                                     </span>
 
@@ -325,11 +325,11 @@ export default function FinancialComparison() {
                                     }}
                                     className="flex justify-between items-start gap-2"
                                 >
-                                    <span className="text-muted-foreground">
+                                    <span className="text-text-secondary">
                                         Dúvidas com gabarito 24/7:
                                     </span>
 
-                                    <span className="font-semibold text-emerald-600 dark:text-emerald-400 uppercase text-xs shrink-0">
+                                    <span className="font-semibold text-feedback-success-ink uppercase text-xs shrink-0">
                                         Grátis
                                     </span>
                                 </motion.li>
@@ -357,7 +357,7 @@ export default function FinancialComparison() {
                             }}
                             className="mt-6 pt-4 border-t border-primary/20 flex items-center justify-between"
                         >
-                            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
                                 Investimento Mensal Total
                             </span>
 
