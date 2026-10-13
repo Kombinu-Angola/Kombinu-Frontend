@@ -1,6 +1,6 @@
 
-import { Button } from "./ui/button";
 import { Play, PlayCircle } from "lucide-react";
+import { Button3D } from "./ui/Button3D";
 import { TextGenerateEffect } from "./ui/text-generate-effect";
 import { motion } from "motion/react";
 
@@ -31,7 +31,7 @@ export function HeroSection() {
                         }}
                         className="max-w-2xl mx-auto px-4 text-center"
                     >
-                        <p className="mt-4 font-sans text-xs sm:text-lg font-medium text-[#424752] leading-relaxed">
+                        <p className="mt-4 font-sans-landing text-xs sm:text-lg font-medium text-text-secondary leading-relaxed">
                             A Kombinu transforma sebentas desorganizadas e provas antigas da UAN, UCAN e ISAF em resumos editoriais rápidos e simulados com gabarito na hora. Se não entenderes o conceito no 1º quiz, não gastaste nem 1 Kwanza nem 1 Megabyte.
                         </p>
                     </motion.div>
@@ -49,16 +49,13 @@ export function HeroSection() {
                     }}
                     className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
-                    <Button className="h-14 px-8 shadow-full rounded-full cursor-pointer">
-                        <PlayCircle className="w-5 h-5" />
-                        Experimentar Quiz
-                        <span>Grátis</span>
-                    </Button>
+                    <Button3D size="lg" leadingIcon={<PlayCircle className="size-5" />}>
+                        Experimentar Quiz Grátis
+                    </Button3D>
 
-                    <Button className="bg-white shadow-full text-primary rounded-full font-bold cursor-pointer h-14 px-8 hover:bg-primary hover:text-white">
-                        <Play className="w-5 h-5" />
+                    <Button3D variant="secondary" size="lg" leadingIcon={<Play className="size-5" />}>
                         Ver Demonstração de 1 Minuto
-                    </Button>
+                    </Button3D>
                 </motion.div>
 
                 <motion.div
@@ -69,7 +66,7 @@ export function HeroSection() {
                         duration: 0.9,
                         ease: "easeOut",
                     }}>
-                    <p className=" text-[#424752] text-xs mt-2 py-4 lg:mt-4">Sem necessidade de cartão bancário • Pagamento opcional via Multicaixa Express • Funciona em qualquer telemóvel</p>
+                    <p className="text-text-secondary text-xs mt-2 py-4 lg:mt-4">Sem necessidade de cartão bancário • Pagamento opcional via Multicaixa Express • Funciona em qualquer telemóvel</p>
                 </motion.div>
             </section>
             <section>

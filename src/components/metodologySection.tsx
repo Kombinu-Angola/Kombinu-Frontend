@@ -13,7 +13,7 @@ export default function MethodologySection() {
             title: "Escolha a sua Cadeira",
             description:
                 "Filtre pela sua faculdade (UAN, UCAN, ISPTEC, etc.), ano letivo e selecione o tópico exato do teste agendado.",
-            tag: "Currículos 100% atualizados para 2025",
+            tag: "Currículos 100% atualizados para 2026",
             icon: FilterIcon,
         },
         {
@@ -50,28 +50,19 @@ export default function MethodologySection() {
                         duration: 0.8,
                         ease: "easeOut",
                     }}
-                    whileHover={{
-                        y: -20,
-                        transition: {
-                            duration: 0.2,
-                            ease: "easeOut",
-                        },
-                    }}
-
-
                     className="text-center max-w-2xl mx-auto mb-10 sm:mb-14"
                 >
                     <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary">
                         Metodologia Comprovada
                     </span>
 
-                    <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+                    <h2 className="font-heading mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
                         Do desespero da matéria ao domínio em 3 passos.
                     </h2>
                 </motion.div>
 
                 {/* Grid de Passos */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hover:">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                     {steps.map((item, index) => (
                         <motion.div
@@ -94,13 +85,13 @@ export default function MethodologySection() {
                                 ease: "easeOut",
                             }}
                             whileHover={{
-                                y: -20,
+                                y: -6,
                                 transition: {
                                     duration: 0.2,
                                     ease: "easeOut",
                                 },
                             }}
-                            className="relative flex flex-col justify-between p-6 rounded-2xl bg-card shadow-sm hover:border-primary/40 transition-colors"
+                            className="relative flex flex-col justify-between p-6 rounded-2xl border-2 border-border-cloud bg-surface-canvas shadow-clay hover:border-primary/40 transition-colors"
                         >
                             <div>
 
@@ -128,12 +119,12 @@ export default function MethodologySection() {
                                 </motion.span>
 
                                 {/* Título */}
-                                <h3 className="mt-2 text-lg sm:text-xl font-bold text-card-foreground">
+                                <h3 className="font-heading mt-2 text-lg sm:text-xl font-bold text-on-surface">
                                     {item.title}
                                 </h3>
 
                                 {/* Descrição */}
-                                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                                <p className="mt-3 text-sm text-text-secondary leading-relaxed">
                                     {item.description}
                                 </p>
 
@@ -157,7 +148,7 @@ export default function MethodologySection() {
                                     duration: 0.5,
                                     delay: index * 0.15 + 0.3,
                                 }}
-                                className="mt-6 pt-4 border-t border-border/50 flex items-center gap-2 text-xs font-medium text-muted-foreground"
+                                className="mt-6 pt-4 border-t border-border-cloud flex items-center gap-2 text-xs font-medium text-text-secondary"
                             >
                                 <div className="text-primary shrink-0">
                                     <HugeiconsIcon

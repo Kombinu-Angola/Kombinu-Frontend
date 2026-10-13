@@ -5,6 +5,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "motion/react";
+import { Button3D } from "./ui/Button3D";
 
 export default function PricingSection() {
     return (
@@ -29,20 +30,11 @@ export default function PricingSection() {
                         Planos Transparentes
                     </span>
 
-                    <motion.h2
-                        whileHover={{
-                            y: -2,
-                            transition: {
-                                duration: 0.2,
-                                ease: "easeOut",
-                            },
-                        }}
-                        className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight"
-                    >
-                        Transparência total. Sem surpresas.
-                    </motion.h2>
+                    <h2 className="font-heading mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+                        Menos que uma fotocópia por dia. Sem letras pequenas.
+                    </h2>
 
-                    <p className="mt-3 text-sm sm:text-base text-muted-foreground">
+                    <p className="mt-3 text-sm sm:text-base text-text-secondary">
                         Estude gratuitamente com a comunidade ou acelere a sua
                         preparação com o Kombinu Pro.
                     </p>
@@ -67,26 +59,17 @@ export default function PricingSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="flex flex-col justify-between p-6 sm:p-8 rounded-3xl bg-card shadow-sm"
+                        className="flex flex-col justify-between p-6 sm:p-8 rounded-3xl border-2 border-border-cloud bg-surface-canvas shadow-clay"
                     >
                         <div>
                             <div>
-                                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                                <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
                                     Acesso Essencial
                                 </span>
 
-                                <motion.h3
-                                    whileHover={{
-                                        x: 5,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                    className="mt-1 text-2xl font-bold text-card-foreground"
-                                >
+                                <h3 className="font-heading mt-1 text-2xl font-bold text-on-surface">
                                     Plano Básico
-                                </motion.h3>
+                                </h3>
 
                                 <div className="mt-4 flex items-baseline gap-1">
                                     <motion.span
@@ -97,12 +80,12 @@ export default function PricingSection() {
                                                 ease: "easeOut",
                                             },
                                         }}
-                                        className="text-3xl sm:text-4xl font-extrabold text-card-foreground"
+                                        className="text-3xl sm:text-4xl font-extrabold text-on-surface"
                                     >
                                         0 AOA
                                     </motion.span>
 
-                                    <span className="text-xs sm:text-sm text-muted-foreground">
+                                    <span className="text-xs sm:text-sm text-text-secondary">
                                         / para sempre
                                     </span>
                                 </div>
@@ -118,14 +101,14 @@ export default function PricingSection() {
                                     transition={{ duration: 0.4, delay: 0.1 }}
                                     className="flex items-start gap-3"
                                 >
-                                    <span className="text-emerald-500 shrink-0 mt-0.5">
+                                    <span className="text-feedback-success-ink shrink-0 mt-0.5">
                                         <HugeiconsIcon
                                             icon={CheckmarkCircle02Icon}
                                             size={18}
                                         />
                                     </span>
 
-                                    <span className="text-card-foreground">
+                                    <span className="text-on-surface">
                                         Acesso a resumos e sebentas de livre acesso
                                     </span>
                                 </motion.li>
@@ -137,14 +120,14 @@ export default function PricingSection() {
                                     transition={{ duration: 0.4, delay: 0.2 }}
                                     className="flex items-start gap-3"
                                 >
-                                    <span className="text-emerald-500 shrink-0 mt-0.5">
+                                    <span className="text-feedback-success-ink shrink-0 mt-0.5">
                                         <HugeiconsIcon
                                             icon={CheckmarkCircle02Icon}
                                             size={18}
                                         />
                                     </span>
 
-                                    <span className="text-card-foreground">
+                                    <span className="text-on-surface">
                                         Quizzes básicos de fixação da comunidade
                                     </span>
                                 </motion.li>
@@ -156,14 +139,14 @@ export default function PricingSection() {
                                     transition={{ duration: 0.4, delay: 0.3 }}
                                     className="flex items-start gap-3"
                                 >
-                                    <span className="text-emerald-500 shrink-0 mt-0.5">
+                                    <span className="text-feedback-success-ink shrink-0 mt-0.5">
                                         <HugeiconsIcon
                                             icon={CheckmarkCircle02Icon}
                                             size={18}
                                         />
                                     </span>
 
-                                    <span className="text-card-foreground">
+                                    <span className="text-on-surface">
                                         Até 3 uploads de ficheiro IA por mês
                                     </span>
                                 </motion.li>
@@ -175,14 +158,14 @@ export default function PricingSection() {
                                     transition={{ duration: 0.4, delay: 0.4 }}
                                     className="flex items-start gap-3"
                                 >
-                                    <span className="text-muted-foreground/50 shrink-0 mt-0.5">
+                                    <span className="text-text-secondary/50 shrink-0 mt-0.5">
                                         <HugeiconsIcon
                                             icon={Cancel01Icon}
                                             size={18}
                                         />
                                     </span>
 
-                                    <span className="text-muted-foreground line-through">
+                                    <span className="text-text-secondary line-through">
                                         Sem modo offline de leitura
                                     </span>
                                 </motion.li>
@@ -194,14 +177,14 @@ export default function PricingSection() {
                                     transition={{ duration: 0.4, delay: 0.5 }}
                                     className="flex items-start gap-3"
                                 >
-                                    <span className="text-muted-foreground/50 shrink-0 mt-0.5">
+                                    <span className="text-text-secondary/50 shrink-0 mt-0.5">
                                         <HugeiconsIcon
                                             icon={Cancel01Icon}
                                             size={18}
                                         />
                                     </span>
 
-                                    <span className="text-muted-foreground line-through">
+                                    <span className="text-text-secondary line-through">
                                         Sem simulados com temporizador de exame
                                     </span>
                                 </motion.li>
@@ -210,23 +193,9 @@ export default function PricingSection() {
                         </div>
 
                         <div className="mt-8">
-                            <motion.button
-                                type="button"
-                                whileHover={{
-                                    scale: 1.03,
-                                    y: -2,
-                                }}
-                                whileTap={{
-                                    scale: 0.97,
-                                }}
-                                transition={{
-                                    duration: 0.2,
-                                    ease: "easeOut",
-                                }}
-                                className="w-full py-3 px-4 rounded-xl text-sm font-semibold bg-background hover:bg-muted text-foreground transition-colors cursor-pointer"
-                            >
+                            <Button3D variant="ghost" fullWidth>
                                 Começar Grátis Agora
-                            </motion.button>
+                            </Button3D>
                         </div>
                     </motion.div>
 
@@ -247,7 +216,7 @@ export default function PricingSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="relative flex flex-col justify-between p-6 sm:p-8 rounded-3xl bg-card border-2 border-primary shadow-xl ring-1 ring-primary/20"
+                        className="relative flex flex-col justify-between p-6 sm:p-8 rounded-3xl bg-surface-canvas border-2 border-primary shadow-xl ring-1 ring-primary/20"
                     >
 
                         {/* Badge Flutuante */}
@@ -272,23 +241,14 @@ export default function PricingSection() {
                         </motion.div>
 
                         <div>
-                            <div className="pb-6 border-b border-border/60">
+                            <div className="pb-6 border-b border-border-cloud">
                                 <span className="text-xs font-bold uppercase tracking-wider text-primary">
                                     Passe Direto sem Recurso
                                 </span>
 
-                                <motion.h3
-                                    whileHover={{
-                                        x: 5,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                    className="mt-1 text-2xl font-bold text-card-foreground"
-                                >
+                                <h3 className="font-heading mt-1 text-2xl font-bold text-on-surface">
                                     Kombinu Pro
-                                </motion.h3>
+                                </h3>
 
                                 <div className="mt-4 flex items-baseline gap-1">
                                     <motion.span
@@ -299,12 +259,12 @@ export default function PricingSection() {
                                                 ease: "easeOut",
                                             },
                                         }}
-                                        className="text-3xl sm:text-4xl font-extrabold text-card-foreground"
+                                        className="text-3xl sm:text-4xl font-extrabold text-on-surface"
                                     >
                                         5.000 AOA
                                     </motion.span>
 
-                                    <span className="text-xs sm:text-sm text-muted-foreground">
+                                    <span className="text-xs sm:text-sm text-text-secondary">
                                         / mês via Multicaixa Express
                                     </span>
                                 </div>
@@ -318,7 +278,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.1 }}
-                                    className="flex items-start gap-3 text-card-foreground"
+                                    className="flex items-start gap-3 text-on-surface"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -337,7 +297,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.2 }}
-                                    className="flex items-start gap-3 text-card-foreground"
+                                    className="flex items-start gap-3 text-on-surface"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -356,7 +316,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.3 }}
-                                    className="flex items-start gap-3 text-card-foreground"
+                                    className="flex items-start gap-3 text-on-surface"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -375,7 +335,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.4 }}
-                                    className="flex items-start gap-3 text-card-foreground"
+                                    className="flex items-start gap-3 text-on-surface"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -394,7 +354,7 @@ export default function PricingSection() {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: false, amount: 0.2 }}
                                     transition={{ duration: 0.4, delay: 0.5 }}
-                                    className="flex items-start gap-3 text-card-foreground"
+                                    className="flex items-start gap-3 text-on-surface"
                                 >
                                     <span className="text-primary shrink-0 mt-0.5">
                                         <HugeiconsIcon
@@ -412,38 +372,15 @@ export default function PricingSection() {
                         </div>
 
                         <div className="mt-8 space-y-3">
-                            <motion.button
-                                type="button"
-                                whileHover={{
-                                    scale: 1.03,
-                                    y: -2,
-                                }}
-                                whileTap={{
-                                    scale: 0.97,
-                                }}
-                                transition={{
-                                    duration: 0.2,
-                                    ease: "easeOut",
-                                }}
-                                className="w-full py-3 px-4 rounded-xl text-sm font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                            <Button3D
+                                variant="primary"
+                                fullWidth
+                                trailingIcon={<HugeiconsIcon icon={ArrowRight01Icon} size={16} />}
                             >
-                                <span>Assinar Pro com Multicaixa Express</span>
+                                Assinar Pro com Multicaixa Express
+                            </Button3D>
 
-                                <motion.span
-                                    whileHover={{ x: 4 }}
-                                    transition={{
-                                        duration: 0.2,
-                                        ease: "easeOut",
-                                    }}
-                                >
-                                    <HugeiconsIcon
-                                        icon={ArrowRight01Icon}
-                                        size={16}
-                                    />
-                                </motion.span>
-                            </motion.button>
-
-                            <p className="text-center text-[11px] sm:text-xs text-muted-foreground">
+                            <p className="text-center text-[11px] sm:text-xs text-text-secondary">
                                 Sem fidelização • Cancele quando o semestre terminar
                             </p>
                         </div>
