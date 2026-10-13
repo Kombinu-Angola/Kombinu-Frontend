@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Button3D } from "../../components/ui/Button3D";
 import { Icon } from "../../components/ui/Icon";
+import { useDialogBehavior } from "../../hooks/useDialogBehavior";
 import { formatKz, formatSize } from "../../lib/format";
 import { cn } from "@/lib/utils";
 import type { CreatorMaterial, Visibility } from "./types";
@@ -31,23 +32,7 @@ export function PricingModal({ material, plan, mode = "publicar", onClose, onCon
   const [isPaid, setIsPaid] = useState(material.priceKz > 0);
   const [price, setPrice] = useState(material.priceKz || 1500);
   const [visibility, setVisibility] = useState<Visibility>(material.visibility);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const openerRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    openerRef.current = document.activeElement as HTMLElement;
-    panelRef.current?.querySelector<HTMLElement>("button, input")?.focus();
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", onKeyDown);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "";
-      openerRef.current?.focus();
-    };
-  }, [onClose]);
+  const panelRef = useDialogBehavior<HTMLDivElement>(onClose);
 
   const commission = plan === "pro" ? 0 : Math.round(price * FREE_PLAN_COMMISSION);
   const net = isPaid ? price - commission : 0;
