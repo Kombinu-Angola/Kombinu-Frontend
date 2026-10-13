@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- `Button3D`: variantes `danger` (confirmacao destrutiva final, com a mesma sombra 3D tactil de `primary`/`success` via o novo token `--shadow-3d-error`) e `danger-outline` (acao destrutiva secundaria ou passo intermedio). Substituem overrides a mao duplicados em 6 ficheiros (`AccountSettingsScreen`, `RenewalFailureScreen`, `OfflineDownloadsScreen`, `StudentSettingsScreen`, `SessionsScreen`, `PrivacyScreen`), um dos quais tinha um bug real de hover (texto ficava azul ao passar o rato num botao com borda vermelha).
 - Enquetes no estudio de criacao (`features/survey/`: `SurveyComposerScreen`, `SurveyResultsScreen`) -- fecha a referencia `/estudio/enquete` deixada pendente no `CreationHubScreen` desde o lote anterior. Novas rotas: `/v2/estudio/enquete`, `/v2/estudio/enquete/resultados`.
 - Exportacao fiscal e equipa/permissoes no backoffice (`features/governance/`: `FiscalExportScreen`, `TeamPermissionsScreen`) e pagina publica de universidade parceira, sem sessao (`features/campus/PublicUniversityScreen`). `AdminShell` ganha 2 itens de navegacao. Novas rotas: `/v2/admin/fiscal`, `/v2/admin/equipa`, `/v2/u/:slug`.
 - Nivelamento adaptativo no backoffice (`features/admin/AdaptiveRulesScreen`). `AdminShell` ganha o item "Nivelamento adaptativo". Nova rota: `/v2/admin/adaptativo`.
@@ -37,6 +38,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Corrigido
 
+- `ReferralScreen`: o CTA do WhatsApp era um `<a>` a duplicar o estilo "success" do `Button3D` a mao; trocado por `LinkButton3D`.
 - Botao "Comecar a ler" no fim do onboarding apontava para um caminho inexistente (`/resumos/taxa-bna`); corrigido para `/v2/leitura`.
 - Botoes (`Button3D`/`LinkButton3D`) usavam `font-lato` em vez de `font-poppins` (SLA 7.3: hierarquia de fontes obrigatoria para CTAs).
 - 4 ocorrencias de `window.location.hash = "#/..."` (nao navegam sob rotas por path): `CreatorShell`, `SubscriptionFlow`, `CreatorContentHubScreen`, `PurchaseHistoryScreen` -- trocadas por `window.location.assign`.
