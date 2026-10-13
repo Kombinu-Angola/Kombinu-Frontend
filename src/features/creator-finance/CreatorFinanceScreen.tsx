@@ -38,7 +38,7 @@ export default function CreatorFinanceScreen({ finance, creatorName }: CreatorFi
   const phone = maskAOPhone(finance.payoutPhone);
   const value = Number(amount) || 0;
   const invalid = value < MIN_WITHDRAWAL || value > finance.balanceKz;
-  const maxBar = Math.max(...finance.weekly);
+  const maxBar = Math.max(...finance.weekly, 1);
 
   return (
     <CreatorShell
