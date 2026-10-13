@@ -183,7 +183,7 @@ export default function AdaptiveRulesScreen() {
                   max={4}
                   value={rules.maxSimultaneousGaps}
                   onChange={(e) => update({ maxSimultaneousGaps: Number(e.target.value) })}
-                  className="w-16 border-x-2 border-border-cloud bg-transparent py-2.5 text-center text-body-lg font-bold text-on-surface tabular-nums focus-visible:outline-none"
+                  className="w-16 border-x-2 border-border-cloud bg-transparent py-2.5 text-center text-body-lg font-bold text-on-surface tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-sky-ink"
                 />
                 <button
                   type="button"
