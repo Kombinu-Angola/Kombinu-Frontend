@@ -73,9 +73,8 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
       <nav aria-label="Backoffice" className="fixed inset-y-0 left-0 z-40 hidden w-[260px] flex-col justify-between border-r-2 border-border-cloud bg-surface-canvas lg:flex">
         <div>
           <div className="flex h-16 items-center justify-between border-b-2 border-border-cloud px-5">
-            <a href="/v2/admin" className="flex items-center gap-2 font-montserrat text-headline-h3 font-extrabold text-primary">
-              <img src={kombinuMark} alt="" className="size-6" />
-              Kombinu
+            <a href="/v2/admin" aria-label="Kombinu" className="flex items-center">
+              <img src={kombinuMark} alt="" className="size-10" />
             </a>
             <span className="rounded-full bg-brand-ocean px-2 py-0.5 text-overline text-white uppercase">Admin</span>
           </div>
@@ -107,9 +106,8 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
             className="absolute inset-y-0 left-0 w-[280px] border-r-2 border-border-cloud bg-surface-canvas py-4"
           >
             <div className="mb-4 flex items-center justify-between px-5">
-              <span className="flex items-center gap-2 font-montserrat text-headline-h3 font-extrabold text-primary">
-                <img src={kombinuMark} alt="" className="size-6" />
-                Kombinu Admin
+              <span className="flex items-center" aria-label="Kombinu Admin">
+                <img src={kombinuMark} alt="" className="size-10" />
               </span>
               <button
                 type="button"

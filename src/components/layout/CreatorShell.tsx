@@ -48,9 +48,8 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
             >
               <Icon name="menu" size={20} />
             </button>
-            <a href="/v2/estudio" className="flex items-center gap-2 font-montserrat text-headline-h3 font-extrabold text-primary">
-              <img src={kombinuMark} alt="" className="size-6" />
-              Kombinu <span className="text-text-secondary">Estúdio</span>
+            <a href="/v2/estudio" aria-label="Kombinu Estúdio" className="flex items-center">
+              <img src={kombinuMark} alt="" className="size-10" />
             </a>
           </div>
 
