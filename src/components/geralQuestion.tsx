@@ -28,21 +28,12 @@ export default function FaqSection() {
                     }}
                     className="text-center mb-10 sm:mb-12"
                 >
-                    <motion.span
-                        whileHover={{
-                            x: 4,
-                            transition: {
-                                duration: 0.2,
-                                ease: "easeOut",
-                            },
-                        }}
-                        className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary inline-flex items-center gap-1.5"
-                    >
+                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary inline-flex items-center gap-1.5">
                         <HugeiconsIcon icon={HelpCircleIcon} size={15} />
                         Tire as suas Dúvidas
-                    </motion.span>
+                    </span>
 
-                    <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight">
+                    <h2 className="font-heading mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight">
                         Perguntas Frequentes
                     </h2>
                 </motion.div>
@@ -67,14 +58,14 @@ export default function FaqSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="rounded-2xl bg-card border border-border overflow-hidden"
+                        className="rounded-2xl bg-surface-canvas border-2 border-border-cloud overflow-hidden"
                     >
                         <button
                             type="button"
                             onClick={() => toggle(0)}
                             className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                         >
-                            <span className="font-semibold text-sm sm:text-base text-card-foreground">
+                            <span className="font-semibold text-sm sm:text-base text-on-surface">
                                 Como o Modo Data-Lean gasta menos de 5MB por hora?
                             </span>
 
@@ -88,7 +79,7 @@ export default function FaqSection() {
                                 }}
                                 className={`shrink-0 ${openIndex === 0
                                     ? "text-primary"
-                                    : "text-muted-foreground"
+                                    : "text-text-secondary"
                                     }`}
                             >
                                 <HugeiconsIcon icon={Add01Icon} size={20} />
@@ -103,7 +94,7 @@ export default function FaqSection() {
                                     duration: 0.3,
                                     ease: "easeOut",
                                 }}
-                                className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                                className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-text-secondary leading-relaxed"
                             >
                                 Eliminámos bibliotecas de JavaScript pesadas, convertemos equações e tabelas em texto estruturado puro e armazenamos o conteúdo lido em cache local. Isso significa que após carregar a página inicial, cada leitura consome apenas alguns kilobytes.
                             </motion.div>
@@ -127,14 +118,14 @@ export default function FaqSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="rounded-2xl bg-card border border-border overflow-hidden"
+                        className="rounded-2xl bg-surface-canvas border-2 border-border-cloud overflow-hidden"
                     >
                         <button
                             type="button"
                             onClick={() => toggle(1)}
                             className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                         >
-                            <span className="font-semibold text-sm sm:text-base text-card-foreground">
+                            <span className="font-semibold text-sm sm:text-base text-on-surface">
                                 Como funciona o pagamento via Multicaixa Express?
                             </span>
 
@@ -148,7 +139,7 @@ export default function FaqSection() {
                                 }}
                                 className={`shrink-0 ${openIndex === 1
                                     ? "text-primary"
-                                    : "text-muted-foreground"
+                                    : "text-text-secondary"
                                     }`}
                             >
                                 <HugeiconsIcon icon={Add01Icon} size={20} />
@@ -163,7 +154,7 @@ export default function FaqSection() {
                                     duration: 0.3,
                                     ease: "easeOut",
                                 }}
-                                className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                                className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-text-secondary leading-relaxed"
                             >
                                 Ao assinar o Kombinu Pro ou comprar uma sebenta avulsa, insere o seu número de telemóvel associado ao Multicaixa Express e recebe a notificação no telemóvel para autorizar com o seu PIN em poucos segundos.
                             </motion.div>
@@ -187,14 +178,14 @@ export default function FaqSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="rounded-2xl bg-card border border-border overflow-hidden"
+                        className="rounded-2xl bg-surface-canvas border-2 border-border-cloud overflow-hidden"
                     >
                         <button
                             type="button"
                             onClick={() => toggle(2)}
                             className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                         >
-                            <span className="font-semibold text-sm sm:text-base text-card-foreground">
+                            <span className="font-semibold text-sm sm:text-base text-on-surface">
                                 Como posso usar a Kombinu de forma totalmente gratuita?
                             </span>
 
@@ -208,7 +199,7 @@ export default function FaqSection() {
                                 }}
                                 className={`shrink-0 ${openIndex === 2
                                     ? "text-primary"
-                                    : "text-muted-foreground"
+                                    : "text-text-secondary"
                                     }`}
                             >
                                 <HugeiconsIcon icon={Add01Icon} size={20} />
@@ -223,7 +214,7 @@ export default function FaqSection() {
                                     duration: 0.3,
                                     ease: "easeOut",
                                 }}
-                                className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                                className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-text-secondary leading-relaxed"
                             >
                                 O Plano Básico é 0 AOA para sempre. Tem acesso imediato a todas as sebentas e resumos públicos partilhados pela comunidade, quizzes de fixação básicos e até 3 uploads de ficheiros com inteligência artificial por mês, sem necessidade de registar cartão ou conta bancária.
                             </motion.div>
@@ -247,14 +238,14 @@ export default function FaqSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="rounded-2xl bg-card border border-border overflow-hidden"
+                        className="rounded-2xl bg-surface-canvas border-2 border-border-cloud overflow-hidden"
                     >
                         <button
                             type="button"
                             onClick={() => toggle(3)}
                             className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
                         >
-                            <span className="font-semibold text-sm sm:text-base text-card-foreground">
+                            <span className="font-semibold text-sm sm:text-base text-on-surface">
                                 Como posso vender as minhas próprias sebentas e resumos?
                             </span>
 
@@ -268,7 +259,7 @@ export default function FaqSection() {
                                 }}
                                 className={`shrink-0 ${openIndex === 3
                                     ? "text-primary"
-                                    : "text-muted-foreground"
+                                    : "text-text-secondary"
                                     }`}
                             >
                                 <HugeiconsIcon icon={Add01Icon} size={20} />
@@ -283,7 +274,7 @@ export default function FaqSection() {
                                     duration: 0.3,
                                     ease: "easeOut",
                                 }}
-                                className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                                className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-text-secondary leading-relaxed"
                             >
                                 Basta aceder ao Marketplace, submeter o seu ficheiro ou apontamento e definir o preço em Kwanzas (AOA). Após aprovação de qualidade pela moderação, a sua sebenta fica listada para estudantes de todo o país. Os pagamentos dos colegas são processados via Multicaixa Express e o valor arrecadado é transferido diretamente para a sua conta.
                             </motion.div>
