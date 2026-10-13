@@ -47,7 +47,7 @@ export default function TestimonialsSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="flex flex-col justify-between p-6 rounded-2xl bg-card shadow-sm"
+                        className="flex flex-col justify-between p-6 rounded-2xl border-2 border-border-cloud bg-surface-canvas shadow-clay"
                     >
                         <div>
 
@@ -97,7 +97,7 @@ export default function TestimonialsSection() {
                                     duration: 0.5,
                                     delay: 0.3,
                                 }}
-                                className="text-sm text-muted-foreground leading-relaxed italic"
+                                className="text-sm text-text-secondary leading-relaxed italic"
                             >
                                 “Mano, salvei Economia graças aos quizzes da Kombinu. Caiu exatamente a pergunta do BNA no teste da UAN! A melhor parte foi poder rever tudo no candongueiro sem travar a internet.”
                             </motion.p>
@@ -130,11 +130,11 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-heading font-semibold text-sm text-card-foreground truncate">
+                                <h4 className="font-heading font-semibold text-sm text-on-surface truncate">
                                     Hamilton K.
                                 </h4>
 
-                                <p className="text-xs text-muted-foreground truncate">
+                                <p className="text-xs text-text-secondary truncate">
                                     2º Ano Economia • UAN
                                 </p>
                             </div>
@@ -159,7 +159,7 @@ export default function TestimonialsSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="flex flex-col justify-between p-6 rounded-2xl bg-card shadow-sm"
+                        className="flex flex-col justify-between p-6 rounded-2xl border-2 border-border-cloud bg-surface-canvas shadow-clay"
                     >
                         <div>
 
@@ -209,7 +209,7 @@ export default function TestimonialsSection() {
                                     duration: 0.5,
                                     delay: 0.4,
                                 }}
-                                className="text-sm text-muted-foreground leading-relaxed italic"
+                                className="text-sm text-text-secondary leading-relaxed italic"
                             >
                                 “Eu gastava 4 mil kwanzas por mês só imprimindo slides cheios de fotos que nem lia. Agora estudo no táxi a caminho do trabalho sem gastar o meu saldo da Unitel. O modo leve funciona mesmo.”
                             </motion.p>
@@ -242,11 +242,11 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-heading font-semibold text-sm text-card-foreground truncate">
+                                <h4 className="font-heading font-semibold text-sm text-on-surface truncate">
                                     Jéssica M.
                                 </h4>
 
-                                <p className="text-xs text-muted-foreground truncate">
+                                <p className="text-xs text-text-secondary truncate">
                                     Estudante de Gestão • UCAN
                                 </p>
                             </div>
@@ -271,7 +271,7 @@ export default function TestimonialsSection() {
                                 ease: "easeOut",
                             },
                         }}
-                        className="flex flex-col justify-between p-6 rounded-2xl bg-card shadow-sm"
+                        className="flex flex-col justify-between p-6 rounded-2xl border-2 border-border-cloud bg-surface-canvas shadow-clay"
                     >
                         <div>
 
@@ -321,7 +321,7 @@ export default function TestimonialsSection() {
                                     duration: 0.5,
                                     delay: 0.5,
                                 }}
-                                className="text-sm text-muted-foreground leading-relaxed italic"
+                                className="text-sm text-text-secondary leading-relaxed italic"
                             >
                                 “Publiquei o meu resumo de Direito Fiscal e fiz 45.000 AOA em uma semana vendendo para colegas de outras turmas. O pagamento cai direto pelo Multicaixa Express sem complicação.”
                             </motion.p>
@@ -354,11 +354,11 @@ export default function TestimonialsSection() {
                             </motion.div>
 
                             <div className="min-w-0">
-                                <h4 className="font-heading font-semibold text-sm text-card-foreground truncate">
+                                <h4 className="font-heading font-semibold text-sm text-on-surface truncate">
                                     Mauro P.
                                 </h4>
 
-                                <p className="text-xs text-muted-foreground truncate">
+                                <p className="text-xs text-text-secondary truncate">
                                     Explicador Independente • Luanda
                                 </p>
                             </div>
