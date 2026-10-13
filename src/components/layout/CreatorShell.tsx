@@ -5,6 +5,7 @@ import { Button3D } from "../ui/Button3D";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
+import { useDialogBehavior } from "../../hooks/useDialogBehavior";
 
 export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" | "definicoes";
 
@@ -53,6 +54,7 @@ function NavList({ active, onNavigate }: { active: CreatorSection; onNavigate?: 
 /** Moldura do modo criador: barra lateral fixa no desktop (lg:+), gaveta no telemóvel/tablet, e atalho para o modo estudante. */
 export function CreatorShell({ active, creatorName, actions, children }: CreatorShellProps) {
   const [open, setOpen] = useState(false);
+  const drawerRef = useDialogBehavior<HTMLElement>(() => setOpen(false), open);
 
   return (
     <div className="min-h-dvh bg-background">
@@ -94,6 +96,9 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
             className="absolute inset-0 h-full w-full cursor-default bg-surface-ink/40"
           />
           <nav
+            ref={drawerRef}
+            role="dialog"
+            aria-modal="true"
             aria-label="Modo criador"
             className="absolute inset-y-0 left-0 flex w-[300px] flex-col border-r-2 border-border-cloud bg-surface-canvas p-4"
           >
@@ -155,7 +160,9 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
           </div>
         </header>
 
-        <main id="conteudo">{children}</main>
+        <main id="conteudo" aria-hidden={open || undefined}>
+          {children}
+        </main>
       </div>
     </div>
   );
