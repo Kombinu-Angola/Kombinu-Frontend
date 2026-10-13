@@ -210,7 +210,7 @@ export default function TrailComposerScreen({ topics, creatorName, subjectName, 
                             aria-label={`Mover o módulo ${index + 1} para cima`}
                             className="flex size-11 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-soft disabled:text-text-disabled"
                           >
-                            <Icon name="arrow-right" size={18} className="-rotate-90" />
+                            <Icon name="arrow-up" size={18} />
                           </button>
                           <button
                             type="button"
@@ -219,7 +219,7 @@ export default function TrailComposerScreen({ topics, creatorName, subjectName, 
                             aria-label={`Mover o módulo ${index + 1} para baixo`}
                             className="flex size-11 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-soft disabled:text-text-disabled"
                           >
-                            <Icon name="arrow-right" size={18} className="rotate-90" />
+                            <Icon name="arrow-down" size={18} />
                           </button>
                           <button
                             type="button"
