@@ -102,7 +102,7 @@ export default function GamificationScreen() {
               <p
                 className={cn(
                   "flex items-center justify-between gap-3 rounded-xl border-2 p-3 text-body-md",
-                  zonesValid ? "border-border-cloud bg-surface-soft text-on-surface" : "border-feedback-error-ink bg-feedback-error-soft text-feedback-error-ink",
+                  zonesValid ? "border-border-cloud bg-surface-soft text-on-surface" : "border-feedback-error bg-feedback-error-soft text-feedback-error-ink",
                 )}
               >
                 <span className="flex items-center gap-2">
@@ -143,7 +143,7 @@ export default function GamificationScreen() {
                     value={league.xpMultiplier}
                     onChange={(e) => setMultiplier(Number(e.target.value))}
                     aria-valuetext={`${league.xpMultiplier} vezes`}
-                    className="w-20 border-x-2 border-border-cloud bg-transparent py-2.5 text-center text-body-lg font-bold text-on-surface tabular-nums focus-visible:outline-none"
+                    className="w-20 border-x-2 border-border-cloud bg-transparent py-2.5 text-center text-body-lg font-bold text-on-surface tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-sky-ink"
                   />
                   <button
                     type="button"
