@@ -22,7 +22,7 @@ export default function ManifestoSection() {
                             ease: "easeOut",
                         },
                     }}
-                    className="p-8 sm:p-12 lg:p-14 rounded-3xl bg-card shadow-sm space-y-8"
+                    className="p-8 sm:p-12 lg:p-14 rounded-3xl border-2 border-border-cloud bg-surface-canvas shadow-clay space-y-8"
                 >
 
                     {/* Cabeçalho */}
@@ -37,25 +37,16 @@ export default function ManifestoSection() {
                         }}
                         className="space-y-3"
                     >
-                        <motion.span
-                            whileHover={{
-                                x: 4,
-                                transition: {
-                                    duration: 0.2,
-                                    ease: "easeOut",
-                                },
-                            }}
-                            className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary inline-flex items-center gap-1.5"
-                        >
+                        <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary inline-flex items-center gap-1.5">
                             <HugeiconsIcon
                                 icon={SparklesIcon}
                                 size={14}
                             />
 
                             O Nosso Manifesto
-                        </motion.span>
+                        </span>
 
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-card-foreground">
+                        <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">
                             Por que estamos a construir a Kombinu em Luanda.
                         </h2>
                     </motion.div>
@@ -70,13 +61,13 @@ export default function ManifestoSection() {
                             delay: 0.2,
                             ease: "easeOut",
                         }}
-                        className="space-y-5 text-sm sm:text-base text-muted-foreground leading-relaxed"
+                        className="space-y-5 text-sm sm:text-base text-text-secondary leading-relaxed"
                     >
                         <p>
                             Quem estuda no ensino superior em Luanda conhece o peso diário: passar 3 a 4 horas nos engarrafamentos entre o trabalho e a faculdade, disputar uma tomada no anfiteatro e tentar ler um PDF ilegível de 120 slides no telemóvel enquanto a bateria e o saldo de dados vão embora.
                         </p>
 
-                        <p className="font-medium text-card-foreground">
+                        <p className="font-medium text-on-surface">
                             Acreditamos que a universidade em Angola não devia ser uma maratona de fotocópias desbotadas, grupos de WhatsApp desorganizados e gastos excessivos com recargas móveis.
                         </p>
 
@@ -99,7 +90,7 @@ export default function ManifestoSection() {
                             delay: 0.3,
                             ease: "easeOut",
                         }}
-                        className="pt-6 border-t border-border/40 flex items-center justify-between gap-4"
+                        className="pt-6 border-t border-border-cloud flex items-center justify-between gap-4"
                     >
                         <div className="flex items-center gap-3.5">
 
@@ -118,32 +109,22 @@ export default function ManifestoSection() {
                             </motion.div>
 
                             <div>
-                                <h4 className="font-bold text-sm sm:text-base text-card-foreground">
+                                <h4 className="font-bold text-sm sm:text-base text-on-surface">
                                     Orlando Fortuna & Equipa Fundadora
                                 </h4>
 
-                                <p className="text-xs sm:text-sm text-muted-foreground">
+                                <p className="text-xs sm:text-sm text-text-secondary">
                                     Desenvolvido por estudantes e graduados das universidades de Luanda
                                 </p>
                             </div>
                         </div>
 
-                        <motion.div
-                            whileHover={{
-                                x: 4,
-                                rotate: -4,
-                                transition: {
-                                    duration: 0.2,
-                                    ease: "easeOut",
-                                },
-                            }}
-                            className="hidden sm:flex text-primary/20 shrink-0"
-                        >
+                        <div className="hidden sm:flex text-primary/20 shrink-0">
                             <HugeiconsIcon
                                 icon={QuoteUpIcon}
                                 size={36}
                             />
-                        </motion.div>
+                        </div>
                     </motion.div>
 
                 </motion.div>
