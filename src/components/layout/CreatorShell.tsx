@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
 import { Button3D } from "../ui/Button3D";
 import { Icon, type IconName } from "../ui/Icon";
+import { useDialogBehavior } from "../../hooks/useDialogBehavior";
 
 export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" | "definicoes";
 
@@ -25,6 +26,7 @@ type CreatorShellProps = {
 /** Moldura do modo criador: barra fixa com gaveta de navegação e atalho para o modo estudante. */
 export function CreatorShell({ active, creatorName, actions, children }: CreatorShellProps) {
   const [open, setOpen] = useState(false);
+  const drawerRef = useDialogBehavior<HTMLElement>(() => setOpen(false), open);
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -77,6 +79,9 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
             className="absolute inset-0 h-full w-full cursor-default bg-surface-ink/40"
           />
           <nav
+            ref={drawerRef}
+            role="dialog"
+            aria-modal="true"
             aria-label="Modo criador"
             className="absolute inset-y-0 left-0 flex w-[300px] flex-col border-r-2 border-border-cloud bg-surface-canvas p-4"
           >
@@ -123,7 +128,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
         </div>
       )}
 
-      <main id="conteudo" className="flex-1">
+      <main id="conteudo" aria-hidden={open || undefined} className="flex-1">
         {children}
       </main>
     </div>
