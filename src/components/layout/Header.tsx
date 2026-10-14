@@ -1,322 +1,120 @@
-// components/layout/Header.tsx
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logoProfile from "../assets/Kombinu logo. .png";
+import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-/**
- * Header reutilizável para visitantes e utilizadores autenticados
- */
+// Ajusta os caminhos às rotas reais do projeto
+const NAV_LINKS = [
+  { to: "/como-funciona", label: "Como Funciona" },
+  { to: "/sebentas", label: "Sebentas & Resumos" },
+  { to: "/data-lean", label: "Modo Data-Lean" },
+  { to: "/precos", label: "Preços" },
+  { to: "/sobre", label: "Sobre Nós" },
+];
 
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+type HeaderProps = {
+  user?: { initials: string; avatarUrl?: string } | null;
+};
 
-import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
-
-import { Logo } from '@/components/ui/Logo';
-import { Button } from '@/components/ui/Button';
-
-import {
-  LogOut,
-  User,
-  Home,
-  BookOpen,
-  Trophy,
-  Menu,
-  X,
-  Plus,
-  BarChart3,
-  Moon,
-  Sun,
-  ArrowRight
-} from 'lucide-react';
-
-export const Header: React.FC = () => {
-  const { usuario, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
-
+export function Header({ user = null }: HeaderProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const linkClass = (to: string) =>
+    `transition-colors hover:text-primary ${pathname === to ? "text-primary" : "text-muted-foreground"
+    }`;
 
-  const handleLogout = (): void => {
-    logout();
-    navigate('/');
-    setMobileMenuOpen(false);
-  };
-
-  const handleNavigation = (): void => {
-    setMobileMenuOpen(false);
-  };
-
-  /**
-   * Links autenticados
-   */
-  const authenticatedLinks = [
-    {
-      to:
-        usuario?.tipo === 'criador'
-          ? '/dashboard/creator'
-          : '/dashboard/learner',
-      icon: Home,
-      label: 'Dashboard',
-      show: true
-    },
-    {
-      to: '/courses',
-      icon: BookOpen,
-      label: 'Marketplace',
-      show: true
-    },
-    {
-      to: '/courses/create',
-      icon: Plus,
-      label: 'Criar',
-      show: usuario?.tipo === 'criador'
-    },
-    {
-      to: '/ranking',
-      icon: Trophy,
-      label: 'Ranking',
-      show: true
-    },
-    {
-      to: '/admin',
-      icon: BarChart3,
-      label: 'Admin',
-      show: usuario?.tipo === 'admin'
-    }
-  ].filter(link => link.show);
-
-  /**
-   * Links públicos
-   */
-  const publicLinks = [
-    {
-      to: '#sobre',
-      label: 'Sobre'
-    },
-    {
-      to: '#funcionalidades',
-      label: 'Funcionalidades'
-    },
-    {
-      to: '#pesquisas',
-      label: 'Pesquisas'
-    },
-    {
-      to: '#contacto',
-      label: 'Contacto'
-    }
-  ];
-
-  const isActiveLink = (path: string): boolean => {
-    return location.pathname === path;
-  };
+  const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="sticky top-0 z-50
-bg-white/95
-dark:bg-gray-900/95
-backdrop-blur-xl
-border-b
-border-gray-200
-dark:border-gray-800
-">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full bg-background/90 backdrop-blur-md ">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 lg:h-20 flex items-center justify-between gap-4">
 
-        <div className="flex justify-between items-center h-16">
+        <Link to="/" className="flex items-center shrink-0" aria-label="Kombinu, página inicial">
+          <img src={logoProfile} alt="Kombinu" className="h-10 sm:h-14 w-auto object-contain" />
+        </Link>
 
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Logo size="md" clickable />
-          </div>
+        <nav className="hidden lg:flex items-center gap-6 font-poppins font-medium text-sm whitespace-nowrap">
+          {NAV_LINKS.map((link) => (
+            <Link key={link.to} to={link.to} className={linkClass(link.to)}>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-2">
-
-            {usuario ? (
-              authenticatedLinks.map((link) => {
-                const Icon = link.icon;
-                const isActive = isActiveLink(link.to);
-
-                return (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 font-lato ${isActive
-                      ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-dark-bg-hover dark:text-dark-interactive-primary'
-                      : 'dark-text-secondary hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-dark-bg-hover dark:hover:text-dark-interactive-primary'
-                      }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span>{link.label}</span>
-                  </Link>
-                );
-              })
-            ) : (
-              publicLinks.map((link) => (
-                <a
-                  key={link.to}
-                  href={link.to}
-                  className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 font-lato dark-text-secondary hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-dark-bg-hover dark:hover:text-dark-interactive-primary"
-                >
-                  {link.label}
-                </a>
-              ))
-            )}
-
-          </nav>
-
-          {/* Right Side */}
-          <div className="flex items-center space-x-4">
-
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 dark-text-muted hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all duration-200 dark:hover:bg-dark-bg-hover dark:hover:text-dark-interactive-primary"
-            >
-              {theme === 'dark'
-                ? <Sun className="w-5 h-5" />
-                : <Moon className="w-5 h-5" />
-              }
-            </button>
-
-            {usuario ? (
-              <>
-                {/* User */}
-                <div className="hidden sm:flex items-center space-x-3">
-
-                  <div className="text-right">
-                    <p className="text-sm font-semibold dark-text-primary truncate max-w-32 font-montserrat">
-                      {usuario.nome}
-                    </p>
-
-                    <div className="flex items-center justify-end space-x-2 text-xs dark-text-muted font-lato">
-                      <span className="flex items-center space-x-1">
-                        <Trophy className="w-3 h-3" />
-                        <span>{usuario.pontos.toLocaleString()}</span>
-                      </span>
-
-                      <span>•</span>
-
-                      <span>Nível {usuario.nivel}</span>
-                    </div>
-                  </div>
-
-                  {/* Avatar */}
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 rounded-full flex items-center justify-center shadow-md">
-                    <User className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-
-                {/* Logout */}
-                <button
-                  onClick={handleLogout}
-                  className="hidden sm:flex p-2 dark-text-muted hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 dark:hover:bg-dark-bg-hover dark:hover:text-dark-interactive-error"
-                >
-                  <LogOut className="w-5 h-5" />
-                </button>
-              </>
-            ) : (
-              <>
-                {/* Login */}
-                <Link to="/login">
-                  <Button variant="ghost" size="sm">
-                    Entrar
-                  </Button>
-                </Link>
-
-                {/* Register */}
-                <Link to="/register">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    className="font-poppins bg-kombinu-neon-blue text-gray-900 hover:bg-kombinu-dark-blue hover:text-white shadow-lg hover:shadow-xl transition-all dark:bg-dark-interactive-primary dark:text-white"
-                  >
-                    Começar
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
-              </>
-            )}
-
-            {/* Mobile Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 dark-text-secondary hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors dark:hover:bg-dark-bg-hover dark:hover:text-dark-text-primary"
-            >
-              {mobileMenuOpen
-                ? <X className="w-6 h-6" />
-                : <Menu className="w-6 h-6" />
-              }
-            </button>
-
-          </div>
+        <div className="hidden lg:flex items-center gap-4 shrink-0">
+          <Link to="/login" className="font-poppins text-sm text-muted-foreground hover:text-primary transition-colors">
+            Iniciar Sessão
+          </Link>
+          <Button size="sm" className="font-poppins cursor-pointer" onClick={() => navigate("/registo")}>
+            Começar Grátis
+          </Button>
+          {user && (
+            <Avatar className="h-10 w-10 border-2 border-border">
+              <AvatarImage src={user.avatarUrl} />
+              <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                {user.initials}
+              </AvatarFallback>
+            </Avatar>
+          )}
         </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t dark-border-primary py-4 space-y-2">
-
-            {usuario ? (
-              <>
-                {authenticatedLinks.map((link) => {
-                  const Icon = link.icon;
-
-                  return (
-                    <Link
-                      key={link.to}
-                      to={link.to}
-                      onClick={handleNavigation}
-                      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 font-lato dark-text-secondary hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-dark-bg-hover dark:hover:text-dark-interactive-primary"
-                    >
-                      <Icon className="w-5 h-5" />
-                      <span>{link.label}</span>
-                    </Link>
-                  );
-                })}
-
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 w-full text-left dark:hover:bg-dark-bg-hover dark:text-dark-interactive-error font-lato"
-                >
-                  <LogOut className="w-5 h-5" />
-                  <span>Sair da conta</span>
-                </button>
-              </>
-            ) : (
-              <>
-                {publicLinks.map((link) => (
-                  <a
-                    key={link.to}
-                    href={link.to}
-                    onClick={handleNavigation}
-                    className="block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 font-lato dark-text-secondary hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-dark-bg-hover dark:hover:text-dark-interactive-primary"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-
-                <Link
-                  to="/login"
-                  onClick={handleNavigation}
-                  className="block px-4 py-3"
-                >
-                  Entrar
-                </Link>
-
-                <Link
-                  to="/register"
-                  onClick={handleNavigation}
-                  className="block px-4 py-3"
-                >
-                  Começar Gratuitamente
-                </Link>
-              </>
-            )}
-
-          </div>
-        )}
+        <Button
+          size="icon"
+          variant="ghost"
+          type="button"
+          onClick={() => setIsOpen((v) => !v)}
+          className="lg:hidden hover:text-primary"
+          aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+        >
+          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </Button>
       </div>
+
+      {isOpen && (
+        <div
+          id="mobile-menu"
+          className="lg:hidden border-t border-border bg-card px-4 pt-3 pb-6 flex flex-col gap-4 shadow-lg"
+        >
+          <nav className="flex flex-col font-poppins font-medium">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={closeMenu}
+                className={`py-2 transition-colors hover:text-primary ${pathname === link.to ? "text-primary" : "text-muted-foreground"
+                  }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex flex-col gap-3 pt-2 border-t border-border">
+            <Link
+              to="/login"
+              onClick={closeMenu}
+              className="font-poppins text-center py-2 text-foreground hover:text-primary transition-colors"
+            >
+              Iniciar Sessão
+            </Link>
+            <Button
+              className="w-full rounded-full font-poppins cursor-pointer"
+              onClick={() => {
+                closeMenu();
+                navigate("/registo");
+              }}
+            >
+              Começar Grátis
+            </Button>
+          </div>
+        </div>
+      )}
     </header>
   );
-};
+}
