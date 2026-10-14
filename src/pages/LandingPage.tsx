@@ -5,7 +5,7 @@ import { HeroCard } from "../components/heroCard";
 import { HeroSection } from "../components/heroSection";
 
 import AcademicMarketplace from "../components/marketplaceAcademy";
-import Quiz from "./Quiz";
+
 import MethodologySection from "@/components/metodololySection";
 import PricingSection from "@/components/pricingSection";
 import TestimonialsSection from "@/components/testemunials";

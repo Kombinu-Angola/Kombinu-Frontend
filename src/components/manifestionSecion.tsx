@@ -1,58 +1,61 @@
-import { QuoteUpIcon, SparklesIcon } from "@hugeicons/core-free-icons";
+import { QuoteUpIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-
-
-
 
 export default function ManifestoSection() {
     return (
-        <section className="w-full py-16 sm:py-20 lg:py-24 bg-background text-foreground">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6">
-                <div className="p-8 sm:p-12 lg:p-14 rounded-3xl bg-card shadow-sm space-y-8">
-                    {/* Cabeçalho */}
-                    <div className="space-y-3">
-                        <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary inline-flex items-center gap-1.5">
-                            <HugeiconsIcon icon={SparklesIcon} size={14} />
-                            O Nosso Manifesto
+        <section className="w-full py-16 sm:py-20 lg:py-24 text-zinc-100">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6">
+                <div className="p-6 sm:p-10 lg:p-12 rounded-2xl bg-card border border-zinc-800/80 space-y-8">
+
+                    {/* Cabeçalho Editorial */}
+                    <div className="space-y-3 pb-6 border-b border-zinc-800/60">
+                        <span className="font-montserrat text-[11px] font-semibold tracking-wider text-zinc-500 uppercase">
+                            Manifesto • Luanda
                         </span>
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground">
-                            Por que estamos a construir a Kombinu em Luanda.
+                        <h2 className="font-montserrat text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
+                            Por que estamos a construir a Kombinu.
                         </h2>
                     </div>
 
                     {/* Corpo do Texto */}
-                    <div className="space-y-5 text-sm sm:text-base text-muted-foreground leading-relaxed">
+                    <div className="space-y-4 font-lato text-xs sm:text-sm text-zinc-400 leading-relaxed">
                         <p>
-                            Quem estuda no ensino superior em Luanda conhece o peso diário: passar 3 a 4 horas nos engarrafamentos entre o trabalho e a faculdade, disputar uma tomada no anfiteatro e tentar ler um PDF ilegível de 120 slides no telemóvel enquanto a bateria e o saldo de dados vão embora.
+                            Quem estuda no ensino superior em Luanda conhece o peso diário: passar 3 a 4 horas nos engarrafamentos entre o trabalho e a faculdade, disputar uma tomada no anfiteatro e tentar decifrar PDFs ilegíveis de 120 slides no telemóvel enquanto a bateria e o saldo de dados esgotam.
                         </p>
-                        <p className="font-medium text-foreground">
-                            Acreditamos que a universidade em Angola não devia ser uma maratona de fotocópias desbotadas, grupos de WhatsApp desorganizados e gastos excessivos com recargas móveis.
-                        </p>
+
+                        {/* Frase de ênfase com linha guia minimalista */}
+                        <div className="border-l-2 border-zinc-400 pl-4 py-1">
+                            <p className="font-montserrat text-sm sm:text-base font-medium text-zinc-200 leading-snug">
+                                A universidade em Angola não devia ser uma maratona de fotocópias desbotadas, grupos de WhatsApp caóticos e recargas móveis queimadas.
+                            </p>
+                        </div>
+
                         <p>
-                            A <strong className="text-primary font-bold">Kombinu</strong> nasceu dessa indignação. Desenhámos uma tecnologia pensada primeiro para o contexto angolano: leve, que corre com sinal 3G fraco, que valoriza cada kwanza gasto em dados móveis e que empodera tanto os estudantes que querem passar quanto os monitores e explicadores que geram conteúdos de excelência.
+                            A <strong className="font-semibold text-zinc-100">Kombinu</strong> foi desenhada para a nossa realidade: leve, funcional com sinal móvel intermitente e económica no consumo de tráfego. Um ecossistema prático para quem precisa de aprovar e para monitores que produzem conteúdo académico de rigor.
                         </p>
                     </div>
 
                     {/* Assinatura */}
-                    <div className="pt-6 border-t border-border/40 flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3.5">
-                            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary font-bold text-sm flex items-center justify-center shrink-0">
+                    <div className="pt-6 border-t border-zinc-800/60 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-lg bg-zinc-800 border border-zinc-700/60 text-zinc-200 font-mono font-medium text-xs flex items-center justify-center shrink-0">
                                 OF
                             </div>
                             <div>
-                                <h4 className="font-bold text-sm sm:text-base text-foreground">
-                                    Orlando Fortuna & Equipa Fundadora
+                                <h4 className="font-montserrat font-semibold text-xs sm:text-sm text-white">
+                                    Orlando Fortuna & Equipa
                                 </h4>
-                                <p className="text-xs sm:text-sm text-muted-foreground">
-                                    Desenvolvido por estudantes e graduados das universidades de Luanda
+                                <p className="font-lato text-[11px] text-zinc-500">
+                                    Feito em Luanda por e para universitários
                                 </p>
                             </div>
                         </div>
 
-                        <div className="hidden sm:flex text-primary/20 shrink-0">
-                            <HugeiconsIcon icon={QuoteUpIcon} size={36} />
+                        <div className="text-zinc-700 shrink-0">
+                            <HugeiconsIcon icon={QuoteUpIcon} size={24} />
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>

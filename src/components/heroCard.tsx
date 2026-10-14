@@ -1,184 +1,130 @@
-import { Badge } from "./ui/badge";
 import { Button } from "@/components/ui/button";
-
-import { PlayCircle, Trophy, Users } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
-
-
-
+import { PlayCircle, Trophy } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 
 export function HeroCard() {
     return (
-        <div className="mx-auto max-w-5xl rounded-2xl    p-4 sm:p-6 shadow-xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="mx-auto max-w-5xl rounded-2xl p-4 sm:p-6 text-zinc-100 ">
+            {/* Grid 50/50 com items-stretch para igualar as alturas */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
 
-                {/* Card 1: Pergunta & Resumo */}
-                <Card className=" bg-card shadow-none flex flex-col justify-between">
+                {/* Card 1: Microconteúdo & Resposta */}
+                <Card className="h-full bg-card border-zinc-800/80 shadow-none rounded-xl text-zinc-100 flex flex-col justify-between">
                     <div>
-                        <CardHeader className="flex flex-row items-center justify-between pb-3">
-                            <CardTitle className="text-xs font-bold tracking-wider text-primary">
-                                ECONOMIA MONETÁRIA • UAN
-                            </CardTitle>
-                            <div className="bg-muted px-3 py-1 rounded-full text-xs text-muted-foreground">
+                        <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-zinc-800/60">
+                            <span className="font-montserrat text-[11px] font-semibold tracking-wider text-zinc-400 uppercase">
+                                Economia Monetária • UAN
+                            </span>
+                            <span className="font-lato text-[11px] text-zinc-500">
                                 5 min de leitura
-                            </div>
+                            </span>
                         </CardHeader>
-                        <CardContent className="space-y-3 pt-0">
-                            <h3 className="text-lg sm:text-xl font-bold text-foreground">
+
+                        <CardContent className="space-y-3 pt-4 font-lato">
+                            <h3 className="font-montserrat text-lg font-semibold text-white tracking-tight">
                                 Equilíbrio Cambial e Taxa BNA
                             </h3>
-                            <p className="text-[#424752]  text-xs sm:text-sm leading-relaxed">
-                                No modelo angolano, a estabilidade cambial depende criticamente das reservas internacionais líquidas geridas pelo Banco Nacional de Angola (BNA). Quando há um choque nos preços do crude, o canal da liquidez contrai a oferta de moeda estrangeira nos bancos comerciais.
+                            <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                                No modelo angolano, a estabilidade cambial depende criticamente das reservas internacionais líquidas geridas pelo BNA. Em choques no crude, a liquidez em moeda estrangeira retrai bruscamente nos bancos comerciais.
                             </p>
-                            <p className="text-[#424752]  text-xs sm:text-sm leading-relaxed">
-                                Para mitigar a depreciação abrupta do Kwanza sem esgotar o stock de divisas, as operações de mercado aberto e a elevação da taxa de cedência de liquidez funcionam como o principal mecanismo de absorção de massa monetária.
+                            <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                                Para conter a depreciação do Kwanza sem esgotar o stock de divisas, as operações de mercado aberto e o aumento da taxa de cedência atuam na absorção de liquidez.
                             </p>
                         </CardContent>
                     </div>
 
-                    <CardFooter className="pt-2">
-                        <div className="w-full bg-background/70 border border-border p-4 rounded-xl space-y-3">
+                    <CardFooter className="pt-2 pb-4">
+                        <div className="w-full bg-card border border-zinc-800 rounded-lg p-3.5 space-y-2.5">
                             <div className="flex items-center justify-between">
-                                <div className="bg-secondary/20 border border-secondary/30 px-2.5 py-0.5 rounded-full">
-                                    <span className="text-[11px] font-bold text-secondary">+20 XP GANHOS</span>
-                                </div>
-                                <div className="bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
-                                    <span className="text-[11px] font-semibold text-emerald-400">Resposta Confirmada</span>
-                                </div>
+                                <span className="font-montserrat text-xs font-medium text-zinc-200">
+                                    Mecanismo de contenção cambial
+                                </span>
+                                <span className="font-mono text-[11px] text-zinc-400">
+                                    +20 XP
+                                </span>
                             </div>
 
-                            <p className="text-xs sm:text-sm font-semibold text-foreground">
-                                Como o BNA contém a pressão inflacionária em cenário de volatilidade cambial?
-                            </p>
-
-                            <div className="flex items-center justify-between border border-emerald-500/40 bg-emerald-500/10 rounded-xl px-4 py-2.5">
-                                <p className="text-xs font-medium text-foreground">Aumento da taxa básica de juro (Taxa BNA)</p>
-                                <span className="text-xs font-bold text-emerald-400 shrink-0">Opção Correcta</span>
+                            {/* Resposta validada minimalista */}
+                            <div className="flex items-center justify-between bg-zinc-900 border-l-2 border-l-emerald-500 border-y border-r border-zinc-800/80 rounded px-3 py-2 text-xs">
+                                <span className="font-lato text-zinc-300">
+                                    Elevação da taxa básica de juro (Taxa BNA)
+                                </span>
+                                <span className="font-poppins text-[10px] text-emerald-400 font-medium shrink-0 ml-2">
+                                    Correto
+                                </span>
                             </div>
 
-                            <p className="text-xs text-muted-foreground leading-relaxed">
-                                💡 Correto! A tua resposta somou +20 pontos para a Universidade Agostinho Neto na Liga Universitária de Luanda.
+                            <p className="font-lato text-[11px] text-zinc-500">
+                                Pontos atribuídos à Faculdade de Economia (UAN).
                             </p>
                         </div>
                     </CardFooter>
                 </Card>
 
-                {/* Card 2: Liga Universitária */}
-                <Card className=" bg-card shadow-none flex flex-col justify-between text-left">
-                    <CardHeader className="pb-3">
-                        <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2.5 py-1 rounded-full tracking-wider inline-flex items-center gap-1.5">
-                                <Trophy className="w-3.5 h-3.5" /> LIGA UNIVERSITÁRIA DE ANGOLA
-                            </span>
-                        </div>
-                        <h2 className="text-base sm:text-lg font-extrabold text-foreground tracking-tight mt-2">
-                            Ranking Geral de Polos
-                        </h2>
-                        <p className="text-xs text-[#424752] ">
-                            Temporada 2026 • Atualizado em tempo real
-                        </p>
-                    </CardHeader>
+                {/* Card 2: Ranking Compacto com Mesmas Dimensões */}
+                <Card className="h-full bg-card border-zinc-800/80 shadow-none rounded-xl text-zinc-100 flex flex-col justify-between">
+                    <div>
+                        <CardHeader className="pb-3 border-b border-zinc-800/60">
+                            <div className="flex items-center justify-between">
+                                <span className="font-montserrat text-xs font-semibold text-zinc-300 tracking-wide flex items-center gap-1.5">
+                                    <Trophy className="w-3.5 h-3.5 text-zinc-400" /> Liga Luanda
+                                </span>
+                                <span className="font-mono text-[10px] text-zinc-500 uppercase">
+                                    Semana 42
+                                </span>
+                            </div>
+                        </CardHeader>
 
-                    <CardContent className="space-y-2 pt-0">
-                        {/* Top 1 */}
-                        <div className="p-2.5 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-secondary/20 border border-secondary/30 rounded-full w-8 h-8 flex items-center justify-center shrink-0">
-                                    <span className="text-sm font-black text-secondary">01</span>
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <p className="font-bold text-xs text-foreground">UAN - LUANDA</p>
-                                        <Badge variant="secondary" className="text-[10px] py-0 px-1.5 font-bold">Líder</Badge>
+                        <CardContent className="space-y-3 pt-4">
+                            {/* Tabela de polos */}
+                            <div className="divide-y divide-zinc-800/60 font-lato text-xs">
+                                <div className="py-2.5 flex items-center justify-between">
+                                    <span className="font-mono font-medium text-white w-5">01</span>
+                                    <div className="flex-1 px-2">
+                                        <span className="font-medium text-white block">UAN</span>
+                                        <span className="text-[10px] text-zinc-500">1.420 estudantes</span>
                                     </div>
-                                    <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
-                                        <Users className="w-3 h-3" /> 1.420 alunos ativos
-                                    </p>
+                                    <span className="font-mono font-semibold text-white">142.850 XP</span>
                                 </div>
-                            </div>
-                            <span className="font-mono font-extrabold text-xs text-primary">142.850 XP</span>
-                        </div>
 
-                        {/* Top 2 */}
-                        <div className="p-2.5 rounded-xl bg-muted/40 border border-border flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-muted rounded-full w-8 h-8 flex items-center justify-center shrink-0">
-                                    <span className="text-sm font-bold text-muted-foreground">02</span>
+                                <div className="py-2.5 flex items-center justify-between text-zinc-400">
+                                    <span className="font-mono w-5 text-zinc-600">02</span>
+                                    <span className="flex-1 px-2">UCAN</span>
+                                    <span className="font-mono text-zinc-400">128.400 XP</span>
                                 </div>
-                                <div>
-                                    <p className="font-bold text-xs text-foreground">UCAN - PALANCA</p>
-                                    <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
-                                        <Users className="w-3 h-3" /> 980 alunos ativos
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <span className="font-mono font-extrabold text-xs text-foreground block">128.400 XP</span>
-                                <span className="text-red-400 text-[10px]">-14.450 XP</span>
-                            </div>
-                        </div>
 
-                        {/* Top 3 */}
-                        <div className="p-2.5 rounded-xl bg-muted/40 border border-border flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-muted rounded-full w-8 h-8 flex items-center justify-center shrink-0">
-                                    <span className="text-sm font-bold text-muted-foreground">03</span>
+                                <div className="py-2.5 flex items-center justify-between text-zinc-400">
+                                    <span className="font-mono w-5 text-zinc-600">03</span>
+                                    <span className="flex-1 px-2">ISAF</span>
+                                    <span className="font-mono text-zinc-400">94.200 XP</span>
                                 </div>
-                                <div>
-                                    <p className="font-bold text-xs text-foreground">ISAF - BENFICA</p>
-                                    <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
-                                        <Users className="w-3 h-3" /> 650 alunos ativos
-                                    </p>
+
+                                <div className="py-2.5 flex items-center justify-between text-zinc-400">
+                                    <span className="font-mono w-5 text-zinc-600">04</span>
+                                    <span className="flex-1 px-2">ISPTEC</span>
+                                    <span className="font-mono text-zinc-400">82.100 XP</span>
+                                </div>
+
+                                <div className="py-2.5 flex items-center justify-between text-zinc-400">
+                                    <span className="font-mono w-5 text-zinc-600">05</span>
+                                    <span className="flex-1 px-2">UniPiaget</span>
+                                    <span className="font-mono text-zinc-400">80.250 XP</span>
                                 </div>
                             </div>
-                            <span className="font-mono font-extrabold text-xs text-foreground">94.200 XP</span>
-                        </div>
+                        </CardContent>
+                    </div>
 
-                        {/* Top 4 */}
-                        <div className="p-2.5 rounded-xl bg-muted/40 border border-border flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-muted rounded-full w-8 h-8 flex items-center justify-center shrink-0">
-                                    <span className="text-sm font-bold text-muted-foreground">04</span>
-                                </div>
-                                <div>
-                                    <p className="font-bold text-xs text-foreground">ISPTEC - LUANDA</p>
-                                    <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
-                                        <Users className="w-3 h-3" /> 510 alunos ativos
-                                    </p>
-                                </div>
-                            </div>
-                            <span className="font-mono font-extrabold text-xs text-foreground">82.100 XP</span>
-                        </div>
-
-                        {/* Top 5 */}
-                        <div className="p-2.5 rounded-xl bg-muted/40 border border-border flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-muted rounded-full w-8 h-8 flex items-center justify-center shrink-0">
-                                    <span className="text-sm font-bold text-muted-foreground">05</span>
-                                </div>
-                                <div>
-                                    <p className="font-bold text-xs text-foreground">UniPiaget - Viana</p>
-                                    <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-0.5">
-                                        <Users className="w-3 h-3" /> 420 alunos ativos
-                                    </p>
-                                </div>
-                            </div>
-                            <span className="font-mono font-extrabold text-xs text-foreground">80.250 XP</span>
-                        </div>
-
-                        <p className="text-xs text-primary font-medium pt-1">
-                            A UCAN está a apenas 14.450 XP de alcançar a UAN.
+                    {/* Rodapé fixado na base alinhado com o Card 1 */}
+                    <CardFooter className="flex-col items-stretch pt-2 pb-4">
+                        <p className="font-lato text-[11px] text-zinc-500 mb-3 text-left">
+                            UCAN a 14.450 XP do 1º lugar.
                         </p>
 
-                        {/* CTA */}
-                        <Button className="w-full h-11 rounded-full font-bold text-xs sm:text-sm cursor-pointer flex items-center justify-center gap-2 mt-3">
-                            <PlayCircle className="w-4 h-4 text-white" />
-                            <span>Entrar & Pontuar Pela Tua Faculdade</span>
-                            <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-medium ml-1">
-                                Grátis
-                            </span>
+                        <Button className="font-poppins w-full h-10 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-medium text-xs cursor-pointer flex items-center justify-center gap-2 transition-colors">
+                            <PlayCircle className="w-3.5 h-3.5" />
+                            <span>Entrar na Rodada</span>
                         </Button>
-                    </CardContent>
+                    </CardFooter>
                 </Card>
 
             </div>

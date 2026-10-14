@@ -1,52 +1,54 @@
 import { ArrowRight01Icon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-
 export default function CallToActionSection() {
     return (
-        <section className="w-full py-16 sm:py-20 lg:py-24  ">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6">
-                <div className="relative overflow-hidden rounded-3xl   p-8 sm:p-12 lg:p-16 text-center">
+        <section className="w-full py-16 sm:py-20 lg:py-24  text-zinc-100">
+            <div className="max-w-3xl mx-auto px-4 sm:px-6">
+                <div className="rounded-2xl bg-card border  p-8 sm:p-12 text-center">
 
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/15 text-primary text-xs font-bold tracking-wider uppercase mb-6">
+                    {/* Eyebrow minimalista */}
+                    <span className="font-montserrat text-[11px] font-semibold tracking-wider text-zinc-500 uppercase block mb-4">
+                        Acesso Imediato • Luanda
+                    </span>
 
-                        <span>Estude Sem Limites</span>
-                    </div>
-
-
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground max-w-2xl mx-auto">
-                        Pronto para estudar menos tempo e tirar notas melhores?
+                    {/* Título de impacto direto */}
+                    <h2 className="font-montserrat text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white max-w-xl mx-auto leading-tight">
+                        Eleva o teu rendimento académico sem gastar o teu saldo.
                     </h2>
-                    <p className="mt-4 text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
-                        Junte-se a milhares de estudantes universitários em Angola hoje mesmo. Comece sem pagar nada.
+
+                    {/* Subtítulo em Lato neutro */}
+                    <p className="mt-4 font-lato text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed">
+                        Junta-te a estudantes da UAN, UCAN, ISPTEC e de todo o país. Começa a resolver simulados e a consultar sebentas sem custos iniciais.
                     </p>
 
-
+                    {/* Botão em Poppins (contraste alto preto/branco) */}
                     <div className="mt-8 flex justify-center">
                         <button
                             type="button"
-                            className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold text-sm sm:text-base bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:gap-3 cursor-pointer"
+                            className="font-poppins inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium text-xs sm:text-sm bg-zinc-100 hover:bg-white text-zinc-950 transition-colors cursor-pointer"
                         >
-                            <span>Criar Conta Gratuita em 30 Segundos</span>
-                            <HugeiconsIcon icon={ArrowRight01Icon} size={18} />
+                            <span>Começar Gratuitamente</span>
+                            <HugeiconsIcon icon={ArrowRight01Icon} size={15} />
                         </button>
                     </div>
 
-
-                    <div className="mt-8 pt-6  flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs text-muted-foreground">
+                    {/* Trust points discretos */}
+                    <div className="mt-8 pt-6 border-t border-zinc-800/60 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 font-lato text-xs text-zinc-500">
                         <span className="inline-flex items-center gap-1.5">
-                            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-emerald-500" />
-                            Acesso instantâneo
+                            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-zinc-400" />
+                            Modo Data-Lean ativo
                         </span>
                         <span className="inline-flex items-center gap-1.5">
-                            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-emerald-500" />
-                            Não pede cartão
+                            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-zinc-400" />
+                            Sem necessidade de dados bancários
                         </span>
                         <span className="inline-flex items-center gap-1.5">
-                            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-emerald-500" />
-                            Cancelamento a qualquer momento
+                            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-zinc-400" />
+                            Acesso imediato a sebentas
                         </span>
                     </div>
+
                 </div>
             </div>
         </section>

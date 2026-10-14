@@ -1,132 +1,86 @@
-import { Add01Icon, HelpCircleIcon } from "@hugeicons/core-free-icons";
+import { Add01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
 
+interface FaqItem {
+    question: string;
+    answer: string;
+}
+
+const FAQS: FaqItem[] = [
+    {
+        question: "Como o Modo Data-Lean consome menos de 5MB por hora?",
+        answer: "Eliminámos bibliotecas pesadas de JavaScript, estruturamos conteúdos em texto leve e aplicamos cache agressivo no browser. Após carregar a estrutura inicial, cada módulo ou resumo consome apenas alguns kilobytes de dados móveis."
+    },
+    {
+        question: "Como funciona o pagamento via Multicaixa Express?",
+        answer: "Basta indicar o número de telemóvel associado ao Multicaixa Express no checkout. Receberá uma notificação instantânea no telemóvel para validar a compra com o seu PIN em Kwanzas (AOA), sem intermediários internacionais."
+    },
+    {
+        question: "Como utilizar a Kombinu de forma gratuita?",
+        answer: "O acesso essencial é 0 AOA. Pode consultar sebentas públicas da comunidade, resolver quizzes de fixação e submeter até 3 documentos por mês para geração assistida sem necessidade de associar dados bancários."
+    },
+    {
+        question: "Como posso disponibilizar e rentabilizar as minhas próprias sebentas?",
+        answer: "Submeta o seu material no Marketplace e defina o valor em Kwanzas. Após validação académica da moderação, o material fica disponível para universitários de todo o país, com os ganhos creditados diretamente via transferência."
+    }
+];
 
 export default function FaqSection() {
-    const [openIndex, setOpenIndex] = useState(null);
+    const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-    const toggle = (index) => {
+    const toggle = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
     };
 
     return (
-        <section className="w-full py-12 sm:py-16 lg:py-20 bg-background text-foreground">
+        <section className="w-full py-16 sm:py-20  text-zinc-100">
             <div className="max-w-3xl mx-auto px-4 sm:px-6">
-                {/* Cabeçalho */}
-                <div className="text-center mb-10 sm:mb-12">
-                    <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-primary inline-flex items-center gap-1.5">
-                        <HugeiconsIcon icon={HelpCircleIcon} size={15} />
-                        Tire as suas Dúvidas
+
+                {/* Cabeçalho Minimalista */}
+                <div className="mb-10 sm:mb-12 b border-zinc-800/60 pb-6">
+                    <span className="font-montserrat text-[11px] font-semibold tracking-wider text-zinc-500 uppercase">
+                        Suporte & Esclarecimentos
                     </span>
-                    <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight">
+                    <h2 className="font-montserrat text-2xl sm:text-3xl font-bold tracking-tight text-white mt-2">
                         Perguntas Frequentes
                     </h2>
                 </div>
 
-                {/* Lista de Acordeões com rotação de + para × */}
-                <div className="space-y-3">
-                    {/* Pergunta 1: Modo Data-Lean */}
-                    <div className="rounded-2xl bg-card border border-border overflow-hidden">
-                        <button
-                            type="button"
-                            onClick={() => toggle(0)}
-                            className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
-                        >
-                            <span className="font-semibold text-sm sm:text-base text-foreground">
-                                Como o Modo Data-Lean gasta menos de 5MB por hora?
-                            </span>
-                            <span
-                                className={`shrink-0 text-muted-foreground transition-transform duration-300 ${openIndex === 0 ? 'rotate-45 text-primary' : ''
-                                    }`}
-                            >
-                                <HugeiconsIcon icon={Add01Icon} size={20} />
-                            </span>
-                        </button>
+                {/* Lista em formato Accordion Monocromático */}
+                <div className="divide-y divide-zinc-800/70 border-y border-zinc-800/70">
+                    {FAQS.map((faq, index) => {
+                        const isOpen = openIndex === index;
 
-                        {openIndex === 0 && (
-                            <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                                Eliminámos bibliotecas de JavaScript pesadas, convertemos equações e tabelas em texto estruturado puro e armazenamos o conteúdo lido em cache local. Isso significa que após carregar a página inicial, cada leitura consome apenas alguns kilobytes.
+                        return (
+                            <div key={index} className="transition-colors duration-150">
+                                <button
+                                    type="button"
+                                    onClick={() => toggle(index)}
+                                    className="w-full py-5 text-left flex items-center justify-between gap-4 cursor-pointer group"
+                                >
+                                    <span className="font-montserrat text-xs sm:text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors">
+                                        {faq.question}
+                                    </span>
+                                    <span
+                                        className={`shrink-0 text-zinc-500 transition-transform duration-200 ${isOpen ? "rotate-45 text-white" : "group-hover:text-zinc-300"
+                                            }`}
+                                    >
+                                        <HugeiconsIcon icon={Add01Icon} size={18} />
+                                    </span>
+                                </button>
+
+                                {isOpen && (
+                                    <div className="pb-5 font-lato text-xs sm:text-sm text-zinc-400 leading-relaxed max-w-2xl">
+                                        {faq.answer}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-
-                    <div className="rounded-2xl bg-card border border-border overflow-hidden">
-                        <button
-                            type="button"
-                            onClick={() => toggle(1)}
-                            className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
-                        >
-                            <span className="font-semibold text-sm sm:text-base text-foreground">
-                                Como funciona o pagamento via Multicaixa Express?
-                            </span>
-                            <span
-                                className={`shrink-0 text-muted-foreground transition-transform duration-300 ${openIndex === 1 ? 'rotate-45 text-primary' : ''
-                                    }`}
-                            >
-                                <HugeiconsIcon icon={Add01Icon} size={20} />
-                            </span>
-                        </button>
-
-                        {openIndex === 1 && (
-                            <div className="px-5 pb-5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                                Ao assinar o Kombinu Pro ou comprar uma sebenta avulsa, insere o seu número de telemóvel associado ao Multicaixa Express e recebe a notificação no telemóvel para autorizar com o seu PIN em poucos segundos.
-                            </div>
-                        )}
-                    </div>
-
-
-                    {/* Pergunta 2: Uso Gratuito */}
-                    <div className="rounded-2xl bg-card border border-border overflow-hidden">
-                        <button
-                            type="button"
-                            onClick={() => toggle(1)}
-                            className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
-                        >
-                            <span className="font-semibold text-sm sm:text-base text-foreground">
-                                Como posso usar a Kombinu de forma totalmente gratuita?
-                            </span>
-                            <span
-                                className={`shrink-0 text-muted-foreground transition-transform duration-300 ${openIndex === 1 ? 'rotate-45 text-primary' : ''
-                                    }`}
-                            >
-                                <HugeiconsIcon icon={Add01Icon} size={20} />
-                            </span>
-                        </button>
-
-                        {openIndex === 1 && (
-                            <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                                O Plano Básico é 0 AOA para sempre. Tem acesso imediato a todas as sebentas e resumos públicos partilhados pela comunidade, quizzes de fixação básicos e até 3 uploads de ficheiros com inteligência artificial por mês, sem necessidade de registar cartão ou conta bancária.
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Pergunta 3: Venda de Sebentas */}
-                    <div className="rounded-2xl bg-card border border-border overflow-hidden">
-                        <button
-                            type="button"
-                            onClick={() => toggle(2)}
-                            className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer"
-                        >
-                            <span className="font-semibold text-sm sm:text-base text-foreground">
-                                Como posso vender as minhas próprias sebentas e resumos?
-                            </span>
-                            <span
-                                className={`shrink-0 text-muted-foreground transition-transform duration-300 ${openIndex === 2 ? 'rotate-45 text-primary' : ''
-                                    }`}
-                            >
-                                <HugeiconsIcon icon={Add01Icon} size={20} />
-                            </span>
-                        </button>
-
-                        {openIndex === 2 && (
-                            <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                                Basta aceder ao Marketplace, submeter o seu ficheiro ou apontamento e definir o preço em Kwanzas (AOA). Após aprovação de qualidade pela moderação, a sua sebenta fica listada para estudantes de todo o país. Os pagamentos dos colegas são processados via Multicaixa Express e o valor arrecadado é transferido diretamente para a sua conta.
-                            </div>
-                        )}
-                    </div>
+                        );
+                    })}
                 </div>
+
             </div>
-        </section >
+        </section>
     );
 }
