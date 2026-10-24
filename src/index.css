@@ -393,6 +393,7 @@
   --shadow-3d-primary: 0 4px 0 0 var(--color-brand-ocean-shadow);
   --shadow-3d-neutral: 0 4px 0 0 var(--color-border-cloud-strong);
   --shadow-3d-success: 0 4px 0 0 var(--color-feedback-success-ink);
+  --shadow-3d-error: 0 4px 0 0 var(--color-feedback-error-ink);
   --shadow-elevation-1: 0 1px 2px rgb(11 18 21 / 0.04), 0 4px 12px -4px rgb(11 18 21 / 0.06);
   --shadow-clay:
     inset 0 2px 0 rgb(255 255 255 / 0.9),

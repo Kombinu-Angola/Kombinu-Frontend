@@ -149,7 +149,7 @@ export default function OfflineDownloadsScreen({
                     Manter as descargas
                   </Button3D>
                   <Button3D
-                    className="bg-feedback-error-ink text-white shadow-none hover:brightness-110"
+                    variant="danger"
                     onClick={() => {
                       setDownloaded([]);
                       setConfirmingPurge(false);
@@ -162,11 +162,10 @@ export default function OfflineDownloadsScreen({
               </div>
             ) : (
               <Button3D
-                variant="ghost"
+                variant="danger-outline"
                 disabled={downloaded.length === 0}
                 onClick={() => setConfirmingPurge(true)}
                 leadingIcon={<Icon name="trash" size={18} />}
-                className="border-feedback-error text-feedback-error-ink"
               >
                 Libertar todo o espaço ({formatSize(usedKb)})
               </Button3D>

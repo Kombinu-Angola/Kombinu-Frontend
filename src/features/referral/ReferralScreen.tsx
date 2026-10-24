@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppShell } from "../../components/layout/AppShell";
 import { Avatar } from "../../components/ui/Avatar";
-import { Button3D } from "../../components/ui/Button3D";
+import { Button3D, LinkButton3D } from "../../components/ui/Button3D";
 import { Icon } from "../../components/ui/Icon";
 import { ProgressBar } from "../../components/ui/ProgressBar";
 import { useToast } from "../../components/ui/Toast";
@@ -156,16 +156,17 @@ export default function ReferralScreen({ program, userName, university, subject 
           />
 
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-            <a
+            <LinkButton3D
               href={`https://wa.me/?text=${encodeURIComponent(message)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-feedback-success text-button text-surface-ink uppercase shadow-3d-success transition-[translate,box-shadow] duration-150 active:translate-y-1 active:shadow-none"
+              variant="success"
+              className="flex-1"
+              leadingIcon={<Icon name="comment" size={20} />}
             >
-              <Icon name="comment" size={20} />
               Enviar no WhatsApp
               <span className="sr-only">(abre numa nova janela)</span>
-            </a>
+            </LinkButton3D>
             <Button3D
               variant="ghost"
               className="sm:w-auto"

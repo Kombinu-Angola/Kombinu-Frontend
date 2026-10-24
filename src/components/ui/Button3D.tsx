@@ -1,7 +1,7 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "success" | "ghost";
+type Variant = "primary" | "secondary" | "success" | "ghost" | "danger" | "danger-outline";
 type Size = "md" | "lg";
 
 type StyleProps = {
@@ -17,6 +17,11 @@ const VARIANTS: Record<Variant, string> = {
     "bg-surface-canvas text-primary border-2 border-brand-ocean shadow-3d-neutral hover:bg-surface-sky",
   success: "bg-feedback-success text-surface-ink shadow-3d-success hover:brightness-105",
   ghost: "bg-surface-canvas text-text-secondary border-2 border-border-cloud hover:bg-surface-soft hover:text-primary",
+  /** Confirmacao destrutiva final (eliminar conta, cancelar subscricao). */
+  danger: "bg-feedback-error text-white shadow-3d-error hover:brightness-105",
+  /** Passo intermedio ou acao destrutiva secundaria (ex.: terminar uma sessao numa lista). */
+  "danger-outline":
+    "bg-surface-canvas text-feedback-error-ink border-2 border-feedback-error hover:bg-feedback-error-soft",
 };
 
 const SIZES: Record<Size, string> = {
@@ -30,7 +35,7 @@ export function button3DClasses({ variant = "primary", size = "md", fullWidth, c
     "inline-flex shrink-0 items-center justify-center gap-2 rounded-full text-center select-none",
     "font-poppins text-button uppercase",
     "transition-[translate,box-shadow,background-color,color] duration-150 ease-out-quint",
-    variant !== "ghost" && "active:translate-y-1 active:shadow-none",
+    variant !== "ghost" && variant !== "danger-outline" && "active:translate-y-1 active:shadow-none",
     "disabled:pointer-events-none disabled:border-transparent disabled:bg-border-cloud disabled:text-text-tertiary disabled:shadow-none",
     "aria-disabled:pointer-events-none aria-disabled:opacity-100",
     VARIANTS[variant],
