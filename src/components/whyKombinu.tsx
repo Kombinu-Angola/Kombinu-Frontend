@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 
 export function WhyKombinu() {
     return (
-        <section id="data-learn" className="mt-12 px-4 max-w-6xl mx-auto">
+        <section id="data-lean" className="mt-12 px-4 max-w-6xl mx-auto">
 
 
             <motion.div
@@ -22,7 +22,7 @@ export function WhyKombinu() {
                     Porquê a Kombinu?
                 </span>
 
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground tracking-tight mt-2">
+                <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground tracking-tight mt-2">
                     Feito para a realidade do estudante angolano
                 </h2>
 
@@ -56,7 +56,7 @@ export function WhyKombinu() {
                             </CardHeader>
 
                             <CardContent className="p-4 sm:p-6 pt-0">
-                                <h3 className="text-lg sm:text-xl font-bold text-card-foreground">
+                                <h3 className="font-heading text-lg sm:text-xl font-bold text-card-foreground">
                                     Modo Ultra-Leve Data-Lean (&lt; 5MB/h)
                                 </h3>
 
@@ -133,7 +133,7 @@ export function WhyKombinu() {
                                             Kombinu Micro-Leituras + Quizzes
                                         </span>
 
-                                        <span className="text-emerald-400 font-bold shrink-0">
+                                        <span className="text-primary font-bold shrink-0">
                                             4.8 MB / hora
                                         </span>
                                     </div>
@@ -148,7 +148,7 @@ export function WhyKombinu() {
                                                 delay: 0.6,
                                                 ease: "easeOut",
                                             }}
-                                            className="bg-emerald-500 h-full rounded-full"
+                                            className="bg-primary h-full rounded-full"
                                         />
                                     </div>
                                 </div>
@@ -186,7 +186,7 @@ export function WhyKombinu() {
                                 </div>
                             </CardHeader>
 
-                            <h3 className="text-lg px-4 sm:px-6 font-bold text-card-foreground">
+                            <h3 className="font-heading text-lg px-4 sm:px-6 font-bold text-card-foreground">
                                 Quizzes com Feedback Imediato
                             </h3>
 
