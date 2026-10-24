@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- Secoes da landing page (`WhyKombinu`, `MethodologySection`, `FinancialComparison`, `AcademicMarketplace`, `PricingSection`, `TestimonialsSection`, `Footer`): tipografia alinhada com `font-heading`/`font-sans-landing` (ja usados no `heroSection`, Montserrat/Rubik), remocao de animacoes `whileHover` decorativas em texto estatico sem proposito, cor da barra "Kombinu" trocada do generico `emerald` para `primary`, e copy da seccao de precos tornada mais especifica da marca ("Transparencia total. Sem surpresas." -> referencia ao tema de fotocopias ja usado em `FinancialComparison`).
 - Enquetes no estudio de criacao (`features/survey/`: `SurveyComposerScreen`, `SurveyResultsScreen`) -- fecha a referencia `/estudio/enquete` deixada pendente no `CreationHubScreen` desde o lote anterior. Novas rotas: `/v2/estudio/enquete`, `/v2/estudio/enquete/resultados`.
 - Exportacao fiscal e equipa/permissoes no backoffice (`features/governance/`: `FiscalExportScreen`, `TeamPermissionsScreen`) e pagina publica de universidade parceira, sem sessao (`features/campus/PublicUniversityScreen`). `AdminShell` ganha 2 itens de navegacao. Novas rotas: `/v2/admin/fiscal`, `/v2/admin/equipa`, `/v2/u/:slug`.
 - Nivelamento adaptativo no backoffice (`features/admin/AdaptiveRulesScreen`). `AdminShell` ganha o item "Nivelamento adaptativo". Nova rota: `/v2/admin/adaptativo`.
@@ -37,6 +38,9 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Corrigido
 
+- Ids de ancora inconsistentes na landing page: `WhyKombinu` (`#data-learn` -> `#data-lean`, nao correspondia ao link ja existente no `Footer`) e `AcademicMarketplace` (`#marktplace` -> `#marketplace`, nao correspondia ao proprio link interno "Ver Todo o Marketplace").
+- `Footer.tsx`: classes Tailwind invalidas no logotipo (`h-30 w-30`, fora da escala de espacamento do projecto, sem efeito) e copyright desatualizado (2025 -> 2026).
+- `MethodologySection.tsx`: classe Tailwind invalida e sem efeito (`hover:` sem utilitario a seguir) no grid de passos; tag "Curriculos 100% atualizados para 2025" desatualizada -> 2026.
 - `AdminShell`: sidebar fixa so aparecia a partir de `lg:` (1024px), deixando o intervalo de tablet (768-1023px) preso ao padrao mobile; promovida para `md:` (nav fixa, overlay da gaveta, padding do conteudo e botao de hamburguer).
 - `CreatorShell`: navegacao so existia dentro da gaveta, sem nenhuma promocao para desktop (ao contrario do `AppShell` em `md:` e do `AdminShell` em `lg:`); adicionada sidebar fixa a partir de `lg:`, reaproveitando a lista de navegacao (com os hints) entre a gaveta e a sidebar via um `NavList` partilhado.
 - Botao "Comecar a ler" no fim do onboarding apontava para um caminho inexistente (`/resumos/taxa-bna`); corrigido para `/v2/leitura`.

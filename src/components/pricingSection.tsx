@@ -29,18 +29,9 @@ export default function PricingSection() {
                         Planos Transparentes
                     </span>
 
-                    <motion.h2
-                        whileHover={{
-                            y: -2,
-                            transition: {
-                                duration: 0.2,
-                                ease: "easeOut",
-                            },
-                        }}
-                        className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight"
-                    >
-                        Transparência total. Sem surpresas.
-                    </motion.h2>
+                    <h2 className="font-heading mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+                        Menos que uma fotocópia por dia. Sem letras pequenas.
+                    </h2>
 
                     <p className="mt-3 text-sm sm:text-base text-muted-foreground">
                         Estude gratuitamente com a comunidade ou acelere a sua
@@ -75,18 +66,9 @@ export default function PricingSection() {
                                     Acesso Essencial
                                 </span>
 
-                                <motion.h3
-                                    whileHover={{
-                                        x: 5,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                    className="mt-1 text-2xl font-bold text-card-foreground"
-                                >
+                                <h3 className="font-heading mt-1 text-2xl font-bold text-card-foreground">
                                     Plano Básico
-                                </motion.h3>
+                                </h3>
 
                                 <div className="mt-4 flex items-baseline gap-1">
                                     <motion.span
@@ -223,7 +205,7 @@ export default function PricingSection() {
                                     duration: 0.2,
                                     ease: "easeOut",
                                 }}
-                                className="w-full py-3 px-4 rounded-xl text-sm font-semibold bg-background hover:bg-muted text-foreground transition-colors cursor-pointer"
+                                className="font-sans-landing w-full py-3 px-4 rounded-xl text-sm font-semibold bg-background hover:bg-muted text-foreground transition-colors cursor-pointer"
                             >
                                 Começar Grátis Agora
                             </motion.button>
@@ -277,18 +259,9 @@ export default function PricingSection() {
                                     Passe Direto sem Recurso
                                 </span>
 
-                                <motion.h3
-                                    whileHover={{
-                                        x: 5,
-                                        transition: {
-                                            duration: 0.2,
-                                            ease: "easeOut",
-                                        },
-                                    }}
-                                    className="mt-1 text-2xl font-bold text-card-foreground"
-                                >
+                                <h3 className="font-heading mt-1 text-2xl font-bold text-card-foreground">
                                     Kombinu Pro
-                                </motion.h3>
+                                </h3>
 
                                 <div className="mt-4 flex items-baseline gap-1">
                                     <motion.span
@@ -425,7 +398,7 @@ export default function PricingSection() {
                                     duration: 0.2,
                                     ease: "easeOut",
                                 }}
-                                className="w-full py-3 px-4 rounded-xl text-sm font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                                className="font-sans-landing w-full py-3 px-4 rounded-xl text-sm font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 <span>Assinar Pro com Multicaixa Express</span>
 
