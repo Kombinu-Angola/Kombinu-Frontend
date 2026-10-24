@@ -22,7 +22,7 @@ const dateFormat = new Intl.DateTimeFormat("pt-AO", { day: "2-digit", month: "sh
 const STATUS: Record<string, { label: string; className: string }> = {
   sucesso: { label: "Sucesso", className: "bg-surface-forest text-feedback-success" },
   pendente: { label: "Pendente", className: "bg-secondary-fixed text-on-secondary-fixed-variant" },
-  falhou: { label: "Falhou", className: "bg-feedback-error-soft text-feedback-error-ink" },
+  falhou: { label: "Falhou", className: "border-2 border-feedback-error bg-surface-canvas text-feedback-error-ink" },
 };
 
 /** ADM-04 — monitor financeiro: transações Multicaixa Express e autorização de repasses. */
@@ -51,13 +51,13 @@ export default function FinanceScreen() {
     >
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {cards.map((c) => (
-          <div key={c.id} className="rounded-2xl bg-brand-ocean-shadow p-5 text-white">
-            <p className="flex items-start justify-between gap-2 text-overline text-white/80 uppercase">
+          <div key={c.id} className="rounded-2xl border-2 border-border-cloud bg-surface-canvas p-5">
+            <p className="flex items-start justify-between gap-2 text-overline text-text-tertiary uppercase">
               {c.label}
-              <Icon name="wallet" size={20} className="shrink-0" />
+              <Icon name="wallet" size={20} className="shrink-0 text-primary" />
             </p>
-            <p className="mt-3 font-montserrat text-headline-h2 font-extrabold tabular-nums">{formatKz(c.value)}</p>
-            <p className="mt-1 text-caption text-white/80">{c.note}</p>
+            <p className="mt-3 font-montserrat text-headline-h2 font-extrabold text-on-surface tabular-nums">{formatKz(c.value)}</p>
+            <p className="mt-1 text-caption text-text-secondary">{c.note}</p>
           </div>
         ))}
       </div>
@@ -134,12 +134,12 @@ export default function FinanceScreen() {
               <thead>
                 <tr>
                   <th scope="col" className={cn(th, "w-12")}>
-                    <label className="flex items-center gap-2">
+                    <label className="flex min-h-11 min-w-11 cursor-pointer items-center justify-center">
                       <input
                         type="checkbox"
                         checked={allSelected}
                         onChange={(e) => setSelected(e.target.checked ? PAYOUTS.map((p) => p.id) : [])}
-                        className="size-5 cursor-pointer accent-brand-ocean"
+                        className="size-6 cursor-pointer accent-brand-ocean"
                       />
                       <span className="sr-only">Selecionar todos os repasses</span>
                     </label>
@@ -157,15 +157,17 @@ export default function FinanceScreen() {
                   return (
                     <tr key={p.id} className={cn(tr, checked && "bg-surface-sky")}>
                       <td className={td}>
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          aria-label={`Selecionar o repasse de ${p.creator}, ${formatKz(p.amountKz)}`}
-                          onChange={(e) =>
-                            setSelected((prev) => (e.target.checked ? [...prev, p.id] : prev.filter((id) => id !== p.id)))
-                          }
-                          className="size-5 cursor-pointer accent-brand-ocean"
-                        />
+                        <label className="flex min-h-11 min-w-11 cursor-pointer items-center justify-center">
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            aria-label={`Selecionar o repasse de ${p.creator}, ${formatKz(p.amountKz)}`}
+                            onChange={(e) =>
+                              setSelected((prev) => (e.target.checked ? [...prev, p.id] : prev.filter((id) => id !== p.id)))
+                            }
+                            className="size-6 cursor-pointer accent-brand-ocean"
+                          />
+                        </label>
                       </td>
                       <th scope="row" className={cn(td, "font-bold")}>{p.creator}</th>
                       <td className={cn(td, "text-text-secondary tabular-nums")}>{p.phone}</td>
