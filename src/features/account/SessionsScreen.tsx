@@ -119,8 +119,7 @@ export default function SessionsScreen({ sessions: initial, userName, securityHr
             </div>
             {others.length > 0 && !confirmingAll && (
               <Button3D
-                variant="ghost"
-                className="border-feedback-error text-feedback-error-ink"
+                variant="danger-outline"
                 onClick={() => setConfirmingAll(true)}
                 leadingIcon={<Icon name="lock" size={18} />}
               >
@@ -140,7 +139,7 @@ export default function SessionsScreen({ sessions: initial, userName, securityHr
                   Cancelar
                 </Button3D>
                 <Button3D
-                  className="bg-feedback-error-ink text-white shadow-none hover:brightness-110"
+                  variant="danger"
                   onClick={() => {
                     setSessions((prev) => prev.filter((s) => s.current));
                     setConfirmingAll(false);
@@ -185,8 +184,8 @@ export default function SessionsScreen({ sessions: initial, userName, securityHr
                     </div>
 
                     <Button3D
-                      variant="ghost"
-                      className="border-feedback-error text-feedback-error-ink sm:w-auto"
+                      variant="danger-outline"
+                      className="sm:w-auto"
                       onClick={() => terminate(session)}
                     >
                       Terminar sessão

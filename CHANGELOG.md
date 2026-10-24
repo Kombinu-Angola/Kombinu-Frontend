@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
+- `Button3D`: variantes `danger` (confirmacao destrutiva final, com a mesma sombra 3D tactil de `primary`/`success` via o novo token `--shadow-3d-error`) e `danger-outline` (acao destrutiva secundaria ou passo intermedio). Substituem overrides a mao duplicados em 6 ficheiros (`AccountSettingsScreen`, `RenewalFailureScreen`, `OfflineDownloadsScreen`, `StudentSettingsScreen`, `SessionsScreen`, `PrivacyScreen`), um dos quais tinha um bug real de hover (texto ficava azul ao passar o rato num botao com borda vermelha).
 - Secoes da landing page (`WhyKombinu`, `MethodologySection`, `FinancialComparison`, `AcademicMarketplace`, `PricingSection`, `TestimonialsSection`, `Footer`): tipografia alinhada com `font-heading`/`font-sans-landing` (ja usados no `heroSection`, Montserrat/Rubik), remocao de animacoes `whileHover` decorativas em texto estatico sem proposito, cor da barra "Kombinu" trocada do generico `emerald` para `primary`, e copy da seccao de precos tornada mais especifica da marca ("Transparencia total. Sem surpresas." -> referencia ao tema de fotocopias ja usado em `FinancialComparison`).
 - Enquetes no estudio de criacao (`features/survey/`: `SurveyComposerScreen`, `SurveyResultsScreen`) -- fecha a referencia `/estudio/enquete` deixada pendente no `CreationHubScreen` desde o lote anterior. Novas rotas: `/v2/estudio/enquete`, `/v2/estudio/enquete/resultados`.
 - Exportacao fiscal e equipa/permissoes no backoffice (`features/governance/`: `FiscalExportScreen`, `TeamPermissionsScreen`) e pagina publica de universidade parceira, sem sessao (`features/campus/PublicUniversityScreen`). `AdminShell` ganha 2 itens de navegacao. Novas rotas: `/v2/admin/fiscal`, `/v2/admin/equipa`, `/v2/u/:slug`.
@@ -38,6 +39,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Corrigido
 
+- `ReferralScreen`: o CTA do WhatsApp era um `<a>` a duplicar o estilo "success" do `Button3D` a mao; trocado por `LinkButton3D`.
 - Ids de ancora inconsistentes na landing page: `WhyKombinu` (`#data-learn` -> `#data-lean`, nao correspondia ao link ja existente no `Footer`) e `AcademicMarketplace` (`#marktplace` -> `#marketplace`, nao correspondia ao proprio link interno "Ver Todo o Marketplace").
 - `Footer.tsx`: classes Tailwind invalidas no logotipo (`h-30 w-30`, fora da escala de espacamento do projecto, sem efeito) e copyright desatualizado (2025 -> 2026).
 - `MethodologySection.tsx`: classe Tailwind invalida e sem efeito (`hover:` sem utilitario a seguir) no grid de passos; tag "Curriculos 100% atualizados para 2025" desatualizada -> 2026.

@@ -191,9 +191,9 @@ export default function PrivacyScreen({
           <div className="mt-5">
             {step === 0 && (
               <Button3D
-                variant="ghost"
+                variant="danger-outline"
                 disabled={blocked}
-                className={cn("border-feedback-error text-feedback-error-ink", blocked && "opacity-100")}
+                className={cn(blocked && "opacity-100")}
                 onClick={() => setStep(1)}
               >
                 {blocked ? "Levanta o saldo para poder eliminar" : "Quero eliminar a minha conta"}
@@ -213,7 +213,7 @@ export default function PrivacyScreen({
                   <Button3D variant="secondary" onClick={() => toast.show("Pedido de exportação registado.")}>
                     Descarregar primeiro
                   </Button3D>
-                  <Button3D variant="ghost" className="border-feedback-error text-feedback-error-ink" onClick={() => setStep(2)}>
+                  <Button3D variant="danger-outline" onClick={() => setStep(2)}>
                     Continuar a eliminar
                   </Button3D>
                 </div>
@@ -247,8 +247,8 @@ export default function PrivacyScreen({
                     Cancelar
                   </Button3D>
                   <Button3D
+                    variant="danger"
                     disabled={!typedCorrectly}
-                    className="bg-feedback-error-ink text-white shadow-none hover:brightness-110"
                     onClick={() => {
                       setStep(0);
                       setConfirmation("");

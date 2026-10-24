@@ -236,10 +236,7 @@ export default function RenewalFailureScreen({
                       <Button3D variant="ghost" onClick={() => setConfirmingDowngrade(false)}>
                         Manter o Pro
                       </Button3D>
-                      <Button3D
-                        className="bg-feedback-error-ink text-white shadow-none hover:brightness-110"
-                        onClick={onDowngrade}
-                      >
+                      <Button3D variant="danger" onClick={onDowngrade}>
                         Passar ao plano grátis
                       </Button3D>
                     </div>
