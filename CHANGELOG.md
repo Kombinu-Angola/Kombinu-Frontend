@@ -41,6 +41,8 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 - Ids de ancora inconsistentes na landing page: `WhyKombinu` (`#data-learn` -> `#data-lean`, nao correspondia ao link ja existente no `Footer`) e `AcademicMarketplace` (`#marktplace` -> `#marketplace`, nao correspondia ao proprio link interno "Ver Todo o Marketplace").
 - `Footer.tsx`: classes Tailwind invalidas no logotipo (`h-30 w-30`, fora da escala de espacamento do projecto, sem efeito) e copyright desatualizado (2025 -> 2026).
 - `MethodologySection.tsx`: classe Tailwind invalida e sem efeito (`hover:` sem utilitario a seguir) no grid de passos; tag "Curriculos 100% atualizados para 2025" desatualizada -> 2026.
+- `AdminShell`: sidebar fixa so aparecia a partir de `lg:` (1024px), deixando o intervalo de tablet (768-1023px) preso ao padrao mobile; promovida para `md:` (nav fixa, overlay da gaveta, padding do conteudo e botao de hamburguer).
+- `CreatorShell`: navegacao so existia dentro da gaveta, sem nenhuma promocao para desktop (ao contrario do `AppShell` em `md:` e do `AdminShell` em `lg:`); adicionada sidebar fixa a partir de `lg:`, reaproveitando a lista de navegacao (com os hints) entre a gaveta e a sidebar via um `NavList` partilhado.
 - Botao "Comecar a ler" no fim do onboarding apontava para um caminho inexistente (`/resumos/taxa-bna`); corrigido para `/v2/leitura`.
 - Botoes (`Button3D`/`LinkButton3D`) usavam `font-lato` em vez de `font-poppins` (SLA 7.3: hierarquia de fontes obrigatoria para CTAs).
 - 4 ocorrencias de `window.location.hash = "#/..."` (nao navegam sob rotas por path): `CreatorShell`, `SubscriptionFlow`, `CreatorContentHubScreen`, `PurchaseHistoryScreen` -- trocadas por `window.location.assign`.
