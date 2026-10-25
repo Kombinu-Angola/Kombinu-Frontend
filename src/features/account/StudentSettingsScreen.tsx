@@ -292,7 +292,7 @@ export default function StudentSettingsScreen({ account: initial, phoneHref, dow
                     Exportar dados
                   </Button3D>
                   <Button3D
-                    className="bg-feedback-error-ink text-white shadow-none hover:brightness-110"
+                    variant="danger"
                     onClick={() => {
                       setDeleting(false);
                       toast.show("Pedido registado. Confirmamos por SMS antes de eliminar.", "error");

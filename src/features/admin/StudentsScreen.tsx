@@ -176,7 +176,7 @@ export default function StudentsScreen() {
                       {s.plan === "pro" ? "Pro" : "Grátis"}
                     </span>
                     {s.status === "suspenso" && (
-                      <span className="mt-1 inline-block rounded-full border-2 border-feedback-error bg-surface-canvas px-2 py-0.5 text-overline text-feedback-error-ink uppercase">
+                      <span className="mt-1 inline-block rounded-full border-2 border-feedback-error bg-surface-canvas px-2.5 py-0.5 text-overline text-feedback-error-ink uppercase">
                         Suspenso
                       </span>
                     )}

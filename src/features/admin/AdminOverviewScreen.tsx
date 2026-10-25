@@ -178,7 +178,9 @@ export default function AdminOverviewScreen() {
                     <span
                       className={cn(
                         "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-overline uppercase",
-                        c.status === "ativo" ? "bg-surface-forest text-feedback-success" : "bg-secondary-fixed text-on-secondary-fixed-variant",
+                        c.status === "ativo" && "bg-surface-forest text-feedback-success",
+                        c.status === "crescimento" && "bg-feedback-success-soft text-feedback-success-ink",
+                        c.status === "pausado" && "bg-secondary-fixed text-on-secondary-fixed-variant",
                       )}
                     >
                       {STATUS_LABEL[c.status]}
@@ -189,6 +191,13 @@ export default function AdminOverviewScreen() {
             </tbody>
           </table>
         </TableScroll>
+
+        {rows.length === 0 && (
+          <p className="mt-6 rounded-2xl border-2 border-dashed border-border-input p-8 text-center text-body-md text-text-secondary">
+            Nenhuma instituição corresponde a esta pesquisa.
+          </p>
+        )}
+
         <p role="status" className="mt-3 text-caption text-text-secondary">
           A mostrar {rows.length} de {CAMPUSES.length} polos monitorizados.
         </p>
