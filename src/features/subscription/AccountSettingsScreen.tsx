@@ -254,7 +254,7 @@ export default function AccountSettingsScreen({ settings: initial, onSave, onCha
                       Manter o Pro
                     </Button3D>
                     <Button3D
-                      className="bg-feedback-error-ink text-white shadow-none hover:brightness-110"
+                      variant="danger"
                       onClick={() => {
                         setCancelling(false);
                         toast.show(`Subscrição cancelada. Tens o Pro até ${renewsLabel}.`, "error");
