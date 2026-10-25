@@ -2,7 +2,7 @@ import logoProfile from "../assets/kombinu-logo.png"
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-background border-t border-border text-foreground pt-14 pb-10">
+    <footer className="w-full bg-background border-t border-border-cloud text-foreground pt-14 pb-10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Grid de Links */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
@@ -11,7 +11,7 @@ export default function Footer() {
             <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-primary">
               Kombinu Plataforma
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
+            <ul className="space-y-2 text-xs sm:text-sm text-text-secondary">
               <li>
                 <a href="#como-funciona" className="hover:text-foreground transition-colors">
                   Como Funciona
@@ -40,7 +40,7 @@ export default function Footer() {
             <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-primary">
               Faculdades Cobertas
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
+            <ul className="space-y-2 text-xs sm:text-sm text-text-secondary">
               <li>
                 <a href="#uan" className="hover:text-foreground transition-colors">
                   Univ. Agostinho Neto (UAN)
@@ -69,7 +69,7 @@ export default function Footer() {
             <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-primary">
               Criadores de Conteúdo
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
+            <ul className="space-y-2 text-xs sm:text-sm text-text-secondary">
               <li>
                 <a href="#publicar" className="hover:text-foreground transition-colors">
                   Publicar Sebenta
@@ -98,7 +98,7 @@ export default function Footer() {
             <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-primary">
               Legal & Segurança
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground">
+            <ul className="space-y-2 text-xs sm:text-sm text-text-secondary">
               <li>
                 <a href="#iapi" className="hover:text-foreground transition-colors">
                   Proteção de Direitos (IAPI)
@@ -121,7 +121,7 @@ export default function Footer() {
         </div>
 
         {/* Barra Inferior: Logo, Links Rápidos e Copyright */}
-        <div className="pt-8  flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+        <div className="pt-8  flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-text-secondary">
           {/* Marca */}
           <img src={logoProfile} className="h-10 w-10 sm:w-14 sm:h-14 object-contain" alt="Kombinu" />
 

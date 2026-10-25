@@ -91,7 +91,7 @@ export default function MethodologySection() {
                                     ease: "easeOut",
                                 },
                             }}
-                            className="relative flex flex-col justify-between p-6 rounded-2xl bg-card shadow-sm hover:border-primary/40 transition-colors"
+                            className="relative flex flex-col justify-between p-6 rounded-2xl border-2 border-border-cloud bg-surface-canvas shadow-clay hover:border-primary/40 transition-colors"
                         >
                             <div>
 
@@ -119,12 +119,12 @@ export default function MethodologySection() {
                                 </motion.span>
 
                                 {/* Título */}
-                                <h3 className="font-heading mt-2 text-lg sm:text-xl font-bold text-card-foreground">
+                                <h3 className="font-heading mt-2 text-lg sm:text-xl font-bold text-on-surface">
                                     {item.title}
                                 </h3>
 
                                 {/* Descrição */}
-                                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                                <p className="mt-3 text-sm text-text-secondary leading-relaxed">
                                     {item.description}
                                 </p>
 
@@ -148,7 +148,7 @@ export default function MethodologySection() {
                                     duration: 0.5,
                                     delay: index * 0.15 + 0.3,
                                 }}
-                                className="mt-6 pt-4 border-t border-border/50 flex items-center gap-2 text-xs font-medium text-muted-foreground"
+                                className="mt-6 pt-4 border-t border-border-cloud flex items-center gap-2 text-xs font-medium text-text-secondary"
                             >
                                 <div className="text-primary shrink-0">
                                     <HugeiconsIcon

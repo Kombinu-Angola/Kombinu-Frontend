@@ -26,7 +26,7 @@ export function WhyKombinu() {
                     Feito para a realidade do estudante angolano
                 </h2>
 
-                <p className="mt-3 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <p className="mt-3 text-xs sm:text-sm text-text-secondary leading-relaxed">
                     Substituímos a desorganização de fotocópias ilegíveis e grupos de
                     WhatsApp caóticos por um sistema de estudo direto ao ponto.
                 </p>
@@ -46,7 +46,7 @@ export function WhyKombinu() {
                     }}
                     className="lg:col-span-2"
                 >
-                    <Card className="bg-card shadow-sm flex flex-col justify-between h-full">
+                    <Card className="bg-surface-canvas border-2 border-border-cloud shadow-clay flex flex-col justify-between h-full">
 
                         <div>
                             <CardHeader className="p-4 sm:p-6 pb-2">
@@ -56,11 +56,11 @@ export function WhyKombinu() {
                             </CardHeader>
 
                             <CardContent className="p-4 sm:p-6 pt-0">
-                                <h3 className="font-heading text-lg sm:text-xl font-bold text-card-foreground">
+                                <h3 className="font-heading text-lg sm:text-xl font-bold text-on-surface">
                                     Modo Ultra-Leve Data-Lean (&lt; 5MB/h)
                                 </h3>
 
-                                <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                                <p className="mt-2 text-xs sm:text-sm text-text-secondary leading-relaxed">
                                     Sem animações pesadas nem scripts inúteis. Estudamos
                                     o protocolo HTTP para que você possa rever 10 sebentas
                                     no engarrafamento da Deolinda Rodrigues sem ver o seu
@@ -70,7 +70,7 @@ export function WhyKombinu() {
                         </div>
 
                         <CardFooter className="p-4 sm:p-6 pt-0">
-                            <div className="w-full bg-background/80 border border-border p-4 rounded-xl space-y-3">
+                            <div className="w-full bg-background/80 border-2 border-border-cloud p-4 rounded-xl space-y-3">
 
                                 {/* Item 1 */}
                                 <div>
@@ -79,12 +79,12 @@ export function WhyKombinu() {
                                             Vídeo-aulas no YouTube / TikTok
                                         </span>
 
-                                        <span className="text-red-400 font-semibold shrink-0">
+                                        <span className="text-feedback-error-ink font-semibold shrink-0">
                                             180 MB / hora
                                         </span>
                                     </div>
 
-                                    <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                                    <div className="h-2 w-full rounded-full bg-surface-soft overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             whileInView={{ width: "100%" }}
@@ -94,7 +94,7 @@ export function WhyKombinu() {
                                                 delay: 0.2,
                                                 ease: "easeOut",
                                             }}
-                                            className="bg-red-500 h-full rounded-full"
+                                            className="bg-feedback-error h-full rounded-full"
                                         />
                                     </div>
                                 </div>
@@ -106,12 +106,12 @@ export function WhyKombinu() {
                                             PDFs digitalizados em grupos
                                         </span>
 
-                                        <span className="text-amber-400 font-semibold shrink-0">
+                                        <span className="text-feedback-streak-ink font-semibold shrink-0">
                                             64 MB / doc
                                         </span>
                                     </div>
 
-                                    <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                                    <div className="h-2 w-full rounded-full bg-surface-soft overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             whileInView={{ width: "35%" }}
@@ -121,7 +121,7 @@ export function WhyKombinu() {
                                                 delay: 0.4,
                                                 ease: "easeOut",
                                             }}
-                                            className="bg-amber-500 h-full rounded-full"
+                                            className="bg-feedback-streak h-full rounded-full"
                                         />
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@ export function WhyKombinu() {
                                         </span>
                                     </div>
 
-                                    <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                                    <div className="h-2 w-full rounded-full bg-surface-soft overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             whileInView={{ width: "10%" }}
@@ -170,7 +170,7 @@ export function WhyKombinu() {
                     }}
                     className="lg:col-span-1"
                 >
-                    <Card className="bg-card shadow-sm flex flex-col justify-between h-full">
+                    <Card className="bg-surface-canvas border-2 border-border-cloud shadow-clay flex flex-col justify-between h-full">
 
                         <div>
                             <CardHeader className="p-4 sm:p-6 pb-2 flex flex-row items-center justify-between">
@@ -186,11 +186,11 @@ export function WhyKombinu() {
                                 </div>
                             </CardHeader>
 
-                            <h3 className="font-heading text-lg px-4 sm:px-6 font-bold text-card-foreground">
+                            <h3 className="font-heading text-lg px-4 sm:px-6 font-bold text-on-surface">
                                 Quizzes com Feedback Imediato
                             </h3>
 
-                            <p className="mt-2 px-4 sm:px-6 text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                            <p className="mt-2 px-4 sm:px-6 text-xs sm:text-sm text-text-secondary leading-relaxed">
                                 Não espere a folha de exame para descobrir lacunas.
                                 Responda perguntas reais de testes anteriores e receba
                                 a justificativa teórica em duas linhas.
@@ -209,10 +209,10 @@ export function WhyKombinu() {
                                     delay: 0.5,
                                     ease: "easeOut",
                                 }}
-                                className="w-full bg-background/80 border border-border p-4 rounded-xl space-y-2"
+                                className="w-full bg-background/80 border-2 border-border-cloud p-4 rounded-xl space-y-2"
                             >
-                                <span className="text-emerald-400 text-[11px] font-bold tracking-wider uppercase inline-flex items-center gap-1.5">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                                <span className="text-feedback-success-ink text-[11px] font-bold tracking-wider uppercase inline-flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-feedback-success shrink-0" />
                                     Resposta Confirmada
                                 </span>
 
@@ -220,7 +220,7 @@ export function WhyKombinu() {
                                     Artigo 483º do Código Civil Angolano:
                                 </p>
 
-                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                <p className="text-xs text-text-secondary leading-relaxed">
                                     Exige ilicitude, culpa e nexo de causalidade para
                                     imputação civil subjectiva.
                                 </p>

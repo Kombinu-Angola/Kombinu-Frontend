@@ -109,12 +109,11 @@ export const InfiniteMovingCards = ({
             key={university}
             className={cn(
               "flex shrink-0 items-center gap-2.5",
-              "rounded-xl border border-border",
-              "bg-card px-4 py-2.5",
-              "shadow-xs",
+              "rounded-xl border-2 border-border-cloud",
+              "bg-surface-canvas px-4 py-2.5",
               "transition-all duration-200",
               "hover:border-primary/60",
-              "hover:bg-muted/40"
+              "hover:bg-surface-soft"
             )}
           >
             <HugeiconsIcon

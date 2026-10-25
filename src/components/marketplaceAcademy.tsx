@@ -6,6 +6,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "motion/react";
+import { Button3D } from "./ui/Button3D";
 
 export default function AcademicMarketplace() {
     const sebentas = [
@@ -131,14 +132,14 @@ export default function AcademicMarketplace() {
                                     ease: "easeOut",
                                 },
                             }}
-                            className="flex flex-col justify-between p-5 sm:p-6 rounded-2xl bg-card shadow-sm hover:border-primary/40 hover:shadow-md transition-shadow"
+                            className="flex flex-col justify-between p-5 sm:p-6 rounded-2xl border-2 border-border-cloud bg-surface-canvas shadow-clay hover:border-primary/40 hover:shadow-clay-hover transition-shadow"
                         >
                             <div>
 
                                 {/* Metadados */}
-                                <div className="flex items-center justify-between text-xs pb-3 border-b border-border/50">
+                                <div className="flex items-center justify-between text-xs pb-3 border-b border-border-cloud">
 
-                                    <span className="font-semibold text-muted-foreground uppercase tracking-wide text-[11px]">
+                                    <span className="font-semibold text-text-secondary uppercase tracking-wide text-[11px]">
                                         {item.university}
                                     </span>
 
@@ -154,7 +155,7 @@ export default function AcademicMarketplace() {
                                             {item.rating}
                                         </span>
 
-                                        <span className="text-muted-foreground font-normal text-[11px]">
+                                        <span className="text-text-secondary font-normal text-[11px]">
                                             ({item.reviews})
                                         </span>
 
@@ -164,13 +165,13 @@ export default function AcademicMarketplace() {
                                 {/* Título & Autor */}
                                 <div className="mt-4">
 
-                                    <h3 className="font-heading font-bold text-base sm:text-lg text-card-foreground leading-snug line-clamp-2">
+                                    <h3 className="font-heading font-bold text-base sm:text-lg text-on-surface leading-snug line-clamp-2">
                                         {item.title}
                                     </h3>
 
-                                    <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                                    <p className="mt-2 text-xs text-text-secondary leading-relaxed">
                                         Por{" "}
-                                        <strong className="text-card-foreground font-medium">
+                                        <strong className="text-on-surface font-medium">
                                             {item.author}
                                         </strong>
 
@@ -189,19 +190,19 @@ export default function AcademicMarketplace() {
                             </div>
 
                             {/* Rodapé */}
-                            <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between gap-3">
+                            <div className="mt-6 pt-4 border-t border-border-cloud flex items-center justify-between gap-3">
 
                                 {/* Preço */}
                                 <div className="flex flex-col">
 
-                                    <span className="text-[10px] uppercase font-semibold text-muted-foreground">
+                                    <span className="text-[10px] uppercase font-semibold text-text-secondary">
                                         Preço
                                     </span>
 
                                     <span
                                         className={`font-heading text-base sm:text-lg font-extrabold ${item.isFree
-                                            ? "text-emerald-500"
-                                            : "text-card-foreground"
+                                            ? "text-feedback-success-ink"
+                                            : "text-on-surface"
                                             }`}
                                     >
                                         {item.price}
@@ -210,31 +211,13 @@ export default function AcademicMarketplace() {
                                 </div>
 
                                 {/* Botão */}
-                                <motion.button
-                                    whileHover={{
-                                        scale: 1.04,
-                                    }}
-                                    whileTap={{
-                                        scale: 0.97,
-                                    }}
-                                    transition={{
-                                        duration: 0.15,
-                                    }}
-                                    type="button"
-                                    className={`font-sans-landing inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${item.isFree
-                                        ? "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 dark:text-emerald-400"
-                                        : "bg-primary text-primary-foreground hover:bg-primary/90"
-                                        }`}
+                                <Button3D
+                                    variant={item.isFree ? "success" : "primary"}
+                                    className="px-3.5 text-xs sm:text-sm"
+                                    leadingIcon={<HugeiconsIcon icon={BookOpen01Icon} size={15} />}
                                 >
-                                    <HugeiconsIcon
-                                        icon={BookOpen01Icon}
-                                        size={15}
-                                    />
-
-                                    <span>
-                                        {item.ctaText}
-                                    </span>
-                                </motion.button>
+                                    {item.ctaText}
+                                </Button3D>
 
                             </div>
                         </motion.div>

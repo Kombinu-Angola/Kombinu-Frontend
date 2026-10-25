@@ -4,6 +4,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "motion/react";
+import { Button3D } from "./ui/Button3D";
 
 export default function CallToActionSection() {
     return (
@@ -25,7 +26,7 @@ export default function CallToActionSection() {
                             ease: "easeOut",
                         },
                     }}
-                    className="relative overflow-hidden rounded-3xl p-8 sm:p-12 lg:p-16 text-center"
+                    className="relative overflow-hidden rounded-3xl p-8 sm:p-12 lg:p-16 text-center bg-primary"
                 >
 
                     {/* Badge */}
@@ -44,7 +45,7 @@ export default function CallToActionSection() {
                                 duration: 0.2,
                             },
                         }}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/15 text-primary text-xs font-bold tracking-wider uppercase mb-6"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold tracking-wider uppercase mb-6"
                     >
                         <span>Estude Sem Limites</span>
                     </motion.div>
@@ -59,7 +60,7 @@ export default function CallToActionSection() {
                             delay: 0.2,
                             ease: "easeOut",
                         }}
-                        className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground max-w-2xl mx-auto"
+                        className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white max-w-2xl mx-auto"
                     >
                         Pronto para estudar menos tempo e tirar notas melhores?
                     </motion.h2>
@@ -74,7 +75,7 @@ export default function CallToActionSection() {
                             delay: 0.3,
                             ease: "easeOut",
                         }}
-                        className="mt-4 text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed"
+                        className="mt-4 text-sm sm:text-base text-white/80 max-w-xl mx-auto leading-relaxed"
                     >
                         Junte-se a milhares de estudantes universitários em Angola hoje mesmo. Comece sem pagar nada.
                     </motion.p>
@@ -91,30 +92,13 @@ export default function CallToActionSection() {
                         }}
                         className="mt-8 flex justify-center"
                     >
-                        <motion.button
-                            type="button"
-                            whileHover={{
-                                scale: 1.04,
-                                gap: "12px",
-                                transition: {
-                                    duration: 0.2,
-                                    ease: "easeOut",
-                                },
-                            }}
-                            whileTap={{
-                                scale: 0.97,
-                            }}
-                            className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold text-sm sm:text-base bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 transition-colors cursor-pointer"
+                        <Button3D
+                            variant="secondary"
+                            size="lg"
+                            trailingIcon={<HugeiconsIcon icon={ArrowRight01Icon} size={18} />}
                         >
-                            <span>
-                                Criar Conta Gratuita em 30 Segundos
-                            </span>
-
-                            <HugeiconsIcon
-                                icon={ArrowRight01Icon}
-                                size={18}
-                            />
-                        </motion.button>
+                            Criar Conta Gratuita em 30 Segundos
+                        </Button3D>
                     </motion.div>
 
                     {/* Benefícios */}
@@ -127,13 +111,13 @@ export default function CallToActionSection() {
                             delay: 0.5,
                             ease: "easeOut",
                         }}
-                        className="mt-8 pt-6 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs text-muted-foreground"
+                        className="mt-8 pt-6 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs text-white/80"
                     >
                         <span className="inline-flex items-center gap-1.5">
                             <HugeiconsIcon
                                 icon={CheckmarkCircle02Icon}
                                 size={14}
-                                className="text-emerald-500"
+                                className="text-white"
                             />
                             Acesso instantâneo
                         </span>
@@ -142,7 +126,7 @@ export default function CallToActionSection() {
                             <HugeiconsIcon
                                 icon={CheckmarkCircle02Icon}
                                 size={14}
-                                className="text-emerald-500"
+                                className="text-white"
                             />
                             Não pede cartão
                         </span>
@@ -151,7 +135,7 @@ export default function CallToActionSection() {
                             <HugeiconsIcon
                                 icon={CheckmarkCircle02Icon}
                                 size={14}
-                                className="text-emerald-500"
+                                className="text-white"
                             />
                             Cancelamento a qualquer momento
                         </span>

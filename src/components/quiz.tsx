@@ -29,7 +29,7 @@ export function QuizSection() {
                     }}
                     className="lg:col-span-1"
                 >
-                    <Card className="bg-card shadow-sm flex flex-col justify-between h-full">
+                    <Card className="bg-surface-canvas border-2 border-border-cloud shadow-clay flex flex-col justify-between h-full">
 
                         <div>
 
@@ -67,7 +67,7 @@ export function QuizSection() {
                                         duration: 0.5,
                                         delay: 0.3,
                                     }}
-                                    className="mt-4 text-lg sm:text-xl font-bold text-card-foreground"
+                                    className="mt-4 text-lg sm:text-xl font-bold text-on-surface"
                                 >
                                     Gerador de Quizzes IA em (&lt; 10s)
                                 </motion.h3>
@@ -84,7 +84,7 @@ export function QuizSection() {
                                         duration: 0.5,
                                         delay: 0.4,
                                     }}
-                                    className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                                    className="mt-2 text-xs sm:text-sm text-text-secondary leading-relaxed"
                                 >
                                     Carregue qualquer sebenta ou anotação de caderno
                                     em PDF ou foto e veja o nosso motor de inteligência
@@ -108,7 +108,7 @@ export function QuizSection() {
                                         delay: 0.5,
                                         ease: "easeOut",
                                     }}
-                                    className="w-full bg-background/80 border border-border p-4 rounded-xl space-y-3"
+                                    className="w-full bg-background/80 border-2 border-border-cloud p-4 rounded-xl space-y-3"
                                 >
 
                                     {/* Ficheiro + tempo */}
@@ -128,7 +128,7 @@ export function QuizSection() {
 
                                         </div>
 
-                                        <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
+                                        <div className="flex items-center gap-1 text-xs text-text-secondary shrink-0">
 
                                             <HugeiconsIcon
                                                 icon={Clock01Icon}
@@ -142,7 +142,7 @@ export function QuizSection() {
                                     </div>
 
                                     {/* Resultado */}
-                                    <div className="flex items-center justify-between gap-3 pt-3 border-t border-border/50">
+                                    <div className="flex items-center justify-between gap-3 pt-3 border-t border-border-cloud">
 
                                         <div className="flex items-center gap-1.5 text-xs font-semibold text-primary">
 
@@ -200,7 +200,7 @@ export function QuizSection() {
                     }}
                     className="lg:col-span-2"
                 >
-                    <Card className="bg-card shadow-sm flex flex-col justify-between h-full">
+                    <Card className="bg-surface-canvas border-2 border-border-cloud shadow-clay flex flex-col justify-between h-full">
 
                         <div>
 
@@ -247,7 +247,7 @@ export function QuizSection() {
                                     duration: 0.5,
                                     delay: 0.3,
                                 }}
-                                className="text-lg px-6 sm:text-xl font-bold text-card-foreground"
+                                className="text-lg px-6 sm:text-xl font-bold text-on-surface"
                             >
                                 Ligas Universitárias: Honre a sua Faculdade
                             </motion.h3>
@@ -264,7 +264,7 @@ export function QuizSection() {
                                     duration: 0.5,
                                     delay: 0.4,
                                 }}
-                                className="mt-2 mb-12 px-6 text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                                className="mt-2 mb-12 px-6 text-xs sm:text-sm text-text-secondary leading-relaxed"
                             >
                                 Cada quiz concluído soma pontos de prestígio para a sua
                                 instituição na tabela geral semanal de Luanda.
@@ -285,7 +285,7 @@ export function QuizSection() {
                                         delay: 0.5,
                                         ease: "easeOut",
                                     }}
-                                    className="w-full bg-background/80 border border-border p-6 sm:p-10 rounded-xl space-y-2"
+                                    className="w-full bg-background/80 border-2 border-border-cloud p-6 sm:p-10 rounded-xl space-y-2"
                                 >
 
                                     {/* 1º Lugar */}
@@ -300,7 +300,7 @@ export function QuizSection() {
                                             duration: 0.4,
                                             delay: 0.6,
                                         }}
-                                        className="flex items-center justify-between text-xs pb-1.5 border-b border-border/40"
+                                        className="flex items-center justify-between text-xs pb-1.5 border-b border-border-cloud"
                                     >
                                         <div className="flex items-center gap-2">
 
@@ -314,7 +314,7 @@ export function QuizSection() {
 
                                         </div>
 
-                                        <span className="text-muted-foreground font-medium text-[11px]">
+                                        <span className="text-text-secondary font-medium text-[11px]">
                                             38.450 XP
                                         </span>
 
@@ -332,7 +332,7 @@ export function QuizSection() {
                                             duration: 0.4,
                                             delay: 0.7,
                                         }}
-                                        className="flex items-center justify-between text-xs pb-1.5 border-b border-border/40"
+                                        className="flex items-center justify-between text-xs pb-1.5 border-b border-border-cloud"
                                     >
                                         <div className="flex items-center gap-2">
 
@@ -346,7 +346,7 @@ export function QuizSection() {
 
                                         </div>
 
-                                        <span className="text-muted-foreground font-medium text-[11px]">
+                                        <span className="text-text-secondary font-medium text-[11px]">
                                             35.120 XP
                                         </span>
 
@@ -378,7 +378,7 @@ export function QuizSection() {
 
                                         </div>
 
-                                        <span className="text-muted-foreground font-medium text-[11px]">
+                                        <span className="text-text-secondary font-medium text-[11px]">
                                             31.800 XP
                                         </span>
 
