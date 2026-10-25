@@ -1,4 +1,4 @@
-import logoProfile from "../assets/kombinu-logo.png"
+import logoProfile from "../assets/kombinu-mark.svg"
 
 export default function Footer() {
   return (

@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Icon, type IconName } from "../ui/Icon";
+import kombinuMark from "../assets/kombinu-mark.svg";
 
 export type AdminSection = "visao" | "estudantes" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao" | "catalogo" | "subscricoes" | "suporte" | "adaptativo" | "equipa" | "fiscal";
 
@@ -72,8 +73,8 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
       <nav aria-label="Backoffice" className="fixed inset-y-0 left-0 z-40 hidden w-[260px] flex-col justify-between border-r-2 border-border-cloud bg-surface-canvas md:flex">
         <div>
           <div className="flex h-16 items-center justify-between border-b-2 border-border-cloud px-5">
-            <a href="/v2/admin" className="font-montserrat text-headline-h3 font-extrabold text-primary">
-              Kombinu
+            <a href="/v2/admin" aria-label="Kombinu" className="flex items-center">
+              <img src={kombinuMark} alt="" className="size-10" />
             </a>
             <span className="rounded-full bg-brand-ocean px-2 py-0.5 text-overline text-white uppercase">Admin</span>
           </div>
@@ -105,7 +106,9 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
             className="absolute inset-y-0 left-0 w-[280px] border-r-2 border-border-cloud bg-surface-canvas py-4"
           >
             <div className="mb-4 flex items-center justify-between px-5">
-              <span className="font-montserrat text-headline-h3 font-extrabold text-primary">Kombinu Admin</span>
+              <span className="flex items-center" aria-label="Kombinu Admin">
+                <img src={kombinuMark} alt="" className="size-10" />
+              </span>
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}

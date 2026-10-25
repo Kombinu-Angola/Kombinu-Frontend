@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
 import { DataSaverBadge } from "../ui/DataSaverBadge";
 import { Icon, type IconName } from "../ui/Icon";
+import kombinuMark from "../assets/kombinu-mark.svg";
 
 export type AppSection = "trilhas" | "simulados" | "ligas" | "sebentas" | "biblioteca" | "painel";
 
@@ -45,8 +46,8 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
       <header className="sticky top-0 z-50 border-b-2 border-border-cloud bg-surface-canvas/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-4 px-4 md:h-20 md:px-6">
           <span className="flex min-w-0 items-center gap-3">
-            <a href="/v2/trilhas" className="font-montserrat text-headline-h2 font-extrabold tracking-tight text-primary">
-              Kombinu
+            <a href="/v2/trilhas" aria-label="Kombinu" className="flex items-center">
+              <img src={kombinuMark} alt="" className="size-10" />
             </a>
             {campus && (
               <span className="hidden items-center gap-1.5 rounded-full bg-surface-sky px-3 py-1 text-caption font-bold text-primary sm:inline-flex">
