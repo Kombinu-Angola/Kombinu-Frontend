@@ -70,6 +70,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Alterado
 
+- `CLAUDE.md`: documentada excepcao aprovada ao padrao Tailwind-only — a landing publica (Passe de Provas) usa CSS Modules e nao tem dark mode, por exigencia de fidelidade pixel-a-pixel a um mockup externo; excepcao restrita a `components/landing/`.
 - `contentService.ts`: mapeamento completo de campos do backend — `video_url` -> `videoUrl`, `text_content` -> `textContent`, objecto `creator` -> `creatorName`; categorias reais do backend (`tecnologia`, `negocios`, `design`) com labels em portugues (S2-20).
 - `Marketplace.tsx`: filtros de categoria agora usam valores reais do backend com labels formatadas; botoes com `type="button"` (S2-20).
 - `authService.ts`: login le `pontos` e `nivel` reais do backend em vez de inicializar a 0 e 1.

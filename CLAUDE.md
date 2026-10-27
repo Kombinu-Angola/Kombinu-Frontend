@@ -23,7 +23,7 @@ npx tsc -p tsconfig.app.json --noEmit
 Env: .env.example → .env.local (VITE_API_URL, VITE_ENV).
 
 ## Estrutura (src/)
-routes/ (inclui routes/v2.tsx, rotas paralelas /v2/* das telas novas) · pages/ (export default, páginas actuais) · features/ (telas novas, organizadas por domínio — desvio aprovado do padrão pages/; ver docs/kombinu-mapeamento.md e docs/INTEGRACAO-TELAS.md) · components/{layout,ui,auth,debug,charts} · contexts/{Auth,Theme,Gamification} · services/ · hooks/ · lib/ · utils/ · types/index.ts
+routes/ (inclui routes/v2.tsx, rotas paralelas /v2/* das telas novas) · pages/ (export default, páginas actuais) · features/ (telas novas, organizadas por domínio — desvio aprovado do padrão pages/; ver docs/kombinu-mapeamento.md e docs/INTEGRACAO-TELAS.md) · components/{layout,ui,auth,debug,charts,landing} · contexts/{Auth,Theme,Gamification} · services/ · hooks/ · lib/ · utils/ · types/index.ts
 LEGADO (não usar): DataContext, useContent, useProgress, storageService, progressService.
 
 ## API e auth
@@ -38,7 +38,7 @@ LEGADO (não usar): DataContext, useContent, useProgress, storageService, progre
 ## Convenções
 - Português em identificadores do domínio, comentários e UI. Sem `any`, sem código comentado, sem console.log (usar utils/logger). Tipos em types/index.ts.
 - try/catch em todo async e feedback ao utilizador em falhas. Loading com spinner `animate-spin`.
-- Tailwind apenas, sem style={{}} (padrão BarraDinamica). Todo o componente novo com `dark:`; testar a 375px.
+- Tailwind apenas, sem style={{}} (padrão BarraDinamica). Excepção aprovada e restrita: `components/landing/` (landing pública "Passe de Provas", `pages/LandingPage.tsx`) usa CSS Modules (`passe.module.css`) por exigência de fidelidade pixel-a-pixel a um mockup externo de um programa/aceleradora em que a Kombinu participa; não é precedente para o resto do projecto. Todo o componente novo com `dark:`, excepto a mesma landing pública (mockup fixo, sem variante dark, por exigência do mesmo programa); testar a 375px.
 - Fontes (SLA): font-montserrat títulos, font-lato corpo, font-poppins botões. Base visual do redesenho vem de templates/ (extrair padrões, nunca copiar código).
 - Acessibilidade: alt descritivo, aria-label em botões só com ícone, contraste WCAG AA.
 - Workspaces B2B/B2C: notificações do marketplace silenciadas no workspace escolar; um só login.
