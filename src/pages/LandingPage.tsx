@@ -1,44 +1,42 @@
-
-
-import Footer from "@/components/layout/Footer";
-import { HeroCard } from "../components/heroCard";
-import { HeroSection } from "../components/heroSection";
-
-import AcademicMarketplace from "../components/marketplaceAcademy";
-
-import MethodologySection from "@/components/metodologySection";
-import PricingSection from "@/components/pricingSection";
-import TestimonialsSection from "@/components/testimonials";
-import { WhyKombinu } from "@/components/whyKombinu";
-import { Carrosel } from "@/components/carrossel";
-import FinancialComparison from "@/components/financialComparison";
-import ManifestoSection from "@/components/manifestoSection";
-import CallToActionSection from "@/components/CallToActions";
-import FaqSection from "@/components/geralQuestion";
-import { QuizSection } from "@/components/quiz";
-
+import styles from "@/components/landing/passe.module.css";
+import { PasseGradientDefs } from "@/components/landing/PasseShared";
+import { usePasseLanding } from "@/components/landing/usePasseLanding";
+import { PasseHeader } from "@/components/landing/PasseHeader";
+import { PasseHero } from "@/components/landing/PasseHero";
+import { PasseCalendar } from "@/components/landing/PasseCalendar";
+import { PasseHowItWorks } from "@/components/landing/PasseHowItWorks";
+import { PasseDataSaving } from "@/components/landing/PasseDataSaving";
+import { PassePricing } from "@/components/landing/PassePricing";
+import { PassePayment } from "@/components/landing/PassePayment";
+import { PasseLeagues } from "@/components/landing/PasseLeagues";
+import { PasseNotes } from "@/components/landing/PasseNotes";
+import { PasseFaq } from "@/components/landing/PasseFaq";
+import { PasseFinalCta } from "@/components/landing/PasseFinalCta";
+import { PasseFooter } from "@/components/landing/PasseFooter";
 
 export function LandingPage() {
-
-
+  const p = usePasseLanding();
 
   return (
-    <main>
-      <HeroSection />
-      <HeroCard />
-      <Carrosel />
-      <WhyKombinu />
-      <QuizSection />
-      <MethodologySection />
-      <FinancialComparison />
-      <AcademicMarketplace />
-      <PricingSection />
-      <TestimonialsSection />
-      <ManifestoSection />
-      <FaqSection />
-      <CallToActionSection />
-      <Footer />
-    </main>
-  )
+    <div className={`${styles["kb-page"]} passe-root ${p.pageClassName}`}>
+      <a className={styles.skip} href="#conteudo">
+        Saltar para o conteúdo
+      </a>
+      <PasseGradientDefs />
+      <PasseHeader />
+      <main id="conteudo" tabIndex={-1}>
+        <PasseHero p={p} />
+        <PasseCalendar p={p} />
+        <PasseHowItWorks p={p} />
+        <PasseDataSaving p={p} />
+        <PassePricing p={p} />
+        <PassePayment p={p} />
+        <PasseLeagues p={p} />
+        <PasseNotes />
+        <PasseFaq p={p} />
+        <PasseFinalCta />
+      </main>
+      <PasseFooter />
+    </div>
+  );
 }
-
