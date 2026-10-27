@@ -4,6 +4,7 @@ import { Button3D } from "../../components/ui/Button3D";
 import { ConsentCheckbox } from "../../components/ui/ConsentCheckbox";
 import { Icon } from "../../components/ui/Icon";
 import { useToast } from "../../components/ui/Toast";
+import { useDialogBehavior } from "../../hooks/useDialogBehavior";
 import { formatActivityTime } from "../../lib/format";
 import { cn } from "@/lib/utils";
 import type { VersionEntry } from "./types";
@@ -27,6 +28,11 @@ export default function VersionHistoryScreen({ materialTitle, versions, creatorN
   const [selectedId, setSelectedId] = useState(versions[0].id);
   const [restoring, setRestoring] = useState<VersionEntry | null>(null);
   const [confirmed, setConfirmed] = useState(false);
+  const closeRestoreDialog = () => {
+    setRestoring(null);
+    setConfirmed(false);
+  };
+  const restoreDialogRef = useDialogBehavior<HTMLDivElement>(closeRestoreDialog, restoring !== null);
   const toast = useToast();
 
   const selected = versions.find((v) => v.id === selectedId)!;
@@ -156,7 +162,13 @@ export default function VersionHistoryScreen({ materialTitle, versions, creatorN
 
       {restoring && (
         <div className="fixed inset-0 z-[55] flex items-center justify-center bg-surface-ink/60 p-4">
-          <div role="dialog" aria-modal="true" aria-labelledby="restore-title" className="w-full max-w-md rounded-3xl bg-surface-canvas p-6 shadow-clay">
+          <div
+            ref={restoreDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="restore-title"
+            className="w-full max-w-md rounded-3xl bg-surface-canvas p-6 shadow-clay"
+          >
             <h2 id="restore-title" className="font-montserrat text-headline-h3 font-extrabold text-on-surface">
               Restaurar a {restoring.label.toLowerCase()}?
             </h2>
@@ -178,13 +190,7 @@ export default function VersionHistoryScreen({ materialTitle, versions, creatorN
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Button3D
-                variant="ghost"
-                onClick={() => {
-                  setRestoring(null);
-                  setConfirmed(false);
-                }}
-              >
+              <Button3D variant="ghost" onClick={closeRestoreDialog}>
                 Cancelar
               </Button3D>
               <Button3D
