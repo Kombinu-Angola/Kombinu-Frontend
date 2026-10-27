@@ -371,3 +371,5 @@ export function usePasseLanding() {
     toggleFaq: (i: number) => setFaq((cur) => (cur === i ? -1 : i)),
   };
 }
+
+export type PasseLandingState = ReturnType<typeof usePasseLanding>;
