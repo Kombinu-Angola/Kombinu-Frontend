@@ -157,6 +157,7 @@ export function PasseHero({ onQuizAnswered }: PasseHeroProps) {
         </motion.div>
 
         <motion.div
+          id="simulado"
           ref={quizRef}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
