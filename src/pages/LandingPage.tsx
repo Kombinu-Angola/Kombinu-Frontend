@@ -1,44 +1,37 @@
+import { useState } from "react";
+import { PasseHeader } from "@/components/landing/PasseHeader";
+import { PasseHero } from "@/components/landing/PasseHero";
+import { PasseCalendar } from "@/components/landing/PasseCalendar";
+import { PasseHowItWorks } from "@/components/landing/PasseHowItWorks";
+import { PasseDataSaving } from "@/components/landing/PasseDataSaving";
+import { PassePricing } from "@/components/landing/PassePricing";
+import { PassePayment } from "@/components/landing/PassePayment";
+import { PasseLeagues } from "@/components/landing/PasseLeagues";
+import { PasseNotes } from "@/components/landing/PasseNotes";
+import { PasseFaq } from "@/components/landing/PasseFaq";
+import { PasseFinalCta } from "@/components/landing/PasseFinalCta";
+import { PasseFooter } from "@/components/landing/PasseFooter";
 
+const QUIZ_XP = 40;
 
-import Footer from "@/components/layout/Footer";
-import { HeroCard } from "../components/heroCard";
-import { HeroSection } from "../components/heroSection";
-
-import AcademicMarketplace from "../components/marketplaceAcademy";
-
-import MethodologySection from "@/components/metodologySection";
-import PricingSection from "@/components/pricingSection";
-import TestimonialsSection from "@/components/testimonials";
-import { WhyKombinu } from "@/components/whyKombinu";
-import { Carrosel } from "@/components/carrossel";
-import FinancialComparison from "@/components/financialComparison";
-import ManifestoSection from "@/components/manifestoSection";
-import CallToActionSection from "@/components/CallToActions";
-import FaqSection from "@/components/geralQuestion";
-import { QuizSection } from "@/components/quiz";
-
-
+/** Landing "Passe de Provas": o simulado do Hero alimenta a posicao na Liga mais abaixo. */
 export function LandingPage() {
-
-
+  const [xpBonus, setXpBonus] = useState(0);
 
   return (
     <main>
-      <HeroSection />
-      <HeroCard />
-      <Carrosel />
-      <WhyKombinu />
-      <QuizSection />
-      <MethodologySection />
-      <FinancialComparison />
-      <AcademicMarketplace />
-      <PricingSection />
-      <TestimonialsSection />
-      <ManifestoSection />
-      <FaqSection />
-      <CallToActionSection />
-      <Footer />
+      <PasseHeader />
+      <PasseHero onQuizAnswered={(correct) => setXpBonus(correct ? QUIZ_XP : 0)} />
+      <PasseCalendar />
+      <PasseHowItWorks />
+      <PasseDataSaving />
+      <PassePricing />
+      <PassePayment />
+      <PasseLeagues xpBonus={xpBonus} />
+      <PasseNotes />
+      <PasseFaq />
+      <PasseFinalCta />
+      <PasseFooter />
     </main>
-  )
+  );
 }
-

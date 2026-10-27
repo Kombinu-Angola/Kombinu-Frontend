@@ -21,16 +21,8 @@ import { v2Routes } from './v2';
 export const router = createBrowserRouter([
   {
     path: '/',
-
-    element: <BaseLayout />,
+    element: <LandingPage />,
     errorElement: <Error />,
-    children: [
-      {
-        index: true,
-        element: <LandingPage />
-      }
-    ]
-
   },
   {
     element: <AuthLayout />,
