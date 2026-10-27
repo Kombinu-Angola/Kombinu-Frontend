@@ -1,132 +1,112 @@
-import { useState } from "react";
-import { motion } from "motion/react";
-import { Button3D } from "../ui/Button3D";
-import { Icon } from "../ui/Icon";
-import { OtpInput } from "../ui/OtpInput";
-import { PhoneInputAO } from "../ui/PhoneInputAO";
-import kombinuMark from "../assets/kombinu-mark.svg";
+import styles from "./passe.module.css";
+import { cx, KLogo } from "./PasseShared";
+import type { PasseLandingState } from "./usePasseLanding";
 
-const STEPS = [
-  { title: "Escolhe a cadeira", desc: "Filtra pela instituição, ano e tópico. Cada simulado mostra as questões e os MB que gasta." },
-  { title: "Ativa o passe", desc: "Entras com o número de WhatsApp e pagas como preferires: Express, voucher ou encarregado." },
-  { title: "Treina 5 minutos por dia", desc: "Resolves com correção na hora e descarregas tudo para estudar sem rede." },
-] as const;
+type TrailState = "done" | "current" | "locked";
 
-const TRAIL_STATES = ["done", "done", "current"] as const;
-const DEMO_CODE = "482913";
-
-/** Trilho geométrico em zig-zag: o mesmo "skill tree" usado no resto do produto, aqui com 3 passos fixos. */
-function SkillTrail() {
+/** Ported 1:1 from ds/kombinu/components/bundle.js's GeometricTrail: zig-zag 45° diagonals joined by 90° verticals. */
+function GeometricTrail({ steps, label }: { steps: TrailState[]; label: string }) {
   const pitch = 96;
   const dx = 20;
   const r = 16;
   const cx0 = 64;
-  const points = TRAIL_STATES.map((state, i) => ({ x: cx0 + (i % 2 ? dx : -dx), y: 32 + i * pitch, state }));
-  const height = 32 + (points.length - 1) * pitch + 32;
-
+  const w = 128;
+  const pts = steps.map((s, i) => ({ x: cx0 + (i % 2 ? dx : -dx), y: 32 + i * pitch, s }));
+  const segs: { d: string; done: boolean }[] = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i];
+    const b = pts[i + 1];
+    const d = `M${a.x} ${a.y + r}V${a.y + 24}L${b.x} ${a.y + 24 + 2 * dx}V${b.y - r}`;
+    segs.push({ d, done: a.s === "done" });
+  }
+  const height = 32 + (steps.length - 1) * pitch + 32;
   return (
-    <svg viewBox={`0 0 128 ${height}`} width={128} height={height} aria-hidden="true" className="block overflow-visible">
-      {points.slice(0, -1).map((a, i) => {
-        const b = points[i + 1];
-        const d = `M${a.x} ${a.y + r}V${a.y + 24}L${b.x} ${a.y + 24 + 2 * dx}V${b.y - r}`;
-        return (
-          <path
-            key={i}
-            d={d}
-            fill="none"
-            strokeWidth={1.75}
-            strokeLinejoin="miter"
-            stroke={a.state === "done" ? "var(--color-brand-ocean)" : "var(--color-outline)"}
-          />
-        );
-      })}
-      {points.map((n, i) => (
-        <g key={i}>
-          <circle
-            cx={n.x}
-            cy={n.y}
-            r={r}
-            strokeWidth={1.75}
-            fill={n.state === "done" ? "var(--color-brand-ocean)" : n.state === "current" ? "var(--color-secondary-container)" : "var(--color-surface-soft)"}
-            stroke={n.state === "done" ? "var(--color-brand-ocean)" : n.state === "current" ? "var(--color-brand-sunbeam-ink)" : "var(--color-outline)"}
-          />
-          {n.state === "done" && (
-            <path d={`M${n.x - 6} ${n.y}l4 4 8-8`} fill="none" stroke="#ffffff" strokeWidth={2.5} strokeLinecap="square" />
-          )}
-          {n.state === "current" && <circle cx={n.x} cy={n.y} r={5} fill="var(--color-brand-sunbeam-ink)" />}
+    <svg className={styles["kb-trail"]} width={w} height={height} viewBox={`0 0 ${w} ${height}`} role="img" aria-label={label}>
+      {segs.map((s, i) => (
+        <path key={`s${i}`} d={s.d} className={cx(styles["kb-trail__seg"], s.done && styles["is-done"])} />
+      ))}
+      {pts.map((n, i) => (
+        <g key={`n${i}`} className={cx(styles["kb-trail__node"], styles[`is-${n.s}`])}>
+          <circle cx={n.x} cy={n.y} r={r} />
+          {n.s === "done" && <path d={`M${n.x - 6} ${n.y}l4 4 8-8`} className={styles["kb-trail__tick"]} />}
+          {n.s === "current" && <circle cx={n.x} cy={n.y} r={5} className={styles["kb-trail__dot"]} />}
         </g>
       ))}
     </svg>
   );
 }
 
-/** "Como funciona" (3 passos) + cartão de entrada com telemóvel angolano e código real via WhatsApp (demo). */
-export function PasseHowItWorks() {
-  const [phone, setPhone] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-
+export function PasseHowItWorks({ p }: { p: PasseLandingState }) {
   return (
-    <section id="como" aria-labelledby="como-h" className="bg-surface-canvas py-20 sm:py-28 lg:py-32">
-      <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-center gap-16 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
-        <div className="order-2 lg:order-1">
-          <h2 id="como-h" className="font-montserrat text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+    <section className={styles.sec} id="como" aria-labelledby="como-h">
+      <div className={cx(styles.wrap, styles["how-grid"])}>
+        <div className={styles["how-text"]}>
+          <h2 className={cx(styles.h2, styles.rv)} id="como-h">
             Três passos até à prova.
           </h2>
-          <div className="mt-10 grid grid-cols-[48px_1fr] gap-x-2 sm:grid-cols-[128px_1fr]">
-            <div aria-hidden="true" className="row-span-3 hidden justify-self-center sm:block">
-              <SkillTrail />
+          <div className={styles.steps}>
+            <div className={styles["trail-col"]} aria-hidden="true">
+              <GeometricTrail steps={["done", "done", "current"]} label="Escolher, ativar, treinar" />
             </div>
-            <div aria-hidden="true" className="row-span-3 w-0.5 justify-self-center bg-border-cloud sm:hidden" />
-            {STEPS.map((step) => (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, x: -12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="h-24 pt-4"
-              >
-                <h3 className="font-bold text-xl text-on-surface">{step.title}</h3>
-                <p className="mt-1 text-on-surface">{step.desc}</p>
-              </motion.div>
-            ))}
+            <div className={cx(styles.step, styles.rv)}>
+              <h3 className={styles["step-t"]}>Escolhe a cadeira</h3>
+              <p className={styles["step-d"]}>Filtra pela instituição, ano e tópico. Cada simulado mostra as questões e os MB que gasta.</p>
+            </div>
+            <div className={cx(styles.step, styles.rv, styles["rv-2"])}>
+              <h3 className={styles["step-t"]}>Ativa o passe</h3>
+              <p className={styles["step-d"]}>Entras com o número de WhatsApp e pagas como preferires: Express, voucher ou encarregado.</p>
+            </div>
+            <div className={cx(styles.step, styles.rv, styles["rv-3"])}>
+              <h3 className={styles["step-t"]}>Treina 5 minutos por dia</h3>
+              <p className={styles["step-d"]}>Resolves com correção na hora e descarregas tudo para estudar sem rede.</p>
+            </div>
           </div>
         </div>
 
-        <div id="entrar" className="order-1 grid gap-4.5 rounded-3xl border-2 border-border-cloud bg-surface-canvas p-7 lg:order-2">
-          <div className="flex items-center gap-3.5">
-            <img src={kombinuMark} alt="" className="size-9" />
+        <div className={cx(styles.login, styles.rv)} id="entrar">
+          <div className={styles["login-head"]}>
+            <KLogo />
             <div>
-              <h3 className="font-montserrat text-xl font-extrabold tracking-tight">Entrar na Kombinu</h3>
-              <p className="mt-0.5 text-text-secondary">Sem palavra-passe para decorar.</p>
+              <h3 className={styles["login-t"]}>Entrar na Kombinu</h3>
+              <p className={styles["login-sub"]}>Sem palavra-passe para decorar.</p>
             </div>
           </div>
-
-          <PhoneInputAO id="passe-tel" label="Número de telemóvel" hint="Recebes um código de 6 dígitos no WhatsApp." value={phone} onChange={setPhone} />
-
-          <Button3D fullWidth onClick={() => setOtpSent(true)} disabled={otpSent}>
-            {otpSent ? "Código enviado" : "Receber código no WhatsApp"}
-          </Button3D>
-
-          <motion.div animate={otpSent ? { opacity: 1, scale: 1 } : { opacity: 0.4, scale: 0.98 }} transition={{ duration: 0.4 }}>
-            <OtpInput id="passe-otp" value={otpSent ? DEMO_CODE : ""} onChange={() => {}} describedBy="passe-otp-hint" />
-          </motion.div>
-
-          {otpSent && (
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.25 }}
-              className="flex items-start gap-2.5 rounded-xl rounded-bl-sm bg-surface-forest p-3.5 text-sm text-white"
-            >
-              <Icon name="chat" size={18} className="mt-0.5 shrink-0 text-feedback-success" />
-              <span>O teu código Kombinu é 482 913. Não o partilhes com ninguém.</span>
-            </motion.p>
-          )}
-
-          <p id="passe-otp-hint" className="text-sm text-text-secondary">
-            O código chega pelo WhatsApp, que é mais rápido e mais barato do que o SMS internacional. Se falhar,
-            enviamos por SMS local.
+          <div className={styles["kb-input"]}>
+            <label className={styles["kb-input__label"]} htmlFor="tel">
+              Número de telemóvel
+            </label>
+            <input id="tel" className={styles["kb-input__field"]} type="tel" inputMode="tel" autoComplete="tel-national" placeholder="9XX XXX XXX" aria-describedby="tel-msg" />
+            <div className={styles["kb-input__msg"]} id="tel-msg">
+              Recebes um código de 6 dígitos no WhatsApp.
+            </div>
+          </div>
+          <button
+            type="button"
+            className={cx(styles["kb-btn"], styles["kb-btn--primary"], styles["kb-btn--block"])}
+            onClick={p.sendOtp}
+          >
+            {p.otpSent ? "Código enviado" : "Receber código no WhatsApp"}
+          </button>
+          <div className={cx(styles.otp, p.otpSent && styles["is-sent"])} role="group" aria-label="Código de 6 dígitos">
+            {["4", "8", "2", "9", "1", "3"].map((digit, i) => (
+              <div className={styles["otp-c"]} key={i}>
+                {p.otpSent && <span className={styles["otp-d"]}>{digit}</span>}
+                {i === 0 && !p.otpSent && <span className={styles["otp-caret"]} />}
+              </div>
+            ))}
+          </div>
+          <div aria-live="polite">
+            {p.otpSent && (
+              <p className={styles["otp-msg"]}>
+                <svg className={styles.ic} viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 5h16v11H9l-5 4z" />
+                </svg>
+                <span>O teu código Kombinu é 482 913. Não o partilhes com ninguém.</span>
+              </p>
+            )}
+          </div>
+          <p className={styles["login-note"]}>
+            O código chega pelo WhatsApp, que é mais rápido e mais barato do que o SMS internacional. Se falhar, enviamos por SMS local.
           </p>
         </div>
       </div>

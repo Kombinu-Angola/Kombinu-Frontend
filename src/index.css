@@ -361,13 +361,6 @@
   --color-on-secondary-fixed: #221b00;
   --color-on-secondary-fixed-variant: #554500;
 
-  /* ── Marca · logótipo "K" e landing Passe de Provas ── */
-  --color-k-blue: #027fc8;
-  --color-k-yellow: #ffcc00;
-  --color-wave-deep: #163c96;
-  --color-wave-light: #2e6de6;
-  --color-sun-pale: #fff6d6;
-
   /* ── Feedback (base = preenchimento; -ink = texto/ícone < 24px) ── */
   --color-feedback-success: #58cc02;
   --color-feedback-success-ink: #327800;
@@ -403,7 +396,6 @@
   --shadow-3d-success: 0 4px 0 0 var(--color-feedback-success-ink);
   --shadow-3d-error: 0 4px 0 0 var(--color-feedback-error-ink);
   --shadow-elevation-1: 0 1px 2px rgb(11 18 21 / 0.04), 0 4px 12px -4px rgb(11 18 21 / 0.06);
-  --shadow-float: 0 32px 64px -24px rgb(9 30 90 / 0.5);
   --shadow-clay:
     inset 0 2px 0 rgb(255 255 255 / 0.9),
     inset 0 -3px 6px rgb(11 18 21 / 0.03),

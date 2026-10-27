@@ -1,58 +1,61 @@
-import kombinuMark from "../assets/kombinu-mark.svg";
+import styles from "./passe.module.css";
+import { KLogo } from "./PasseShared";
 
-const SITE_LINKS = [
-  { href: "#epocas", label: "Épocas de provas" },
-  { href: "#como", label: "Como funciona" },
-  { href: "#precos", label: "Preços" },
-  { href: "#pagamento", label: "Pagamento" },
-  { href: "#ligas", label: "Ligas" },
-  { href: "#resumos", label: "Publicar um resumo" },
-  { href: "#perguntas", label: "Perguntas" },
-] as const;
-
-const LEGAL_LINKS = [
-  { href: "#termos", label: "Termos de utilização" },
-  { href: "#privacidade", label: "Privacidade e dados (Lei n.º 22/11)" },
-  { href: "#direitos", label: "Direitos de autor e remoção" },
-] as const;
-
-/** Rodapé da landing "Passe de Provas". */
 export function PasseFooter() {
   return (
-    <footer className="bg-surface-ink py-14 text-white">
-      <div className="mx-auto max-w-[1240px] px-4 sm:px-6">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1.1fr_0.9fr] sm:gap-16">
+    <footer className={styles.ftr}>
+      <div className={styles.wrap}>
+        <div className={styles["ftr-top"]}>
           <div>
-            <img src={kombinuMark} alt="Kombinu" className="size-10" />
-            <p className="mt-4 max-w-[28em] text-white/80">
-              Simulados e resumos de estudantes para passar nas frequências e exames em Angola.
-            </p>
+            <a className={styles.brand} href="#topo" aria-label="Kombinu, voltar ao início">
+              <KLogo />
+            </a>
+            <p className={styles["ftr-tag"]}>Simulados e resumos de estudantes para passar nas frequências e exames em Angola.</p>
           </div>
-          <div className="grid grid-cols-2 gap-8">
-            <ul className="grid gap-2.5">
-              {SITE_LINKS.map((l) => (
-                <li key={l.href}>
-                  <a href={l.href} className="text-white/85 hover:text-white">
-                    {l.label}
-                  </a>
+          <div className={styles["ftr-nav"]}>
+            <nav aria-label="Rodapé">
+              <ul>
+                <li>
+                  <a href="#epocas">Épocas de provas</a>
                 </li>
-              ))}
-            </ul>
-            <ul className="grid gap-2.5">
-              {LEGAL_LINKS.map((l) => (
-                <li key={l.href}>
-                  <a href={l.href} className="text-white/85 hover:text-white">
-                    {l.label}
-                  </a>
+                <li>
+                  <a href="#como">Como funciona</a>
                 </li>
-              ))}
-            </ul>
+                <li>
+                  <a href="#precos">Preços</a>
+                </li>
+                <li>
+                  <a href="#pagamento">Pagamento</a>
+                </li>
+                <li>
+                  <a href="#ligas">Ligas</a>
+                </li>
+                <li>
+                  <a href="#resumos">Publicar um resumo</a>
+                </li>
+                <li>
+                  <a href="#perguntas">Perguntas</a>
+                </li>
+              </ul>
+            </nav>
+            <nav className={styles["ftr-legal"]} aria-label="Informação legal">
+              <ul>
+                <li>
+                  <a href="#termos">Termos de utilização</a>
+                </li>
+                <li>
+                  <a href="#privacidade">Privacidade e dados (Lei n.º 22/11)</a>
+                </li>
+                <li>
+                  <a href="#direitos">Direitos de autor e remoção</a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
-
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/15 pt-6 text-sm text-white/70 sm:flex-row">
-          <p>© 2026 Kombinu Angola</p>
-          <p>Elevando o aprendizado, superando barreiras.</p>
+        <div className={styles["ftr-bot"]}>
+          <span>© 2026 Kombinu Angola</span>
+          <span>Elevando o aprendizado, superando barreiras.</span>
         </div>
       </div>
     </footer>

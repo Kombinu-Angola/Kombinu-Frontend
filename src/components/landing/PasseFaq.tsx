@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Icon } from "../ui/Icon";
+import styles from "./passe.module.css";
+import { cx, IconPlus } from "./PasseShared";
+import type { PasseLandingState } from "./usePasseLanding";
 
-const FAQS = [
+const FAQS: Array<{ q: string; a: string }> = [
   {
     q: "Tenho de pagar todos os meses?",
     a: "Não. Pagas uma vez por passe. Quando os dias do passe acabam, o acesso termina e não há nenhuma cobrança automática.",
@@ -26,48 +27,40 @@ const FAQS = [
     q: "Quem vê as minhas notas?",
     a: "Só tu. As notas e o desempenho são privados por defeito; na liga aparece apenas a XP da semana. Mensagens de marketing só chegam com a tua autorização e, se tens menos de 18 anos, pedimos o consentimento do teu encarregado.",
   },
-] as const;
+];
 
-/** Acordeão de pergunta única aberta por vez; a copy e idêntica ao FAQPage schema no <head>. */
-export function PasseFaq() {
-  const [open, setOpen] = useState<number | null>(null);
-
+export function PasseFaq({ p }: { p: PasseLandingState }) {
   return (
-    <section id="perguntas" aria-labelledby="faq-h" className="bg-surface-canvas py-20 sm:py-28 lg:py-32">
-      <div className="mx-auto grid max-w-[1240px] grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+    <section className={styles.sec} id="perguntas" aria-labelledby="faq-h">
+      <div className={cx(styles.wrap, styles["faq-grid"])}>
         <div>
-          <h2 id="faq-h" className="font-montserrat text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+          <h2 className={cx(styles.h2, styles.rv)} id="faq-h">
             Perguntas antes de comprar.
           </h2>
-          <p className="mt-4 text-lg text-on-surface">
-            Não encontras a tua dúvida? Escreve-nos pelo WhatsApp depois de entrares.
-          </p>
+          <p className={cx(styles.lead, styles.rv, styles["rv-2"])}>Não encontras a tua dúvida? Escreve-nos pelo WhatsApp depois de entrares.</p>
         </div>
-
-        <div className="grid gap-2">
+        <div className={styles["faq-list"]}>
           {FAQS.map((item, i) => {
-            const isOpen = open === i;
+            const open = p.faq === i;
             return (
-              <div key={item.q} className="border-b-2 border-border-cloud">
-                <h3>
+              <div key={item.q} className={cx(styles["faq-item"], open && styles["is-open"])}>
+                <h3 className={styles["faq-q"]}>
                   <button
                     type="button"
-                    aria-expanded={isOpen}
+                    className={styles["faq-btn"]}
+                    aria-expanded={open}
                     aria-controls={`faq-a${i}`}
-                    onClick={() => setOpen(isOpen ? null : i)}
-                    className="flex min-h-14 w-full items-center justify-between gap-4 py-4 text-left font-bold text-lg text-on-surface"
+                    onClick={() => p.toggleFaq(i)}
                   >
                     {item.q}
-                    <Icon name="plus" size={20} className={`shrink-0 transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`} />
+                    <span className={styles["faq-ico"]} aria-hidden="true">
+                      <IconPlus />
+                    </span>
                   </button>
                 </h3>
-                <div
-                  id={`faq-a${i}`}
-                  className="overflow-hidden transition-[grid-template-rows] duration-300"
-                  style={{ display: "grid", gridTemplateRows: isOpen ? "1fr" : "0fr" }}
-                >
-                  <div className="overflow-hidden">
-                    <p className="pb-4 text-on-surface">{item.a}</p>
+                <div className={styles["faq-a"]} id={`faq-a${i}`}>
+                  <div>
+                    <p>{item.a}</p>
                   </div>
                 </div>
               </div>

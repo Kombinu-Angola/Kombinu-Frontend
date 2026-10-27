@@ -1,4 +1,6 @@
-import { useState } from "react";
+import styles from "@/components/landing/passe.module.css";
+import { PasseGradientDefs } from "@/components/landing/PasseShared";
+import { usePasseLanding } from "@/components/landing/usePasseLanding";
 import { PasseHeader } from "@/components/landing/PasseHeader";
 import { PasseHero } from "@/components/landing/PasseHero";
 import { PasseCalendar } from "@/components/landing/PasseCalendar";
@@ -12,26 +14,29 @@ import { PasseFaq } from "@/components/landing/PasseFaq";
 import { PasseFinalCta } from "@/components/landing/PasseFinalCta";
 import { PasseFooter } from "@/components/landing/PasseFooter";
 
-const QUIZ_XP = 40;
-
-/** Landing "Passe de Provas": o simulado do Hero alimenta a posicao na Liga mais abaixo. */
 export function LandingPage() {
-  const [xpBonus, setXpBonus] = useState(0);
+  const p = usePasseLanding();
 
   return (
-    <main>
+    <div className={`${styles["kb-page"]} passe-root ${p.pageClassName}`}>
+      <a className={styles.skip} href="#conteudo">
+        Saltar para o conteúdo
+      </a>
+      <PasseGradientDefs />
       <PasseHeader />
-      <PasseHero onQuizAnswered={(correct) => setXpBonus(correct ? QUIZ_XP : 0)} />
-      <PasseCalendar />
-      <PasseHowItWorks />
-      <PasseDataSaving />
-      <PassePricing />
-      <PassePayment />
-      <PasseLeagues xpBonus={xpBonus} />
-      <PasseNotes />
-      <PasseFaq />
-      <PasseFinalCta />
+      <main id="conteudo" tabIndex={-1}>
+        <PasseHero p={p} />
+        <PasseCalendar p={p} />
+        <PasseHowItWorks p={p} />
+        <PasseDataSaving p={p} />
+        <PassePricing p={p} />
+        <PassePayment p={p} />
+        <PasseLeagues p={p} />
+        <PasseNotes />
+        <PasseFaq p={p} />
+        <PasseFinalCta />
+      </main>
       <PasseFooter />
-    </main>
+    </div>
   );
 }
