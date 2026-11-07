@@ -1,47 +1,67 @@
-import axios from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
+import { toast } from "sonner";
 
-let isRefreshing = false;
-let failedQueue: {
-  resolve: (token: string) => void;
-  reject: (err: unknown) => void;
-}[] = [];
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
-const processQueue = (error: unknown, token: string | null = null) => {
-  failedQueue.forEach((p) => {
-    if (token) p.resolve(token);
-    else p.reject(error);
-  });
-  failedQueue = [];
-};
+/** Rota de refresh do backend (`POST /api/auth/token/refresh/`; `VITE_API_URL` termina em `/api`). */
+const REFRESH_PATH = "/auth/token/refresh/";
 
-async function refreshAccessToken() {
+type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
+
+/** Falha do refresh que prova que a sessão acabou (sem token, ou recusado pelo backend). */
+class SessaoExpiradaError extends Error {}
+
+/**
+ * Um único refresh em voo, partilhado por todos os pedidos que receberam 401 ao mesmo
+ * tempo. O backend limita o refresh (429 acima de 30/min por IP), por isso nunca se
+ * dispara mais do que um pedido de cada vez.
+ */
+let refreshEmCurso: Promise<string> | null = null;
+
+async function pedirNovoAccessToken(): Promise<string> {
   const refreshToken = localStorage.getItem("refreshToken");
-  if (!refreshToken) throw new Error("No refresh token");
+  if (!refreshToken) throw new SessaoExpiradaError("Sem refresh token");
 
-  const response = await axios.post(
-    `${import.meta.env.VITE_API_URL}/auth/refresh/`,
-    { refresh: refreshToken }
-  );
-
-  const newAccess = response.data.access;
-  localStorage.setItem("accessToken", newAccess);
-
-  if (response.data.refresh) {
-    localStorage.setItem("refreshToken", response.data.refresh);
+  try {
+    // axios "nu": não passa pelos interceptors de `api`, evita ciclos de refresh.
+    const response = await axios.post(`${BASE_URL}${REFRESH_PATH}`, { refresh: refreshToken });
+    const novoAccess: string = response.data.access;
+    localStorage.setItem("accessToken", novoAccess);
+    if (response.data.refresh) {
+      localStorage.setItem("refreshToken", response.data.refresh);
+    }
+    return novoAccess;
+  } catch (err) {
+    const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+    // 400/401/403: o refresh token foi recusado. 429, 5xx ou falha de rede não
+    // significam sessão inválida: o utilizador mantém a sessão e pode tentar de novo.
+    if (status === 400 || status === 401 || status === 403) {
+      throw new SessaoExpiradaError("Refresh token recusado");
+    }
+    throw err;
   }
+}
 
-  return newAccess;
+function obterNovoAccessToken(): Promise<string> {
+  if (!refreshEmCurso) {
+    refreshEmCurso = pedirNovoAccessToken().finally(() => {
+      refreshEmCurso = null;
+    });
+  }
+  return refreshEmCurso;
 }
 
 function forceLogout() {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("kombinu_usuario");
-  window.location.href = "/login";
+  if (window.location.pathname !== "/login") {
+    window.location.href = "/login";
+  }
 }
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "/api",
+  baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -56,50 +76,28 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as RetriableConfig | undefined;
 
-    // Pedidos de autenticação não devem accionar a lógica de refresh.
-    // Um 401 no login = credenciais erradas, não sessão expirada.
+    // Pedidos de autenticação não accionam o refresh: um 401 no login são
+    // credenciais erradas, não sessão expirada.
     const url = originalRequest?.url ?? "";
-    const isAuthEndpoint =
-      url.includes("/auth/login") || url.includes("/auth/refresh");
+    const isAuthEndpoint = url.includes("/auth/login") || url.includes(REFRESH_PATH);
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !isAuthEndpoint
-    ) {
-      if (isRefreshing) {
-        return new Promise<string>((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            return api(originalRequest);
-          })
-          .catch((err) => Promise.reject(err));
-      }
-
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry && !isAuthEndpoint) {
       originalRequest._retry = true;
-      isRefreshing = true;
-
       try {
-        const newToken = await refreshAccessToken();
-        processQueue(null, newToken);
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        const novoToken = await obterNovoAccessToken();
+        originalRequest.headers.Authorization = `Bearer ${novoToken}`;
         return api(originalRequest);
       } catch (err) {
-        processQueue(err, null);
-        forceLogout();
+        if (err instanceof SessaoExpiradaError) forceLogout();
         return Promise.reject(err);
-      } finally {
-        isRefreshing = false;
       }
     }
 
+    // 403 = sem permissão para este recurso, não sessão inválida: informa, não termina a sessão.
     if (error.response?.status === 403) {
-      forceLogout();
-      return Promise.reject(error);
+      toast.error("Não tens permissão para aceder a este recurso.");
     }
 
     return Promise.reject(error);
