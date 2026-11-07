@@ -1,0 +1,61 @@
+import type { AppNotification } from "./types";
+
+const hoursAgo = (h: number) => new Date(Date.now() - h * 3_600_000).toISOString();
+
+export const NOTIFICATIONS: AppNotification[] = [
+  {
+    id: "n1",
+    category: "gamificacao",
+    tone: "urgente",
+    icon: "flame",
+    title: "A tua ofensiva de 12 dias termina hoje",
+    body: "Ainda não fizeste o quiz diário. Tens até às 23:59 para manter a sequência sem gastar uma proteção de gelo.",
+    at: hoursAgo(0.75),
+    read: false,
+    action: { label: "Salvar a ofensiva", href: "/v2/ofensiva", primary: true },
+  },
+  {
+    id: "n2",
+    category: "conteudo",
+    tone: "informativo",
+    icon: "book",
+    title: "Nova sebenta na tua faculdade",
+    body: "Mateus Silva publicou a sebenta de Macroeconomia II: políticas de estabilização.",
+    at: hoursAgo(5),
+    read: false,
+    action: { label: "Ver no marketplace", href: "/v2/marketplace" },
+  },
+  {
+    id: "n3",
+    category: "gamificacao",
+    tone: "neutro",
+    icon: "trophy",
+    title: "Ultrapassaram-te na liga da faculdade",
+    body: "Hamilton Kiala ganhou 80 XP e passou para o teu lugar na classificação semanal.",
+    at: hoursAgo(20),
+    read: true,
+    action: { label: "Ver a classificação", href: "/v2/ligas" },
+  },
+  {
+    id: "n4",
+    category: "conteudo",
+    tone: "neutro",
+    icon: "cloud",
+    title: "Descarga offline concluída",
+    body: "A sebenta do modelo IS-LM está pronta no telemóvel, com 1,4 MB. Podes lê-la sem ligação.",
+    at: hoursAgo(50),
+    read: true,
+    action: { label: "Abrir na biblioteca", href: "/v2/biblioteca" },
+  },
+  {
+    id: "n5",
+    category: "conta",
+    tone: "neutro",
+    icon: "shield",
+    title: "Sessão iniciada num novo aparelho",
+    body: "Entrada confirmada por SMS a partir de um Android em Luanda, Maianga. Se não foste tu, altera o número de acesso.",
+    at: hoursAgo(120),
+    read: true,
+    action: { label: "Rever a segurança", href: "/v2/conta/telemovel" },
+  },
+];

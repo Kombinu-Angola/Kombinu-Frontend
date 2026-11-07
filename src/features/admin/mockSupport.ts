@@ -1,0 +1,87 @@
+import type { SupportTicket } from "./supportTypes";
+
+const hoursAgo = (h: number) => new Date(Date.now() - h * 3_600_000).toISOString();
+
+export const SUPPORT_TICKETS: SupportTicket[] = [
+  {
+    id: "TCK-9410",
+    category: "pagamento",
+    status: "aberto",
+    subject: "Pagamento debitado e sebenta não apareceu",
+    summary: "Débito confirmado no Express, mas a sebenta não entrou na biblioteca.",
+    user: { name: "Orlando Fortuna", kind: "Estudante", phone: "923 ••• 789", university: "UAN" },
+    reference: "TX-984210",
+    amountKz: 1500,
+    openedAt: hoursAgo(0.4),
+    slaHours: 1,
+    messages: [
+      {
+        id: "m1",
+        author: "Orlando Fortuna",
+        role: "estudante",
+        body: "Paguei 1.500 Kz pela sebenta de Macroeconomia e recebi a confirmação do Express, mas ela não aparece nas minhas sebentas.",
+        at: hoursAgo(0.4),
+      },
+    ],
+  },
+  {
+    id: "TCK-9408",
+    category: "pagamento",
+    status: "a-aguardar",
+    subject: "Repasse não creditado na carteira",
+    summary: "Criador vendeu 3 materiais e o saldo não subiu.",
+    user: { name: "Teresa Bento", kind: "Criador", phone: "912 ••• 678", university: "UAN" },
+    reference: "PO-1201",
+    amountKz: 12_000,
+    openedAt: hoursAgo(5),
+    slaHours: 8,
+    assignee: "Hamilton K.",
+    messages: [
+      { id: "m1", author: "Teresa Bento", role: "criador", body: "Tenho três vendas confirmadas e o saldo continua igual.", at: hoursAgo(5) },
+      { id: "m2", author: "Hamilton K.", role: "agente", body: "Estamos a confirmar a conciliação com a EMIS. Damos resposta hoje.", at: hoursAgo(3) },
+    ],
+  },
+  {
+    id: "TCK-9405",
+    category: "tecnico",
+    status: "aberto",
+    subject: "Descarga offline falha sempre aos 80%",
+    summary: "Sebenta de 2,1 MB interrompe a descarga em rede móvel.",
+    user: { name: "Mateus Kiala", kind: "Estudante", phone: "941 ••• 884", university: "ISPTEC" },
+    openedAt: hoursAgo(9),
+    slaHours: 24,
+    messages: [{ id: "m1", author: "Mateus Kiala", role: "estudante", body: "Tentei cinco vezes e para sempre no mesmo ponto.", at: hoursAgo(9) }],
+  },
+  {
+    id: "TCK-9401",
+    category: "denuncia",
+    status: "aberto",
+    subject: "Conteúdo copiado de um manual da faculdade",
+    summary: "Estudante alega que uma sebenta reproduz capítulos de um manual com direitos.",
+    user: { name: "Esperança Manuel", kind: "Estudante", phone: "931 ••• 456", university: "ISAF" },
+    openedAt: hoursAgo(26),
+    slaHours: 48,
+    messages: [
+      {
+        id: "m1",
+        author: "Esperança Manuel",
+        role: "estudante",
+        body: "As páginas 12 a 20 são iguais ao manual do professor, sem referência nenhuma.",
+        at: hoursAgo(26),
+      },
+    ],
+  },
+  {
+    id: "TCK-9399",
+    category: "pagamento",
+    status: "aberto",
+    subject: "Pedido de reembolso de simulado",
+    summary: "Comprou o simulado errado e pede devolução.",
+    user: { name: "Nelson Domingos", kind: "Estudante", phone: "939 ••• 331", university: "UAN" },
+    reference: "TX-983115",
+    amountKz: 14_500,
+    openedAt: hoursAgo(14),
+    slaHours: 24,
+    messages: [{ id: "m1", author: "Nelson Domingos", role: "estudante", body: "Comprei o simulado de Direito em vez do de Economia.", at: hoursAgo(14) }],
+  },
+];

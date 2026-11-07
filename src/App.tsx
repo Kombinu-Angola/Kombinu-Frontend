@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
 import { useEffect, useState } from 'react';
 import { SplashScreen } from './components/SplashScreen';
+import { Toaster } from './components/ui/sonner';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
     <AuthProvider>
       <ThemeProvider >
         <RouterProvider router={router} />
+        <Toaster />
       </ThemeProvider>
     </AuthProvider>
   );

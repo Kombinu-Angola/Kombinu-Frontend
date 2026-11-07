@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import BaseLayout from '../components/layout/BaseLayout';
-import LandingPage from '../pages/LandingPage';
+
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import DashboardAprendiz from '../pages/DashboardAprendiz';
@@ -13,11 +13,16 @@ import VisualizarConteudo from '../pages/VisualizarConteudo';
 import PainelAdmin from '../pages/PainelAdmin';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import AuthLayout from '@/components/layout/authLayout';
+import { LandingPage } from '@/pages/LandingPage';
+import { Error } from '@/pages/error';
+import { NotFound } from '@/pages/notFound';
+import { v2Routes } from './v2';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <LandingPage />,
+    errorElement: <Error />,
   },
   {
     element: <AuthLayout />,
@@ -36,6 +41,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <BaseLayout />,
+
     children: [
 
       {
@@ -82,4 +88,9 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  v2Routes,
+  {
+    path: "*",
+    element: <NotFound />
+  }
 ]);
