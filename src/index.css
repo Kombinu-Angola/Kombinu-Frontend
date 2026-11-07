@@ -358,6 +358,7 @@
   --color-on-primary-fixed: #001a41;
   --color-secondary-fixed: #ffe174;
   --color-secondary-container: #fed400;
+  --color-on-secondary-fixed: #221b00;
   --color-on-secondary-fixed-variant: #554500;
 
   /* ── Feedback (base = preenchimento; -ink = texto/ícone < 24px) ── */
