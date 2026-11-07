@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Corrigido
 
+- Landing page "Passe de Provas": `canonical`, `og:url` e JSON-LD (`index.html`) e o link de exemplo da mensagem de pagamento passam a usar o dominio oficial `https://kombinu.com` em vez de `kombinu.ao`.
 - Landing page "Passe de Provas": reconstrucao fiel ao mockup original apos divergencias sinalizadas (seccao de precos com fundo escuro indevido; botoes "Ver precos"/"Publicar um resumo" como links em vez de botoes reais; icones fora de escala; gradientes das ilustracoes achatados para cor solida; grid de "Como funciona" com a ordem invertida -- o cartao de login deve vir primeiro; rodape com links em coluna em vez de linhas com wrap; CTA do cabecalho sempre visivel quando devia so aparecer ao scroll; praticamente todas as animacoes do mockup em falta). CSS do mockup portado quase verbatim para `src/components/landing/passe.module.css` (CSS Modules, isolado do resto do projeto); logica de estado portada 1:1 para `usePasseLanding.ts`; secoes voltam a usar o markup/SVG original (incluindo os gradientes partilhados) em vez de reimplementacoes com os componentes do design system.
 
 ### Adicionado

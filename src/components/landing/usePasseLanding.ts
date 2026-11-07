@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const CORRECT = "b";
 const MSG =
-  "Olá, pai. Tenho a 1.ª frequência de Anatomia I daqui a 15 dias. Preciso do Passe de Provas da Kombinu (600 Kz, 21 dias): simulados e resumos da cadeira. Podes pagar aqui pelo Multicaixa Express? kombinu.ao/p/A7K2";
+  "Olá, pai. Tenho a 1.ª frequência de Anatomia I daqui a 15 dias. Preciso do Passe de Provas da Kombinu (600 Kz, 21 dias): simulados e resumos da cadeira. Podes pagar aqui pelo Multicaixa Express? kombinu.com/p/A7K2";
 
 function fmt(n: number): string {
   return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
