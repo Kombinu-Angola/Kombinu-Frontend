@@ -15,7 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Seguranca
 
-- Dependencias actualizadas por vulnerabilidades conhecidas: `axios` ^1.21.0, `vite` ^5.4.21 (mantem-se no Vite 5), `eslint` ^9.39.5, `postcss` ^8.5.32 e `typescript-eslint` ^8.46.0 (necessario para o lint funcionar com o eslint 9.39), com `package-lock.json` regenerado. `npm audit`: 35 -> 32 vulnerabilidades (producao: 28 -> 21); as restantes vem de dependencias transitivas (ex.: `react-router`, `zod`, cadeia do `shadcn`/MCP) e ficam por tratar em PRs proprios.
+- Dependencias actualizadas por vulnerabilidades conhecidas: `axios` ^1.21.0, `vite` ^5.4.21 (mantem-se no Vite 5), `eslint` ^9.39.5, `postcss` ^8.5.32 e `typescript-eslint` ^8.72.1 (necessario para o lint funcionar com o eslint 9.39), com `package-lock.json` regenerado. `npm audit`: 35 -> 32 vulnerabilidades (producao: 28 -> 21); as restantes vem de dependencias transitivas (ex.: `react-router`, `zod`, cadeia do `shadcn`/MCP) e ficam por tratar em PRs proprios.
 
 ### Corrigido
 
