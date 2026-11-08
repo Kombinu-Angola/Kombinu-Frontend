@@ -92,3 +92,20 @@ export interface DadosRegistro {
   senha: string;
   tipo: 'criador' | 'aprendiz';
 }
+
+// Ranking global (GET /rankings/global/, paginado)
+export interface RankingGlobalUtilizador {
+  id: string;
+  nome: string;
+  pontos: number;
+  posicao: number;
+}
+
+export interface RankingGlobalPagina {
+  utilizadores: RankingGlobalUtilizador[];
+  minhaPosicao: { posicao: number; pontos: number } | null;
+  total: number;
+  pagina: number;
+  totalPaginas: number;
+  workspace: string | null;
+}

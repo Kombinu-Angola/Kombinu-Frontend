@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Crown, Medal, Trophy, ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { rankingGlobalService } from '../services/rankingGlobalService';
 
 interface RankingUser {
   id: string;
   name: string;
   points: number;
+  position: number;
   trend: 'up' | 'down' | 'same';
 }
 
@@ -13,48 +15,46 @@ export default function Ranking() {
   const { usuario } = useAuth();
   const [rankingData, setRankingData] = useState<RankingUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState(false);
+  const [pagina, setPagina] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
 
   useEffect(() => {
     const fetchRanking = async () => {
       setLoading(true);
+      setErro(false);
       try {
-        const { api } = await import('../services/api');
-        const response = await api.get('/rankings/global/');
+        const resposta = await rankingGlobalService.obter(pagina);
+        const data: RankingUser[] = resposta.utilizadores.map((u) => ({
+          id: u.id,
+          name: u.nome,
+          points: u.pontos,
+          position: u.posicao,
+          trend: 'same' as const,
+        }));
 
-        if (response.data && Array.isArray(response.data.top_users)) {
-          const data: RankingUser[] = response.data.top_users.map((u: any) => ({
-            id: String(u.user_id),
-            name: u.email?.split('@')[0] || 'user',
-            points: u.total_score,
-            trend: 'same' as const,
-          }));
-
-          if (
-            usuario &&
-            response.data.user_position &&
-            !data.find(x => x.id === usuario.id)
-          ) {
-            data.push({
-              id: usuario.id,
-              name: usuario.nome,
-              points: response.data.user_position.total_score,
-              trend: 'same',
-            });
-          }
-
-          data.sort((a, b) => b.points - a.points);
-          setRankingData(data);
-        } else {
-          setRankingData([]);
+        if (usuario && resposta.minhaPosicao && !data.find((x) => x.id === usuario.id)) {
+          data.push({
+            id: usuario.id,
+            name: usuario.nome,
+            points: resposta.minhaPosicao.pontos,
+            position: resposta.minhaPosicao.posicao,
+            trend: 'same',
+          });
         }
+
+        data.sort((x, y) => x.position - y.position);
+        setRankingData(data);
+        setTotalPaginas(resposta.totalPaginas);
       } catch {
         setRankingData([]);
+        setErro(true);
       } finally {
         setLoading(false);
       }
     };
     fetchRanking();
-  }, [usuario]);
+  }, [usuario, pagina]);
 
   const getTrendIcon = (trend: RankingUser['trend']) => {
     if (trend === 'up') return <ArrowUp className="w-4 h-4 text-green-500" />;
@@ -78,8 +78,8 @@ export default function Ranking() {
     );
   }
 
-  const top3 = rankingData.slice(0, 3);
-  const resto = rankingData.slice(3);
+  const top3 = pagina === 1 ? rankingData.slice(0, 3) : [];
+  const resto = rankingData.slice(top3.length);
   const podiumOrder = top3.length >= 3
     ? [top3[1], top3[0], top3[2]]
     : top3;
@@ -102,8 +102,7 @@ export default function Ranking() {
         {top3.length >= 2 && (
           <div className="flex items-end justify-center gap-4 mb-8">
             {podiumOrder.map((user, podiumIdx) => {
-              const realIndex = rankingData.findIndex(u => u.id === user.id);
-              const pos = realIndex + 1;
+              const pos = user.position;
               const isFirst = pos === 1;
               const isMe = usuario?.id === user.id;
 
@@ -153,8 +152,12 @@ export default function Ranking() {
           {rankingData.length === 0 ? (
             <div className="py-20 text-center">
               <Trophy className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-500 dark:text-gray-400 text-lg">Ainda não há utilizadores no ranking.</p>
-              <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Faz o teu primeiro quiz para aparecer aqui!</p>
+              <p className="text-gray-500 dark:text-gray-400 text-lg">
+                {erro ? 'Não foi possível carregar o ranking.' : 'Ainda não há utilizadores no ranking.'}
+              </p>
+              <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+                {erro ? 'Tenta novamente dentro de instantes.' : 'Faz o teu primeiro quiz para aparecer aqui!'}
+              </p>
             </div>
           ) : (
             <>
@@ -166,8 +169,7 @@ export default function Ranking() {
               </div>
 
               {(top3.length >= 2 ? resto : rankingData).map((user, idx) => {
-                const realIndex = rankingData.findIndex(u => u.id === user.id);
-                const pos = realIndex + 1;
+                const pos = user.position;
                 const isMe = usuario?.id === user.id;
 
                 return (
@@ -211,6 +213,30 @@ export default function Ranking() {
             </>
           )}
         </div>
+
+        {totalPaginas > 1 && (
+          <nav aria-label="Paginação do ranking" className="flex items-center justify-center gap-4 mb-10">
+            <button
+              type="button"
+              onClick={() => setPagina((p) => Math.max(1, p - 1))}
+              disabled={pagina <= 1}
+              className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-poppins text-sm shadow disabled:opacity-50"
+            >
+              Anterior
+            </button>
+            <span className="text-sm text-gray-600 dark:text-gray-300">
+              Página {pagina} de {totalPaginas}
+            </span>
+            <button
+              type="button"
+              onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))}
+              disabled={pagina >= totalPaginas}
+              className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-poppins text-sm shadow disabled:opacity-50"
+            >
+              Seguinte
+            </button>
+          </nav>
+        )}
       </div>
     </div>
   );
