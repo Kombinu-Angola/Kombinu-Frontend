@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Corrigido
 
+- `Ranking.tsx`: deixa de chamar a `api` directamente e de usar `any`; passa a ler o ranking pelo novo `rankingGlobalService` (`GET /rankings/global/`). Usa o `name` devolvido pelo backend (antes derivava o nome do `email`, que ja nao vem, e todos apareciam como "user"), a `position` calculada pelo backend e a paginacao (`count`, `page`, `total_pages`) com controlos Anterior/Seguinte. O podio so aparece na primeira pagina. Ainda sem `X-Workspace` (contrato do workspace por combinar). O `rankingService.ts` legado (usado por `useRanking`) nao foi tocado.
 - `services/api.ts`: o refresh do token apontava a `/auth/refresh/` (inexistente no backend, que expoe `POST /api/auth/token/refresh/`), pelo que cada expiracao do access token terminava a sessao. Passa a usar `/auth/token/refresh/` e o `isAuthEndpoint` reconhece a rota certa. O refresh e um unico pedido em voo partilhado pelos pedidos em espera (o backend limita o refresh a 30/min por IP), e so termina a sessao quando o refresh token e recusado (400/401/403) ou falta; 429, 5xx ou falha de rede mantem a sessao.
 - `services/api.ts`: um 403 deixa de fazer logout forcado (era tratado como sessao invalida); mostra um aviso ao utilizador e a sessao mantem-se.
 - Landing page "Passe de Provas": `canonical`, `og:url` e JSON-LD (`index.html`) e o link de exemplo da mensagem de pagamento passam a usar o dominio oficial `https://kombinu.com` em vez de `kombinu.ao`.
