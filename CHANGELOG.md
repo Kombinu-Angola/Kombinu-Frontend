@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Seguranca
 
+- `package.json`: `overrides` fixa `proxy-addr` em ^2.0.8 (corrige a CVE-2026-90711, spoofing de IP, critica). Dependencia transitiva (`shadcn` -> `@modelcontextprotocol/sdk` -> `express` 5.2.1 -> `proxy-addr` 2.0.7) que nao vai para o bundle mas o scanner da Hostinger conta; `package-lock.json` so muda o `proxy-addr` (2.0.7 -> 2.0.8).
 - Dependencias actualizadas por vulnerabilidades conhecidas: `axios` ^1.21.0, `vite` ^5.4.21 (mantem-se no Vite 5), `eslint` ^9.39.5, `postcss` ^8.5.32 e `typescript-eslint` ^8.72.1 (necessario para o lint funcionar com o eslint 9.39), com `package-lock.json` regenerado. `npm audit`: 35 -> 32 vulnerabilidades (producao: 28 -> 21); as restantes vem de dependencias transitivas (ex.: `react-router`, `zod`, cadeia do `shadcn`/MCP) e ficam por tratar em PRs proprios.
 
 ### Corrigido
