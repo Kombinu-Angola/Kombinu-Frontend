@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useErrorHandler } from '../hooks/useErrorHandler';
 import type { ReactNode } from "react";
-import { authService } from '../services/authService';
+import { authService, ErroLogin, type CodigoErroLogin } from '../services/authService';
 import type { Usuario } from '@/types';
 
+
+/** Resultado de um login que o ecrã consegue apresentar sem apanhar excepções. */
+export type ResultadoLogin = { ok: true; usuario: Usuario } | { ok: false; codigo: CodigoErroLogin };
 
 interface AuthContextType {
   usuario: Usuario | null;
@@ -16,6 +19,12 @@ interface AuthContextType {
     senha: string;
     tipo: 'criador' | 'aprendiz';
   }) => Promise<Usuario | null>;
+  /** Login por email com o resultado tipado (distingue credenciais, senha temporária expirada e limite). */
+  entrar: (email: string, senha: string) => Promise<ResultadoLogin>;
+  /** Login institucional (código da escola, código do aluno, senha). */
+  entrarInstitucional: (codigoEscola: string, codigoAluno: string, senha: string) => Promise<ResultadoLogin>;
+  /** Troca a senha, renova os tokens e levanta o bloqueio de troca obrigatória. Lança `ErroTrocaSenha` se o backend recusar. */
+  trocarSenha: (senhaAtual: string, novaSenha: string) => Promise<void>;
   logout: () => void;
   atualizarUsuario: (dados: Partial<Usuario>) => void;
   atualizarPontos: (delta: number) => void;
@@ -58,6 +67,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       return user;
     }, 'login') ?? null;
+  };
+
+  const iniciarSessao = async (operacao: () => Promise<Usuario>): Promise<ResultadoLogin> => {
+    try {
+      const user = await operacao();
+      setUsuario(user);
+      localStorage.setItem('kombinu_usuario', JSON.stringify(user));
+      return { ok: true, usuario: user };
+    } catch (err) {
+      return { ok: false, codigo: err instanceof ErroLogin ? err.codigo : 'indisponivel' };
+    }
+  };
+
+  const entrar = (email: string, senha: string) => iniciarSessao(() => authService.login(email, senha));
+
+  const entrarInstitucional = (codigoEscola: string, codigoAluno: string, senha: string) =>
+    iniciarSessao(() => authService.loginInstitucional(codigoEscola, codigoAluno, senha));
+
+  const trocarSenha = async (senhaAtual: string, novaSenha: string) => {
+    await authService.trocarSenha(senhaAtual, novaSenha);
+    setUsuario((atual) => {
+      if (!atual) return atual;
+      const atualizado = { ...atual, mustChangePassword: false };
+      localStorage.setItem('kombinu_usuario', JSON.stringify(atualizado));
+      return atualizado;
+    });
   };
 
   // REGISTER
@@ -115,6 +150,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         error,
         login,
         register,
+        entrar,
+        entrarInstitucional,
+        trocarSenha,
         logout,
         atualizarUsuario,
         atualizarPontos,
