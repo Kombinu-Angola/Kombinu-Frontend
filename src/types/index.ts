@@ -14,10 +14,21 @@ export interface RegisterData {
   senha: string;
   tipo: 'criador' | 'aprendiz';
 }
+/** Pertença activa a uma organização (escola); `organizacaoId` é o UUID enviado em `X-Workspace`. */
+export interface Membership {
+  organizacaoId: string;
+  nome: string;
+  codigo: string;
+  papel: 'student' | 'teacher' | 'admin';
+}
+
 export interface Usuario {
   id: string;
   nome: string;
-  email: string;
+  /** `null` nas contas institucionais sem email real. */
+  email: string | null;
+  memberships?: Membership[];
+  mustChangePassword?: boolean;
   tipo: 'criador' | 'aprendiz' | 'admin';
   pontos: number;
   nivel: number;

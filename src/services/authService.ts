@@ -1,5 +1,6 @@
 import { api } from "./api";
-import type { Usuario, RegisterData } from "@/types";
+import type { Membership, Usuario, RegisterData } from "@/types";
+import { workspaceService } from "./workspaceService";
 
 const API_URL = "/auth";
 
@@ -7,6 +8,19 @@ const userTypeMap: Record<RegisterData["tipo"], string> = {
   criador: "creator",
   aprendiz: "learner",
 };
+
+const PAPEIS: ReadonlyArray<Membership["papel"]> = ["student", "teacher", "admin"];
+
+/** As memberships vêm do backend (não confiável): descarta entradas malformadas. */
+function mapearMemberships(raw: unknown): Membership[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((m): Membership[] => {
+    const id = m?.organizacao_id;
+    const papel = m?.role;
+    if (typeof id !== "string" || !id || !PAPEIS.includes(papel)) return [];
+    return [{ organizacaoId: id, nome: String(m.name ?? ""), codigo: String(m.code ?? ""), papel }];
+  });
+}
 
 export const authService = {
   async login(email: string, senha: string): Promise<Usuario> {
@@ -29,10 +43,15 @@ export const authService = {
 
     const user = data.user || data;
 
+    const memberships = mapearMemberships(user.memberships);
+    workspaceService.sincronizarMemberships(memberships);
+
     return {
       id: String(user.id),
-      nome: user.nome || user.first_name || user.email?.split("@")[0],
-      email: user.email,
+      nome: user.nome || user.first_name || user.email?.split("@")[0] || "Utilizador",
+      email: user.email ?? null,
+      memberships,
+      mustChangePassword: user.must_change_password === true,
       tipo: user.user_type === "creator" ? "criador" : "aprendiz",
       pontos: user.pontos ?? 0,
       nivel: user.nivel ?? 1,
@@ -54,6 +73,7 @@ export const authService = {
   logout(): void {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    workspaceService.limpar();
   },
 
   getToken(): string | null {
