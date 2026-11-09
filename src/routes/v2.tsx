@@ -73,6 +73,10 @@ import { SessionExpiredScreen, NotFoundScreen } from '../features/system/Recover
 
 import NotificationCenterScreen from '../features/notifications/NotificationCenterScreen';
 import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
+import { useEffect, useMemo } from 'react';
+import { toast } from 'sonner';
+import { useAuth } from '../contexts/AuthContext';
+import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 import GlobalSearchScreen from '../features/search/GlobalSearchScreen';
 import { MOCK_SEARCH } from '../features/search/mockSearch';
 
@@ -153,6 +157,45 @@ function CreatorApplicationRoute() {
       onExit={() => navigate('/v2')}
       submit={submitCreatorApplication}
       links={{ studio: '/v2/estudio', home: '/v2/painel', support: '/v2' }}
+    />
+  );
+}
+
+function NotificationsRoute() {
+  const { usuario } = useAuth();
+  const lista = useListaNotificacoes();
+  const { marcarLida, marcarTodasLidas } = useAccoesNotificacoes();
+  const itens = useMemo(() => lista.data?.pages.flatMap((p) => p.itens) ?? [], [lista.data]);
+
+  useEffect(() => {
+    if (lista.isError) toast.error('Não foi possível carregar as notificações.', { id: 'erro-notificacoes' });
+  }, [lista.isError]);
+
+  // Sem sessão iniciada continua a demonstração com dados de exemplo.
+  if (!usuario) {
+    return <NotificationCenterScreen notifications={NOTIFICATIONS} userName={STUDENT_NAME} settingsHref="/v2/definicoes" />;
+  }
+
+  if (lista.isPending) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-background">
+        <div className="size-10 animate-spin rounded-full border-b-2 border-primary" role="status" aria-label="A carregar notificações" />
+      </div>
+    );
+  }
+
+  const falhou = () => toast.error('Não foi possível actualizar a notificação.', { id: 'erro-notificacao-leitura' });
+
+  return (
+    <NotificationCenterScreen
+      notifications={itens}
+      userName={usuario.nome}
+      settingsHref="/v2/definicoes"
+      onMarkRead={(id) => void marcarLida(id).catch(falhou)}
+      onMarkAllRead={() => void marcarTodasLidas().catch(falhou)}
+      hasMore={lista.hasNextPage}
+      onLoadMore={() => void lista.fetchNextPage()}
+      loadingMore={lista.isFetchingNextPage}
     />
   );
 }
@@ -402,7 +445,7 @@ export const v2Routes: RouteObject = {
     { path: 'sessao-expirada', element: <SessionExpiredRoute /> },
     { path: '404', element: <NotFoundRoute /> },
 
-    { path: 'notificacoes', element: <NotificationCenterScreen notifications={NOTIFICATIONS} userName={STUDENT_NAME} settingsHref="/v2/definicoes" /> },
+    { path: 'notificacoes', element: <NotificationsRoute /> },
     { path: 'pesquisa', element: <GlobalSearchScreen results={MOCK_SEARCH} userName={STUDENT_NAME} /> },
 
     { path: 'estudio/analitica', element: <MaterialAnalyticsScreen analytics={MOCK_ANALYTICS} creatorName={CREATOR_NAME} materialsHref="/v2/estudio/materiais" /> },
