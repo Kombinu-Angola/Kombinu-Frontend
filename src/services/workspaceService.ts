@@ -1,14 +1,19 @@
 import { queryClient } from "@/lib/queryClient";
+import { api } from "./api";
 import { useWorkspaceStore, WORKSPACE_MARKETPLACE } from "@/stores/workspaceStore";
 import type { Membership } from "@/types";
 
 /**
- * Ponto de extensão da conversão B2B -> B2C (backlog B4): executado ao passar de um
- * workspace escolar para o marketplace, antes de a troca ser aplicada. Fica vazio até
- * o backend publicar o endpoint; quando existir, chamá-lo aqui, via `api`.
+ * Conversão B2B -> B2C (B4): ao passar para o marketplace regista-se a visita
+ * (`POST /tenancy/marketplace-visit/`, sem corpo, 204 e idempotente). É só uma métrica:
+ * corre depois da troca (sem `X-Workspace`) e qualquer erro é ignorado em silêncio.
  */
 async function aoTrocarParaMarketplace(): Promise<void> {
-  return;
+  try {
+    await api.post("/tenancy/marketplace-visit/");
+  } catch {
+    // Métrica não crítica: a falha não pode impedir a troca de workspace.
+  }
 }
 
 export const workspaceService = {
@@ -26,8 +31,8 @@ export const workspaceService = {
   async trocar(id: string): Promise<void> {
     const { ativo } = useWorkspaceStore.getState();
     if (id === ativo) return;
-    if (id === WORKSPACE_MARKETPLACE) await aoTrocarParaMarketplace();
     useWorkspaceStore.getState().definirAtivo(id);
+    if (id === WORKSPACE_MARKETPLACE) void aoTrocarParaMarketplace();
     await queryClient.invalidateQueries();
   },
 
