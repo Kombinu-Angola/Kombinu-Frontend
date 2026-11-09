@@ -4,6 +4,7 @@ import { formatInt } from "../../lib/format";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
 import { DataSaverBadge } from "../ui/DataSaverBadge";
+import { NotificationBell } from "./NotificationBell";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
@@ -92,13 +93,7 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
               <span aria-hidden="true">{formatInt(gems)}</span>
               <span className="sr-only">{formatInt(gems)} gemas</span>
             </p>
-            <a
-              href="/v2/notificacoes"
-              aria-label="Notificações"
-              className="relative flex size-11 items-center justify-center rounded-full text-text-secondary transition-[background-color,color] duration-150 hover:bg-surface-soft hover:text-on-surface"
-            >
-              <Icon name="bell" size={20} />
-            </a>
+            <NotificationBell />
             <a href="/v2/painel" aria-label={`Painel e perfil de ${userName}`} className="relative rounded-full">
               <Avatar name={userName} />
               <span
