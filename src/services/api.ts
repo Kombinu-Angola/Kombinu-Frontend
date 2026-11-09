@@ -63,6 +63,24 @@ function forceLogout() {
   }
 }
 
+/** Rota do ecrã de troca obrigatória de senha. */
+export const ROTA_TROCA_SENHA = "/trocar-senha";
+
+function exigirTrocaDeSenha() {
+  try {
+    const guardado = localStorage.getItem("kombinu_usuario");
+    if (guardado) {
+      const usuario = JSON.parse(guardado);
+      localStorage.setItem("kombinu_usuario", JSON.stringify({ ...usuario, mustChangePassword: true }));
+    }
+  } catch {
+    // Dados locais ilegíveis: o redireccionamento por si só chega para bloquear a navegação.
+  }
+  if (!window.location.pathname.endsWith(ROTA_TROCA_SENHA)) {
+    window.location.assign(ROTA_TROCA_SENHA);
+  }
+}
+
 export const api = axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
@@ -91,7 +109,11 @@ api.interceptors.response.use(
     // Pedidos de autenticação não accionam o refresh: um 401 no login são
     // credenciais erradas, não sessão expirada.
     const url = originalRequest?.url ?? "";
-    const isAuthEndpoint = url.includes("/auth/login") || url.includes(REFRESH_PATH);
+    const isAuthEndpoint =
+      url.includes("/auth/login") ||
+      url.includes("/auth/institutional/login") ||
+      url.includes("/auth/password/change") ||
+      url.includes(REFRESH_PATH);
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry && !isAuthEndpoint) {
       originalRequest._retry = true;
@@ -103,6 +125,13 @@ api.interceptors.response.use(
         if (err instanceof SessaoExpiradaError) forceLogout();
         return Promise.reject(err);
       }
+    }
+
+    // 403 `password_change_required`: troca de senha obrigatória pendente (conta institucional).
+    // Marca o utilizador e leva-o ao ecrã de troca; sem aviso de "sem permissão".
+    if (error.response?.status === 403 && error.response.data?.code === "password_change_required") {
+      exigirTrocaDeSenha();
+      return Promise.reject(error);
     }
 
     // 403 = sem permissão para este recurso, não sessão inválida: informa, não termina a sessão.

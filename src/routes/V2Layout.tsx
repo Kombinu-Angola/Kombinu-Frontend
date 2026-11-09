@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { GamificationProvider } from '../contexts/GamificationContext';
 
 /**
@@ -34,6 +35,10 @@ function useInternalLinkInterceptor() {
 /** Moldura de /v2: sessão de demonstração (XP 650, sequência 12, 450 gemas) partilhada entre as telas novas. */
 export default function V2Layout() {
   useInternalLinkInterceptor();
+  const { usuario } = useAuth();
+
+  // Troca de senha obrigatória pendente: nenhuma tela de /v2 fica acessível até à troca.
+  if (usuario?.mustChangePassword) return <Navigate to="/trocar-senha" replace />;
 
   return (
     <GamificationProvider initialXp={650} initialStreak={12} initialGems={450}>

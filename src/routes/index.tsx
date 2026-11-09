@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import BaseLayout from '../components/layout/BaseLayout';
 
 import Login from '../pages/Login';
+import ChangePasswordScreen from '../features/auth/ChangePasswordScreen';
 import Register from '../pages/Register';
 import DashboardAprendiz from '../pages/DashboardAprendiz';
 import DashboardCriador from '../pages/DashboardCriador';
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: 'trocar-senha',
+        element: <ChangePasswordScreen />,
       },
 
     ]

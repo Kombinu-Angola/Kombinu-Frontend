@@ -1,4 +1,5 @@
 import type { RouteObject } from 'react-router-dom';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import V2Layout from './V2Layout';
 
@@ -8,6 +9,7 @@ import { mockRecommendation } from '../features/onboarding/mockRecommendation';
 import { MOCK_DIAGNOSTIC } from '../features/quiz/mockDiagnostic';
 
 import AuthScreen from '../features/auth/AuthScreen';
+import SchoolLoginScreen from '../features/auth/SchoolLoginScreen';
 
 import CreatorApplicationFlow from '../features/creator/CreatorApplicationFlow';
 import { submitCreatorApplication } from '../services/creatorService';
@@ -204,7 +206,19 @@ function AuthRoute() {
   const navigate = useNavigate();
   // Demo visual: sem tokens/sessao real (auth por SMS ainda sem endpoint no backend
   // e a ligar autenticacao real precisa de aprovacao do CTO -- ver CLAUDE.md).
-  return <AuthScreen onAuthenticated={() => navigate('/v2/painel')} />;
+  const [modoEscola, setModoEscola] = useState(false);
+
+  // A entrada com a conta da escola e real (POST /auth/institutional/login/); a de SMS continua demo.
+  if (modoEscola) {
+    return (
+      <SchoolLoginScreen
+        onAuthenticated={(usuario) => navigate(usuario.mustChangePassword ? '/trocar-senha' : '/v2/painel')}
+        onBack={() => setModoEscola(false)}
+      />
+    );
+  }
+
+  return <AuthScreen onAuthenticated={() => navigate('/v2/painel')} onSchoolLogin={() => setModoEscola(true)} />;
 }
 
 function ReadingRoute() {

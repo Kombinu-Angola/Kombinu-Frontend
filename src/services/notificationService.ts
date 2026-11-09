@@ -40,13 +40,14 @@ const ICONE: Record<NotificationCategory, IconName> = {
 /**
  * O backend envia `target`; o `href` é decidido aqui (a rota é do SPA). As rotas /v2 ainda
  * não têm `:id`, por isso o alvo segue em query string, como no `trilhaService`.
+ * Enquetes: quem as recebe é um membro que tem de votar, mas ainda não existe ecrã de
+ * votação nem lista de enquetes (só o compositor e os resultados do criador), por isso a
+ * notificação fica sem acção até esse ecrã existir.
  */
 function accaoDoAlvo(target: RawTarget | null): AppNotification["action"] {
   if (!target || typeof target.id !== "string" || !target.id) return undefined;
-  const id = encodeURIComponent(target.id);
-  if (target.kind === "trilha") return { label: "Abrir trilha", href: `/v2/trilha?id=${id}`, primary: true };
-  if (target.kind === "enquete") {
-    return { label: "Ver enquete", href: `/v2/estudio/enquete/resultados?id=${id}`, primary: true };
+  if (target.kind === "trilha") {
+    return { label: "Abrir trilha", href: `/v2/trilha?id=${encodeURIComponent(target.id)}`, primary: true };
   }
   return undefined;
 }
