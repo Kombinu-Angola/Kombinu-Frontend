@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
 import { Button3D } from "../ui/Button3D";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
 
@@ -139,6 +140,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
 
             <div className="flex items-center gap-2">
               {actions}
+              <WorkspaceSwitcher />
               <a
                 href="/v2/trilhas"
                 className="hidden min-h-11 items-center gap-2 rounded-full border-2 border-border-cloud px-4 text-button text-text-secondary uppercase transition-[color,background-color] duration-150 hover:bg-surface-soft hover:text-primary sm:inline-flex lg:hidden"

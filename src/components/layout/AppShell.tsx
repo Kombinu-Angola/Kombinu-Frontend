@@ -4,6 +4,7 @@ import { formatInt } from "../../lib/format";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
 import { DataSaverBadge } from "../ui/DataSaverBadge";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
 
@@ -80,6 +81,7 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
 
           <div className="flex items-center gap-3 sm:gap-5">
             {headerSlot}
+            <WorkspaceSwitcher />
             <p className="flex items-center gap-1.5 text-body-lg font-bold text-feedback-streak-ink tabular-nums">
               <Icon name="flame" size={20} className="text-feedback-streak" />
               <span aria-hidden="true">{streakDays}</span>
