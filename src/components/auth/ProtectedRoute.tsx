@@ -25,6 +25,11 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // Troca de senha obrigatória pendente (conta institucional): bloqueia o resto da app
+  if (usuario.mustChangePassword) {
+    return <Navigate to="/trocar-senha" replace />;
+  }
+
   // Se o utilizador logado não pertencer ao array de roles permitidos, manda para a base
   if (allowedRoles && !allowedRoles.includes(usuario.tipo as any)) {
     return <Navigate to={usuario.tipo === 'criador' ? '/dashboard/creator' : '/dashboard/learner'} replace />;

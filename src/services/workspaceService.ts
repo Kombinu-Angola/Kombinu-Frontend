@@ -27,6 +27,14 @@ export const workspaceService = {
     useWorkspaceStore.getState().definirMemberships(memberships);
   },
 
+  /** Após o login institucional, abre directamente o workspace da escola em que o aluno entrou. */
+  activarEscolaPorCodigo(codigo: string): void {
+    const alvo = useWorkspaceStore
+      .getState()
+      .memberships.find((m) => m.codigo.toLowerCase() === codigo.trim().toLowerCase());
+    if (alvo) useWorkspaceStore.getState().definirAtivo(alvo.organizacaoId);
+  },
+
   /** Troca de workspace sem novo login; invalida os dados em cache do contexto anterior. */
   async trocar(id: string): Promise<void> {
     const { ativo } = useWorkspaceStore.getState();

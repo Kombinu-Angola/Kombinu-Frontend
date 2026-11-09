@@ -20,6 +20,8 @@ type AuthScreenProps = {
   onAuthenticated: (phone: string) => void;
   onGoogle?: () => void;
   onUniversityEmail?: () => void;
+  /** Abre a entrada com a conta da escola (código da escola, código do aluno, senha). */
+  onSchoolLogin?: () => void;
 };
 
 /** AUTH-01 — entrada por telemóvel com código SMS. */
@@ -29,6 +31,7 @@ export default function AuthScreen({
   onAuthenticated,
   onGoogle,
   onUniversityEmail,
+  onSchoolLogin,
 }: AuthScreenProps) {
   const headingRef = useFocusOnMount();
   const [step, setStep] = useState<"phone" | "code">("phone");
@@ -233,6 +236,11 @@ export default function AuthScreen({
             E-mail académico
           </Button3D>
         </div>
+        {onSchoolLogin && (
+          <Button3D variant="ghost" fullWidth className="mt-3" onClick={onSchoolLogin} leadingIcon={<Icon name="school" size={18} />}>
+            Entrar com a escola
+          </Button3D>
+        )}
 
         <p className="mt-7 flex items-start gap-2 border-t-2 border-border-cloud pt-4 text-caption text-text-secondary">
           <Icon name="lock" size={16} className="mt-0.5 shrink-0 text-feedback-success-ink" />
