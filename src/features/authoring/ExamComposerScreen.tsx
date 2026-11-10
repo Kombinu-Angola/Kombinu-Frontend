@@ -304,7 +304,7 @@ export default function ExamComposerScreen({ questions, topics, creatorName, sub
                             aria-label={`Mover a questão ${index + 1} para cima`}
                             className="flex size-11 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-canvas disabled:text-text-disabled"
                           >
-                            <Icon name="arrow-right" size={18} className="-rotate-90" />
+                            <Icon name="arrow-up" size={18} />
                           </button>
                           <button
                             type="button"
@@ -313,7 +313,7 @@ export default function ExamComposerScreen({ questions, topics, creatorName, sub
                             aria-label={`Mover a questão ${index + 1} para baixo`}
                             className="flex size-11 items-center justify-center rounded-lg text-text-secondary hover:bg-surface-canvas disabled:text-text-disabled"
                           >
-                            <Icon name="arrow-right" size={18} className="rotate-90" />
+                            <Icon name="arrow-down" size={18} />
                           </button>
                           <button
                             type="button"
