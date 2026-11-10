@@ -14,13 +14,18 @@ import { useEffect, useRef } from "react";
 export function useDialogBehavior<T extends HTMLElement = HTMLDivElement>(onClose: () => void, active = true) {
   const panelRef = useRef<T>(null);
   const openerRef = useRef<HTMLElement | null>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!active) return;
     openerRef.current = document.activeElement as HTMLElement;
     panelRef.current?.querySelector<HTMLElement>("button, input, a, select, textarea")?.focus();
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") onCloseRef.current();
     }
     document.addEventListener("keydown", onKeyDown);
     document.body.style.overflow = "hidden";
@@ -29,7 +34,7 @@ export function useDialogBehavior<T extends HTMLElement = HTMLDivElement>(onClos
       document.body.style.overflow = "";
       openerRef.current?.focus();
     };
-  }, [onClose, active]);
+  }, [active]);
 
   return panelRef;
 }
