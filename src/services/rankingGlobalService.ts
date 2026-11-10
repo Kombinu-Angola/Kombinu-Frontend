@@ -24,8 +24,9 @@ const numero = (valor: unknown, omissao: number): number =>
 /**
  * Ranking do contexto activo (`GET /rankings/global/`, paginado). O backend devolve
  * `name` (nunca o email) e a posição já calculada (RANK()). A resposta é tratada como
- * não confiável: campos em falta caem em valores seguros. Ainda sem `X-Workspace`:
- * o contrato do workspace está por combinar, por isso pede sempre o marketplace.
+ * não confiável: campos em falta caem em valores seguros. O contexto vem do `X-Workspace`
+ * que `api` junta a cada pedido: escola activa = ranking interno da escola; sem header
+ * (marketplace) = ranking global.
  */
 export const rankingGlobalService = {
   obter: async (pagina = 1, tamanho = 100): Promise<RankingGlobalPagina> => {
