@@ -13,6 +13,10 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 <!-- Registar aqui as alteracoes que estao em desenvolvimento e ainda nao foram lancadas. -->
 <!-- Quando houver um release, mover esta seccao para um bloco com versao e data. -->
 
+### Adicionado
+
+- Enquetes ligadas a API (`/api/enquetes/`): `src/services/surveyService.ts` (listar, criar rascunho, publicar, fechar, votar, resultados) e `src/hooks/useEnquetes.ts` (react-query, chaves por workspace). `SurveyComposerScreen` cria o rascunho e ativa-o (o servidor nao edita rascunhos: depois de guardar o formulario fica bloqueado) e valida as regras de opcoes do servidor (2 a 10, distintas, 2 na binaria). `SurveyResultsScreen` mostra resultados reais, trata enquete sem respostas e fecha a enquete. Novo ecra `SurveyListScreen` (`/v2/enquetes`): quem estuda responde (um voto por enquete, so em activas), quem cria ativa rascunhos e abre os resultados. A notificacao de enquete passa a abrir a lista com a enquete em destaque (`?id=`). Removido o `mockSurvey.ts`.
+
 ### Seguranca
 
 - `package-lock.json`: `npm audit fix` (sem `--force`) corrige vulnerabilidades transitivas dentro dos ranges existentes, sem tocar no `package.json`: `rollup` 4.24 -> 4.68, `react-router`/`react-router-dom` 7.7 -> 7.18, `@vitejs/plugin-react` 4.3 -> 4.7, `picomatch`, `flatted`, `ip-address`, `browserslist`, `shadcn` 4.8 -> 4.23 (mesma major; deixa de depender de `@modelcontextprotocol/sdk`/`hono`/`express`, removendo da arvore a cadeia do `proxy-addr`, `body-parser` e `hono`) e outras. `npm audit`: 31 -> 14 no total (0 criticas, 1 alta) e 20 -> 6 em producao (0 altas). Ficam de fora o `vite` 8, o `esbuild`, o `shadcn` 1.0.0 e o `typescript-eslint` 8.36 (saltos de major ou downgrades sugeridos pelo npm).

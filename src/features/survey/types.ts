@@ -16,11 +16,42 @@ export type SurveyDraft = {
   segmentSize: number;
 };
 
+/** Ciclo de vida no servidor: rascunho -> activa -> encerrada. Só se vota em enquetes activas. */
+export type SurveyState = "rascunho" | "activa" | "encerrada";
+
+export type SurveyOption = {
+  id: string;
+  label: string;
+  value: number | null;
+};
+
+/** Vista do criador (`POST /enquetes/` e transições): o rascunho mais o id e o estado. */
+export type Survey = Omit<SurveyDraft, "options"> & {
+  id: string;
+  state: SurveyState;
+  options: SurveyOption[];
+  closedAt: string | null;
+};
+
+/** Vista de quem vota: nunca inclui a decisão do criador. */
+export type SurveyListItem = {
+  id: string;
+  kind: SurveyKind;
+  question: string;
+  faculty: string;
+  subject: string;
+  trigger: SurveyTrigger;
+  state: SurveyState;
+  options: SurveyOption[];
+  hasVoted: boolean;
+};
+
 export type SurveyResult = {
   question: string;
   decision: string;
   subject: string;
-  closedAt: string;
+  /** `null` enquanto a enquete está activa. */
+  closedAt: string | null;
   answers: number;
   dismissed: number;
   shown: number;
