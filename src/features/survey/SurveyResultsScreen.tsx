@@ -5,23 +5,43 @@ import { Icon } from "../../components/ui/Icon";
 import { ProgressBar } from "../../components/ui/ProgressBar";
 import { useToast } from "../../components/ui/Toast";
 import { cn } from "@/lib/utils";
+import { mensagemErroEnquete } from "../../services/surveyService";
 import type { SurveyResult } from "./types";
 
 const dateFormat = new Intl.DateTimeFormat("pt-AO", { day: "2-digit", month: "long", year: "numeric" });
 
-type SurveyResultsScreenProps = { result: SurveyResult; creatorName: string };
+type SurveyResultsScreenProps = {
+  result: SurveyResult;
+  creatorName: string;
+  /** Fecha a enquete (activa -> encerrada). Só aparece enquanto está aberta. */
+  onClose: () => Promise<void>;
+};
 
 /** Resultados da enquete, com devolução a quem respondeu: é isso que faz as pessoas responderem outra vez. */
-export default function SurveyResultsScreen({ result, creatorName }: SurveyResultsScreenProps) {
-  const [message, setMessage] = useState(
-    "Obrigado às 138 pessoas que responderam. Quatro em cada dez acharam o tempo apertado, por isso o próximo simulado passa a ter 120 segundos por questão.",
-  );
+export default function SurveyResultsScreen({ result, creatorName, onClose }: SurveyResultsScreenProps) {
+  const [message, setMessage] = useState("");
+  const [closing, setClosing] = useState(false);
   const toast = useToast();
+  const open = result.closedAt === null;
 
-  const responseRate = Math.round((result.answers / result.shown) * 100);
-  const dismissRate = Math.round((result.dismissed / result.shown) * 100);
+  // `shown` pode ser 0 numa enquete recém-ativada: sem divisão por zero.
+  const pct = (n: number) => (result.shown === 0 ? 0 : Math.round((n / result.shown) * 100));
+  const responseRate = pct(result.answers);
+  const dismissRate = pct(result.dismissed);
   const noisy = dismissRate > 60;
   const top = [...result.distribution].sort((a, b) => b.value - a.value)[0];
+
+  const fechar = async () => {
+    setClosing(true);
+    try {
+      await onClose();
+      toast.show("Enquete fechada. Deixou de receber respostas.");
+    } catch (err) {
+      toast.show(mensagemErroEnquete(err, "Não foi possível fechar a enquete."), "error");
+    } finally {
+      setClosing(false);
+    }
+  };
 
   return (
     <CreatorShell active="materiais" creatorName={creatorName}>
@@ -38,7 +58,8 @@ export default function SurveyResultsScreen({ result, creatorName }: SurveyResul
 
         <header className="mb-6">
           <p className="text-overline text-primary uppercase">
-            {result.subject} · fechada a {dateFormat.format(new Date(result.closedAt))}
+            {result.subject ? `${result.subject} · ` : ""}
+            {open ? "a decorrer" : `fechada a ${dateFormat.format(new Date(result.closedAt as string))}`}
           </p>
           <h1 className="mt-1 font-montserrat text-headline-h2 text-balance text-on-surface sm:text-headline-h1">
             {result.question}
@@ -51,9 +72,18 @@ export default function SurveyResultsScreen({ result, creatorName }: SurveyResul
           </p>
         </header>
 
+        {open && (
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 border-border-cloud bg-surface-canvas p-3.5">
+            <p className="text-body-md text-on-surface">A enquete continua a receber respostas.</p>
+            <Button3D variant="danger-outline" disabled={closing} onClick={() => void fechar()}>
+              {closing ? "A fechar…" : "Fechar enquete"}
+            </Button3D>
+          </div>
+        )}
+
         <section aria-label="Saúde da recolha" className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
-            { id: "respostas", label: "Respostas", value: String(result.answers), note: `${result.shown} estudantes viram a pergunta`, tone: "text-primary" },
+            { id: "respostas", label: "Respostas", value: String(result.answers), note: result.shown === 1 ? "1 estudante viu a pergunta" : `${result.shown} estudantes viram a pergunta`, tone: "text-primary" },
             { id: "taxa", label: "Taxa de resposta", value: `${responseRate}%`, note: "Acima de 50% é saudável numa micro-enquete", tone: "text-feedback-success-ink" },
             {
               id: "dispensa",
@@ -108,8 +138,9 @@ export default function SurveyResultsScreen({ result, creatorName }: SurveyResul
 
           <p className="mt-5 flex items-start gap-2 border-t-2 border-border-cloud pt-4 text-caption text-text-secondary tabular-nums">
             <Icon name="lightbulb" size={16} className="mt-0.5 shrink-0 text-primary" />
-            Somando "muito curto" e "apertado", {result.distribution[0].value + result.distribution[1].value}% sentiram
-            falta de tempo. É o número que decide, segundo o que combinaste à partida.
+            {top && result.answers > 0
+              ? `A opção mais escolhida foi "${top.label}", com ${top.value}% das respostas. É o número que decide, segundo o que combinaste à partida.`
+              : "Ainda sem respostas. Os números aparecem assim que as primeiras chegarem."}
           </p>
         </section>
 
@@ -126,7 +157,7 @@ export default function SurveyResultsScreen({ result, creatorName }: SurveyResul
               <li key={row.year} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-surface-soft p-4">
                 <span>
                   <span className="block text-body-md font-bold text-on-surface">{row.year}</span>
-                  <span className="block text-caption text-text-tertiary tabular-nums">{row.answers} respostas</span>
+                  <span className="block text-caption text-text-tertiary tabular-nums">{row.answers} {row.answers === 1 ? "resposta" : "respostas"}</span>
                 </span>
                 <span className="text-right">
                   <span className="block text-caption text-text-secondary">Resposta mais comum</span>

@@ -1,6 +1,6 @@
 import type { RouteObject } from 'react-router-dom';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import V2Layout from './V2Layout';
 
 import OnboardingRoleScreen from '../features/onboarding/OnboardingRoleScreen';
@@ -116,7 +116,9 @@ import FiscalExportScreen from '../features/governance/FiscalExportScreen';
 import TeamPermissionsScreen from '../features/governance/TeamPermissionsScreen';
 import SurveyComposerScreen from '../features/survey/SurveyComposerScreen';
 import SurveyResultsScreen from '../features/survey/SurveyResultsScreen';
-import { SURVEY_DRAFT, SURVEY_RESULT } from '../features/survey/mockSurvey';
+import SurveyListScreen from '../features/survey/SurveyListScreen';
+import { useAccoesEnquetes, useListaEnquetes, useResultadosEnquete } from '../hooks/useEnquetes';
+import { mensagemErroEnquete } from '../services/surveyService';
 
 import CreationHubScreen from '../features/authoring/CreationHubScreen';
 import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
@@ -195,6 +197,93 @@ function NotificationsRoute() {
       settingsHref="/v2/definicoes"
       onMarkRead={(id) => void marcarLida(id).catch(falhou)}
       onMarkAllRead={() => void marcarTodasLidas().catch(falhou)}
+      hasMore={lista.hasNextPage}
+      onLoadMore={() => void lista.fetchNextPage()}
+      loadingMore={lista.isFetchingNextPage}
+    />
+  );
+}
+
+function SessaoNecessariaEnquetes() {
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-background px-4 text-center">
+      <p className="text-body-md text-on-surface">Inicia sessão para ver e gerir enquetes.</p>
+      <a href="/login" className="font-bold text-primary underline">
+        Entrar
+      </a>
+    </div>
+  );
+}
+
+function CarregarEnquetes({ rotulo }: { rotulo: string }) {
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-background">
+      <div className="size-10 animate-spin rounded-full border-b-2 border-primary" role="status" aria-label={rotulo} />
+    </div>
+  );
+}
+
+function SurveyComposerRoute() {
+  const { usuario } = useAuth();
+  const navigate = useNavigate();
+  const { criar, publicar } = useAccoesEnquetes();
+  if (!usuario) return <SessaoNecessariaEnquetes />;
+  return (
+    <SurveyComposerScreen
+      creatorName={usuario.nome}
+      onSaveDraft={criar}
+      onPublish={publicar}
+      onPublished={(enquete) => navigate(`/v2/estudio/enquete/resultados?id=${encodeURIComponent(enquete.id)}`)}
+    />
+  );
+}
+
+function SurveyResultsRoute() {
+  const { usuario } = useAuth();
+  const [params] = useSearchParams();
+  const id = params.get('id');
+  const resultados = useResultadosEnquete(id);
+  const { fechar } = useAccoesEnquetes();
+  if (!usuario) return <SessaoNecessariaEnquetes />;
+  if (!id) return <Navigate to="/v2/enquetes" replace />;
+  if (resultados.isPending) return <CarregarEnquetes rotulo="A carregar resultados" />;
+  if (resultados.isError || !resultados.data) {
+    return (
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-background px-4 text-center">
+        <p className="text-body-md text-on-surface">
+          {mensagemErroEnquete(resultados.error, 'Não foi possível carregar os resultados.')}
+        </p>
+        <a href="/v2/enquetes" className="font-bold text-primary underline">
+          Voltar às enquetes
+        </a>
+      </div>
+    );
+  }
+  return <SurveyResultsScreen result={resultados.data} creatorName={usuario.nome} onClose={async () => void (await fechar(id))} />;
+}
+
+function SurveyListRoute() {
+  const { usuario } = useAuth();
+  const [params] = useSearchParams();
+  const lista = useListaEnquetes();
+  const { votar, publicar } = useAccoesEnquetes();
+  const itens = useMemo(() => lista.data?.pages.flatMap((p) => p.itens) ?? [], [lista.data]);
+
+  useEffect(() => {
+    if (lista.isError) toast.error('Não foi possível carregar as enquetes.', { id: 'erro-enquetes' });
+  }, [lista.isError]);
+
+  if (!usuario) return <SessaoNecessariaEnquetes />;
+  if (lista.isPending) return <CarregarEnquetes rotulo="A carregar enquetes" />;
+
+  return (
+    <SurveyListScreen
+      userName={usuario.nome}
+      isCreator={usuario.tipo === 'criador'}
+      items={itens}
+      highlightId={params.get('id')}
+      onVote={votar}
+      onPublish={async (id) => void (await publicar(id))}
       hasMore={lista.hasNextPage}
       onLoadMore={() => void lista.fetchNextPage()}
       loadingMore={lista.isFetchingNextPage}
@@ -525,7 +614,8 @@ export const v2Routes: RouteObject = {
 
     { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
 
-    { path: 'estudio/enquete', element: <SurveyComposerScreen draft={SURVEY_DRAFT} creatorName={CREATOR_NAME} /> },
-    { path: 'estudio/enquete/resultados', element: <SurveyResultsScreen result={SURVEY_RESULT} creatorName={CREATOR_NAME} /> },
+    { path: 'enquetes', element: <SurveyListRoute /> },
+    { path: 'estudio/enquete', element: <SurveyComposerRoute /> },
+    { path: 'estudio/enquete/resultados', element: <SurveyResultsRoute /> },
   ],
 };
