@@ -1,18 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Search, Star, Clock, Users } from 'lucide-react';
+import { useState, useEffect, useId } from 'react';
+import { Link } from 'react-router-dom';
 
 import { contentService } from '../services/contentService';
 import type { Content } from '../services/contentService';
-import { Link } from 'react-router-dom';
+import { Icon } from '../components/ui/Icon';
+import { button3DClasses } from '../components/ui/Button3D';
+import { cn } from '@/lib/utils';
 
 const TODOS = 'Todos';
-
 
 /**
  * Página principal de funcionalidades (antigo Marketplace)
  * Lista todos os cursos/conteúdos disponíveis
  */
 export default function Marketplace() {
+  const searchId = useId();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(TODOS);
   const [contents, setContents] = useState<Content[]>([]);
@@ -44,128 +46,164 @@ export default function Marketplace() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div
+          className="size-12 animate-spin rounded-full border-b-2 border-primary"
+          role="status"
+          aria-label="A carregar conteúdos"
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-background">
 
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r  dark:bg-blue-600 bg-blue-600 text-white py-7">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold font-montserrat mb-4">
-              Explore Conhecimento Sem Limites
-            </h1>
-            <p className="text-xl text-blue-100 font-lato mb-5">
-              Encontre os melhores cursos e quizzes gamificados para impulsionar sua carreira
-            </p>
+      {/* Hero */}
+      <section className="bg-surface-ink px-4 py-12 text-white md:px-6 md:py-16">
+        <div className="mx-auto max-w-[1280px]">
+          <h1 className="max-w-3xl font-montserrat text-headline-h1-mobile text-balance md:text-display-l">
+            Explore conhecimento sem limites
+          </h1>
+          <p className="mt-3 max-w-2xl text-body-lg text-white/75">
+            Encontre os melhores cursos e quizzes gamificados para impulsionar a sua carreira.
+          </p>
 
-            {/* Barra de Pesquisa */}
-            <div className="relative max-w-2xl mx-auto">
+          {/* Barra de pesquisa */}
+          <div role="search" className="mt-6 max-w-xl">
+            <label htmlFor={searchId} className="sr-only">
+              Pesquisar conteúdos
+            </label>
+            <div className="relative">
+              <Icon name="search" size={20} className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-white/60" />
               <input
-                type="text"
+                id={searchId}
+                type="search"
                 placeholder="O que você quer aprender hoje?"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-8 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-500/30 shadow-lg pl-12 dark:bg-gray-800 dark:text-white border-0"
+                className="min-h-12 w-full rounded-full border-2 border-white/25 bg-white/10 pr-4 pl-12 text-body-md text-white placeholder:text-white/60 transition-[border-color,background-color] duration-150 focus:border-white focus:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               />
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Categorias */}
+      <div className="sticky top-16 z-40 border-b-2 border-border-cloud bg-surface-canvas md:top-20">
+        <div
+          role="group"
+          aria-label="Categoria"
+          className="mx-auto flex max-w-[1280px] items-center gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none] md:px-6"
+        >
+          {[TODOS, ...categories].map((categoria) => {
+            const active = selectedCategory === categoria;
+            return (
+              <button
+                key={categoria}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setSelectedCategory(categoria)}
+                className={cn(
+                  'min-h-11 shrink-0 rounded-full border-2 px-4 text-body-md font-bold whitespace-nowrap transition-[background-color,border-color,color,translate,box-shadow] duration-150',
+                  active
+                    ? 'border-brand-ocean bg-brand-ocean text-white shadow-3d-primary active:translate-y-1 active:shadow-none'
+                    : 'border-border-cloud bg-surface-canvas text-text-secondary hover:border-brand-ocean hover:text-primary',
+                )}
+              >
+                {categoria === TODOS ? 'Todos' : contentService.getCategoryLabel(categoria)}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Categorias */}
-        <div className="flex overflow-x-auto pb-4 mb-8 space-x-2 scrollbar-hide">
-          {[TODOS, ...categories].map((categoria) => (
-            <button
-              key={categoria}
-              type="button"
-              onClick={() => setSelectedCategory(categoria)}
-              className={`px-4 py-2 rounded-full whitespace-nowrap transition-all text-sm font-medium ${selectedCategory === categoria
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'bg-white text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
-                }`}
-            >
-              {categoria === TODOS ? 'Todos' : contentService.getCategoryLabel(categoria)}
-            </button>
-          ))}
-        </div>
+      <div className="mx-auto max-w-[1280px] px-4 py-8 md:px-6">
+        <p role="status" className="mb-5 text-body-md text-text-secondary">
+          {filteredContents.length === 1 ? '1 conteúdo' : `${filteredContents.length} conteúdos`}
+        </p>
 
-        {/* Grid de Conteúdos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredContents.map((conteudo) => (
-            <div key={conteudo.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden group flex flex-col h-full">
-              {/* Thumbnail */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={conteudo.thumbnail}
-                  alt={conteudo.title}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute top-4 right-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-semibold text-gray-900 dark:text-white flex items-center shadow-lg">
-                  <Star className="w-3 h-3 text-yellow-500 mr-1" />
-                  {conteudo.rating}
-                </div>
-                <div className="absolute top-4 left-4 bg-blue-600/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-white shadow-lg">
-                  {conteudo.category}
-                </div>
-              </div>
-
-              {/* Informações */}
-              <div className="p-6 flex-1 flex flex-col">
-                <div className="flex-1">
-                  <h3 className="font-montserrat font-bold text-xl text-gray-900 dark:text-white mb-2 line-clamp-2">
-                    {conteudo.title}
-                  </h3>
-                  <p className="font-lato text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-4">
-                    {conteudo.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4 border-t border-gray-100 dark:border-gray-700 pt-4">
-                  <div className="flex items-center">
-                    <Clock className="w-4 h-4 mr-1" />
-                    {conteudo.duration}
-                  </div>
-                  <div className="flex items-center">
-                    <Users className="w-4 h-4 mr-1" />
-                    {conteudo.students} alunos
-                  </div>
-                </div>
-
-                <div className="mt-auto flex items-center justify-between">
-                  <span className="font-montserrat font-bold text-lg text-green-600 dark:text-green-400">
-                    {(conteudo.price || 0) === 0 ? 'Gratuito' : `Kz ${(conteudo.price || 0).toLocaleString()}`}
-                  </span>
-                  <Link
-                    to={`/courses/${conteudo.id}`}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg text-sm"
-                  >
-                    Ver Detalhes
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Estado Vazio */}
-        {filteredContents.length === 0 && (
-          <div className="text-center py-20">
-            <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Search className="w-10 h-10 text-gray-400" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Nenhum conteúdo encontrado</h3>
-            <p className="text-gray-600 dark:text-gray-400">
+        {/* Estado vazio */}
+        {filteredContents.length === 0 ? (
+          <div className="rounded-3xl border-2 border-dashed border-border-input p-10 text-center">
+            <p className="text-headline-h3 text-on-surface">Nenhum conteúdo encontrado</p>
+            <p className="mt-1 text-body-md text-text-secondary">
               Tente pesquisar por outros termos ou mudar a categoria.
             </p>
           </div>
+        ) : (
+          <>
+            <h2 className="sr-only">Conteúdos disponíveis</h2>
+            <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredContents.map((conteudo) => {
+                const gratuito = (conteudo.price || 0) === 0;
+                return (
+                  <li key={conteudo.id}>
+                    <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border-2 border-border-cloud bg-surface-canvas shadow-elevation-1 transition-[translate,box-shadow,border-color] duration-200 ease-out-quint hover:-translate-y-1 hover:border-brand-ocean hover:shadow-clay has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-brand-sky-ink">
+                      {/* Miniatura */}
+                      <div className="relative h-44 overflow-hidden bg-surface-soft">
+                        <img
+                          src={conteudo.thumbnail}
+                          alt=""
+                          className="size-full object-cover transition-[scale] duration-500 ease-out-quint group-hover:scale-105"
+                        />
+                        <span className="absolute top-3 left-3 rounded-full bg-surface-canvas px-2.5 py-0.5 text-caption font-bold text-text-secondary">
+                          {contentService.getCategoryLabel(conteudo.category)}
+                        </span>
+                        <span className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-surface-canvas px-2.5 py-0.5 text-caption font-bold text-on-surface tabular-nums">
+                          <Icon name="star" size={14} className="fill-feedback-streak text-feedback-streak" />
+                          {conteudo.rating}
+                          <span className="sr-only">de 5</span>
+                        </span>
+                      </div>
+
+                      {/* Informações */}
+                      <div className="flex flex-1 flex-col p-4">
+                        <h3 className="font-montserrat text-headline-h3 leading-snug font-extrabold text-on-surface line-clamp-2">
+                          {conteudo.title}
+                        </h3>
+                        <p className="mt-2 mb-4 text-body-md text-text-secondary line-clamp-3">
+                          {conteudo.description}
+                        </p>
+
+                        <div className="mt-auto mb-4 flex items-center justify-between border-t-2 border-border-cloud pt-3 text-caption text-text-secondary">
+                          <span className="flex items-center gap-1.5">
+                            <Icon name="clock" size={16} />
+                            {conteudo.duration}
+                          </span>
+                          <span className="flex items-center gap-1.5 tabular-nums">
+                            <Icon name="users" size={16} />
+                            {conteudo.students} alunos
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-3">
+                          <span
+                            className={cn(
+                              'font-montserrat text-headline-h3 font-extrabold tabular-nums',
+                              gratuito ? 'text-feedback-success-ink' : 'text-on-surface',
+                            )}
+                          >
+                            {gratuito ? 'Gratuito' : `Kz ${(conteudo.price || 0).toLocaleString()}`}
+                          </span>
+                          <Link
+                            to={`/courses/${conteudo.id}`}
+                            className={cn(
+                              button3DClasses({ size: 'md' }),
+                              'outline-none after:absolute after:inset-0 after:content-[""]',
+                            )}
+                          >
+                            Ver detalhes
+                            <span className="sr-only">: {conteudo.title}</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
         )}
       </div>
     </div>
