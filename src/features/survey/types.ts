@@ -44,6 +44,8 @@ export type SurveyListItem = {
   state: SurveyState;
   options: SurveyOption[];
   hasVoted: boolean;
+  /** O utilizador é o criador desta enquete (decide o servidor): só ele gere e vê resultados. */
+  isOwner: boolean;
 };
 
 export type SurveyResult = {

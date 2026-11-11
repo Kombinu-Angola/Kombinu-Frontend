@@ -19,7 +19,6 @@ type SurveyResultsScreenProps = {
 
 /** Resultados da enquete, com devolução a quem respondeu: é isso que faz as pessoas responderem outra vez. */
 export default function SurveyResultsScreen({ result, creatorName, onClose }: SurveyResultsScreenProps) {
-  const [message, setMessage] = useState("");
   const [closing, setClosing] = useState(false);
   const toast = useToast();
   const open = result.closedAt === null;
@@ -104,14 +103,9 @@ export default function SurveyResultsScreen({ result, creatorName, onClose }: Su
         </section>
 
         <section aria-labelledby="dist-title" className="mb-6 rounded-3xl border-2 border-border-cloud bg-surface-canvas p-5 sm:p-6">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <h2 id="dist-title" className="font-montserrat text-headline-h3 font-extrabold text-on-surface">
-              Distribuição das respostas
-            </h2>
-            <Button3D variant="ghost" onClick={() => toast.show("Exportação agregada em CSV iniciada.")} leadingIcon={<Icon name="download" size={18} />}>
-              Exportar dados agregados
-            </Button3D>
-          </div>
+          <h2 id="dist-title" className="mb-4 font-montserrat text-headline-h3 font-extrabold text-on-surface">
+            Distribuição das respostas
+          </h2>
 
           <ul className="flex flex-col gap-4">
             {result.distribution.map((item) => {
@@ -168,41 +162,6 @@ export default function SurveyResultsScreen({ result, creatorName, onClose }: Su
               </li>
             ))}
           </ul>
-        </section>
-
-        <section aria-labelledby="return-title" className="rounded-3xl border-2 border-feedback-success bg-surface-canvas p-5 sm:p-6">
-          <h2 id="return-title" className="flex items-center gap-2 font-montserrat text-headline-h3 font-extrabold text-on-surface">
-            <Icon name="comment" size={22} className="text-feedback-success-ink" />
-            Devolver a conclusão a quem respondeu
-          </h2>
-          <p id="return-hint" className="mt-1 mb-3 text-caption text-text-secondary">
-            Fecha o ciclo. Quem vê que a resposta serviu para alguma coisa volta a responder da próxima vez.
-          </p>
-
-          <label htmlFor="return-message" className="sr-only">
-            Mensagem de devolução
-          </label>
-          <textarea
-            id="return-message"
-            rows={3}
-            value={message}
-            aria-describedby="return-hint"
-            onChange={(e) => setMessage(e.target.value)}
-            className="field-sizing-content w-full resize-none rounded-xl border-2 border-border-input bg-surface-canvas p-3.5 text-body-md text-on-surface"
-          />
-
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <Button3D variant="ghost" onClick={() => toast.show("Devolução guardada como rascunho.")}>
-              Guardar rascunho
-            </Button3D>
-            <Button3D
-              disabled={message.trim().length < 20}
-              onClick={() => toast.show(`Devolução publicada para ${result.answers} estudantes.`)}
-              trailingIcon={<Icon name="arrow-right" size={18} />}
-            >
-              Publicar devolução
-            </Button3D>
-          </div>
         </section>
       </div>
     </CreatorShell>

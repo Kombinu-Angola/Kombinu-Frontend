@@ -27,6 +27,7 @@ type RawSurvey = {
   state: string;
   closedAt?: string | null;
   hasVoted?: boolean;
+  isOwner?: boolean;
 };
 
 type RawResult = {
@@ -96,6 +97,7 @@ function mapearVotante(raw: RawSurvey): SurveyListItem {
     state: estado(raw.state),
     options: opcoes(raw.options),
     hasVoted: raw.hasVoted === true,
+    isOwner: raw.isOwner === true,
   };
 }
 
