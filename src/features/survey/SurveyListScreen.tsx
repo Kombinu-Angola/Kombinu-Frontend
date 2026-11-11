@@ -17,7 +17,7 @@ const STATE_LABEL: Record<SurveyState, { label: string; tone: "sunbeam" | "succe
 
 type SurveyListScreenProps = {
   userName: string;
-  /** Criadores veem a gestão (publicar, resultados); os restantes só respondem. */
+  /** Escolhe a moldura (estúdio ou app). A gestão de cada enquete depende só de `item.isOwner`. */
   isCreator: boolean;
   items: SurveyListItem[];
   /** Enquete a destacar (por exemplo, vinda de uma notificação). */
@@ -31,13 +31,11 @@ type SurveyListScreenProps = {
 
 function SurveyCard({
   item,
-  isCreator,
   highlighted,
   onVote,
   onPublish,
 }: {
   item: SurveyListItem;
-  isCreator: boolean;
   highlighted: boolean;
   onVote: SurveyListScreenProps["onVote"];
   onPublish: SurveyListScreenProps["onPublish"];
@@ -138,14 +136,14 @@ function SurveyCard({
         </p>
       )}
 
-      {isCreator && item.state !== "rascunho" && (
+      {item.isOwner && item.state !== "rascunho" && (
         <div className="mt-4 flex justify-end">
           <LinkButton3D variant="ghost" href={`/v2/estudio/enquete/resultados?id=${encodeURIComponent(item.id)}`}>
             Ver resultados
           </LinkButton3D>
         </div>
       )}
-      {isCreator && item.state === "rascunho" && (
+      {item.isOwner && item.state === "rascunho" && (
         <div className="mt-4 flex justify-end">
           <Button3D disabled={busy} onClick={() => void publicar()}>
             {busy ? "A ativar…" : "Ativar enquete"}
@@ -193,7 +191,6 @@ export default function SurveyListScreen({
             <SurveyCard
               key={item.id}
               item={item}
-              isCreator={isCreator}
               highlighted={item.id === highlightId}
               onVote={onVote}
               onPublish={onPublish}
