@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import { useGamification } from "../../contexts/GamificationContext";
 import { formatInt } from "../../lib/format";
 import { cn } from "@/lib/utils";
@@ -21,7 +22,8 @@ const NAV: ReadonlyArray<{ id: AppSection; label: string; href: string; icon: Ic
 
 type AppShellProps = {
   active: AppSection;
-  userName: string;
+  /** Ignorado: o cabeçalho mostra o utilizador autenticado. Mantido para não mexer em todas as telas. */
+  userName?: string;
   /** Cadeira em curso, mostrada ao lado da marca. */
   campus?: string;
   /** Conteúdo extra no cabeçalho (ex.: pesquisa do marketplace). */
@@ -33,8 +35,10 @@ type AppShellProps = {
  * Moldura da app com sessão iniciada: navegação em pílula no desktop, barra de separadores
  * fixa no telemóvel (polegar), sequência e gemas sempre visíveis, rodapé e selo de dados.
  */
-export function AppShell({ active, userName, campus, headerSlot, children }: AppShellProps) {
+export function AppShell({ active, campus, headerSlot, children }: AppShellProps) {
   const { streakDays, gems } = useGamification();
+  const { usuario } = useAuth();
+  const nomeUtilizador = usuario?.nome;
 
   return (
     <div className="flex min-h-dvh flex-col bg-background pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0">
@@ -94,13 +98,15 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
               <span className="sr-only">{formatInt(gems)} gemas</span>
             </p>
             <NotificationBell />
-            <a href="/v2/painel" aria-label={`Painel e perfil de ${userName}`} className="relative rounded-full">
-              <Avatar name={userName} />
-              <span
-                aria-hidden="true"
-                className="absolute right-0 bottom-0 size-3 rounded-full border-2 border-white bg-feedback-success"
-              />
-            </a>
+            {nomeUtilizador && (
+              <a href="/v2/painel" aria-label={`Painel e perfil de ${nomeUtilizador}`} className="relative rounded-full">
+                <Avatar name={nomeUtilizador} />
+                <span
+                  aria-hidden="true"
+                  className="absolute right-0 bottom-0 size-3 rounded-full border-2 border-white bg-feedback-success"
+                />
+              </a>
+            )}
           </div>
         </div>
       </header>

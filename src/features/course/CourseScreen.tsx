@@ -24,7 +24,6 @@ const dateFormat = new Intl.DateTimeFormat("pt-AO", {
 
 type CourseScreenProps = {
   course: Course;
-  userName: string;
   trilhaId?: string;
   itemId?: string;
 };
@@ -32,7 +31,6 @@ type CourseScreenProps = {
 /** Página da cadeira: publicação em destaque, próximos módulos e barra lateral de contexto. */
 export default function CourseScreen({
   course,
-  userName,
   trilhaId: propTrilhaId,
   itemId: propItemId,
 }: CourseScreenProps) {
@@ -115,7 +113,7 @@ export default function CourseScreen({
   const trailFullHref = trilha ? hrefDaTrilha(trilha.id) : "/v2/trilha";
 
   return (
-    <AppShell active="trilhas" userName={userName} campus="UAN · Economia">
+    <AppShell active="trilhas">
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-8 px-4 py-8 md:px-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:py-12">
         <div className="min-w-0">
           {/* Barra contextual da trilha ativa (progresso + conclusão de item) */}
@@ -208,30 +206,11 @@ export default function CourseScreen({
           )}
 
           <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b-2 border-border-cloud pb-5">
-            <div className="flex items-center gap-3">
-              <Avatar name={course.author.name} />
-              <div>
-                <p className="flex items-center gap-1 font-montserrat text-headline-h3 font-extrabold text-on-surface">
-                  {course.author.name}
-                  {course.author.verified && (
-                    <>
-                      <Icon
-                        name="seal"
-                        size={16}
-                        className="text-brand-sky-ink"
-                      />
-                      <span className="sr-only">Autor verificado</span>
-                    </>
-                  )}
-                </p>
-                <p className="text-caption text-text-tertiary">
-                  {course.author.role} ·{" "}
-                  <time dateTime={course.publishedAt}>
-                    {dateFormat.format(new Date(course.publishedAt))}
-                  </time>
-                </p>
-              </div>
-            </div>
+            <p className="text-caption text-text-tertiary">
+              <time dateTime={course.publishedAt}>
+                {dateFormat.format(new Date(course.publishedAt))}
+              </time>
+            </p>
             <Button3D
               variant={subscribed ? "secondary" : "primary"}
               aria-pressed={subscribed}

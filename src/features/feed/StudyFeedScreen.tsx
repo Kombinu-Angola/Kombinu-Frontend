@@ -6,6 +6,7 @@ import { Button3D, LinkButton3D } from "../../components/ui/Button3D";
 import { Icon } from "../../components/ui/Icon";
 import { LeaderboardRow } from "../../components/ui/LeaderboardRow";
 import { ProgressBar } from "../../components/ui/ProgressBar";
+import { useAuth } from "../../contexts/AuthContext";
 import { useGamification } from "../../contexts/GamificationContext";
 import { formatActivityTime, formatInt } from "../../lib/format";
 import { levelInfo } from "../../lib/levels";
@@ -30,6 +31,8 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
   const [saved, setSaved] = useState<string[]>([]);
 
   const { xp, streakDays, gems } = useGamification();
+  const { usuario } = useAuth();
+  const nomeUtilizador = usuario?.nome ?? "";
   const lvl = levelInfo(xp);
 
   // Trilhas reais da API (do workspace activo); só as publicadas aparecem ao estudante
@@ -69,7 +72,6 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
           faltam === 0
             ? "trilha concluída! Podes rever os conteúdos."
             : `falta${faltam > 1 ? "m" : ""} ${faltam} ${faltam > 1 ? "itens" : "item"} para fechar a trilha.`,
-        reviewedBy: feed.active.reviewedBy,
         href: proximoItem
           ? hrefDoItem(proximoItem, emCurso.id)
           : hrefDaTrilha(emCurso.id),
@@ -90,7 +92,6 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
       sectionsTotal: feed.active.sectionsTotal,
       percent: fallbackPercent,
       statusHint: "falta 1 checkpoint para fechar o artigo.",
-      reviewedBy: feed.active.reviewedBy,
       href: feed.active.href,
     };
   }, [trilhasApi, feed.active]);
@@ -101,11 +102,7 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
   );
 
   return (
-    <AppShell
-      active="trilhas"
-      userName={feed.student.name}
-      campus={`${activeCard.university} · ${feed.student.course}`}
-    >
+    <AppShell active="trilhas">
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-8 px-4 py-6 md:px-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:py-8">
         <div className="min-w-0">
           <div
@@ -178,11 +175,7 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
               />
             </div>
 
-            <div className="mt-5 flex flex-col items-stretch justify-between gap-3 border-t-2 border-border-cloud pt-4 sm:flex-row sm:items-center">
-              <p className="flex items-center gap-2 text-caption text-text-tertiary">
-                <Icon name="seal" size={16} className="text-primary" />
-                Revisto por {activeCard.reviewedBy}
-              </p>
+            <div className="mt-5 flex flex-col items-stretch justify-end gap-3 border-t-2 border-border-cloud pt-4 sm:flex-row sm:items-center">
               <LinkButton3D
                 href={activeCard.href}
                 size="lg"
@@ -313,32 +306,7 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
                       className="rounded-3xl border-2 border-border-cloud bg-surface-canvas p-5 transition-[border-color,box-shadow] duration-200 hover:border-brand-ocean hover:shadow-elevation-1"
                     >
                       <article>
-                        <header className="mb-4 flex items-center justify-between gap-3">
-                          <span className="flex min-w-0 items-center gap-3">
-                            <Avatar name={post.author.name} />
-                            <span className="min-w-0">
-                              <span className="flex items-center gap-1.5 text-body-md font-bold text-on-surface">
-                                {post.author.name}
-                                <Icon
-                                  name={
-                                    post.author.badge === "verified"
-                                      ? "seal"
-                                      : "trophy"
-                                  }
-                                  size={15}
-                                  className="text-primary"
-                                />
-                                <span className="sr-only">
-                                  {post.author.badge === "verified"
-                                    ? "autor verificado"
-                                    : "monitor académico"}
-                                </span>
-                              </span>
-                              <span className="block truncate text-caption text-text-tertiary">
-                                {post.author.role}
-                              </span>
-                            </span>
-                          </span>
+                        <header className="mb-4 flex items-center justify-end gap-3">
                           <time
                             dateTime={post.publishedAt}
                             className="shrink-0 text-caption text-text-tertiary"
@@ -428,7 +396,7 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
             </h2>
             <div className="flex items-center gap-3.5">
               <span className="relative">
-                <Avatar name={feed.student.name} size="lg" />
+                <Avatar name={nomeUtilizador} size="lg" />
                 <span className="absolute -right-1 -bottom-1 flex size-7 items-center justify-center rounded-full border-[3px] border-white bg-brand-ocean text-caption font-bold text-white tabular-nums">
                   <span className="sr-only">Nível </span>
                   {lvl.level}
@@ -436,13 +404,10 @@ export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
               </span>
               <div className="min-w-0">
                 <p className="font-montserrat text-headline-h3 font-extrabold text-on-surface">
-                  {feed.student.name}
+                  {nomeUtilizador}
                 </p>
                 <p className="text-caption font-bold text-primary">
                   Nível {lvl.level} — {lvl.title}
-                </p>
-                <p className="text-caption text-text-tertiary">
-                  {feed.student.course} · {feed.student.year}
                 </p>
               </div>
             </div>
