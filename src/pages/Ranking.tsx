@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Crown, Medal, Trophy, ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { Crown, Trophy, ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { rankingGlobalService } from '../services/rankingGlobalService';
+import { useWorkspaceStore, WORKSPACE_MARKETPLACE } from '../stores/workspaceStore';
 
 interface RankingUser {
   id: string;
@@ -11,8 +12,21 @@ interface RankingUser {
   trend: 'up' | 'down' | 'same';
 }
 
+/**
+ * O ranking é do workspace activo: o `X-Workspace` já segue em cada pedido (api.ts),
+ * por isso basta recomeçar do zero quando o workspace muda -- sem esperar pela resposta
+ * do contexto anterior nem manter uma página que só existia lá.
+ */
 export default function Ranking() {
+  const ativo = useWorkspaceStore((s) => s.ativo);
+  return <RankingDoWorkspace key={ativo} />;
+}
+
+function RankingDoWorkspace() {
   const { usuario } = useAuth();
+  const ativo = useWorkspaceStore((s) => s.ativo);
+  const escola = useWorkspaceStore((s) => s.memberships.find((m) => m.organizacaoId === s.ativo)?.nome);
+  const titulo = ativo === WORKSPACE_MARKETPLACE ? 'Ranking Global' : `Ranking · ${escola ?? 'Escola'}`;
   const [rankingData, setRankingData] = useState<RankingUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(false);
@@ -20,11 +34,13 @@ export default function Ranking() {
   const [totalPaginas, setTotalPaginas] = useState(1);
 
   useEffect(() => {
+    let cancelado = false;
     const fetchRanking = async () => {
       setLoading(true);
       setErro(false);
       try {
         const resposta = await rankingGlobalService.obter(pagina);
+        if (cancelado) return;
         const data: RankingUser[] = resposta.utilizadores.map((u) => ({
           id: u.id,
           name: u.nome,
@@ -47,13 +63,17 @@ export default function Ranking() {
         setRankingData(data);
         setTotalPaginas(resposta.totalPaginas);
       } catch {
+        if (cancelado) return;
         setRankingData([]);
         setErro(true);
       } finally {
-        setLoading(false);
+        if (!cancelado) setLoading(false);
       }
     };
     fetchRanking();
+    return () => {
+      cancelado = true;
+    };
   }, [usuario, pagina]);
 
   const getTrendIcon = (trend: RankingUser['trend']) => {
@@ -72,7 +92,7 @@ export default function Ranking() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-[50vh] flex items-center justify-center">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
       </div>
     );
@@ -85,18 +105,14 @@ export default function Ranking() {
     : top3;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-
-      {/* Header com gradiente */}
-      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white pt-12 pb-24 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <Trophy className="w-12 h-12 mx-auto mb-3 text-yellow-300" />
-          <h1 className="text-4xl font-bold mb-2">Ranking Global</h1>
-          <p className="text-blue-200 text-lg">Classificação em tempo real dos melhores aprendizes</p>
-        </div>
+    <div>
+      <div className="max-w-4xl mx-auto px-4 pt-8 pb-6 text-center">
+        <Trophy className="w-10 h-10 mx-auto mb-2 text-yellow-500" />
+        <h1 className="font-montserrat text-headline-h1-mobile text-on-surface sm:text-headline-h1">{titulo}</h1>
+        <p className="mt-1 text-body-md text-text-secondary">Classificação em tempo real dos melhores aprendizes</p>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 -mt-16">
+      <div className="max-w-4xl mx-auto px-4">
 
         {/* Pódio top 3 */}
         {top3.length >= 2 && (
@@ -168,7 +184,7 @@ export default function Ranking() {
                 <div className="col-span-2 text-center">Tendência</div>
               </div>
 
-              {(top3.length >= 2 ? resto : rankingData).map((user, idx) => {
+              {(top3.length >= 2 ? resto : rankingData).map((user) => {
                 const pos = user.position;
                 const isMe = usuario?.id === user.id;
 

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { BookOpen, Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { SchoolLoginForm } from '../features/auth/SchoolLoginForm';
+import { MENSAGENS_LOGIN } from '../features/auth/mensagensLogin';
+import type { Usuario } from '../types';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -10,33 +13,36 @@ export default function Login() {
   const [erro, setErro] = useState('');
   const [carregando, setCarregando] = useState(false);
 
-  const { login, usuario } = useAuth();
+  const [modo, setModo] = useState<'email' | 'escola'>('email');
+
+  const { entrar } = useAuth();
   const navigate = useNavigate();
+
+  /** Destino após autenticar: troca de senha obrigatória primeiro, depois o painel do tipo de utilizador. */
+  const seguirParaDestino = (usuarioLogado: Usuario) => {
+    if (usuarioLogado.mustChangePassword) {
+      navigate('/trocar-senha');
+    } else if (usuarioLogado.tipo === 'criador') {
+      navigate('/dashboard/creator');
+    } else if (usuarioLogado.tipo === 'admin') {
+      navigate('/dashboard/admin');
+    } else {
+      navigate('/dashboard/learner');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setCarregando(true);
     setErro('');
 
-    try {
-      const usuarioLogado = await login(email, senha);
-      if (usuarioLogado) {
-        // Redireciona baseado no tipo do usuário recém logado
-        if (usuarioLogado.tipo === 'criador') {
-          navigate('/dashboard/creator');
-        } else if (usuarioLogado.tipo === 'admin') {
-          navigate('/dashboard/admin');
-        } else {
-          navigate('/dashboard/learner');
-        }
-      } else {
-        setErro('Email ou senha incorretos');
-      }
-    } catch (error) {
-      setErro('Erro ao fazer login. Tente novamente.');
-    } finally {
-      setCarregando(false);
+    const resultado = await entrar(email, senha);
+    if ("usuario" in resultado) {
+      seguirParaDestino(resultado.usuario);
+    } else {
+      setErro(MENSAGENS_LOGIN[resultado.codigo]);
     }
+    setCarregando(false);
   };
 
   return (
@@ -69,7 +75,28 @@ export default function Login() {
           <p className="text-gray-600">
             Entre na sua conta e continue sua jornada de aprendizado
           </p>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div role="tablist" aria-label="Tipo de conta" className="mt-6 grid grid-cols-2 gap-2 rounded-lg bg-gray-100 p-1">
+            {([['email', 'Email'], ['escola', 'Escola']] as const).map(([valor, rotulo]) => (
+              <button
+                key={valor}
+                type="button"
+                role="tab"
+                aria-selected={modo === valor}
+                onClick={() => setModo(valor)}
+                className={`min-h-11 rounded-md text-sm font-medium transition-colors ${modo === valor ? 'bg-white text-blue-700 shadow' : 'text-gray-600 hover:text-gray-900'}`}
+              >
+                {rotulo}
+              </button>
+            ))}
+          </div>
+
+          {modo === 'escola' && (
+            <div className="mt-6">
+              <SchoolLoginForm onAuthenticated={seguirParaDestino} />
+            </div>
+          )}
+
+          <form className={`mt-8 space-y-6 ${modo === 'escola' ? 'hidden' : ''}`} onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">

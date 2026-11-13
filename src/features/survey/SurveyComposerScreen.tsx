@@ -5,7 +5,8 @@ import { SelectField } from "../../components/ui/Field";
 import { Icon } from "../../components/ui/Icon";
 import { useToast } from "../../components/ui/Toast";
 import { cn } from "@/lib/utils";
-import type { SurveyDraft, SurveyKind, SurveyTrigger } from "./types";
+import { mensagemErroEnquete } from "../../services/surveyService";
+import type { Survey, SurveyDraft, SurveyKind, SurveyTrigger } from "./types";
 
 const MAX_QUESTION = 140;
 const MIN_DECISION = 20;
@@ -36,19 +37,92 @@ const SUBJECTS = [
   { value: "todas", label: "Todas as minhas cadeiras" },
 ];
 
-type SurveyComposerScreenProps = { draft: SurveyDraft; creatorName: string };
+/** Ponto de partida do compositor; `segmentSize` só alimenta a estimativa de recolha. */
+const EMPTY_DRAFT: SurveyDraft = {
+  decision: "",
+  kind: "escala",
+  question: "",
+  options: KINDS[0].options,
+  faculty: "todas",
+  subject: "todas",
+  trigger: "fim-simulado",
+  sampleTarget: 120,
+  segmentSize: 540,
+};
+
+/** O servidor guarda texto livre: a escolha "todas" fica em branco e as restantes seguem com o rótulo. */
+const rotulo = (lista: ReadonlyArray<{ value: string; label: string }>, value: string) =>
+  value === "todas" ? "" : (lista.find((item) => item.value === value)?.label ?? "");
+
+type SurveyComposerScreenProps = {
+  creatorName: string;
+  /** Cria o rascunho no servidor. Só se pode criar uma vez: a API não edita rascunhos. */
+  onSaveDraft: (draft: SurveyDraft) => Promise<Survey>;
+  /** Publica o rascunho (rascunho -> activa). */
+  onPublish: (id: string) => Promise<Survey>;
+  /** Chamado depois de publicar, para levar o criador aos resultados. */
+  onPublished: (survey: Survey) => void;
+};
 
 /** Compositor de micro-enquete: uma pergunta, dez segundos, e uma decisão escrita à partida. */
-export default function SurveyComposerScreen({ draft: initial, creatorName }: SurveyComposerScreenProps) {
-  const [draft, setDraft] = useState(initial);
+export default function SurveyComposerScreen({ creatorName, onSaveDraft, onPublish, onPublished }: SurveyComposerScreenProps) {
+  const [draft, setDraft] = useState(EMPTY_DRAFT);
   const [preview, setPreview] = useState<number | null>(null);
+  const [saved, setSaved] = useState<Survey | null>(null);
+  const [busy, setBusy] = useState<"guardar" | "ativar" | null>(null);
   const toast = useToast();
 
   const update = (patch: Partial<SurveyDraft>) => setDraft((prev) => ({ ...prev, ...patch }));
 
   const decisionOk = draft.decision.trim().length >= MIN_DECISION;
   const questionOk = draft.question.trim().length >= 10 && draft.question.length <= MAX_QUESTION;
-  const canActivate = decisionOk && questionOk;
+  // Regras do servidor: 2 a 10 opções, sem vazias nem repetidas, e exactamente 2 na binária.
+  const optionsOk = useMemo(() => {
+    const limpas = draft.options.map((o) => o.trim());
+    return (
+      limpas.length >= 2 &&
+      limpas.length <= 10 &&
+      limpas.every(Boolean) &&
+      new Set(limpas.map((o) => o.toLowerCase())).size === limpas.length &&
+      (draft.kind !== "binaria" || limpas.length === 2)
+    );
+  }, [draft.options, draft.kind]);
+  const canActivate = decisionOk && questionOk && optionsOk;
+
+  const paraEnviar = (): SurveyDraft => ({
+    ...draft,
+    faculty: rotulo(FACULTIES, draft.faculty),
+    subject: rotulo(SUBJECTS, draft.subject),
+  });
+
+  const guardar = async () => {
+    if (saved || busy) return;
+    setBusy("guardar");
+    try {
+      setSaved(await onSaveDraft(paraEnviar()));
+      toast.show("Rascunho guardado.");
+    } catch (err) {
+      toast.show(mensagemErroEnquete(err, "Não foi possível guardar o rascunho."), "error");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const ativar = async () => {
+    if (busy || !canActivate) return;
+    setBusy("ativar");
+    try {
+      const rascunho = saved ?? (await onSaveDraft(paraEnviar()));
+      setSaved(rascunho);
+      const activa = await onPublish(rascunho.id);
+      toast.show("Micro-enquete ativa. Começa a aparecer no próximo simulado concluído.");
+      onPublished(activa);
+    } catch (err) {
+      toast.show(mensagemErroEnquete(err, "Não foi possível ativar a enquete."), "error");
+    } finally {
+      setBusy(null);
+    }
+  };
 
   // Estimativa de recolha: quantos veem a enquete por dia e qual a taxa de resposta esperada.
   const estimate = useMemo(() => {
@@ -64,15 +138,15 @@ export default function SurveyComposerScreen({ draft: initial, creatorName }: Su
       creatorName={creatorName}
       actions={
         <>
-          <Button3D variant="ghost" onClick={() => toast.show("Rascunho guardado.")}>
-            Guardar rascunho
+          <Button3D variant="ghost" disabled={busy !== null || saved !== null || !canActivate} onClick={() => void guardar()}>
+            {saved ? "Rascunho guardado" : "Guardar rascunho"}
           </Button3D>
           <Button3D
-            disabled={!canActivate}
+            disabled={!canActivate || busy !== null}
             aria-describedby={canActivate ? undefined : "activate-hint"}
-            onClick={() => toast.show("Micro-enquete ativa. Começa a aparecer no próximo simulado concluído.")}
+            onClick={() => void ativar()}
           >
-            Ativar enquete
+            {busy === "ativar" ? "A ativar…" : "Ativar enquete"}
           </Button3D>
         </>
       }
@@ -89,6 +163,14 @@ export default function SurveyComposerScreen({ draft: initial, creatorName }: Su
           </p>
         </header>
 
+        {saved && (
+          <p role="status" className="mb-6 rounded-2xl border-2 border-feedback-success bg-surface-canvas p-3.5 text-body-md text-on-surface">
+            <strong>Rascunho guardado.</strong> A API não edita rascunhos: para alterar a pergunta ou as opções, cria
+            uma enquete nova. Quando estiver como queres, ativa-a.
+          </p>
+        )}
+
+        <fieldset disabled={saved !== null} className="m-0 min-w-0 border-0 p-0">
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
           <div className="flex flex-col gap-6 lg:col-span-7">
             <section
@@ -324,13 +406,20 @@ export default function SurveyComposerScreen({ draft: initial, creatorName }: Su
 
             {!canActivate && (
               <p id="activate-hint" className="mt-3 rounded-2xl border-2 border-feedback-streak bg-surface-canvas p-3 text-caption font-bold text-feedback-streak-ink">
-                Para ativar: {!decisionOk && "escreve a decisão associada"}
-                {!decisionOk && !questionOk && " e "}
-                {!questionOk && "escreve a pergunta"}.
+                Para ativar:{" "}
+                {[
+                  !decisionOk && "escreve a decisão associada",
+                  !questionOk && "escreve a pergunta",
+                  !optionsOk && "usa 2 a 10 opções distintas e preenchidas",
+                ]
+                  .filter(Boolean)
+                  .join(", ")}
+                .
               </p>
             )}
           </aside>
         </div>
+        </fieldset>
       </div>
     </CreatorShell>
   );

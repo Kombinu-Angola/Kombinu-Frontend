@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import { useGamification } from "../../contexts/GamificationContext";
 import { formatInt } from "../../lib/format";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
 import { DataSaverBadge } from "../ui/DataSaverBadge";
+import { NotificationBell } from "./NotificationBell";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
 
@@ -19,7 +22,8 @@ const NAV: ReadonlyArray<{ id: AppSection; label: string; href: string; icon: Ic
 
 type AppShellProps = {
   active: AppSection;
-  userName: string;
+  /** Ignorado: o cabeçalho mostra o utilizador autenticado. Mantido para não mexer em todas as telas. */
+  userName?: string;
   /** Cadeira em curso, mostrada ao lado da marca. */
   campus?: string;
   /** Conteúdo extra no cabeçalho (ex.: pesquisa do marketplace). */
@@ -31,8 +35,10 @@ type AppShellProps = {
  * Moldura da app com sessão iniciada: navegação em pílula no desktop, barra de separadores
  * fixa no telemóvel (polegar), sequência e gemas sempre visíveis, rodapé e selo de dados.
  */
-export function AppShell({ active, userName, campus, headerSlot, children }: AppShellProps) {
+export function AppShell({ active, campus, headerSlot, children }: AppShellProps) {
   const { streakDays, gems } = useGamification();
+  const { usuario } = useAuth();
+  const nomeUtilizador = usuario?.nome;
 
   return (
     <div className="flex min-h-dvh flex-col bg-background pb-[calc(72px+env(safe-area-inset-bottom))] md:pb-0">
@@ -80,6 +86,7 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
 
           <div className="flex items-center gap-3 sm:gap-5">
             {headerSlot}
+            <WorkspaceSwitcher />
             <p className="flex items-center gap-1.5 text-body-lg font-bold text-feedback-streak-ink tabular-nums">
               <Icon name="flame" size={20} className="text-feedback-streak" />
               <span aria-hidden="true">{streakDays}</span>
@@ -90,20 +97,16 @@ export function AppShell({ active, userName, campus, headerSlot, children }: App
               <span aria-hidden="true">{formatInt(gems)}</span>
               <span className="sr-only">{formatInt(gems)} gemas</span>
             </p>
-            <a
-              href="/v2/notificacoes"
-              aria-label="Notificações"
-              className="relative flex size-11 items-center justify-center rounded-full text-text-secondary transition-[background-color,color] duration-150 hover:bg-surface-soft hover:text-on-surface"
-            >
-              <Icon name="bell" size={20} />
-            </a>
-            <a href="/v2/painel" aria-label={`Painel e perfil de ${userName}`} className="relative rounded-full">
-              <Avatar name={userName} />
-              <span
-                aria-hidden="true"
-                className="absolute right-0 bottom-0 size-3 rounded-full border-2 border-white bg-feedback-success"
-              />
-            </a>
+            <NotificationBell />
+            {nomeUtilizador && (
+              <a href="/v2/painel" aria-label={`Painel e perfil de ${nomeUtilizador}`} className="relative rounded-full">
+                <Avatar name={nomeUtilizador} />
+                <span
+                  aria-hidden="true"
+                  className="absolute right-0 bottom-0 size-3 rounded-full border-2 border-white bg-feedback-success"
+                />
+              </a>
+            )}
           </div>
         </div>
       </header>

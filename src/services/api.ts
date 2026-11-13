@@ -1,5 +1,7 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
 import { toast } from "sonner";
+import { obterHeaderWorkspace } from "@/stores/workspaceStore";
+import { workspaceService } from "./workspaceService";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
@@ -55,8 +57,27 @@ function forceLogout() {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("kombinu_usuario");
+  workspaceService.limpar();
   if (window.location.pathname !== "/login") {
     window.location.href = "/login";
+  }
+}
+
+/** Rota do ecrã de troca obrigatória de senha. */
+export const ROTA_TROCA_SENHA = "/trocar-senha";
+
+function exigirTrocaDeSenha() {
+  try {
+    const guardado = localStorage.getItem("kombinu_usuario");
+    if (guardado) {
+      const usuario = JSON.parse(guardado);
+      localStorage.setItem("kombinu_usuario", JSON.stringify({ ...usuario, mustChangePassword: true }));
+    }
+  } catch {
+    // Dados locais ilegíveis: o redireccionamento por si só chega para bloquear a navegação.
+  }
+  if (!window.location.pathname.endsWith(ROTA_TROCA_SENHA)) {
+    window.location.assign(ROTA_TROCA_SENHA);
   }
 }
 
@@ -65,10 +86,17 @@ export const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+/** Rotas de autenticação não levam contexto de workspace. */
+const isRotaAuth = (url: string | undefined) => (url ?? "").includes("/auth/");
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+  const workspace = isRotaAuth(config.url) ? null : obterHeaderWorkspace();
+  if (workspace) {
+    config.headers["X-Workspace"] = workspace;
   }
   return config;
 });
@@ -81,7 +109,11 @@ api.interceptors.response.use(
     // Pedidos de autenticação não accionam o refresh: um 401 no login são
     // credenciais erradas, não sessão expirada.
     const url = originalRequest?.url ?? "";
-    const isAuthEndpoint = url.includes("/auth/login") || url.includes(REFRESH_PATH);
+    const isAuthEndpoint =
+      url.includes("/auth/login") ||
+      url.includes("/auth/institutional/login") ||
+      url.includes("/auth/password/change") ||
+      url.includes(REFRESH_PATH);
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry && !isAuthEndpoint) {
       originalRequest._retry = true;
@@ -95,9 +127,17 @@ api.interceptors.response.use(
       }
     }
 
+    // 403 `password_change_required`: troca de senha obrigatória pendente (conta institucional).
+    // Marca o utilizador e leva-o ao ecrã de troca; sem aviso de "sem permissão".
+    if (error.response?.status === 403 && error.response.data?.code === "password_change_required") {
+      exigirTrocaDeSenha();
+      return Promise.reject(error);
+    }
+
     // 403 = sem permissão para este recurso, não sessão inválida: informa, não termina a sessão.
     if (error.response?.status === 403) {
-      toast.error("Não tens permissão para aceder a este recurso.");
+      // `id` fixo: vários pedidos em paralelo com 403 mostram um único aviso.
+      toast.error("Não tens permissão para aceder a este recurso.", { id: "erro-403" });
     }
 
     return Promise.reject(error);

@@ -1,13 +1,13 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import BaseLayout from '../components/layout/BaseLayout';
 
 import Login from '../pages/Login';
+import ChangePasswordScreen from '../features/auth/ChangePasswordScreen';
 import Register from '../pages/Register';
 import DashboardAprendiz from '../pages/DashboardAprendiz';
 import DashboardCriador from '../pages/DashboardCriador';
 import Marketplace from '../pages/Marketplace';
 import Quiz from '../pages/Quiz';
-import Ranking from '../pages/Ranking';
 import CriarConteudo from '../pages/CriarConteudo';
 import VisualizarConteudo from '../pages/VisualizarConteudo';
 import PainelAdmin from '../pages/PainelAdmin';
@@ -34,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: 'trocar-senha',
+        element: <ChangePasswordScreen />,
       },
 
     ]
@@ -84,7 +88,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'ranking',
-        element: <ProtectedRoute><Ranking /></ProtectedRoute>,
+        element: <Navigate to="/v2/classificacao" replace />,
       },
     ],
   },

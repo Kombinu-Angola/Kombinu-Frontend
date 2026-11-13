@@ -1,18 +1,25 @@
+import { useMemo } from "react";
 import { AppShell } from "../../components/layout/AppShell";
 import { LinkButton3D } from "../../components/ui/Button3D";
 import { Icon } from "../../components/ui/Icon";
 import { ProgressBar } from "../../components/ui/ProgressBar";
+import { hrefDoItem } from "../../services/trilhaService";
+import { useTrilha } from "../../hooks/useTrilhas";
 import { cn } from "@/lib/utils";
 import type { LearningTrail, TrailNodeStatus } from "./types";
 
-const NODE_STYLE: Record<TrailNodeStatus, { badge: string; card: string; label: string }> = {
+const NODE_STYLE: Record<
+  TrailNodeStatus,
+  { badge: string; card: string; label: string }
+> = {
   concluido: {
     badge: "bg-feedback-success text-surface-ink shadow-3d-success",
     card: "border-border-cloud bg-surface-canvas",
     label: "concluído",
   },
   ativo: {
-    badge: "bg-brand-ocean text-white shadow-3d-primary ring-4 ring-primary-fixed",
+    badge:
+      "bg-brand-ocean text-white shadow-3d-primary ring-4 ring-primary-fixed",
     card: "border-brand-ocean bg-surface-canvas shadow-clay",
     label: "em curso",
   },
@@ -32,7 +39,11 @@ function Stars({ stars }: { stars: number }) {
           name="star"
           size={15}
           aria-hidden="true"
-          className={n <= stars ? "fill-feedback-streak text-feedback-streak" : "text-border-cloud-strong"}
+          className={
+            n <= stars
+              ? "fill-feedback-streak text-feedback-streak"
+              : "text-border-cloud-strong"
+          }
         />
       ))}
       <span className="sr-only">{stars} de 3 estrelas</span>
@@ -40,19 +51,69 @@ function Stars({ stars }: { stars: number }) {
   );
 }
 
-type LearningTrailScreenProps = { trail: LearningTrail; userName: string; backHref: string };
+type LearningTrailScreenProps = {
+  trail: LearningTrail;
+  trilhaId?: string;
+  userName: string;
+  backHref: string;
+};
 
 /** Trilha linear de uma cadeira: nós concluídos, nó em curso e exame no fim. */
-export default function LearningTrailScreen({ trail, userName, backHref }: LearningTrailScreenProps) {
-  const done = trail.nodes.filter((n) => n.status === "concluido").length;
-  const total = trail.nodes.length;
-  const percent = Math.round((done / total) * 100);
-  const active = trail.nodes.find((n) => n.status === "ativo");
+export default function LearningTrailScreen({
+  trail,
+  trilhaId,
+  userName,
+  backHref,
+}: LearningTrailScreenProps) {
+  // A trilha real vem de ?id= (ou da prop); sem sessão ou sem id mantém-se a trilha de exemplo
+  const idDaUrl = new URLSearchParams(window.location.search).get("id") || undefined;
+  const { data: apiTrilha } = useTrilha(trilhaId || idDaUrl);
+
+  const resolvedTrail = useMemo<LearningTrail>(() => {
+    if (!apiTrilha || apiTrilha.itens.length === 0) return trail;
+
+    return {
+      subject: apiTrilha.disciplina || trail.subject,
+      headline: apiTrilha.titulo || trail.headline,
+      year: apiTrilha.ano || trail.year,
+      semester: apiTrilha.semestre || trail.semester,
+      nodes: apiTrilha.itens.map((item) => ({
+        id: item.id,
+        order: item.ordem,
+        title: item.titulo,
+        summary: item.descricao || "Módulo da trilha de aprendizagem.",
+        minutes: item.minutos,
+        xp: item.xp,
+        status: item.estado,
+        stars: item.estrelas,
+        href: hrefDoItem(item, apiTrilha.id),
+      })),
+      finalExam: apiTrilha.exameFinal
+        ? {
+            title: apiTrilha.exameFinal.titulo,
+            minutes: apiTrilha.exameFinal.minutos,
+            xp: apiTrilha.exameFinal.xp,
+            href: `/v2/desafio?id=${encodeURIComponent(apiTrilha.exameFinal.quizId)}`,
+          }
+        : trail.finalExam,
+    };
+  }, [apiTrilha, trail]);
+
+  const done = resolvedTrail.nodes.filter(
+    (n) => n.status === "concluido",
+  ).length;
+  const total = resolvedTrail.nodes.length;
+  const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+  const active = resolvedTrail.nodes.find((n) => n.status === "ativo");
   const remaining = total - done;
-  const examUnlocked = done === total;
+  const examUnlocked = total > 0 && done === total;
 
   return (
-    <AppShell active="trilhas" userName={userName} campus={`${trail.subject} · ${trail.year}`}>
+    <AppShell
+      active="trilhas"
+      userName={userName}
+      campus={`${resolvedTrail.subject} · ${resolvedTrail.year}`}
+    >
       <div className="mx-auto max-w-[800px] px-4 py-6 md:px-6 lg:py-8">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <a
@@ -63,13 +124,13 @@ export default function LearningTrailScreen({ trail, userName, backHref }: Learn
             Voltar às cadeiras
           </a>
           <span className="text-caption text-text-tertiary">
-            {trail.year} · {trail.semester}
+            {resolvedTrail.year} · {resolvedTrail.semester}
           </span>
         </div>
 
         <header className="mb-5">
           <h1 className="font-montserrat text-headline-h1-mobile text-balance text-on-surface sm:text-headline-h1">
-            {trail.subject} — {trail.headline}
+            {resolvedTrail.subject} — {resolvedTrail.headline}
           </h1>
         </header>
 
@@ -78,7 +139,10 @@ export default function LearningTrailScreen({ trail, userName, backHref }: Learn
           className="rounded-2xl border-2 border-border-cloud bg-surface-canvas p-4 sm:p-5"
         >
           <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
-            <h2 id="progress-title" className="flex items-center gap-1.5 text-headline-h3 text-on-surface">
+            <h2
+              id="progress-title"
+              className="flex items-center gap-1.5 text-headline-h3 text-on-surface"
+            >
               <Icon name="target" size={18} className="text-primary" />
               Progresso da trilha
             </h2>
@@ -88,12 +152,16 @@ export default function LearningTrailScreen({ trail, userName, backHref }: Learn
           </div>
           <ProgressBar
             value={done}
-            max={total}
+            max={Math.max(total, 1)}
             label="Progresso da trilha"
             valueText={`${done} de ${total} módulos concluídos`}
           />
           <p className="mt-2 flex items-start gap-1.5 text-caption text-text-secondary tabular-nums">
-            <Icon name="lightbulb" size={15} className="mt-0.5 shrink-0 text-primary" />
+            <Icon
+              name="lightbulb"
+              size={15}
+              className="mt-0.5 shrink-0 text-primary"
+            />
             {active
               ? `Estás no módulo ${active.order}. Faltam ${remaining} módulos para desbloquear o exame simulado.`
               : "Trilha concluída. O exame simulado já está disponível."}
@@ -101,18 +169,25 @@ export default function LearningTrailScreen({ trail, userName, backHref }: Learn
         </section>
 
         <ol className="mt-8 flex flex-col">
-          {trail.nodes.map((node, index) => {
+          {resolvedTrail.nodes.map((node, index) => {
             const style = NODE_STYLE[node.status];
-            const last = index === trail.nodes.length - 1;
+            const last = index === resolvedTrail.nodes.length - 1;
             const lineDone = node.status === "concluido";
             return (
-              <li key={node.id} className="relative flex items-start gap-4 pb-8">
+              <li
+                key={node.id}
+                className="relative flex items-start gap-4 pb-8"
+              >
                 {!last && (
                   <span
                     aria-hidden="true"
                     className={cn(
                       "absolute top-[52px] bottom-0 left-[23px] w-1 rounded-full",
-                      lineDone ? "bg-feedback-success" : node.status === "ativo" ? "bg-brand-ocean" : "bg-border-cloud",
+                      lineDone
+                        ? "bg-feedback-success"
+                        : node.status === "ativo"
+                          ? "bg-brand-ocean"
+                          : "bg-border-cloud",
                     )}
                   />
                 )}
@@ -154,23 +229,32 @@ export default function LearningTrailScreen({ trail, userName, backHref }: Learn
                       Módulo {String(node.order).padStart(2, "0")}
                       {node.status === "ativo" && " · estás aqui"}
                     </span>
-                    <span className="text-caption text-text-tertiary tabular-nums">{node.minutes} min</span>
+                    <span className="text-caption text-text-tertiary tabular-nums">
+                      {node.minutes} min
+                    </span>
                     <span className="sr-only">Estado: {style.label}</span>
                   </div>
 
                   <h3
                     className={cn(
                       "mt-2 font-montserrat text-headline-h3 font-extrabold",
-                      node.status === "bloqueado" ? "text-text-secondary" : "text-on-surface",
+                      node.status === "bloqueado"
+                        ? "text-text-secondary"
+                        : "text-on-surface",
                     )}
                   >
                     {node.title}
                   </h3>
-                  <p className="mt-1 text-body-md text-text-secondary">{node.summary}</p>
+                  <p className="mt-1 text-body-md text-text-secondary">
+                    {node.summary}
+                  </p>
 
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t-2 border-border-cloud pt-3">
                     <span className="flex flex-wrap items-center gap-2">
-                      {node.status === "concluido" && node.stars !== undefined && <Stars stars={node.stars} />}
+                      {node.status === "concluido" &&
+                        node.stars !== undefined && (
+                          <Stars stars={node.stars} />
+                        )}
                       <span
                         className={cn(
                           "inline-flex items-center gap-1 rounded-md px-2 py-1 text-caption font-bold tabular-nums",
@@ -209,27 +293,38 @@ export default function LearningTrailScreen({ trail, userName, backHref }: Learn
           aria-labelledby="exam-title"
           className={cn(
             "flex flex-col items-center gap-3 rounded-3xl border-2 p-6 text-center",
-            examUnlocked ? "border-brand-ocean bg-surface-canvas shadow-clay" : "border-dashed border-border-input bg-surface-soft",
+            examUnlocked
+              ? "border-brand-ocean bg-surface-canvas shadow-clay"
+              : "border-dashed border-border-input bg-surface-soft",
           )}
         >
           <span
             className={cn(
               "flex size-14 items-center justify-center rounded-full",
-              examUnlocked ? "bg-secondary-container text-surface-ink" : "bg-surface-canvas text-text-tertiary",
+              examUnlocked
+                ? "bg-secondary-container text-surface-ink"
+                : "bg-surface-canvas text-text-tertiary",
             )}
           >
             <Icon name={examUnlocked ? "trophy" : "lock"} size={28} />
           </span>
-          <h2 id="exam-title" className="font-montserrat text-headline-h2 text-on-surface">
-            {trail.finalExam.title}
+          <h2
+            id="exam-title"
+            className="font-montserrat text-headline-h2 text-on-surface"
+          >
+            {resolvedTrail.finalExam.title}
           </h2>
           <p className="max-w-md text-body-md text-text-secondary tabular-nums">
             {examUnlocked
-              ? `${trail.finalExam.minutes} minutos, com direito a ${trail.finalExam.xp} XP.`
-              : `Desbloqueia com os ${remaining} módulos que faltam. Depois são ${trail.finalExam.minutes} minutos por ${trail.finalExam.xp} XP.`}
+              ? `${resolvedTrail.finalExam.minutes} minutos, com direito a ${resolvedTrail.finalExam.xp} XP.`
+              : `Desbloqueia com os ${remaining} módulos que faltam. Depois são ${resolvedTrail.finalExam.minutes} minutos por ${resolvedTrail.finalExam.xp} XP.`}
           </p>
           {examUnlocked && (
-            <LinkButton3D href={trail.finalExam.href} size="lg" trailingIcon={<Icon name="arrow-right" size={20} />}>
+            <LinkButton3D
+              href={resolvedTrail.finalExam.href}
+              size="lg"
+              trailingIcon={<Icon name="arrow-right" size={20} />}
+            >
               Fazer o exame simulado
             </LinkButton3D>
           )}

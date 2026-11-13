@@ -1,5 +1,6 @@
 import type { RouteObject } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import V2Layout from './V2Layout';
 
 import OnboardingRoleScreen from '../features/onboarding/OnboardingRoleScreen';
@@ -8,6 +9,7 @@ import { mockRecommendation } from '../features/onboarding/mockRecommendation';
 import { MOCK_DIAGNOSTIC } from '../features/quiz/mockDiagnostic';
 
 import AuthScreen from '../features/auth/AuthScreen';
+import SchoolLoginScreen from '../features/auth/SchoolLoginScreen';
 
 import CreatorApplicationFlow from '../features/creator/CreatorApplicationFlow';
 import { submitCreatorApplication } from '../services/creatorService';
@@ -20,6 +22,9 @@ import ChallengeFlow from '../features/challenge/ChallengeFlow';
 import MarketplaceScreen from '../features/marketplace/MarketplaceScreen';
 import { MOCK_MATERIALS } from '../features/marketplace/mockMaterials';
 import CourseScreen from '../features/course/CourseScreen';
+import { AppShell } from '../components/layout/AppShell';
+import ProtectedRoute from '../components/auth/ProtectedRoute';
+import Ranking from '../pages/Ranking';
 import { MOCK_COURSE } from '../features/course/mockCourse';
 import ReadingFlow from '../features/reading/ReadingFlow';
 import { MOCK_ARTICLE } from '../features/content/mockArticle';
@@ -43,7 +48,7 @@ import SubscriptionFlow from '../features/subscription/SubscriptionFlow';
 import AccountSettingsScreen, { type AccountSettings } from '../features/subscription/AccountSettingsScreen';
 
 import AdminOverviewScreen from '../features/admin/AdminOverviewScreen';
-import StudentsScreen from '../features/admin/StudentsScreen';
+import AdminEstudantesScreen from '../features/admin/AdminEstudantesScreen';
 import ModerationScreen from '../features/admin/ModerationScreen';
 import FinanceScreen from '../features/admin/FinanceScreen';
 import InsightsScreen from '../features/admin/InsightsScreen';
@@ -73,6 +78,10 @@ import { SessionExpiredScreen, NotFoundScreen } from '../features/system/Recover
 
 import NotificationCenterScreen from '../features/notifications/NotificationCenterScreen';
 import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
+import { useEffect, useMemo } from 'react';
+import { toast } from 'sonner';
+import { useAuth } from '../contexts/AuthContext';
+import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 import GlobalSearchScreen from '../features/search/GlobalSearchScreen';
 import { MOCK_SEARCH } from '../features/search/mockSearch';
 
@@ -110,7 +119,9 @@ import FiscalExportScreen from '../features/governance/FiscalExportScreen';
 import TeamPermissionsScreen from '../features/governance/TeamPermissionsScreen';
 import SurveyComposerScreen from '../features/survey/SurveyComposerScreen';
 import SurveyResultsScreen from '../features/survey/SurveyResultsScreen';
-import { SURVEY_DRAFT, SURVEY_RESULT } from '../features/survey/mockSurvey';
+import SurveyListScreen from '../features/survey/SurveyListScreen';
+import { useAccoesEnquetes, useListaEnquetes, useResultadosEnquete } from '../hooks/useEnquetes';
+import { mensagemErroEnquete } from '../services/surveyService';
 
 import CreationHubScreen from '../features/authoring/CreationHubScreen';
 import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
@@ -157,11 +168,149 @@ function CreatorApplicationRoute() {
   );
 }
 
+function NotificationsRoute() {
+  const { usuario } = useAuth();
+  const lista = useListaNotificacoes();
+  const { marcarLida, marcarTodasLidas } = useAccoesNotificacoes();
+  const itens = useMemo(() => lista.data?.pages.flatMap((p) => p.itens) ?? [], [lista.data]);
+
+  useEffect(() => {
+    if (lista.isError) toast.error('Não foi possível carregar as notificações.', { id: 'erro-notificacoes' });
+  }, [lista.isError]);
+
+  // Sem sessão iniciada continua a demonstração com dados de exemplo.
+  if (!usuario) {
+    return <NotificationCenterScreen notifications={NOTIFICATIONS} userName={STUDENT_NAME} settingsHref="/v2/definicoes" />;
+  }
+
+  if (lista.isPending) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-background">
+        <div className="size-10 animate-spin rounded-full border-b-2 border-primary" role="status" aria-label="A carregar notificações" />
+      </div>
+    );
+  }
+
+  const falhou = () => toast.error('Não foi possível actualizar a notificação.', { id: 'erro-notificacao-leitura' });
+
+  return (
+    <NotificationCenterScreen
+      notifications={itens}
+      userName={usuario.nome}
+      settingsHref="/v2/definicoes"
+      onMarkRead={(id) => void marcarLida(id).catch(falhou)}
+      onMarkAllRead={() => void marcarTodasLidas().catch(falhou)}
+      hasMore={lista.hasNextPage}
+      onLoadMore={() => void lista.fetchNextPage()}
+      loadingMore={lista.isFetchingNextPage}
+    />
+  );
+}
+
+function SessaoNecessariaEnquetes() {
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-background px-4 text-center">
+      <p className="text-body-md text-on-surface">Inicia sessão para ver e gerir enquetes.</p>
+      <a href="/login" className="font-bold text-primary underline">
+        Entrar
+      </a>
+    </div>
+  );
+}
+
+function CarregarEnquetes({ rotulo }: { rotulo: string }) {
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-background">
+      <div className="size-10 animate-spin rounded-full border-b-2 border-primary" role="status" aria-label={rotulo} />
+    </div>
+  );
+}
+
+function SurveyComposerRoute() {
+  const { usuario } = useAuth();
+  const navigate = useNavigate();
+  const { criar, publicar } = useAccoesEnquetes();
+  if (!usuario) return <SessaoNecessariaEnquetes />;
+  return (
+    <SurveyComposerScreen
+      creatorName={usuario.nome}
+      onSaveDraft={criar}
+      onPublish={publicar}
+      onPublished={(enquete) => navigate(`/v2/estudio/enquete/resultados?id=${encodeURIComponent(enquete.id)}`)}
+    />
+  );
+}
+
+function SurveyResultsRoute() {
+  const { usuario } = useAuth();
+  const [params] = useSearchParams();
+  const id = params.get('id');
+  const resultados = useResultadosEnquete(id);
+  const { fechar } = useAccoesEnquetes();
+  if (!usuario) return <SessaoNecessariaEnquetes />;
+  if (!id) return <Navigate to="/v2/enquetes" replace />;
+  if (resultados.isPending) return <CarregarEnquetes rotulo="A carregar resultados" />;
+  if (resultados.isError || !resultados.data) {
+    return (
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-background px-4 text-center">
+        <p className="text-body-md text-on-surface">
+          {mensagemErroEnquete(resultados.error, 'Não foi possível carregar os resultados.')}
+        </p>
+        <a href="/v2/enquetes" className="font-bold text-primary underline">
+          Voltar às enquetes
+        </a>
+      </div>
+    );
+  }
+  return <SurveyResultsScreen result={resultados.data} creatorName={usuario.nome} onClose={async () => void (await fechar(id))} />;
+}
+
+function SurveyListRoute() {
+  const { usuario } = useAuth();
+  const [params] = useSearchParams();
+  const lista = useListaEnquetes();
+  const { votar, publicar } = useAccoesEnquetes();
+  const itens = useMemo(() => lista.data?.pages.flatMap((p) => p.itens) ?? [], [lista.data]);
+
+  useEffect(() => {
+    if (lista.isError) toast.error('Não foi possível carregar as enquetes.', { id: 'erro-enquetes' });
+  }, [lista.isError]);
+
+  if (!usuario) return <SessaoNecessariaEnquetes />;
+  if (lista.isPending) return <CarregarEnquetes rotulo="A carregar enquetes" />;
+
+  return (
+    <SurveyListScreen
+      userName={usuario.nome}
+      isCreator={usuario.tipo === 'criador'}
+      items={itens}
+      highlightId={params.get('id')}
+      onVote={votar}
+      onPublish={async (id) => void (await publicar(id))}
+      hasMore={lista.hasNextPage}
+      onLoadMore={() => void lista.fetchNextPage()}
+      loadingMore={lista.isFetchingNextPage}
+    />
+  );
+}
+
 function AuthRoute() {
   const navigate = useNavigate();
   // Demo visual: sem tokens/sessao real (auth por SMS ainda sem endpoint no backend
   // e a ligar autenticacao real precisa de aprovacao do CTO -- ver CLAUDE.md).
-  return <AuthScreen onAuthenticated={() => navigate('/v2/painel')} />;
+  const [modoEscola, setModoEscola] = useState(false);
+
+  // A entrada com a conta da escola e real (POST /auth/institutional/login/); a de SMS continua demo.
+  if (modoEscola) {
+    return (
+      <SchoolLoginScreen
+        onAuthenticated={(usuario) => navigate(usuario.mustChangePassword ? '/trocar-senha' : '/v2/painel')}
+        onBack={() => setModoEscola(false)}
+      />
+    );
+  }
+
+  return <AuthScreen onAuthenticated={() => navigate('/v2/painel')} onSchoolLogin={() => setModoEscola(true)} />;
 }
 
 function ReadingRoute() {
@@ -304,6 +453,16 @@ function SessionExpiredRoute() {
   );
 }
 
+function RankingRoute() {
+  return (
+    <ProtectedRoute>
+      <AppShell active="ligas">
+        <Ranking />
+      </AppShell>
+    </ProtectedRoute>
+  );
+}
+
 function NotFoundRoute() {
   return (
     <NotFoundScreen
@@ -353,8 +512,9 @@ export const v2Routes: RouteObject = {
     { path: 'marketplace', element: <MarketplaceScreen materials={MOCK_MATERIALS} userName={STUDENT_NAME} /> },
     { path: 'marketplace/:id', element: <DocumentRoute /> },
     { path: 'sebenta', element: <DocumentRoute /> },
-    { path: 'cadeira', element: <CourseScreen course={MOCK_COURSE} userName={STUDENT_NAME} /> },
+    { path: 'cadeira', element: <CourseScreen course={MOCK_COURSE} /> },
     { path: 'leitura', element: <ReadingRoute /> },
+    { path: 'classificacao', element: <RankingRoute /> },
     { path: 'ligas', element: <LeaguesScreen league={mockLeague()} userName={STUDENT_NAME} /> },
     { path: 'ofensiva', element: <StreakHubScreen streak={MOCK_STREAK} userName={STUDENT_NAME} studyHref="/v2/trilhas" /> },
     { path: 'perfil', element: <StudentProfileScreen profile={MOCK_PROFILE} badgesHref="/v2/medalhas" /> },
@@ -367,7 +527,8 @@ export const v2Routes: RouteObject = {
     { path: 'estudio/definicoes', element: <AccountSettingsRoute /> },
 
     { path: 'admin', element: <AdminOverviewScreen /> },
-    { path: 'admin/estudantes', element: <StudentsScreen /> },
+    { path: 'admin/estudantes', element: <Navigate to="/v2/admin/membros" replace /> },
+    { path: 'admin/membros', element: <AdminEstudantesScreen /> },
     { path: 'admin/criadores', element: <CreatorQueueScreen applications={CREATOR_QUEUE} /> },
     { path: 'admin/moderacao', element: <ModerationScreen /> },
     { path: 'admin/insights', element: <InsightsScreen /> },
@@ -402,7 +563,7 @@ export const v2Routes: RouteObject = {
     { path: 'sessao-expirada', element: <SessionExpiredRoute /> },
     { path: '404', element: <NotFoundRoute /> },
 
-    { path: 'notificacoes', element: <NotificationCenterScreen notifications={NOTIFICATIONS} userName={STUDENT_NAME} settingsHref="/v2/definicoes" /> },
+    { path: 'notificacoes', element: <NotificationsRoute /> },
     { path: 'pesquisa', element: <GlobalSearchScreen results={MOCK_SEARCH} userName={STUDENT_NAME} /> },
 
     { path: 'estudio/analitica', element: <MaterialAnalyticsScreen analytics={MOCK_ANALYTICS} creatorName={CREATOR_NAME} materialsHref="/v2/estudio/materiais" /> },
@@ -468,7 +629,8 @@ export const v2Routes: RouteObject = {
 
     { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
 
-    { path: 'estudio/enquete', element: <SurveyComposerScreen draft={SURVEY_DRAFT} creatorName={CREATOR_NAME} /> },
-    { path: 'estudio/enquete/resultados', element: <SurveyResultsScreen result={SURVEY_RESULT} creatorName={CREATOR_NAME} /> },
+    { path: 'enquetes', element: <SurveyListRoute /> },
+    { path: 'estudio/enquete', element: <SurveyComposerRoute /> },
+    { path: 'estudio/enquete/resultados', element: <SurveyResultsRoute /> },
   ],
 };

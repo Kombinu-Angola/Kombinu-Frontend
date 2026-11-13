@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "../../components/layout/AppShell";
 import { Button3D, LinkButton3D } from "../../components/ui/Button3D";
 import { Icon } from "../../components/ui/Icon";
@@ -22,11 +22,34 @@ const TONE: Record<NotificationTone, { card: string; icon: string }> = {
   neutro: { card: "border-border-cloud bg-surface-canvas", icon: "bg-surface-soft text-text-secondary" },
 };
 
-type NotificationCenterScreenProps = { notifications: AppNotification[]; userName: string; settingsHref: string };
+type NotificationCenterScreenProps = {
+  notifications: AppNotification[];
+  userName: string;
+  settingsHref: string;
+  /** Persistem a leitura no backend; sem elas o ecrã só muda o estado local (modo demonstração). */
+  onMarkRead?: (id: string) => void;
+  onMarkAllRead?: () => void;
+  /** Há mais páginas por carregar. */
+  hasMore?: boolean;
+  onLoadMore?: () => void;
+  loadingMore?: boolean;
+};
 
 /** Centro de notificações: um sítio para tudo o que a plataforma avisa por SMS ou no ecrã. */
-export default function NotificationCenterScreen({ notifications: initial, userName, settingsHref }: NotificationCenterScreenProps) {
+export default function NotificationCenterScreen({
+  notifications: initial,
+  userName,
+  settingsHref,
+  onMarkRead,
+  onMarkAllRead,
+  hasMore,
+  onLoadMore,
+  loadingMore,
+}: NotificationCenterScreenProps) {
   const [notifications, setNotifications] = useState(initial);
+
+  // Dados reais: quando a lista do backend muda (nova página, refresco), o ecrã acompanha.
+  useEffect(() => setNotifications(initial), [initial]);
   const [filter, setFilter] = useState<Filter>("todas");
 
   const counts = useMemo(() => {
@@ -44,7 +67,15 @@ export default function NotificationCenterScreen({ notifications: initial, userN
     filter === "todas" ? true : filter === "por-ler" ? !n.read : n.category === filter,
   );
 
-  const markRead = (id: string) => setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  const markRead = (id: string) => {
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+    onMarkRead?.(id);
+  };
+
+  const markAllRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    onMarkAllRead?.();
+  };
 
   return (
     <AppShell active="painel" userName={userName} campus="UAN · Economia">
@@ -64,7 +95,7 @@ export default function NotificationCenterScreen({ notifications: initial, userN
           <Button3D
             variant="ghost"
             disabled={counts["por-ler"] === 0}
-            onClick={() => setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))}
+            onClick={markAllRead}
             leadingIcon={<Icon name="check" size={18} strokeWidth={3} />}
           >
             Marcar todas como lidas
@@ -167,6 +198,14 @@ export default function NotificationCenterScreen({ notifications: initial, userN
               );
             })}
           </ul>
+        )}
+
+        {hasMore && (
+          <div className="mt-6 flex justify-center">
+            <Button3D variant="ghost" onClick={onLoadMore} disabled={loadingMore}>
+              {loadingMore ? "A carregar…" : "Carregar mais avisos"}
+            </Button3D>
+          </div>
         )}
 
         <footer className="mt-10 border-t-2 border-border-cloud pt-6 text-center">

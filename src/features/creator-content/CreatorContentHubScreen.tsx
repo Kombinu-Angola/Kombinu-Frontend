@@ -6,6 +6,7 @@ import { Icon } from "../../components/ui/Icon";
 import { table, td, th, tr } from "../../components/ui/table";
 import { TableScroll } from "../../components/ui/TableScroll";
 import { useToast } from "../../components/ui/Toast";
+import { useDialogBehavior } from "../../hooks/useDialogBehavior";
 import { formatActivityTime, formatInt, formatKz, formatSize, normalize } from "../../lib/format";
 import { cn } from "@/lib/utils";
 import { PricingModal } from "./PricingModal";
@@ -42,6 +43,7 @@ export default function CreatorContentHubScreen({ materials: initial, creatorNam
   const [university, setUniversity] = useState("todas");
   const [pricing, setPricing] = useState<CreatorMaterial | null>(null);
   const [pausing, setPausing] = useState<CreatorMaterial | null>(null);
+  const pauseDialogRef = useDialogBehavior<HTMLDivElement>(() => setPausing(null), pausing !== null);
   const toast = useToast();
 
   const universities = useMemo(
@@ -347,7 +349,13 @@ export default function CreatorContentHubScreen({ materials: initial, creatorNam
 
       {pausing && (
         <div className="fixed inset-0 z-[55] flex items-center justify-center bg-surface-ink/60 p-4">
-          <div role="dialog" aria-modal="true" aria-labelledby="pause-title" className="w-full max-w-md rounded-3xl bg-surface-canvas p-6 shadow-clay">
+          <div
+            ref={pauseDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pause-title"
+            className="w-full max-w-md rounded-3xl bg-surface-canvas p-6 shadow-clay"
+          >
             <h2 id="pause-title" className="font-montserrat text-headline-h3 font-extrabold text-on-surface">
               {pausing.status === "pausado" ? "Republicar material?" : "Pausar material?"}
             </h2>

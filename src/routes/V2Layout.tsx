@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { GamificationProvider } from '../contexts/GamificationContext';
 
 /**
@@ -34,6 +35,27 @@ function useInternalLinkInterceptor() {
 /** Moldura de /v2: sessão de demonstração (XP 650, sequência 12, 450 gemas) partilhada entre as telas novas. */
 export default function V2Layout() {
   useInternalLinkInterceptor();
+  const { usuario, loading } = useAuth();
+  const { pathname } = useLocation();
+
+  // Troca de senha obrigatória pendente: nenhuma tela de /v2 fica acessível até à troca.
+  if (usuario?.mustChangePassword) return <Navigate to="/trocar-senha" replace />;
+
+  // Defesa em profundidade: a API já recusa, mas a área de administração só abre a quem
+  // é admin de uma escola (membership) ou admin da plataforma.
+  if (pathname === '/v2/admin' || pathname.startsWith('/v2/admin/')) {
+    if (loading) {
+      return (
+        <div className="flex min-h-dvh items-center justify-center bg-background">
+          <div className="size-12 animate-spin rounded-full border-b-2 border-brand-ocean" />
+        </div>
+      );
+    }
+    if (!usuario) return <Navigate to="/login" state={{ from: { pathname } }} replace />;
+    const eAdmin =
+      usuario.tipo === 'admin' || (usuario.memberships ?? []).some((m) => m.papel === 'admin');
+    if (!eAdmin) return <Navigate to="/v2/trilhas" replace />;
+  }
 
   return (
     <GamificationProvider initialXp={650} initialStreak={12} initialGems={450}>
