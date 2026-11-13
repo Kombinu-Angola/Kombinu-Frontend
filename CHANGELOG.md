@@ -108,6 +108,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Alterado
 
+- Admin: substitui a demonstracao "Estudantes e polos" (`StudentsScreen`, com dados mock) pela gestao real de membros. O menu do `AdminShell` fica so com "Membros da escola" (`/v2/admin/membros`) e a rota antiga `/v2/admin/estudantes` redirecciona para la. Apaguei `StudentsScreen` e `StudentDrawer`, que mais nada usava; os dados de exemplo `STUDENTS` em `mockAdmin.ts` ficam sem uso.
 - `CLAUDE.md`: documentada excepcao aprovada ao padrao Tailwind-only — a landing publica (Passe de Provas) usa CSS Modules e nao tem dark mode, por exigencia de fidelidade pixel-a-pixel a um mockup externo; excepcao restrita a `components/landing/`.
 - `contentService.ts`: mapeamento completo de campos do backend — `video_url` -> `videoUrl`, `text_content` -> `textContent`, objecto `creator` -> `creatorName`; categorias reais do backend (`tecnologia`, `negocios`, `design`) com labels em portugues (S2-20).
 - `Marketplace.tsx`: filtros de categoria agora usam valores reais do backend com labels formatadas; botoes com `type="button"` (S2-20).

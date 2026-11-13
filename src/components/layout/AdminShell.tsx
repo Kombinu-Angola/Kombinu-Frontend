@@ -3,11 +3,10 @@ import { cn } from "@/lib/utils";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
 
-export type AdminSection = "visao" | "estudantes" | "membros" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao" | "catalogo" | "subscricoes" | "suporte" | "adaptativo" | "equipa" | "fiscal";
+export type AdminSection = "visao" | "membros" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao" | "catalogo" | "subscricoes" | "suporte" | "adaptativo" | "equipa" | "fiscal";
 
 const NAV: ReadonlyArray<{ id: AdminSection; label: string; href: string; icon: IconName }> = [
   { id: "visao", label: "Visão executiva", href: "/v2/admin", icon: "grid" },
-  { id: "estudantes", label: "Estudantes e polos", href: "/v2/admin/estudantes", icon: "users" },
   { id: "membros", label: "Membros da escola", href: "/v2/admin/membros", icon: "users" },
   { id: "criadores", label: "Homologação de criadores", href: "/v2/admin/criadores", icon: "seal" },
   { id: "moderacao", label: "Moderação de conteúdo", href: "/v2/admin/moderacao", icon: "shield" },
