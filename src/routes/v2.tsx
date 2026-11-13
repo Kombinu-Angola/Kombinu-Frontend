@@ -46,6 +46,7 @@ import AccountSettingsScreen, { type AccountSettings } from '../features/subscri
 
 import AdminOverviewScreen from '../features/admin/AdminOverviewScreen';
 import StudentsScreen from '../features/admin/StudentsScreen';
+import AdminEstudantesScreen from '../features/admin/AdminEstudantesScreen';
 import ModerationScreen from '../features/admin/ModerationScreen';
 import FinanceScreen from '../features/admin/FinanceScreen';
 import InsightsScreen from '../features/admin/InsightsScreen';
@@ -514,6 +515,7 @@ export const v2Routes: RouteObject = {
 
     { path: 'admin', element: <AdminOverviewScreen /> },
     { path: 'admin/estudantes', element: <StudentsScreen /> },
+    { path: 'admin/membros', element: <AdminEstudantesScreen /> },
     { path: 'admin/criadores', element: <CreatorQueueScreen applications={CREATOR_QUEUE} /> },
     { path: 'admin/moderacao', element: <ModerationScreen /> },
     { path: 'admin/insights', element: <InsightsScreen /> },
