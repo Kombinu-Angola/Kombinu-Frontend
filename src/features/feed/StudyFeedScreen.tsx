@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AppShell } from "../../components/layout/AppShell";
 import { Asset3D } from "../../components/ui/Asset3D";
 import { Avatar } from "../../components/ui/Avatar";
@@ -9,7 +9,8 @@ import { ProgressBar } from "../../components/ui/ProgressBar";
 import { useGamification } from "../../contexts/GamificationContext";
 import { formatActivityTime, formatInt } from "../../lib/format";
 import { levelInfo } from "../../lib/levels";
-import { trilhaService, type Trilha } from "../../services/trilhaService";
+import { hrefDaTrilha, hrefDoItem } from "../../services/trilhaService";
+import { useListaTrilhas } from "../../hooks/useTrilhas";
 import { cn } from "@/lib/utils";
 import type { StudyFeed, TrailTab } from "./types";
 
@@ -21,50 +22,22 @@ const TABS: ReadonlyArray<{ value: TrailTab; label: string }> = [
 
 type StudyFeedScreenProps = {
   feed: StudyFeed;
-  usuarioId?: string;
 };
 
 /** Feed de estudos: módulo em curso (efeito Zeigarnik), publicações recentes e painel do estudante. */
-export default function StudyFeedScreen({
-  feed,
-  usuarioId,
-}: StudyFeedScreenProps) {
+export default function StudyFeedScreen({ feed }: StudyFeedScreenProps) {
   const [tab, setTab] = useState<TrailTab>("aprendizado");
   const [saved, setSaved] = useState<string[]>([]);
-  const [trilhasApi, setTrilhasApi] = useState<Trilha[]>([]);
-  const [loadingTrilhas, setLoadingTrilhas] = useState(true);
 
   const { xp, streakDays, gems } = useGamification();
   const lvl = levelInfo(xp);
 
-  // Carrega trilhas reais da API + progresso do utilizador
-  useEffect(() => {
-    let mounted = true;
-    const resolvedUserId =
-      usuarioId ||
-      (feed.student as { id?: string })?.id ||
-      localStorage.getItem("kombinu_user_id") ||
-      undefined;
-
-    trilhaService
-      .listarTrilhas(resolvedUserId)
-      .then((lista) => {
-        if (!mounted) return;
-        // Apenas trilhas publicadas aparecem para o estudante
-        const publicadas = lista.filter((t) => t.status === "published");
-        setTrilhasApi(publicadas.length > 0 ? publicadas : lista);
-      })
-      .catch((err) => {
-        console.warn("Falha ao carregar trilhas no feed:", err);
-      })
-      .finally(() => {
-        if (mounted) setLoadingTrilhas(false);
-      });
-
-    return () => {
-      mounted = false;
-    };
-  }, [usuarioId, feed.student]);
+  // Trilhas reais da API (do workspace activo); só as publicadas aparecem ao estudante
+  const { data: trilhasTodas, isLoading: loadingTrilhas } = useListaTrilhas();
+  const trilhasApi = useMemo(
+    () => (trilhasTodas ?? []).filter((t) => t.status === "published"),
+    [trilhasTodas],
+  );
 
   // Efeito Zeigarnik: prioriza trilha em andamento (>0% e <100%), ou a primeira disponível da API
   const activeCard = useMemo(() => {
@@ -98,8 +71,8 @@ export default function StudyFeedScreen({
             : `falta${faltam > 1 ? "m" : ""} ${faltam} ${faltam > 1 ? "itens" : "item"} para fechar a trilha.`,
         reviewedBy: feed.active.reviewedBy,
         href: proximoItem
-          ? `/v2/trilhas/${emCurso.id}?itemId=${proximoItem.id}`
-          : `/v2/trilhas/${emCurso.id}`,
+          ? hrefDoItem(proximoItem, emCurso.id)
+          : hrefDaTrilha(emCurso.id),
       };
     }
 
@@ -260,7 +233,7 @@ export default function StudyFeedScreen({
                         </div>
                         <h3 className="font-montserrat text-headline-h3 font-extrabold text-on-surface">
                           <a
-                            href={`/v2/trilhas/${trilha.id}`}
+                            href={hrefDaTrilha(trilha.id)}
                             className="hover:text-primary"
                           >
                             {trilha.titulo}
@@ -286,7 +259,7 @@ export default function StudyFeedScreen({
                             {concluidos}/{total} concluídos
                           </span>
                           <a
-                            href={`/v2/trilhas/${trilha.id}`}
+                            href={hrefDaTrilha(trilha.id)}
                             className="inline-flex items-center gap-1 text-button text-primary uppercase hover:underline"
                           >
                             {pct === 100

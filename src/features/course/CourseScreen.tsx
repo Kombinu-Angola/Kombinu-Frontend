@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AppShell } from "../../components/layout/AppShell";
 import { Asset3D } from "../../components/ui/Asset3D";
 import { Avatar } from "../../components/ui/Avatar";
@@ -8,10 +8,12 @@ import { ProgressBar } from "../../components/ui/ProgressBar";
 import { useToast } from "../../components/ui/Toast";
 import { formatInt } from "../../lib/format";
 import {
-  trilhaService,
-  type Trilha,
+  hrefDaTrilha,
+  hrefDoItem,
+  mensagemErroTrilha,
   type TrilhaItem,
 } from "../../services/trilhaService";
+import { useAccoesTrilhas, useTrilha } from "../../hooks/useTrilhas";
 import { cn } from "@/lib/utils";
 import type { Course } from "./types";
 
@@ -23,7 +25,6 @@ const dateFormat = new Intl.DateTimeFormat("pt-AO", {
 type CourseScreenProps = {
   course: Course;
   userName: string;
-  usuarioId?: string;
   trilhaId?: string;
   itemId?: string;
 };
@@ -32,7 +33,6 @@ type CourseScreenProps = {
 export default function CourseScreen({
   course,
   userName,
-  usuarioId,
   trilhaId: propTrilhaId,
   itemId: propItemId,
 }: CourseScreenProps) {
@@ -41,66 +41,20 @@ export default function CourseScreen({
   const [following, setFollowing] = useState<string[]>([]);
 
   // Contexto da trilha ativa (via props ou query params ?trilhaId=...&itemId=...)
-  const [trilhaContext, setTrilhaContext] = useState<{
-    trilhaId?: string;
-    itemId?: string;
-  }>({ trilhaId: propTrilhaId, itemId: propItemId });
-  const [trilha, setTrilha] = useState<Trilha | null>(null);
+  const [trilhaContext] = useState<{ trilhaId?: string; itemId?: string }>(() => {
+    if (propTrilhaId) return { trilhaId: propTrilhaId, itemId: propItemId };
+    const params = new URLSearchParams(window.location.search);
+    return {
+      trilhaId: params.get("trilhaId") || undefined,
+      itemId: params.get("itemId") || undefined,
+    };
+  });
+  const { data: trilha } = useTrilha(trilhaContext.trilhaId);
+  const { concluirItem } = useAccoesTrilhas();
   const [completing, setCompleting] = useState(false);
-  const [completedItem, setCompletedItem] = useState(false);
-  const [nextItem, setNextItem] = useState<TrilhaItem | undefined>(undefined);
 
   const toast = useToast();
   const likes = course.hero.likes + (liked ? 1 : 0);
-
-  const resolvedUserId = useMemo(
-    () => usuarioId || localStorage.getItem("kombinu_user_id") || "guest",
-    [usuarioId],
-  );
-
-  // Extrai trilhaId e itemId da URL caso não venham por props
-  useEffect(() => {
-    if (propTrilhaId) return;
-    const params = new URLSearchParams(window.location.search);
-    const qTrilhaId = params.get("trilhaId") || undefined;
-    const qItemId = params.get("itemId") || undefined;
-    if (qTrilhaId) {
-      setTrilhaContext({ trilhaId: qTrilhaId, itemId: qItemId });
-    }
-  }, [propTrilhaId]);
-
-  // Carrega dados da trilha e estado de conclusão do item atual
-  useEffect(() => {
-    const activeTrilhaId = trilhaContext.trilhaId;
-    if (!activeTrilhaId) return;
-    let mounted = true;
-
-    trilhaService
-      .obterTrilhaPorId(activeTrilhaId, resolvedUserId)
-      .then((res) => {
-        if (!mounted || !res) return;
-        setTrilha(res);
-
-        const currentIdx = trilhaContext.itemId
-          ? res.itens.findIndex((i) => i.id === trilhaContext.itemId)
-          : res.itens.findIndex((i) => !i.concluido);
-
-        if (currentIdx !== -1) {
-          const current = res.itens[currentIdx];
-          setCompletedItem(Boolean(current.concluido));
-          if (currentIdx + 1 < res.itens.length) {
-            setNextItem(res.itens[currentIdx + 1]);
-          }
-        }
-      })
-      .catch((err) => {
-        console.warn("Erro ao carregar contexto da trilha no course:", err);
-      });
-
-    return () => {
-      mounted = false;
-    };
-  }, [trilhaContext.trilhaId, trilhaContext.itemId, resolvedUserId]);
 
   const currentItem = useMemo(() => {
     if (!trilha) return undefined;
@@ -110,51 +64,30 @@ export default function CourseScreen({
     return trilha.itens.find((i) => !i.concluido) || trilha.itens[0];
   }, [trilha, trilhaContext.itemId]);
 
+  const completedItem = Boolean(currentItem?.concluido);
+  const nextItem = useMemo<TrilhaItem | undefined>(() => {
+    if (!trilha || !currentItem) return undefined;
+    return trilha.itens[trilha.itens.findIndex((i) => i.id === currentItem.id) + 1];
+  }, [trilha, currentItem]);
+
   async function handleCompleteItem() {
-    if (!trilha || !currentItem || completing) return;
+    if (!currentItem || completing) return;
     setCompleting(true);
 
     try {
-      const targetId =
-        currentItem.targetId ||
-        (course as { id?: string }).id ||
-        currentItem.id;
-
-      const { proximoItem, trilhaAtualizada } =
-        await trilhaService.concluirItemTrilha(
-          resolvedUserId,
-          trilha.id,
-          currentItem.id,
-          targetId,
-          course.hero.quizXp || 10,
-          (course.hero.minutes || 0) * 60,
-        );
-
-      setCompletedItem(true);
-      setNextItem(proximoItem);
-      if (trilhaAtualizada) setTrilha(trilhaAtualizada);
-
+      await concluirItem(currentItem.id);
       toast.show(
-        proximoItem
-          ? `Módulo concluído! Próximo: ${proximoItem.titulo}`
+        nextItem
+          ? `Módulo concluído! Próximo: ${nextItem.titulo}`
           : "Parabéns! Concluíste o último módulo desta trilha.",
       );
-    } catch {
+    } catch (err) {
       toast.show(
-        "Não foi possível registar a conclusão agora. Tenta novamente.",
+        mensagemErroTrilha(err, "Não foi possível registar a conclusão agora. Tenta novamente."),
       );
     } finally {
       setCompleting(false);
     }
-  }
-
-  function buildItemHref(item: TrilhaItem, activeTrilhaId: string) {
-    const base =
-      item.kind === "quiz"
-        ? `/v2/course/${item.targetId}?mode=quiz`
-        : `/v2/course/${item.targetId}`;
-    const sep = base.includes("?") ? "&" : "?";
-    return `${base}${sep}trilhaId=${encodeURIComponent(activeTrilhaId)}&itemId=${encodeURIComponent(item.id)}`;
   }
 
   // Próximos módulos: usa itens reais da trilha se disponível, senão fallback
@@ -170,16 +103,16 @@ export default function CourseScreen({
             (item.concluido
               ? "Módulo já concluído nesta trilha."
               : "Próximo passo na tua trilha de aprendizagem."),
-          minutes: item.kind === "quiz" ? 15 : 12,
+          minutes: item.minutos,
           asset: course.hero.asset,
-          href: buildItemHref(item, trilha.id),
+          href: hrefDoItem(item, trilha.id),
           concluido: item.concluido,
         }));
     }
     return course.modules.map((m) => ({ ...m, concluido: false }));
   }, [trilha, currentItem?.id, course.modules, course.hero.asset]);
 
-  const trailFullHref = trilha ? `/v2/trilhas/${trilha.id}` : "/v2/trilha";
+  const trailFullHref = trilha ? hrefDaTrilha(trilha.id) : "/v2/trilha";
 
   return (
     <AppShell active="trilhas" userName={userName} campus="UAN · Economia">
@@ -232,13 +165,19 @@ export default function CourseScreen({
 
                   <div className="flex flex-wrap items-center gap-2">
                     {!completedItem ? (
-                      <Button3D
-                        disabled={completing}
-                        onClick={handleCompleteItem}
-                        leadingIcon={<Icon name="check" size={16} />}
-                      >
-                        {completing ? "A registar..." : "Concluir módulo"}
-                      </Button3D>
+                      currentItem.kind === "conteudo" ? (
+                        <Button3D
+                          disabled={completing}
+                          onClick={handleCompleteItem}
+                          leadingIcon={<Icon name="check" size={16} />}
+                        >
+                          {completing ? "A registar..." : "Concluir módulo"}
+                        </Button3D>
+                      ) : (
+                        <span className="text-caption font-bold text-text-secondary">
+                          Conclui-se sozinho ao responder.
+                        </span>
+                      )
                     ) : (
                       <>
                         <span className="inline-flex items-center gap-1 rounded-full bg-feedback-success-soft px-3 py-1.5 text-caption font-bold text-feedback-success-ink">
@@ -247,7 +186,7 @@ export default function CourseScreen({
                         </span>
                         {nextItem ? (
                           <LinkButton3D
-                            href={buildItemHref(nextItem, trilha.id)}
+                            href={hrefDoItem(nextItem, trilha.id)}
                             trailingIcon={<Icon name="arrow-right" size={16} />}
                           >
                             Próximo: {nextItem.titulo}

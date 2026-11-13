@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CreatorShell } from "../../components/layout/CreatorShell";
 import { Button3D } from "../../components/ui/Button3D";
 import { SelectField, TextField } from "../../components/ui/Field";
@@ -6,55 +6,21 @@ import { Icon } from "../../components/ui/Icon";
 import { ProgressBar } from "../../components/ui/ProgressBar";
 import { useToast } from "../../components/ui/Toast";
 import {
+  mensagemErroTrilha,
   trilhaService,
+  type AlvoDeTrilha,
+  type Trilha,
   type TrilhaItemKind,
   type TrilhaStatus,
 } from "../../services/trilhaService";
+import { useAccoesTrilhas } from "../../hooks/useTrilhas";
+import { TrailTargetPicker } from "./TrailTargetPicker";
 import { cn } from "@/lib/utils";
 import type { Topic, TrailNodeDraft } from "./types";
 
 const SEMESTERS = [
   { value: "2026-1", label: "Ano letivo 2026, 1.º semestre" },
   { value: "2026-2", label: "Ano letivo 2026, 2.º semestre" },
-];
-
-const INITIAL_NODES: TrailNodeDraft[] = [
-  {
-    id: "n1",
-    kind: "artigo",
-    title: "Introdução ao mercado cambial e reservas do BNA",
-    minutes: 12,
-    xp: 40,
-    checkpoints: 3,
-    topicIds: ["t-cambial"],
-  },
-  {
-    id: "n2",
-    kind: "artigo",
-    title: "O modelo IS-LM em economia fechada",
-    minutes: 18,
-    xp: 50,
-    checkpoints: 4,
-    topicIds: ["t-islm"],
-  },
-  {
-    id: "n3",
-    kind: "simulado",
-    title: "Simulado prático: 8 questões de IS-LM",
-    minutes: 15,
-    xp: 80,
-    checkpoints: 8,
-    topicIds: ["t-islm"],
-  },
-  {
-    id: "n4",
-    kind: "vazio",
-    title: "",
-    minutes: 0,
-    xp: 0,
-    checkpoints: 0,
-    topicIds: [],
-  },
 ];
 
 type DraftNodeWithApi = TrailNodeDraft & {
@@ -71,11 +37,26 @@ type TrailComposerScreenProps = {
 };
 
 function mapDraftKindToApi(kind: TrailNodeDraft["kind"]): TrilhaItemKind {
-  return kind === "simulado" ? "quiz" : "document";
+  return kind === "simulado" ? "quiz" : "conteudo";
 }
 
 function mapApiKindToDraft(kind: TrilhaItemKind): TrailNodeDraft["kind"] {
   return kind === "quiz" ? "simulado" : "artigo";
+}
+
+/** Passos reais da trilha como nós do compositor. */
+function nodesDaTrilha(trilha: Trilha, topics: Topic[]): DraftNodeWithApi[] {
+  return trilha.itens.map((item) => ({
+    id: item.id,
+    kind: mapApiKindToDraft(item.kind),
+    title: item.titulo,
+    minutes: item.minutos,
+    xp: item.xp,
+    checkpoints: item.kind === "quiz" ? 8 : 3,
+    topicIds: topics[0] ? [topics[0].id] : [],
+    persistedInApi: true,
+    targetId: item.targetId,
+  }));
 }
 
 /** Compositor de trilha: sequência de nós, coerência pedagógica e política de versões. */
@@ -89,7 +70,7 @@ export default function TrailComposerScreen({
   const [trilhaId, setTrilhaId] = useState<string | undefined>(initialTrilhaId);
   const [status, setStatus] = useState<TrilhaStatus>("draft");
   const [nodes, setNodes] = useState<DraftNodeWithApi[]>(
-    initialTrilhaId ? [] : INITIAL_NODES,
+    [],
   );
   const [goal, setGoal] = useState(
     "Compreender como o câmbio e a política monetária se cruzam numa economia aberta.",
@@ -101,6 +82,13 @@ export default function TrailComposerScreen({
   const [busy, setBusy] = useState(false);
 
   const toast = useToast();
+  const toastRef = useRef(toast);
+  useEffect(() => {
+    toastRef.current = toast;
+  });
+  const { refrescar } = useAccoesTrilhas();
+  const [picker, setPicker] = useState<{ kind: "artigo" | "simulado"; replaceEmptyId?: string } | null>(null);
+  const fecharPicker = useCallback(() => setPicker(null), []);
   const creatingDraftRef = useRef<Promise<string> | null>(null);
 
   // Carrega trilha existente se vier trilhaId (modo edição)
@@ -115,28 +103,16 @@ export default function TrailComposerScreen({
         setTrilhaId(trilha.id);
         setStatus(trilha.status);
         if (trilha.descricao) setGoal(trilha.descricao);
-        setNodes(
-          trilha.itens.map((item) => ({
-            id: item.id,
-            kind: mapApiKindToDraft(item.kind),
-            title: item.titulo,
-            minutes: item.kind === "quiz" ? 15 : 14,
-            xp: item.kind === "quiz" ? 70 : 40,
-            checkpoints: item.kind === "quiz" ? 8 : 3,
-            topicIds: topics[0] ? [topics[0].id] : [],
-            persistedInApi: true,
-            targetId: item.targetId,
-          })),
-        );
+        setNodes(nodesDaTrilha(trilha, topics));
       })
       .catch(() => {
-        toast.show("Não foi possível carregar os dados da trilha.");
+        toastRef.current.show("Não foi possível carregar os dados da trilha.");
       });
 
     return () => {
       mounted = false;
     };
-  }, [initialTrilhaId, topics, toast]);
+  }, [initialTrilhaId, topics]);
 
   // Garante um rascunho criado via POST /api/trilhas/ antes de manipular itens
   async function ensureDraftId(): Promise<string> {
@@ -147,6 +123,9 @@ export default function TrailComposerScreen({
       .criarTrilha({
         titulo: `Trilha completa de ${subjectName}`,
         descricao: goal,
+        disciplina: subjectName,
+        ano: semester.split("-")[0],
+        semestre: semester,
       })
       .then((created) => {
         setTrilhaId(created.id);
@@ -182,7 +161,17 @@ export default function TrailComposerScreen({
     [topics, filled],
   );
   const uncovered = coverage.filter((c) => c.count === 0);
-  const canPublish = emptyNodes === 0 && practice > 0 && filled.length >= 3;
+  // O backend só exige pelo menos um passo; simulado e 3 passos são sugestões pedagógicas.
+  const canPublish = emptyNodes === 0 && filled.length >= 1;
+
+  /** Mantém os espaços vazios locais e substitui os passos pelos que o backend devolveu. */
+  function aplicarTrilha(trilha: Trilha, removerVazioId?: string) {
+    setNodes((prev) => [
+      ...nodesDaTrilha(trilha, topics),
+      ...prev.filter((n) => n.kind === "vazio" && n.id !== removerVazioId),
+    ]);
+    setStatus(trilha.status);
+  }
 
   async function move(index: number, direction: -1 | 1) {
     const target = index + direction;
@@ -200,12 +189,13 @@ export default function TrailComposerScreen({
     if (trilhaId && persistedIds.length > 1) {
       try {
         await trilhaService.reordenarItens(trilhaId, persistedIds);
+        await refrescar();
         toast.show(
           `Módulo movido para a posição ${target + 1} de ${next.length}.`,
         );
-      } catch {
+      } catch (err) {
         setNodes(previous);
-        toast.show("Erro ao guardar a nova ordem na API.");
+        toast.show(mensagemErroTrilha(err, "Não foi possível guardar a nova ordem."));
       }
     } else {
       toast.show(
@@ -222,18 +212,17 @@ export default function TrailComposerScreen({
     if (trilhaId && targetNode?.persistedInApi) {
       try {
         await trilhaService.removerItem(trilhaId, id);
+        await refrescar();
         toast.show("Módulo removido da trilha.");
-      } catch {
+      } catch (err) {
         setNodes(previous);
-        toast.show("Não foi possível remover o módulo na API.");
+        toast.show(mensagemErroTrilha(err, "Não foi possível remover o módulo."));
       }
     }
   }
 
-  async function addNode(
-    kind: TrailNodeDraft["kind"],
-    replaceEmptyId?: string,
-  ) {
+  /** `vazio` adiciona um espaço local; artigo e simulado abrem o seletor de conteúdos reais. */
+  function addNode(kind: TrailNodeDraft["kind"], replaceEmptyId?: string) {
     if (kind === "vazio") {
       setNodes((prev) => [
         ...prev,
@@ -250,57 +239,31 @@ export default function TrailComposerScreen({
       ]);
       return;
     }
+    setPicker({ kind, replaceEmptyId });
+  }
 
-    const defaultTitle =
-      kind === "artigo"
-        ? "Novo artigo do meu estúdio"
-        : "Novo simulado do meu banco";
-    const tempId = `temp-${Date.now()}`;
-    const generatedTargetId = `content-${Date.now()}`;
+  async function addFromTarget(alvo: AlvoDeTrilha) {
+    if (!picker) return;
+    const { kind, replaceEmptyId } = picker;
+    const targetId = kind === "simulado" ? alvo.quizId : alvo.conteudoId;
+    setPicker(null);
+    if (!targetId) return;
 
-    const optimisticNode: DraftNodeWithApi = {
-      id: tempId,
-      kind,
-      title: defaultTitle,
-      minutes: kind === "artigo" ? 14 : 12,
-      xp: kind === "artigo" ? 40 : 70,
-      checkpoints: kind === "artigo" ? 3 : 8,
-      topicIds: topics[0] ? [topics[0].id] : [],
-      persistedInApi: false,
-      targetId: generatedTargetId,
-    };
-
-    setNodes((prev) =>
-      replaceEmptyId
-        ? prev.map((n) => (n.id === replaceEmptyId ? optimisticNode : n))
-        : [...prev, optimisticNode],
-    );
-
+    setBusy(true);
     try {
       const id = await ensureDraftId();
-      const createdItem = await trilhaService.adicionarItem(id, {
+      const trilha = await trilhaService.adicionarItem(id, {
         kind: mapDraftKindToApi(kind),
-        targetId: generatedTargetId,
-        titulo: defaultTitle,
-        ordem: nodes.length + 1,
+        targetId,
+        titulo: alvo.titulo,
       });
-
-      setNodes((prev) =>
-        prev.map((n) =>
-          n.id === tempId
-            ? {
-                ...n,
-                id: createdItem.id,
-                targetId: createdItem.targetId || generatedTargetId,
-                persistedInApi: true,
-              }
-            : n,
-        ),
-      );
-    } catch {
-      toast.show(
-        "Módulo adicionado localmente (falha ao sincronizar com a API).",
-      );
+      aplicarTrilha(trilha, replaceEmptyId);
+      await refrescar();
+      toast.show("Módulo adicionado à trilha.");
+    } catch (err) {
+      toast.show(mensagemErroTrilha(err, "Não foi possível adicionar o módulo."));
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -311,16 +274,14 @@ export default function TrailComposerScreen({
       await trilhaService.editarTrilha(id, {
         titulo: `Trilha completa de ${subjectName}`,
         descricao: goal,
+        disciplina: subjectName,
+        ano: semester.split("-")[0],
+        semestre: semester,
       });
+      await refrescar();
       toast.show("Alterações da trilha guardadas.");
-    } catch (error: any) {
-      if (error?.response?.status === 409) {
-        toast.show(
-          "Esta trilha já tem progresso de alunos e não pode ser alterada diretamente.",
-        );
-      } else {
-        toast.show("Erro ao guardar metadados da trilha.");
-      }
+    } catch (err) {
+      toast.show(mensagemErroTrilha(err, "Erro ao guardar metadados da trilha."));
     } finally {
       setBusy(false);
     }
@@ -331,47 +292,27 @@ export default function TrailComposerScreen({
     setBusy(true);
     try {
       const id = await ensureDraftId();
-      const updatedNodes = [...nodes];
-
-      // Garante que nós iniciais não sincronizados sejam enviados antes de publicar
-      for (let i = 0; i < updatedNodes.length; i++) {
-        const node = updatedNodes[i];
-        if (node.kind !== "vazio" && !node.persistedInApi) {
-          const item = await trilhaService.adicionarItem(id, {
-            kind: mapDraftKindToApi(node.kind),
-            targetId: node.targetId || `seed-${node.id}`,
-            titulo: node.title,
-            ordem: i + 1,
-          });
-          updatedNodes[i] = {
-            ...node,
-            id: item.id,
-            targetId: item.targetId || node.targetId,
-            persistedInApi: true,
-          };
-        }
-      }
-
-      setNodes(updatedNodes);
-
       await trilhaService.editarTrilha(id, {
         titulo: `Trilha completa de ${subjectName}`,
         descricao: goal,
+        disciplina: subjectName,
+        ano: semester.split("-")[0],
+        semestre: semester,
       });
 
       const published = await trilhaService.publicarTrilha(id);
       setStatus(published.status);
+      await refrescar();
 
       toast.show(
         versionPolicy === "manter"
           ? "Trilha publicada. Quem já começou termina na versão anterior."
           : "Trilha publicada para todos, incluindo quem está a meio.",
       );
-    } catch (error: any) {
-      const msg =
-        error?.response?.data?.detail ||
-        "Não foi possível publicar a trilha. Verifica se tem pelo menos 1 item.";
-      toast.show(msg);
+    } catch (err) {
+      toast.show(
+        mensagemErroTrilha(err, "Não foi possível publicar a trilha. Verifica se tem pelo menos 1 item."),
+      );
     } finally {
       setBusy(false);
     }
@@ -386,13 +327,14 @@ export default function TrailComposerScreen({
           ? await trilhaService.desarquivarTrilha(trilhaId)
           : await trilhaService.arquivarTrilha(trilhaId);
       setStatus(updated.status);
+      await refrescar();
       toast.show(
         updated.status === "archived"
           ? "Trilha arquivada."
           : "Trilha desarquivada.",
       );
-    } catch {
-      toast.show("Erro ao atualizar estado de arquivo da trilha.");
+    } catch (err) {
+      toast.show(mensagemErroTrilha(err, "Erro ao atualizar estado de arquivo da trilha."));
     } finally {
       setBusy(false);
     }
@@ -403,9 +345,10 @@ export default function TrailComposerScreen({
     setBusy(true);
     try {
       await trilhaService.apagarTrilha(trilhaId);
+      await refrescar();
       toast.show("Trilha apagada com sucesso.");
-    } catch (error: any) {
-      toast.show(error?.message || "Erro ao apagar a trilha.");
+    } catch (err) {
+      toast.show(mensagemErroTrilha(err, "Erro ao apagar a trilha."));
     } finally {
       setBusy(false);
     }
@@ -885,6 +828,7 @@ export default function TrailComposerScreen({
           </aside>
         </div>
       </div>
+      {picker && <TrailTargetPicker kind={picker.kind} onPick={(alvo) => void addFromTarget(alvo)} onClose={fecharPicker} />}
     </CreatorShell>
   );
 }

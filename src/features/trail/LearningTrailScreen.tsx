@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { AppShell } from "../../components/layout/AppShell";
 import { LinkButton3D } from "../../components/ui/Button3D";
 import { Icon } from "../../components/ui/Icon";
 import { ProgressBar } from "../../components/ui/ProgressBar";
-import { trilhaService, type Trilha } from "../../services/trilhaService";
+import { hrefDoItem } from "../../services/trilhaService";
+import { useTrilha } from "../../hooks/useTrilhas";
 import { cn } from "@/lib/utils";
 import type { LearningTrail, TrailNodeStatus } from "./types";
 
@@ -53,7 +54,6 @@ function Stars({ stars }: { stars: number }) {
 type LearningTrailScreenProps = {
   trail: LearningTrail;
   trilhaId?: string;
-  usuarioId?: string;
   userName: string;
   backHref: string;
 };
@@ -62,83 +62,40 @@ type LearningTrailScreenProps = {
 export default function LearningTrailScreen({
   trail,
   trilhaId,
-  usuarioId,
   userName,
   backHref,
 }: LearningTrailScreenProps) {
-  const [apiTrilha, setApiTrilha] = useState<Trilha | null>(null);
+  // A trilha real vem de ?id= (ou da prop); sem sessão ou sem id mantém-se a trilha de exemplo
+  const idDaUrl = new URLSearchParams(window.location.search).get("id") || undefined;
+  const { data: apiTrilha } = useTrilha(trilhaId || idDaUrl);
 
-  useEffect(() => {
-    let mounted = true;
-    const resolvedTrilhaId =
-      trilhaId ||
-      (trail as { id?: string })?.id ||
-      window.location.pathname.split("/").filter(Boolean).pop();
-
-    if (!resolvedTrilhaId) return;
-
-    const resolvedUserId =
-      usuarioId || localStorage.getItem("kombinu_user_id") || undefined;
-
-    trilhaService
-      .obterTrilhaPorId(resolvedTrilhaId, resolvedUserId)
-      .then((res) => {
-        if (mounted && res && res.itens.length > 0) {
-          setApiTrilha(res);
-        }
-      })
-      .catch((err) => {
-        console.warn("Erro ao carregar detalhes da trilha:", err);
-      });
-
-    return () => {
-      mounted = false;
-    };
-  }, [trilhaId, trail, usuarioId]);
-
-  // Mescla dados da API mantendo estrutura visual e fallback
   const resolvedTrail = useMemo<LearningTrail>(() => {
-    if (!apiTrilha) return trail;
-
-    let foundActive = false;
-    const mappedNodes = apiTrilha.itens.map((item, idx) => {
-      let status: TrailNodeStatus;
-      if (item.concluido) {
-        status = "concluido";
-      } else if (!foundActive) {
-        status = "ativo";
-        foundActive = true;
-      } else {
-        status = "bloqueado";
-      }
-
-      const fallbackNode = trail.nodes[idx];
-      const baseCoursePath =
-        item.kind === "quiz"
-          ? `/v2/course/${item.targetId}?mode=quiz`
-          : `/v2/course/${item.targetId}`;
-      const separator = baseCoursePath.includes("?") ? "&" : "?";
-
-      return {
-        id: item.id,
-        order: idx + 1,
-        title: item.titulo,
-        summary:
-          item.descricao ||
-          fallbackNode?.summary ||
-          "Módulo da trilha de aprendizagem.",
-        minutes: fallbackNode?.minutes ?? (item.kind === "quiz" ? 15 : 12),
-        xp: fallbackNode?.xp ?? (item.kind === "quiz" ? 80 : 40),
-        status,
-        stars: item.concluido ? (fallbackNode?.stars ?? 3) : undefined,
-        href: `${baseCoursePath}${separator}trilhaId=${encodeURIComponent(apiTrilha.id)}&itemId=${encodeURIComponent(item.id)}`,
-      };
-    });
+    if (!apiTrilha || apiTrilha.itens.length === 0) return trail;
 
     return {
-      ...trail,
+      subject: apiTrilha.disciplina || trail.subject,
       headline: apiTrilha.titulo || trail.headline,
-      nodes: mappedNodes,
+      year: apiTrilha.ano || trail.year,
+      semester: apiTrilha.semestre || trail.semester,
+      nodes: apiTrilha.itens.map((item) => ({
+        id: item.id,
+        order: item.ordem,
+        title: item.titulo,
+        summary: item.descricao || "Módulo da trilha de aprendizagem.",
+        minutes: item.minutos,
+        xp: item.xp,
+        status: item.estado,
+        stars: item.estrelas,
+        href: hrefDoItem(item, apiTrilha.id),
+      })),
+      finalExam: apiTrilha.exameFinal
+        ? {
+            title: apiTrilha.exameFinal.titulo,
+            minutes: apiTrilha.exameFinal.minutos,
+            xp: apiTrilha.exameFinal.xp,
+            href: `/v2/desafio?id=${encodeURIComponent(apiTrilha.exameFinal.quizId)}`,
+          }
+        : trail.finalExam,
     };
   }, [apiTrilha, trail]);
 
