@@ -92,7 +92,7 @@ function RankingDoWorkspace() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-[50vh] flex items-center justify-center">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
       </div>
     );
@@ -105,18 +105,14 @@ function RankingDoWorkspace() {
     : top3;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-
-      {/* Header com gradiente */}
-      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white pt-12 pb-24 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <Trophy className="w-12 h-12 mx-auto mb-3 text-yellow-300" />
-          <h1 className="text-4xl font-bold mb-2">{titulo}</h1>
-          <p className="text-blue-200 text-lg">Classificação em tempo real dos melhores aprendizes</p>
-        </div>
+    <div>
+      <div className="max-w-4xl mx-auto px-4 pt-8 pb-6 text-center">
+        <Trophy className="w-10 h-10 mx-auto mb-2 text-yellow-500" />
+        <h1 className="font-montserrat text-headline-h1-mobile text-on-surface sm:text-headline-h1">{titulo}</h1>
+        <p className="mt-1 text-body-md text-text-secondary">Classificação em tempo real dos melhores aprendizes</p>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 -mt-16">
+      <div className="max-w-4xl mx-auto px-4">
 
         {/* Pódio top 3 */}
         {top3.length >= 2 && (

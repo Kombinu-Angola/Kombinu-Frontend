@@ -1,5 +1,9 @@
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "../../contexts/AuthContext";
+import { useWorkspaceStore, WORKSPACE_MARKETPLACE } from "../../stores/workspaceStore";
+import { NotificationBell } from "./NotificationBell";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
 
@@ -59,6 +63,10 @@ function NavList({ active, onNavigate }: { active: AdminSection; onNavigate?: ()
 /** Moldura do backoffice: navegação lateral no desktop, gaveta no telemóvel, e barra de estado. */
 export function AdminShell({ active, title, description, actions, eyebrow, children }: AdminShellProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { usuario } = useAuth();
+  const ativo = useWorkspaceStore((s) => s.ativo);
+  const escola = useWorkspaceStore((s) => s.memberships.find((m) => m.organizacaoId === s.ativo)?.nome);
+  const contexto = ativo === WORKSPACE_MARKETPLACE ? "Marketplace" : (escola ?? "Escola");
 
   return (
     <div className="min-h-dvh bg-background">
@@ -82,13 +90,9 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
           <NavList active={active} />
         </div>
         <div className="border-t-2 border-border-cloud p-4">
-          <p className="flex items-center justify-between rounded-lg border-2 border-border-cloud bg-surface-soft p-3">
-            <span>
-              <span className="block text-caption text-text-secondary">Plataforma Luanda</span>
-              <span className="block text-overline text-primary">v1.0 · AO</span>
-            </span>
-            <span aria-hidden="true" className="size-2 rounded-full bg-feedback-success" />
-            <span className="sr-only">Sistema operacional</span>
+          <p className="rounded-lg border-2 border-border-cloud bg-surface-soft p-3">
+            <span className="block text-caption text-text-secondary">Espaço activo</span>
+            <span className="block truncate text-overline text-primary">{contexto}</span>
           </p>
         </div>
       </nav>
@@ -135,33 +139,17 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
             >
               <Icon name="menu" size={20} />
             </button>
-            <p className="hidden items-center gap-2 rounded-full border-2 border-border-cloud px-3 py-1 text-caption text-text-secondary xl:flex">
-              <span aria-hidden="true" className="size-2 rounded-full bg-feedback-success" />
-              Servidor <strong className="text-on-surface">operacional</strong>
-            </p>
-            <p className="hidden items-center gap-2 rounded-full border-2 border-border-cloud px-3 py-1 text-caption text-text-secondary lg:flex">
-              <Icon name="signal" size={16} className="text-brand-sky-ink" />
-              Multicaixa Express <strong className="text-on-surface tabular-nums">99,4%</strong>
-            </p>
-            <p className="flex items-center gap-2 rounded-full bg-surface-forest px-3 py-1 text-overline text-feedback-success uppercase tabular-nums">
-              <Icon name="bolt" size={14} />
-              1,4 MB/h · meta &lt; 4,8
-            </p>
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
-            <button
-              type="button"
-              aria-label="Notificações (3 por ler)"
-              className="relative flex size-11 items-center justify-center rounded-lg border-2 border-border-cloud text-text-secondary transition-[background-color] duration-150 hover:bg-surface-soft"
-            >
-              <Icon name="bell" size={20} />
-              <span aria-hidden="true" className="absolute top-2 right-2 size-2 rounded-full bg-feedback-error" />
-            </button>
-            <p className="hidden border-l-2 border-border-cloud pl-3 text-right sm:block">
-              <span className="block text-button text-on-surface">Super Admin</span>
-              <span className="block text-caption text-text-secondary">operacoes@kombinu.ao</span>
-            </p>
+            <WorkspaceSwitcher />
+            <NotificationBell />
+            {usuario && (
+              <p className="hidden border-l-2 border-border-cloud pl-3 text-right sm:block">
+                <span className="block text-button text-on-surface">{usuario.nome}</span>
+                <span className="block text-caption text-text-secondary">{usuario.email ?? contexto}</span>
+              </p>
+            )}
           </div>
         </header>
 

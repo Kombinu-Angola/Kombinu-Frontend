@@ -22,6 +22,9 @@ import ChallengeFlow from '../features/challenge/ChallengeFlow';
 import MarketplaceScreen from '../features/marketplace/MarketplaceScreen';
 import { MOCK_MATERIALS } from '../features/marketplace/mockMaterials';
 import CourseScreen from '../features/course/CourseScreen';
+import { AppShell } from '../components/layout/AppShell';
+import ProtectedRoute from '../components/auth/ProtectedRoute';
+import Ranking from '../pages/Ranking';
 import { MOCK_COURSE } from '../features/course/mockCourse';
 import ReadingFlow from '../features/reading/ReadingFlow';
 import { MOCK_ARTICLE } from '../features/content/mockArticle';
@@ -450,6 +453,16 @@ function SessionExpiredRoute() {
   );
 }
 
+function RankingRoute() {
+  return (
+    <ProtectedRoute>
+      <AppShell active="ligas">
+        <Ranking />
+      </AppShell>
+    </ProtectedRoute>
+  );
+}
+
 function NotFoundRoute() {
   return (
     <NotFoundScreen
@@ -499,8 +512,9 @@ export const v2Routes: RouteObject = {
     { path: 'marketplace', element: <MarketplaceScreen materials={MOCK_MATERIALS} userName={STUDENT_NAME} /> },
     { path: 'marketplace/:id', element: <DocumentRoute /> },
     { path: 'sebenta', element: <DocumentRoute /> },
-    { path: 'cadeira', element: <CourseScreen course={MOCK_COURSE} userName={STUDENT_NAME} /> },
+    { path: 'cadeira', element: <CourseScreen course={MOCK_COURSE} /> },
     { path: 'leitura', element: <ReadingRoute /> },
+    { path: 'classificacao', element: <RankingRoute /> },
     { path: 'ligas', element: <LeaguesScreen league={mockLeague()} userName={STUDENT_NAME} /> },
     { path: 'ofensiva', element: <StreakHubScreen streak={MOCK_STREAK} userName={STUDENT_NAME} studyHref="/v2/trilhas" /> },
     { path: 'perfil', element: <StudentProfileScreen profile={MOCK_PROFILE} badgesHref="/v2/medalhas" /> },
