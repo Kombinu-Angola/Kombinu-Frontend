@@ -1,4 +1,4 @@
-import axios from "axios";
+import { api } from "./api"; // <-- Usa a tua instância axios já autenticada (ou mantém axios se tiveres interceptor global)
 import { API_BASE_URL } from "../utils/constants";
 
 export type MemberRole = "student" | "teacher" | "admin";
@@ -36,7 +36,9 @@ export interface ListarMembrosParams {
   role?: MemberRole;
 }
 
-const BASE_ENDPOINT = `${API_BASE_URL}/api/tenancy/members`;
+// Evita /api/api/ caso API_BASE_URL já inclua /api
+const cleanBase = API_BASE_URL.replace(/\/api\/?$/, "").replace(/\/$/, "");
+const BASE_ENDPOINT = `${cleanBase}/api/tenancy/members`;
 
 class MemberService {
   /** GET /api/tenancy/members/ */
@@ -49,7 +51,7 @@ class MemberService {
     }
     if (params?.role) query.role = params.role;
 
-    const response = await axios.get(`${BASE_ENDPOINT}/`, { params: query });
+    const response = await api.get(`${BASE_ENDPOINT}/`, { params: query });
     const rawList = Array.isArray(response.data)
       ? response.data
       : response.data?.results || response.data?.members || [];
@@ -57,7 +59,7 @@ class MemberService {
     return rawList.map((raw: any) => this.mapMemberFromApi(raw));
   }
 
-  /** POST /api/tenancy/members/import/ (aceita lista estruturada ou CSV) */
+  /** POST /api/tenancy/members/import/ */
   async importarEmLote(rows: BulkImportMemberRow[]): Promise<BulkImportResult> {
     const payload = rows.map((r) => ({
       name: r.nome,
@@ -72,7 +74,7 @@ class MemberService {
       role: "student",
     }));
 
-    const response = await axios.post(`${BASE_ENDPOINT}/import/`, {
+    const response = await api.post(`${BASE_ENDPOINT}/import/`, {
       members: payload,
       items: payload,
     });
@@ -90,7 +92,7 @@ class MemberService {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await axios.post(`${BASE_ENDPOINT}/import/`, formData, {
+    const response = await api.post(`${BASE_ENDPOINT}/import/`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
@@ -104,17 +106,13 @@ class MemberService {
 
   /** POST /api/tenancy/members/{id}/deactivate/ */
   async desactivarMembro(memberId: string): Promise<SchoolMember> {
-    const response = await axios.post(
-      `${BASE_ENDPOINT}/${memberId}/deactivate/`,
-    );
+    const response = await api.post(`${BASE_ENDPOINT}/${memberId}/deactivate/`);
     return this.mapMemberFromApi(response.data);
   }
 
   /** POST /api/tenancy/members/{id}/reactivate/ */
   async reactivarMembro(memberId: string): Promise<SchoolMember> {
-    const response = await axios.post(
-      `${BASE_ENDPOINT}/${memberId}/reactivate/`,
-    );
+    const response = await api.post(`${BASE_ENDPOINT}/${memberId}/reactivate/`);
     return this.mapMemberFromApi(response.data);
   }
 
@@ -122,7 +120,7 @@ class MemberService {
   async reporSenha(
     memberId: string,
   ): Promise<{ temporaryPassword?: string; detail?: string }> {
-    const response = await axios.post(
+    const response = await api.post(
       `${BASE_ENDPOINT}/${memberId}/reset-password/`,
     );
     const data = response.data || {};
@@ -133,7 +131,7 @@ class MemberService {
     };
   }
 
-  /** Faz parsing de texto CSV/TSV colado ou lido de ficheiro (nome, email, matricula, curso) */
+  /** Faz parsing de texto CSV/TSV colado ou lido de ficheiro */
   parseCsvText(rawText: string): BulkImportMemberRow[] {
     const lines = rawText
       .split(/\r?\n/)
@@ -149,7 +147,7 @@ class MemberService {
       const cols = line
         .split(separator)
         .map((c) => c.trim().replace(/^"|"$/g, ""));
-      // Ignora linha de cabeçalho se detetar "email"
+
       if (index === 0 && cols.some((c) => c.toLowerCase() === "email")) {
         return;
       }
