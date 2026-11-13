@@ -45,7 +45,6 @@ import SubscriptionFlow from '../features/subscription/SubscriptionFlow';
 import AccountSettingsScreen, { type AccountSettings } from '../features/subscription/AccountSettingsScreen';
 
 import AdminOverviewScreen from '../features/admin/AdminOverviewScreen';
-import StudentsScreen from '../features/admin/StudentsScreen';
 import AdminEstudantesScreen from '../features/admin/AdminEstudantesScreen';
 import ModerationScreen from '../features/admin/ModerationScreen';
 import FinanceScreen from '../features/admin/FinanceScreen';
@@ -514,7 +513,7 @@ export const v2Routes: RouteObject = {
     { path: 'estudio/definicoes', element: <AccountSettingsRoute /> },
 
     { path: 'admin', element: <AdminOverviewScreen /> },
-    { path: 'admin/estudantes', element: <StudentsScreen /> },
+    { path: 'admin/estudantes', element: <Navigate to="/v2/admin/membros" replace /> },
     { path: 'admin/membros', element: <AdminEstudantesScreen /> },
     { path: 'admin/criadores', element: <CreatorQueueScreen applications={CREATOR_QUEUE} /> },
     { path: 'admin/moderacao', element: <ModerationScreen /> },
