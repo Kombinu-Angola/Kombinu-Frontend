@@ -16,7 +16,7 @@ export function PasseHeader() {
           <a href="#perguntas">Perguntas</a>
         </nav>
         <div className={styles["hdr-act"]}>
-          <a className={styles["hdr-login"]} href="#entrar">
+          <a className={styles["hdr-login"]} href="/login">
             Entrar
           </a>
           <a className={cx(styles["kb-btn"], styles["kb-btn--primary"], styles["btn-sm"], styles["hdr-cta"])} href="#simulado">
