@@ -5,6 +5,7 @@ import { FieldError, TextField } from "../../components/ui/Field";
 import { useAuth } from "../../contexts/AuthContext";
 import { ErroTrocaSenha } from "../../services/authService";
 import { useFocusOnMount } from "../../hooks/useFocusOnMount";
+import { destinoPorPapel } from "../../lib/destinoPosLogin";
 
 /**
  * Troca de senha. Obrigatória no primeiro acesso das contas institucionais
@@ -43,7 +44,7 @@ export default function ChangePasswordScreen() {
     setAGuardar(true);
     try {
       await trocarSenha(atual, nova);
-      navigate(usuario?.tipo === "criador" ? "/dashboard/creator" : "/dashboard/learner", { replace: true });
+      navigate(destinoPorPapel(usuario), { replace: true });
     } catch (err) {
       if (err instanceof ErroTrocaSenha) {
         setErroAtual(err.erros.senhaAtual?.join(" "));
