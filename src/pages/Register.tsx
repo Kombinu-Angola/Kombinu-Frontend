@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { validarEmail } from '../utils/helpers';
+import { destinoPorPapel } from '../lib/destinoPosLogin';
 import { BookOpen, Eye, EyeOff, Mail, Lock, User, UserCheck } from 'lucide-react';
 
 export default function Register() {
@@ -47,7 +48,7 @@ export default function Register() {
     try {
       const sucesso = await register({ nome, email, senha, tipo });
       if (sucesso) {
-        navigate(tipo === 'criador' ? '/dashboard/creator' : '/dashboard/learner');
+        navigate(destinoPorPapel({ tipo }));
       } else {
         // Usar erro específico do contexto se disponível
         if (authError) {

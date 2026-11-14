@@ -4,8 +4,6 @@ import BaseLayout from '../components/layout/BaseLayout';
 import Login from '../pages/Login';
 import ChangePasswordScreen from '../features/auth/ChangePasswordScreen';
 import Register from '../pages/Register';
-import DashboardAprendiz from '../pages/DashboardAprendiz';
-import DashboardCriador from '../pages/DashboardCriador';
 import Marketplace from '../pages/Marketplace';
 import Quiz from '../pages/Quiz';
 import CriarConteudo from '../pages/CriarConteudo';
@@ -53,11 +51,11 @@ export const router = createBrowserRouter([
         children: [
           {
             path: 'learner',
-            element: <ProtectedRoute><DashboardAprendiz /></ProtectedRoute>,
+            element: <Navigate to="/v2/painel" replace />,
           },
           {
             path: 'creator',
-            element: <ProtectedRoute><DashboardCriador /></ProtectedRoute>,
+            element: <Navigate to="/v2/estudio/materiais" replace />,
           },
           {
             path: 'admin',

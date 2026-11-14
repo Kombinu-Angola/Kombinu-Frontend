@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { BookOpen, Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { SchoolLoginForm } from '../features/auth/SchoolLoginForm';
 import { MENSAGENS_LOGIN } from '../features/auth/mensagensLogin';
+import { destinoPosLogin } from '../lib/destinoPosLogin';
 import type { Usuario } from '../types';
 
 export default function Login() {
@@ -17,18 +18,12 @@ export default function Login() {
 
   const { entrar } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  /** Destino após autenticar: troca de senha obrigatória primeiro, depois o painel do tipo de utilizador. */
+  /** Destino após autenticar: troca de senha obrigatória, depois o `from` do ProtectedRoute, senão o ecrã do papel. */
   const seguirParaDestino = (usuarioLogado: Usuario) => {
-    if (usuarioLogado.mustChangePassword) {
-      navigate('/trocar-senha');
-    } else if (usuarioLogado.tipo === 'criador') {
-      navigate('/dashboard/creator');
-    } else if (usuarioLogado.tipo === 'admin') {
-      navigate('/dashboard/admin');
-    } else {
-      navigate('/dashboard/learner');
-    }
+    const from = (location.state as { from?: unknown } | null)?.from;
+    navigate(destinoPosLogin(usuarioLogado, from), { replace: true });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
