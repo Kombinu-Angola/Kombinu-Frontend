@@ -1,6 +1,6 @@
 import type { RouteObject } from 'react-router-dom';
-import { useState } from 'react';
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, type ReactNode } from 'react';
+import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import V2Layout from './V2Layout';
 
 import OnboardingRoleScreen from '../features/onboarding/OnboardingRoleScreen';
@@ -15,28 +15,23 @@ import CreatorApplicationFlow from '../features/creator/CreatorApplicationFlow';
 import { submitCreatorApplication } from '../services/creatorService';
 
 import DashboardScreen from '../features/dashboard/DashboardScreen';
-import { MOCK_DASHBOARD } from '../features/dashboard/mockDashboard';
 import StudyFeedScreen from '../features/feed/StudyFeedScreen';
 import { MOCK_FEED } from '../features/feed/mockFeed';
-import ChallengeFlow from '../features/challenge/ChallengeFlow';
+import SimuladoFlow from '../features/challenge/SimuladoFlow';
 import MarketplaceScreen from '../features/marketplace/MarketplaceScreen';
-import { MOCK_MATERIALS } from '../features/marketplace/mockMaterials';
 import CourseScreen from '../features/course/CourseScreen';
 import { AppShell } from '../components/layout/AppShell';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import Ranking from '../pages/Ranking';
 import { MOCK_COURSE } from '../features/course/mockCourse';
-import ReadingFlow from '../features/reading/ReadingFlow';
-import { MOCK_ARTICLE } from '../features/content/mockArticle';
 import LeaguesScreen from '../features/leagues/LeaguesScreen';
 import { mockLeague } from '../features/leagues/mockLeague';
 import StreakHubScreen from '../features/streak/StreakHubScreen';
 import { MOCK_STREAK } from '../features/streak/mockStreak';
 import StudentProfileScreen from '../features/profile/StudentProfileScreen';
 import BadgeVaultScreen from '../features/profile/BadgeVaultScreen';
-import { MOCK_PROFILE, BADGES } from '../features/profile/mockProfile';
-import DocumentDetailScreen from '../features/document/DocumentDetailScreen';
-import { MOCK_DOCUMENT } from '../features/document/mockDocument';
+import { BADGES } from '../features/profile/mockProfile';
+import MaterialDetailScreen from '../features/marketplace/MaterialDetailScreen';
 import CreatorPublicProfileScreen from '../features/creator-public/CreatorPublicProfileScreen';
 import { MOCK_CREATOR } from '../features/creator-public/mockCreator';
 
@@ -62,7 +57,6 @@ import { LIBRARY_ITEMS, DOWNLOAD_PREFERENCES, OFFLINE_STORAGE } from '../feature
 import PurchaseHistoryScreen from '../features/purchases/PurchaseHistoryScreen';
 import { PURCHASES } from '../features/purchases/mockPurchases';
 import CreatorContentHubScreen from '../features/creator-content/CreatorContentHubScreen';
-import { CREATOR_MATERIALS } from '../features/creator-content/mockContent';
 
 import StudentSettingsScreen from '../features/account/StudentSettingsScreen';
 import PhoneSecurityScreen from '../features/account/PhoneSecurityScreen';
@@ -83,7 +77,6 @@ import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 import GlobalSearchScreen from '../features/search/GlobalSearchScreen';
-import { MOCK_SEARCH } from '../features/search/mockSearch';
 
 import MaterialAnalyticsScreen from '../features/analytics/MaterialAnalyticsScreen';
 import { MOCK_ANALYTICS } from '../features/analytics/mockAnalytics';
@@ -98,7 +91,6 @@ import SubscriptionsReportScreen from '../features/admin/SubscriptionsReportScre
 import SeasonFinaleScreen from '../features/leagues/SeasonFinaleScreen';
 import { mockSeasonResult } from '../features/leagues/mockLeague';
 import FreeLibraryScreen from '../features/library/FreeLibraryScreen';
-import { FREE_MATERIALS } from '../features/library/mockFreeLibrary';
 
 import AudioPlayerScreen from '../features/audio/AudioPlayerScreen';
 import { MOCK_AUDIO } from '../features/audio/mockAudio';
@@ -133,8 +125,11 @@ import VersionHistoryScreen from '../features/authoring/VersionHistoryScreen';
 import { TOPICS, QUESTIONS, VERSIONS, IMPORTED_ROWS } from '../features/authoring/mockAuthoring';
 
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
-const STUDENT_NAME = 'João Kiala';
-const CREATOR_NAME = 'Orlando Fortuna';
+/** Entrega o nome do utilizador autenticado às telas que ainda o recebem por prop. */
+function ComUtilizador({ children }: { children: (nome: string) => ReactNode }) {
+  const { usuario } = useAuth();
+  return <>{children(usuario?.nome ?? '')}</>;
+}
 
 function OnboardingRoute() {
   const navigate = useNavigate();
@@ -180,7 +175,7 @@ function NotificationsRoute() {
 
   // Sem sessão iniciada continua a demonstração com dados de exemplo.
   if (!usuario) {
-    return <NotificationCenterScreen notifications={NOTIFICATIONS} userName={STUDENT_NAME} settingsHref="/v2/definicoes" />;
+    return <NotificationCenterScreen notifications={NOTIFICATIONS} userName="" settingsHref="/v2/definicoes" />;
   }
 
   if (lista.isPending) {
@@ -313,37 +308,28 @@ function AuthRoute() {
   return <AuthScreen onAuthenticated={() => navigate('/v2/painel')} onSchoolLogin={() => setModoEscola(true)} />;
 }
 
-function ReadingRoute() {
-  const navigate = useNavigate();
-  return (
-    <ReadingFlow
-      article={MOCK_ARTICLE}
-      onExit={() => navigate('/v2/cadeira')}
-      onNextArticle={() => navigate('/v2/cadeira')}
-    />
-  );
+function MaterialRoute() {
+  const { id } = useParams();
+  const [params] = useSearchParams();
+  return <MaterialDetailScreen id={id ?? params.get('id')} />;
 }
 
-function DocumentRoute() {
-  const navigate = useNavigate();
-  return (
-    <DocumentDetailScreen
-      document={MOCK_DOCUMENT}
-      userName={STUDENT_NAME}
-      onRead={() => navigate('/v2/leitura')}
-      onPurchase={async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        return { reference: `DEMO-${Date.now()}` };
-      }}
-    />
-  );
+function SearchRoute() {
+  const [params] = useSearchParams();
+  return <GlobalSearchScreen initialQuery={params.get('q') ?? ''} />;
+}
+
+function SimuladoRoute() {
+  const [params] = useSearchParams();
+  return <SimuladoFlow quizId={params.get('quizId')} />;
 }
 
 function StudioRoute() {
+  const { usuario } = useAuth();
   return (
     <StudioScreen
       initialDraft={MOCK_DRAFT}
-      authorName={CREATOR_NAME}
+      authorName={usuario?.nome ?? ''}
       courseName={MOCK_COURSE.hero.title}
       onSave={async () => {
         /* Backend de rascunhos ainda nao existe; useDraft guarda so em memoria. */
@@ -353,7 +339,7 @@ function StudioRoute() {
 }
 
 const DEMO_SETTINGS: AccountSettings = {
-  name: CREATOR_NAME,
+  name: '',
   institution: 'uan-economia',
   bio: 'Explico Economia e Macroeconomia de forma simples, com sebentas revistas e simulados semanais.',
   phone: '923000302',
@@ -366,7 +352,8 @@ const DEMO_SETTINGS: AccountSettings = {
 
 function AccountSettingsRoute() {
   const navigate = useNavigate();
-  return <AccountSettingsScreen settings={DEMO_SETTINGS} onChangePlan={() => navigate('/v2/estudio/plano')} />;
+  const { usuario } = useAuth();
+  return <AccountSettingsScreen settings={{ ...DEMO_SETTINGS, name: usuario?.nome ?? '' }} onChangePlan={() => navigate('/v2/estudio/plano')} />;
 }
 
 function StudentSettingsRoute() {
@@ -394,7 +381,7 @@ function PhoneSecurityRoute() {
 }
 
 const HOMOLOGATION_CREATOR = {
-  name: CREATOR_NAME,
+  name: '',
   university: 'Universidade Agostinho Neto (UAN)',
   faculty: 'Faculdade de Ciências',
   specialty: 'Estruturas de Dados',
@@ -420,14 +407,16 @@ const HOMOLOGATION_CORRECAO: HomologationResult = {
 
 function ReviewRoute() {
   const navigate = useNavigate();
-  return <ReviewNotebookScreen queue={MOCK_REVIEW} userName={STUDENT_NAME} onStartSession={() => navigate('/v2/desafio')} />;
+  const { usuario } = useAuth();
+  return <ReviewNotebookScreen queue={MOCK_REVIEW} userName={usuario?.nome ?? ''} onStartSession={() => navigate('/v2/desafio')} />;
 }
 
 function RenewalFailureRoute() {
   const navigate = useNavigate();
+  const { usuario } = useAuth();
   return (
     <RenewalFailureScreen
-      creatorName={CREATOR_NAME}
+      creatorName={usuario?.nome ?? ''}
       priceKz={5000}
       phone="923891024"
       failedAt={new Date(Date.now() - 2 * 86_400_000).toISOString()}
@@ -478,9 +467,10 @@ function NotFoundRoute() {
 }
 
 function SubscriptionRoute() {
+  const { usuario } = useAuth();
   return (
     <SubscriptionFlow
-      creatorName={CREATOR_NAME}
+      creatorName={usuario?.nome ?? ''}
       currentPlan="free"
       studioHref="/v2/estudio"
       authorize={async (_phone, _amountKz) => {
@@ -506,23 +496,23 @@ export const v2Routes: RouteObject = {
     { path: 'credenciamento', element: <CreatorApplicationRoute /> },
     { path: 'entrar', element: <AuthRoute /> },
 
-    { path: 'painel', element: <DashboardScreen data={MOCK_DASHBOARD} /> },
+    { path: 'painel', element: <DashboardScreen /> },
     { path: 'trilhas', element: <StudyFeedScreen feed={MOCK_FEED} /> },
-    { path: 'desafio', element: <ChallengeFlow userName={STUDENT_NAME} /> },
-    { path: 'marketplace', element: <MarketplaceScreen materials={MOCK_MATERIALS} userName={STUDENT_NAME} /> },
-    { path: 'marketplace/:id', element: <DocumentRoute /> },
-    { path: 'sebenta', element: <DocumentRoute /> },
+    { path: 'desafio', element: <SimuladoRoute /> },
+    { path: 'marketplace', element: <MarketplaceScreen /> },
+    { path: 'marketplace/:id', element: <MaterialRoute /> },
+    { path: 'sebenta', element: <MaterialRoute /> },
     { path: 'cadeira', element: <CourseScreen course={MOCK_COURSE} /> },
-    { path: 'leitura', element: <ReadingRoute /> },
+    { path: 'leitura', element: <MaterialRoute /> },
     { path: 'classificacao', element: <RankingRoute /> },
-    { path: 'ligas', element: <LeaguesScreen league={mockLeague()} userName={STUDENT_NAME} /> },
-    { path: 'ofensiva', element: <StreakHubScreen streak={MOCK_STREAK} userName={STUDENT_NAME} studyHref="/v2/trilhas" /> },
-    { path: 'perfil', element: <StudentProfileScreen profile={MOCK_PROFILE} badgesHref="/v2/medalhas" /> },
-    { path: 'medalhas', element: <BadgeVaultScreen badges={BADGES} userName={STUDENT_NAME} seasonTotal={BADGES.length} /> },
-    { path: 'criador', element: <CreatorPublicProfileScreen creator={MOCK_CREATOR} userName={STUDENT_NAME} /> },
+    { path: 'ligas', element: <ComUtilizador>{(nome) => <LeaguesScreen league={mockLeague()} userName={nome} />}</ComUtilizador> },
+    { path: 'ofensiva', element: <ComUtilizador>{(nome) => <StreakHubScreen streak={MOCK_STREAK} userName={nome} studyHref="/v2/trilhas" />}</ComUtilizador> },
+    { path: 'perfil', element: <StudentProfileScreen /> },
+    { path: 'medalhas', element: <ComUtilizador>{(nome) => <BadgeVaultScreen badges={BADGES} userName={nome} seasonTotal={BADGES.length} />}</ComUtilizador> },
+    { path: 'criador', element: <ComUtilizador>{(nome) => <CreatorPublicProfileScreen creator={MOCK_CREATOR} userName={nome} />}</ComUtilizador> },
 
     { path: 'estudio', element: <StudioRoute /> },
-    { path: 'estudio/financeiro', element: <CreatorFinanceScreen finance={MOCK_FINANCE} creatorName={CREATOR_NAME} /> },
+    { path: 'estudio/financeiro', element: <ComUtilizador>{(nome) => <CreatorFinanceScreen finance={MOCK_FINANCE} creatorName={nome} />}</ComUtilizador> },
     { path: 'estudio/plano', element: <SubscriptionRoute /> },
     { path: 'estudio/definicoes', element: <AccountSettingsRoute /> },
 
@@ -535,28 +525,32 @@ export const v2Routes: RouteObject = {
     { path: 'admin/financeiro', element: <FinanceScreen /> },
     { path: 'admin/gamificacao', element: <GamificationScreen /> },
 
-    { path: 'biblioteca', element: <StudentLibraryScreen items={LIBRARY_ITEMS} userName={STUDENT_NAME} downloadsHref="/v2/biblioteca/descargas" marketplaceHref="/v2/marketplace" /> },
+    { path: 'biblioteca', element: <ComUtilizador>{(nome) => <StudentLibraryScreen items={LIBRARY_ITEMS} userName={nome} downloadsHref="/v2/biblioteca/descargas" marketplaceHref="/v2/marketplace" />}</ComUtilizador> },
     {
       path: 'biblioteca/descargas',
       element: (
-        <OfflineDownloadsScreen
-          items={LIBRARY_ITEMS}
-          storage={OFFLINE_STORAGE}
-          preferences={DOWNLOAD_PREFERENCES}
-          userName={STUDENT_NAME}
-          libraryHref="/v2/biblioteca"
-        />
+        <ComUtilizador>
+          {(nome) => (
+            <OfflineDownloadsScreen
+              items={LIBRARY_ITEMS}
+              storage={OFFLINE_STORAGE}
+              preferences={DOWNLOAD_PREFERENCES}
+              userName={nome}
+              libraryHref="/v2/biblioteca"
+            />
+          )}
+        </ComUtilizador>
       ),
     },
-    { path: 'perfil/compras', element: <PurchaseHistoryScreen purchases={PURCHASES} userName={STUDENT_NAME} profileHref="/v2/perfil" /> },
-    { path: 'estudio/materiais', element: <CreatorContentHubScreen materials={CREATOR_MATERIALS} creatorName={CREATOR_NAME} plan="pro" /> },
+    { path: 'perfil/compras', element: <ComUtilizador>{(nome) => <PurchaseHistoryScreen purchases={PURCHASES} userName={nome} profileHref="/v2/perfil" />}</ComUtilizador> },
+    { path: 'estudio/materiais', element: <CreatorContentHubScreen /> },
 
     { path: 'definicoes', element: <StudentSettingsRoute /> },
     { path: 'conta/telemovel', element: <PhoneSecurityRoute /> },
-    { path: 'trilha', element: <LearningTrailScreen trail={MOCK_TRAIL} userName={STUDENT_NAME} backHref="/v2/cadeira" /> },
-    { path: 'trilha/mista', element: <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={STUDENT_NAME} diagnosticHref="/v2/painel" /> },
-    { path: 'estudio/homologacao', element: <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={HOMOLOGATION_APROVADO} /> },
-    { path: 'estudio/homologacao/correcao', element: <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={HOMOLOGATION_CORRECAO} /> },
+    { path: 'trilha', element: <ComUtilizador>{(nome) => <LearningTrailScreen trail={MOCK_TRAIL} userName={nome} backHref="/v2/cadeira" />}</ComUtilizador> },
+    { path: 'trilha/mista', element: <ComUtilizador>{(nome) => <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={nome} diagnosticHref="/v2/painel" />}</ComUtilizador> },
+    { path: 'estudio/homologacao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_APROVADO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
+    { path: 'estudio/homologacao/correcao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_CORRECAO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
     { path: 'estudio/renovacao', element: <RenewalFailureRoute /> },
 
     { path: 'offline', element: <OfflineScreen offlineItems={5} cachedKb={5_940} pendingAnswers={4} streakDays={12} libraryHref="/v2/biblioteca" /> },
@@ -564,21 +558,21 @@ export const v2Routes: RouteObject = {
     { path: '404', element: <NotFoundRoute /> },
 
     { path: 'notificacoes', element: <NotificationsRoute /> },
-    { path: 'pesquisa', element: <GlobalSearchScreen results={MOCK_SEARCH} userName={STUDENT_NAME} /> },
+    { path: 'pesquisa', element: <SearchRoute /> },
 
-    { path: 'estudio/analitica', element: <MaterialAnalyticsScreen analytics={MOCK_ANALYTICS} creatorName={CREATOR_NAME} materialsHref="/v2/estudio/materiais" /> },
-    { path: 'duvidas', element: <MaterialQaScreen board={MOCK_QA} userName={STUDENT_NAME} /> },
+    { path: 'estudio/analitica', element: <ComUtilizador>{(nome) => <MaterialAnalyticsScreen analytics={MOCK_ANALYTICS} creatorName={nome} materialsHref="/v2/estudio/materiais" />}</ComUtilizador> },
+    { path: 'duvidas', element: <ComUtilizador>{(nome) => <MaterialQaScreen board={MOCK_QA} userName={nome} />}</ComUtilizador> },
     { path: 'revisao', element: <ReviewRoute /> },
 
     { path: 'admin/catalogo', element: <CurriculumCatalogScreen institutions={CATALOG} /> },
     { path: 'admin/subscricoes', element: <SubscriptionsReportScreen /> },
-    { path: 'ligas/temporada', element: <SeasonFinaleScreen result={mockSeasonResult()} userName={STUDENT_NAME} leagueHref="/v2/ligas" /> },
-    { path: 'biblioteca-livre', element: <FreeLibraryScreen materials={FREE_MATERIALS} userName={STUDENT_NAME} totalStudents={3420} /> },
+    { path: 'ligas/temporada', element: <ComUtilizador>{(nome) => <SeasonFinaleScreen result={mockSeasonResult()} userName={nome} leagueHref="/v2/ligas" />}</ComUtilizador> },
+    { path: 'biblioteca-livre', element: <FreeLibraryScreen /> },
 
-    { path: 'audio', element: <AudioPlayerScreen audio={MOCK_AUDIO} userName={STUDENT_NAME} /> },
-    { path: 'polo', element: <CampusPageScreen page={MOCK_CAMPUS} userName={STUDENT_NAME} /> },
+    { path: 'audio', element: <ComUtilizador>{(nome) => <AudioPlayerScreen audio={MOCK_AUDIO} userName={nome} />}</ComUtilizador> },
+    { path: 'polo', element: <ComUtilizador>{(nome) => <CampusPageScreen page={MOCK_CAMPUS} userName={nome} />}</ComUtilizador> },
 
-    { path: 'convidar', element: <ReferralScreen program={MOCK_REFERRAL} userName={STUDENT_NAME} university="UAN" subject="Macroeconomia I" /> },
+    { path: 'convidar', element: <ComUtilizador>{(nome) => <ReferralScreen program={MOCK_REFERRAL} userName={nome} university="UAN" subject="Macroeconomia I" />}</ComUtilizador> },
     { path: 'conta/sessoes', element: <SessionsScreen sessions={SESSIONS} userName={MOCK_ACCOUNT.name} securityHref="/v2/definicoes" /> },
     {
       path: 'privacidade',
@@ -601,12 +595,14 @@ export const v2Routes: RouteObject = {
 
     { path: 'admin/suporte', element: <SupportTicketsScreen tickets={SUPPORT_TICKETS} agentName="Hamilton Kiala" /> },
 
-    { path: 'estudio/criar', element: <CreationHubScreen creatorName={CREATOR_NAME} questionCount={QUESTIONS.length} draftCount={2} /> },
+    { path: 'estudio/criar', element: <ComUtilizador>{(nome) => <CreationHubScreen creatorName={nome} questionCount={QUESTIONS.length} draftCount={2} />}</ComUtilizador> },
     {
       path: 'estudio/comecar',
       element: (
+        <ComUtilizador>
+          {(nome) => (
         <StudioOnboardingScreen
-          creatorName={CREATOR_NAME}
+          creatorName={nome}
           university="UAN · Faculdade de Ciências"
           steps={[
             { id: 's1', label: 'Credenciais homologadas', detail: 'Aprovado pela equipa de auditoria.', done: true, href: '/v2/estudio/homologacao' },
@@ -615,13 +611,15 @@ export const v2Routes: RouteObject = {
             { id: 's4', label: 'Confirmar o Multicaixa Express', detail: 'Teste de 1 Kz para validar a titularidade.', done: false, href: '/v2/estudio/financeiro' },
           ]}
         />
+          )}
+        </ComUtilizador>
       ),
     },
-    { path: 'estudio/questoes', element: <QuestionBankScreen questions={QUESTIONS} topics={TOPICS} creatorName={CREATOR_NAME} subjectName="Macroeconomia I · UAN" /> },
-    { path: 'estudio/simulado', element: <ExamComposerScreen questions={QUESTIONS} topics={TOPICS} creatorName={CREATOR_NAME} subjectName="Macroeconomia I" /> },
-    { path: 'estudio/trilha', element: <TrailComposerScreen topics={TOPICS} creatorName={CREATOR_NAME} subjectName="Macroeconomia I" readersOnCurrent={83} /> },
-    { path: 'estudio/importar', element: <BulkImportScreen rows={IMPORTED_ROWS} topics={TOPICS} creatorName={CREATOR_NAME} /> },
-    { path: 'estudio/versoes', element: <VersionHistoryScreen materialTitle="Manual de exercícios: Macroeconomia I" versions={VERSIONS} creatorName={CREATOR_NAME} /> },
+    { path: 'estudio/questoes', element: <ComUtilizador>{(nome) => <QuestionBankScreen questions={QUESTIONS} topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I · UAN" />}</ComUtilizador> },
+    { path: 'estudio/simulado', element: <ComUtilizador>{(nome) => <ExamComposerScreen questions={QUESTIONS} topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I" />}</ComUtilizador> },
+    { path: 'estudio/trilha', element: <ComUtilizador>{(nome) => <TrailComposerScreen topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I" readersOnCurrent={83} />}</ComUtilizador> },
+    { path: 'estudio/importar', element: <ComUtilizador>{(nome) => <BulkImportScreen rows={IMPORTED_ROWS} topics={TOPICS} creatorName={nome} />}</ComUtilizador> },
+    { path: 'estudio/versoes', element: <ComUtilizador>{(nome) => <VersionHistoryScreen materialTitle="Manual de exercícios: Macroeconomia I" versions={VERSIONS} creatorName={nome} />}</ComUtilizador> },
 
     { path: 'admin/adaptativo', element: <AdaptiveRulesScreen /> },
     { path: 'admin/fiscal', element: <FiscalExportScreen entityName="Kombinu EdTech, Lda" nif="5412894210" /> },
