@@ -45,7 +45,7 @@ LEGADO (não usar): DataContext, useContent, useProgress, storageService, progre
 
 ## Git
 - Conventional Commits em português sem acentos; escopos: landing, auth, dashboard, marketplace, quiz, ranking, content, layout, ui, theme, workspace.
-- Branch a partir de `develop` (feature|fix|chore|hotfix/kebab-case). Nunca push directo para main/develop. `git rebase origin/develop` antes do PR. Squash merge; só o CTO faz merge.
+- Branch a partir de `develop` (feature|fix|chore|hotfix/kebab-case). Nunca push directo para main/develop. `git rebase origin/develop` antes do PR. Squash merge nos PRs para o `develop`; os releases `develop` → `main` usam merge commit (o squash deixa o `main` com commits que o `develop` não tem e o release seguinte dá conflito). Merges só na revisão (ver `CLAUDE.md` da pasta-mãe); as sessões nunca fazem merge.
 - PR com .github/pull_request_template.md, screenshots em mudanças visuais, CHANGELOG.md actualizado (secção "Nao Lancado").
 - Nunca adicionar Claude como co-author nos commits deste projecto.
 
