@@ -16,7 +16,6 @@ import { submitCreatorApplication } from '../services/creatorService';
 
 import DashboardScreen from '../features/dashboard/DashboardScreen';
 import StudyFeedScreen from '../features/feed/StudyFeedScreen';
-import { MOCK_FEED } from '../features/feed/mockFeed';
 import SimuladoFlow from '../features/challenge/SimuladoFlow';
 import MarketplaceScreen from '../features/marketplace/MarketplaceScreen';
 import CourseScreen from '../features/course/CourseScreen';
@@ -497,7 +496,7 @@ export const v2Routes: RouteObject = {
     { path: 'entrar', element: <AuthRoute /> },
 
     { path: 'painel', element: <DashboardScreen /> },
-    { path: 'trilhas', element: <StudyFeedScreen feed={MOCK_FEED} /> },
+    { path: 'trilhas', element: <StudyFeedScreen /> },
     { path: 'desafio', element: <SimuladoRoute /> },
     { path: 'marketplace', element: <MarketplaceScreen /> },
     { path: 'marketplace/:id', element: <MaterialRoute /> },

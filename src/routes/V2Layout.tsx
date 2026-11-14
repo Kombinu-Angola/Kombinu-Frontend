@@ -32,18 +32,22 @@ function useInternalLinkInterceptor() {
   }, [navigate]);
 }
 
+/** Entradas de /v2 que não precisam de sessão (onboarding, credenciamento e a entrada de demonstração). */
+const ROTAS_PUBLICAS = ['/v2/entrar', '/v2/onboarding', '/v2/credenciamento'];
+
 /** Moldura de /v2: sessão de demonstração (XP 650, sequência 12, 450 gemas) partilhada entre as telas novas. */
 export default function V2Layout() {
   useInternalLinkInterceptor();
   const { usuario, loading } = useAuth();
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
 
   // Troca de senha obrigatória pendente: nenhuma tela de /v2 fica acessível até à troca.
   if (usuario?.mustChangePassword) return <Navigate to="/trocar-senha" replace />;
 
-  // Defesa em profundidade: a API já recusa, mas a área de administração só abre a quem
-  // é admin de uma escola (membership) ou admin da plataforma.
-  if (pathname === '/v2/admin' || pathname.startsWith('/v2/admin/')) {
+  // Fora das entradas públicas, as telas /v2 precisam de sessão: sem ela ficariam em "A carregar…"
+  // para sempre. Vai para o login com o `from`, que o devolve aqui depois de entrar.
+  const publica = pathname === '/v2' || pathname === '/v2/' || ROTAS_PUBLICAS.some((r) => pathname === r || pathname.startsWith(`${r}/`));
+  if (!publica) {
     if (loading) {
       return (
         <div className="flex min-h-dvh items-center justify-center bg-background">
@@ -51,9 +55,14 @@ export default function V2Layout() {
         </div>
       );
     }
-    if (!usuario) return <Navigate to="/login" state={{ from: { pathname } }} replace />;
+    if (!usuario) return <Navigate to="/login" state={{ from: { pathname, search } }} replace />;
+  }
+
+  // Defesa em profundidade: a API já recusa, mas a área de administração só abre a quem
+  // é admin de uma escola (membership) ou admin da plataforma.
+  if (pathname === '/v2/admin' || pathname.startsWith('/v2/admin/')) {
     const eAdmin =
-      usuario.tipo === 'admin' || (usuario.memberships ?? []).some((m) => m.papel === 'admin');
+      usuario?.tipo === 'admin' || (usuario?.memberships ?? []).some((m) => m.papel === 'admin');
     if (!eAdmin) return <Navigate to="/v2/trilhas" replace />;
   }
 

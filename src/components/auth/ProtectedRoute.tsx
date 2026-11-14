@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { destinoPorPapel } from '../../lib/destinoPosLogin';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -32,7 +33,7 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
 
   // Se o utilizador logado não pertencer ao array de roles permitidos, manda para a base
   if (allowedRoles && !allowedRoles.includes(usuario.tipo as any)) {
-    return <Navigate to={usuario.tipo === 'criador' ? '/dashboard/creator' : '/dashboard/learner'} replace />;
+    return <Navigate to={destinoPorPapel(usuario)} replace />;
   }
 
   return <>{children}</>;
