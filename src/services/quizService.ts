@@ -26,6 +26,7 @@ export interface QuizResult {
   correctAnswers: number;
   totalQuestions: number;
   'xp earned': number;
+  details?: Array<{ question_id: string; correct: boolean; correct_option_id: string | null }>;
 }
 
 export const quizService = {
