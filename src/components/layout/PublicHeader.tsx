@@ -33,7 +33,7 @@ export function Header() {
               },
             }}
             src={logoProfile}
-            className="h-10 w-10 sm:h-14 sm:w-14 object-contain"
+            className="size-10 object-contain"
             alt="Kombinu"
           />
         </Link>

@@ -3,7 +3,7 @@ import { Avatar } from "../../components/ui/Avatar";
 import { LinkButton3D } from "../../components/ui/Button3D";
 import { Icon } from "../../components/ui/Icon";
 import { useAuth } from "../../contexts/AuthContext";
-import { useEstatisticasAprendiz } from "../../hooks/useV2Dados";
+import { useEstatisticasAprendiz, useGamificacaoMe } from "../../hooks/useV2Dados";
 import { formatInt } from "../../lib/format";
 import { levelInfo } from "../../lib/levels";
 
@@ -13,6 +13,7 @@ const PAPEIS: Record<string, string> = { student: "Estudante", teacher: "Profess
 export default function StudentProfileScreen() {
   const { usuario } = useAuth();
   const stats = useEstatisticasAprendiz();
+  const gamificacao = useGamificacaoMe();
   const nome = usuario?.nome ?? "";
   const nivel = stats.data?.nivel ?? usuario?.nivel ?? 1;
   const memberships = usuario?.memberships ?? [];
@@ -45,7 +46,13 @@ export default function StudentProfileScreen() {
                 Não foi possível carregar os teus números.
               </p>
             ) : (
-              <dl className="grid grid-cols-3 gap-3">
+              <dl className={`grid gap-3 ${gamificacao.data ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3"}`}>
+                {gamificacao.data && (
+                  <div className="rounded-2xl border-2 border-border-cloud p-4">
+                    <dt className="text-overline text-text-tertiary uppercase">XP total</dt>
+                    <dd className="font-montserrat text-headline-h2 font-extrabold text-on-surface tabular-nums">{formatInt(gamificacao.data.xpTotal)}</dd>
+                  </div>
+                )}
                 <div className="rounded-2xl border-2 border-border-cloud p-4">
                   <dt className="text-overline text-text-tertiary uppercase">XP neste espaço</dt>
                   <dd className="font-montserrat text-headline-h2 font-extrabold text-primary tabular-nums">{formatInt(stats.data.pontos)}</dd>
