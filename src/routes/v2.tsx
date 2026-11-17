@@ -11,8 +11,6 @@ import { MOCK_DIAGNOSTIC } from '../features/quiz/mockDiagnostic';
 import AuthScreen from '../features/auth/AuthScreen';
 import SchoolLoginScreen from '../features/auth/SchoolLoginScreen';
 
-import CreatorApplicationFlow from '../features/creator/CreatorApplicationFlow';
-import { submitCreatorApplication } from '../services/creatorService';
 
 import DashboardScreen from '../features/dashboard/DashboardScreen';
 import StudyFeedScreen from '../features/feed/StudyFeedScreen';
@@ -23,34 +21,16 @@ import { AppShell } from '../components/layout/AppShell';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import Ranking from '../pages/Ranking';
 import { MOCK_COURSE } from '../features/course/mockCourse';
-import LeaguesScreen from '../features/leagues/LeaguesScreen';
-import { mockLeague } from '../features/leagues/mockLeague';
-import StreakHubScreen from '../features/streak/StreakHubScreen';
-import { MOCK_STREAK } from '../features/streak/mockStreak';
 import StudentProfileScreen from '../features/profile/StudentProfileScreen';
-import BadgeVaultScreen from '../features/profile/BadgeVaultScreen';
-import { BADGES } from '../features/profile/mockProfile';
 import MaterialDetailScreen from '../features/marketplace/MaterialDetailScreen';
-import CreatorPublicProfileScreen from '../features/creator-public/CreatorPublicProfileScreen';
-import { MOCK_CREATOR } from '../features/creator-public/mockCreator';
 
 import StudioScreen from '../features/studio/StudioScreen';
 import { MOCK_DRAFT } from '../features/studio/mockDraft';
-import CreatorFinanceScreen from '../features/creator-finance/CreatorFinanceScreen';
-import { MOCK_FINANCE } from '../features/creator-finance/mockFinance';
 import SubscriptionFlow from '../features/subscription/SubscriptionFlow';
 import AccountSettingsScreen, { type AccountSettings } from '../features/subscription/AccountSettingsScreen';
 
-import AdminOverviewScreen from '../features/admin/AdminOverviewScreen';
 import AdminEstudantesScreen from '../features/admin/AdminEstudantesScreen';
-import ModerationScreen from '../features/admin/ModerationScreen';
-import FinanceScreen from '../features/admin/FinanceScreen';
-import InsightsScreen from '../features/admin/InsightsScreen';
-import GamificationScreen from '../features/admin/GamificationScreen';
-import CreatorQueueScreen from '../features/admin/CreatorQueueScreen';
-import { CREATOR_QUEUE } from '../features/admin/mockCreatorQueue';
 
-import StudentLibraryScreen from '../features/library/StudentLibraryScreen';
 import OfflineDownloadsScreen from '../features/library/OfflineDownloadsScreen';
 import { LIBRARY_ITEMS, DOWNLOAD_PREFERENCES, OFFLINE_STORAGE } from '../features/library/mockLibrary';
 import PurchaseHistoryScreen from '../features/purchases/PurchaseHistoryScreen';
@@ -66,7 +46,6 @@ import { MOCK_TRAIL, MOCK_ADAPTIVE } from '../features/trail/mockTrail';
 import HomologationResultScreen, { type HomologationResult } from '../features/creator/HomologationResultScreen';
 import RenewalFailureScreen from '../features/subscription/RenewalFailureScreen';
 
-import { OfflineScreen } from '../features/system/OfflineScreen';
 import { SessionExpiredScreen, NotFoundScreen } from '../features/system/RecoveryScreens';
 
 import NotificationCenterScreen from '../features/notifications/NotificationCenterScreen';
@@ -74,40 +53,24 @@ import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
+import { EmBreve, EmBrevePagina } from '../components/EmBreve';
+import { destinoPorPapel } from '../lib/destinoPosLogin';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 import GlobalSearchScreen from '../features/search/GlobalSearchScreen';
 
-import MaterialAnalyticsScreen from '../features/analytics/MaterialAnalyticsScreen';
-import { MOCK_ANALYTICS } from '../features/analytics/mockAnalytics';
 import MaterialQaScreen from '../features/qa/MaterialQaScreen';
 import { MOCK_QA } from '../features/qa/mockQa';
-import ReviewNotebookScreen from '../features/review/ReviewNotebookScreen';
-import { MOCK_REVIEW } from '../features/review/mockReview';
 
-import CurriculumCatalogScreen from '../features/admin/CurriculumCatalogScreen';
-import { CATALOG } from '../features/admin/mockCatalog';
-import SubscriptionsReportScreen from '../features/admin/SubscriptionsReportScreen';
-import SeasonFinaleScreen from '../features/leagues/SeasonFinaleScreen';
-import { mockSeasonResult } from '../features/leagues/mockLeague';
 import FreeLibraryScreen from '../features/library/FreeLibraryScreen';
 
-import AudioPlayerScreen from '../features/audio/AudioPlayerScreen';
-import { MOCK_AUDIO } from '../features/audio/mockAudio';
 import CampusPageScreen from '../features/campus/CampusPageScreen';
 import { MOCK_CAMPUS } from '../features/campus/mockCampus';
 import PublicUniversityScreen from '../features/campus/PublicUniversityScreen';
 
-import ReferralScreen from '../features/referral/ReferralScreen';
-import { MOCK_REFERRAL } from '../features/referral/mockReferral';
 import PrivacyScreen from '../features/account/PrivacyScreen';
 import SessionsScreen from '../features/account/SessionsScreen';
 import { SESSIONS } from '../features/account/mockAccount';
 
-import SupportTicketsScreen from '../features/admin/SupportTicketsScreen';
-import { SUPPORT_TICKETS } from '../features/admin/mockSupport';
-import AdaptiveRulesScreen from '../features/admin/AdaptiveRulesScreen';
-import FiscalExportScreen from '../features/governance/FiscalExportScreen';
-import TeamPermissionsScreen from '../features/governance/TeamPermissionsScreen';
 import SurveyComposerScreen from '../features/survey/SurveyComposerScreen';
 import SurveyResultsScreen from '../features/survey/SurveyResultsScreen';
 import SurveyListScreen from '../features/survey/SurveyListScreen';
@@ -116,12 +79,8 @@ import { mensagemErroEnquete } from '../services/surveyService';
 
 import CreationHubScreen from '../features/authoring/CreationHubScreen';
 import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
-import QuestionBankScreen from '../features/authoring/QuestionBankScreen';
-import ExamComposerScreen from '../features/authoring/ExamComposerScreen';
 import TrailComposerScreen from '../features/authoring/TrailComposerScreen';
-import BulkImportScreen from '../features/authoring/BulkImportScreen';
-import VersionHistoryScreen from '../features/authoring/VersionHistoryScreen';
-import { TOPICS, QUESTIONS, VERSIONS, IMPORTED_ROWS } from '../features/authoring/mockAuthoring';
+import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
 
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 /** Entrega o nome do utilizador autenticado às telas que ainda o recebem por prop. */
@@ -132,6 +91,10 @@ function ComUtilizador({ children }: { children: (nome: string) => ReactNode }) 
 
 function OnboardingRoute() {
   const navigate = useNavigate();
+  const { usuario, loading } = useAuth();
+  // Com sessão iniciada, `/v2` leva ao ecrã do papel (admin: membros, professor: estúdio, estudante: painel), sem Onboarding.
+  if (loading) return null;
+  if (usuario) return <Navigate to={destinoPorPapel(usuario)} replace />;
   return (
     <OnboardingRoleScreen
       onSelectRole={(role) => navigate(role === 'creator' ? '/v2/credenciamento' : '/v2/onboarding/estudante')}
@@ -151,15 +114,9 @@ function StudentOnboardingRoute() {
   );
 }
 
+/** O credenciamento de criador ainda não tem API (`POST /creators/applications/` não existe): mostra "Em breve" em vez de dar 404 ao submeter. */
 function CreatorApplicationRoute() {
-  const navigate = useNavigate();
-  return (
-    <CreatorApplicationFlow
-      onExit={() => navigate('/v2')}
-      submit={submitCreatorApplication}
-      links={{ studio: '/v2/estudio', home: '/v2/painel', support: '/v2' }}
-    />
-  );
+  return <EmBreve nome="Credenciamento de criador" />;
 }
 
 function NotificationsRoute() {
@@ -404,12 +361,6 @@ const HOMOLOGATION_CORRECAO: HomologationResult = {
   required: ['Declaração institucional com a validade legível, em PDF ou fotografia nítida.'],
 };
 
-function ReviewRoute() {
-  const navigate = useNavigate();
-  const { usuario } = useAuth();
-  return <ReviewNotebookScreen queue={MOCK_REVIEW} userName={usuario?.nome ?? ''} onStartSession={() => navigate('/v2/desafio')} />;
-}
-
 function RenewalFailureRoute() {
   const navigate = useNavigate();
   const { usuario } = useAuth();
@@ -504,27 +455,27 @@ export const v2Routes: RouteObject = {
     { path: 'cadeira', element: <CourseScreen course={MOCK_COURSE} /> },
     { path: 'leitura', element: <MaterialRoute /> },
     { path: 'classificacao', element: <RankingRoute /> },
-    { path: 'ligas', element: <ComUtilizador>{(nome) => <LeaguesScreen league={mockLeague()} userName={nome} />}</ComUtilizador> },
-    { path: 'ofensiva', element: <ComUtilizador>{(nome) => <StreakHubScreen streak={MOCK_STREAK} userName={nome} studyHref="/v2/trilhas" />}</ComUtilizador> },
+    { path: 'ligas', element: <EmBrevePagina area="aluno" nome="Ligas" /> },
+    { path: 'ofensiva', element: <EmBrevePagina area="aluno" nome="Ofensiva" /> },
     { path: 'perfil', element: <StudentProfileScreen /> },
-    { path: 'medalhas', element: <ComUtilizador>{(nome) => <BadgeVaultScreen badges={BADGES} userName={nome} seasonTotal={BADGES.length} />}</ComUtilizador> },
-    { path: 'criador', element: <ComUtilizador>{(nome) => <CreatorPublicProfileScreen creator={MOCK_CREATOR} userName={nome} />}</ComUtilizador> },
+    { path: 'medalhas', element: <EmBrevePagina area="aluno" nome="Medalhas" /> },
+    { path: 'criador', element: <EmBrevePagina area="criador" nome="Perfil público" /> },
 
     { path: 'estudio', element: <StudioRoute /> },
-    { path: 'estudio/financeiro', element: <ComUtilizador>{(nome) => <CreatorFinanceScreen finance={MOCK_FINANCE} creatorName={nome} />}</ComUtilizador> },
+    { path: 'estudio/financeiro', element: <EmBrevePagina area="criador" nome="Financeiro" /> },
     { path: 'estudio/plano', element: <SubscriptionRoute /> },
     { path: 'estudio/definicoes', element: <AccountSettingsRoute /> },
 
-    { path: 'admin', element: <AdminOverviewScreen /> },
+    { path: 'admin', element: <EmBrevePagina area="admin" nome="Visão executiva" /> },
     { path: 'admin/estudantes', element: <Navigate to="/v2/admin/membros" replace /> },
     { path: 'admin/membros', element: <AdminEstudantesScreen /> },
-    { path: 'admin/criadores', element: <CreatorQueueScreen applications={CREATOR_QUEUE} /> },
-    { path: 'admin/moderacao', element: <ModerationScreen /> },
-    { path: 'admin/insights', element: <InsightsScreen /> },
-    { path: 'admin/financeiro', element: <FinanceScreen /> },
-    { path: 'admin/gamificacao', element: <GamificationScreen /> },
+    { path: 'admin/criadores', element: <EmBrevePagina area="admin" nome="Homologação de criadores" /> },
+    { path: 'admin/moderacao', element: <EmBrevePagina area="admin" nome="Moderação de conteúdo" /> },
+    { path: 'admin/insights', element: <EmBrevePagina area="admin" nome="Insights" /> },
+    { path: 'admin/financeiro', element: <EmBrevePagina area="admin" nome="Financeiro" /> },
+    { path: 'admin/gamificacao', element: <EmBrevePagina area="admin" nome="Gamificação e ligas" /> },
 
-    { path: 'biblioteca', element: <ComUtilizador>{(nome) => <StudentLibraryScreen items={LIBRARY_ITEMS} userName={nome} downloadsHref="/v2/biblioteca/descargas" marketplaceHref="/v2/marketplace" />}</ComUtilizador> },
+    { path: 'biblioteca', element: <EmBrevePagina area="aluno" nome="Biblioteca" /> },
     {
       path: 'biblioteca/descargas',
       element: (
@@ -552,26 +503,26 @@ export const v2Routes: RouteObject = {
     { path: 'estudio/homologacao/correcao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_CORRECAO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
     { path: 'estudio/renovacao', element: <RenewalFailureRoute /> },
 
-    { path: 'offline', element: <OfflineScreen offlineItems={5} cachedKb={5_940} pendingAnswers={4} streakDays={12} libraryHref="/v2/biblioteca" /> },
+    { path: 'offline', element: <EmBrevePagina area="aluno" nome="Estudo offline" /> },
     { path: 'sessao-expirada', element: <SessionExpiredRoute /> },
     { path: '404', element: <NotFoundRoute /> },
 
     { path: 'notificacoes', element: <NotificationsRoute /> },
     { path: 'pesquisa', element: <SearchRoute /> },
 
-    { path: 'estudio/analitica', element: <ComUtilizador>{(nome) => <MaterialAnalyticsScreen analytics={MOCK_ANALYTICS} creatorName={nome} materialsHref="/v2/estudio/materiais" />}</ComUtilizador> },
+    { path: 'estudio/analitica', element: <EmBrevePagina area="criador" nome="Analítica" /> },
     { path: 'duvidas', element: <ComUtilizador>{(nome) => <MaterialQaScreen board={MOCK_QA} userName={nome} />}</ComUtilizador> },
-    { path: 'revisao', element: <ReviewRoute /> },
+    { path: 'revisao', element: <EmBrevePagina area="aluno" nome="Revisão" /> },
 
-    { path: 'admin/catalogo', element: <CurriculumCatalogScreen institutions={CATALOG} /> },
-    { path: 'admin/subscricoes', element: <SubscriptionsReportScreen /> },
-    { path: 'ligas/temporada', element: <ComUtilizador>{(nome) => <SeasonFinaleScreen result={mockSeasonResult()} userName={nome} leagueHref="/v2/ligas" />}</ComUtilizador> },
+    { path: 'admin/catalogo', element: <EmBrevePagina area="admin" nome="Catálogo curricular" /> },
+    { path: 'admin/subscricoes', element: <EmBrevePagina area="admin" nome="Subscrições" /> },
+    { path: 'ligas/temporada', element: <EmBrevePagina area="aluno" nome="Ligas" /> },
     { path: 'biblioteca-livre', element: <FreeLibraryScreen /> },
 
-    { path: 'audio', element: <ComUtilizador>{(nome) => <AudioPlayerScreen audio={MOCK_AUDIO} userName={nome} />}</ComUtilizador> },
+    { path: 'audio', element: <EmBrevePagina area="aluno" nome="Áudio" /> },
     { path: 'polo', element: <ComUtilizador>{(nome) => <CampusPageScreen page={MOCK_CAMPUS} userName={nome} />}</ComUtilizador> },
 
-    { path: 'convidar', element: <ComUtilizador>{(nome) => <ReferralScreen program={MOCK_REFERRAL} userName={nome} university="UAN" subject="Macroeconomia I" />}</ComUtilizador> },
+    { path: 'convidar', element: <EmBrevePagina area="aluno" nome="Convidar amigos" /> },
     { path: 'conta/sessoes', element: <SessionsScreen sessions={SESSIONS} userName={MOCK_ACCOUNT.name} securityHref="/v2/definicoes" /> },
     {
       path: 'privacidade',
@@ -592,7 +543,7 @@ export const v2Routes: RouteObject = {
       ),
     },
 
-    { path: 'admin/suporte', element: <SupportTicketsScreen tickets={SUPPORT_TICKETS} agentName="Hamilton Kiala" /> },
+    { path: 'admin/suporte', element: <EmBrevePagina area="admin" nome="Suporte e disputas" /> },
 
     { path: 'estudio/criar', element: <ComUtilizador>{(nome) => <CreationHubScreen creatorName={nome} questionCount={QUESTIONS.length} draftCount={2} />}</ComUtilizador> },
     {
@@ -614,15 +565,15 @@ export const v2Routes: RouteObject = {
         </ComUtilizador>
       ),
     },
-    { path: 'estudio/questoes', element: <ComUtilizador>{(nome) => <QuestionBankScreen questions={QUESTIONS} topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I · UAN" />}</ComUtilizador> },
-    { path: 'estudio/simulado', element: <ComUtilizador>{(nome) => <ExamComposerScreen questions={QUESTIONS} topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I" />}</ComUtilizador> },
+    { path: 'estudio/questoes', element: <EmBrevePagina area="criador" nome="Banco de questões" /> },
+    { path: 'estudio/simulado', element: <EmBrevePagina area="criador" nome="Construtor de simulado" /> },
     { path: 'estudio/trilha', element: <ComUtilizador>{(nome) => <TrailComposerScreen topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I" readersOnCurrent={83} />}</ComUtilizador> },
-    { path: 'estudio/importar', element: <ComUtilizador>{(nome) => <BulkImportScreen rows={IMPORTED_ROWS} topics={TOPICS} creatorName={nome} />}</ComUtilizador> },
-    { path: 'estudio/versoes', element: <ComUtilizador>{(nome) => <VersionHistoryScreen materialTitle="Manual de exercícios: Macroeconomia I" versions={VERSIONS} creatorName={nome} />}</ComUtilizador> },
+    { path: 'estudio/importar', element: <EmBrevePagina area="criador" nome="Importação em massa" /> },
+    { path: 'estudio/versoes', element: <EmBrevePagina area="criador" nome="Histórico de versões" /> },
 
-    { path: 'admin/adaptativo', element: <AdaptiveRulesScreen /> },
-    { path: 'admin/fiscal', element: <FiscalExportScreen entityName="Kombinu EdTech, Lda" nif="5412894210" /> },
-    { path: 'admin/equipa', element: <TeamPermissionsScreen /> },
+    { path: 'admin/adaptativo', element: <EmBrevePagina area="admin" nome="Nivelamento adaptativo" /> },
+    { path: 'admin/fiscal', element: <EmBrevePagina area="admin" nome="Exportação fiscal" /> },
+    { path: 'admin/equipa', element: <EmBrevePagina area="admin" nome="Equipa e permissões" /> },
 
     { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
 
