@@ -10,19 +10,7 @@ import kombinuMark from "../assets/kombinu-mark.svg";
 export type AdminSection = "visao" | "membros" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao" | "catalogo" | "subscricoes" | "suporte" | "adaptativo" | "equipa" | "fiscal";
 
 const NAV: ReadonlyArray<{ id: AdminSection; label: string; href: string; icon: IconName }> = [
-  { id: "visao", label: "Visão executiva", href: "/v2/admin", icon: "grid" },
   { id: "membros", label: "Membros da escola", href: "/v2/admin/membros", icon: "users" },
-  { id: "criadores", label: "Homologação de criadores", href: "/v2/admin/criadores", icon: "seal" },
-  { id: "moderacao", label: "Moderação de conteúdo", href: "/v2/admin/moderacao", icon: "shield" },
-  { id: "insights", label: "Insights", href: "/v2/admin/insights", icon: "chart" },
-  { id: "financeiro", label: "Financeiro e Express", href: "/v2/admin/financeiro", icon: "wallet" },
-  { id: "subscricoes", label: "Subscrições Pro", href: "/v2/admin/subscricoes", icon: "seal" },
-  { id: "gamificacao", label: "Gamificação e ligas", href: "/v2/admin/gamificacao", icon: "trophy" },
-  { id: "adaptativo", label: "Nivelamento adaptativo", href: "/v2/admin/adaptativo", icon: "target" },
-  { id: "catalogo", label: "Catálogo curricular", href: "/v2/admin/catalogo", icon: "school" },
-  { id: "suporte", label: "Suporte e disputas", href: "/v2/admin/suporte", icon: "comment" },
-  { id: "fiscal", label: "Exportação fiscal", href: "/v2/admin/fiscal", icon: "file" },
-  { id: "equipa", label: "Equipa e permissões", href: "/v2/admin/equipa", icon: "users" },
 ];
 
 type AdminShellProps = {

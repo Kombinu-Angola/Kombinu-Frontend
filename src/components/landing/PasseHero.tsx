@@ -82,7 +82,7 @@ export function PasseHero({ p }: { p: PasseLandingState }) {
             </a>
           </div>
           <p className={cx(styles["hero-note"], styles.in, styles["in-4"])}>
-            O primeiro simulado não pede conta. Depois entras com o teu número de WhatsApp.
+            O primeiro simulado não pede conta. Para guardares o progresso, crias a tua conta.
           </p>
         </div>
 
@@ -168,6 +168,9 @@ export function PasseHero({ p }: { p: PasseLandingState }) {
                     <p className={styles["fb-text"]}>
                       Juros mais altos encarecem o crédito e travam a procura, por isso os preços sobem mais devagar.
                     </p>
+                    <a className={cx(styles["kb-btn"], styles["kb-btn--primary"], styles["btn-sm"])} href="/register">
+                      Criar conta
+                    </a>
                     <button type="button" className={styles["fb-retry"]} onClick={p.resetQuiz}>
                       Tentar de novo
                     </button>

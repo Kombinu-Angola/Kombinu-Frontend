@@ -4,12 +4,11 @@ import { quizService } from '../services/quizService';
 import { Header } from '@/components/layout/PublicHeader';
 import { useAuth } from '../contexts/AuthContext';
 import { contentService } from '../services/contentService';
-import { Save, Plus, Trash2, BookOpen, Video, FileText, Clock, Target, Tag, Cpu } from 'lucide-react';
+import { Save, Plus, Trash2, BookOpen, Video, FileText, Clock, Target, Tag } from 'lucide-react';
 
 export default function CriarConteudo() {
   const { usuario } = useAuth();
   const navigate = useNavigate();
-  const [gerandoIA, setGerandoIA] = useState(false);
 
   const [titulo, setTitulo] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -73,43 +72,6 @@ export default function CriarConteudo() {
     setTags(tags.filter(tag => tag !== tagParaRemover));
   };
 
-  const gerarQuizIA = async () => {
-    if (!titulo.trim() || !descricao.trim()) {
-      alert('Preenche o Título e a Descrição antes de gerar o quiz com IA.');
-      return;
-    }
-
-    try {
-      setGerandoIA(true);
-
-      const createdContent = await contentService.create({
-        title: titulo,
-        description: descricao,
-        category: categoria,
-        thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500',
-        level: dificuldade,
-        duration: `${tempoEstimado}h`,
-        type: 'quiz',
-        tags: tags.join(','),
-      } as any);
-
-      await quizService.generateQuiz(createdContent.id);
-
-      navigate('/dashboard/creator');
-    } catch (error: any) {
-      console.error('Erro ao gerar quiz IA', error);
-      const backendMsg = error?.response?.data?.error;
-      if (error?.response?.status === 503) {
-        alert('A API de perguntas está temporariamente sobrecarregada. Aguarda alguns segundos e tenta novamente.');
-      } else if (backendMsg) {
-        alert(`Erro: ${backendMsg}`);
-      } else {
-        alert('Ocorreu um erro ao gerar o quiz com IA. Tenta novamente.');
-      }
-    } finally {
-      setGerandoIA(false);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -331,17 +293,6 @@ export default function CriarConteudo() {
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                 {tipo === 'quiz' ? 'Perguntas do Quiz' : 'Conteúdo'}
               </h2>
-              {tipo === 'quiz' && (
-                <button
-                  type="button"
-                  onClick={gerarQuizIA}
-                  disabled={gerandoIA}
-                  className="bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors disabled:opacity-50"
-                >
-                  <Cpu className="w-4 h-4" />
-                  <span>{gerandoIA ? 'Gerando...' : 'Gerar com Inteligência Artificial'}</span>
-                </button>
-              )}
             </div>
 
             {tipo !== 'quiz' ? (

@@ -14,6 +14,7 @@ import AuthLayout from '@/components/layout/authLayout';
 import { LandingPage } from '@/pages/LandingPage';
 import { Error } from '@/pages/error';
 import { NotFound } from '@/pages/notFound';
+import { Termos, Privacidade, Direitos } from '@/pages/Legal';
 import { v2Routes } from './v2';
 
 export const router = createBrowserRouter([
@@ -22,6 +23,9 @@ export const router = createBrowserRouter([
     element: <LandingPage />,
     errorElement: <Error />,
   },
+  { path: '/termos', element: <Termos />, errorElement: <Error /> },
+  { path: '/privacidade', element: <Privacidade />, errorElement: <Error /> },
+  { path: '/direitos', element: <Direitos />, errorElement: <Error /> },
   {
     element: <AuthLayout />,
     children: [
