@@ -47,7 +47,7 @@ export function PasseFooter() {
                   <a href="/privacidade">Privacidade e dados (Lei n.º 22/11)</a>
                 </li>
                 <li>
-                  <a href="/direitos">Direitos de autor e remoção</a>
+                  <a href="/termos#sec-8">Direitos de autor e remoção</a>
                 </li>
               </ul>
             </nav>

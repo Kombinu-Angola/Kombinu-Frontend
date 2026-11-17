@@ -14,7 +14,6 @@ import AuthLayout from '@/components/layout/authLayout';
 import { LandingPage } from '@/pages/LandingPage';
 import { Error } from '@/pages/error';
 import { NotFound } from '@/pages/notFound';
-import { Termos, Privacidade, Direitos } from '@/pages/Legal';
 import { v2Routes } from './v2';
 
 export const router = createBrowserRouter([
@@ -23,9 +22,9 @@ export const router = createBrowserRouter([
     element: <LandingPage />,
     errorElement: <Error />,
   },
-  { path: '/termos', element: <Termos />, errorElement: <Error /> },
-  { path: '/privacidade', element: <Privacidade />, errorElement: <Error /> },
-  { path: '/direitos', element: <Direitos />, errorElement: <Error /> },
+  // Documentos legais: carregados à parte (o texto pesa ~60 kB e só se lê quando se abre).
+  { path: '/termos', lazy: async () => ({ Component: (await import('@/features/legal/LegalPage')).TermsScreen }), errorElement: <Error /> },
+  { path: '/privacidade', lazy: async () => ({ Component: (await import('@/features/legal/LegalPage')).PrivacyScreen }), errorElement: <Error /> },
   {
     element: <AuthLayout />,
     children: [
