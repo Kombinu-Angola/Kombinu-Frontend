@@ -5,7 +5,7 @@ import { Icon } from "../../components/ui/Icon";
 import { ProgressBar } from "../../components/ui/ProgressBar";
 import { SectionCard } from "../../components/ui/SectionCard";
 import { useAuth } from "../../contexts/AuthContext";
-import { useCursosAprendiz, useEstatisticasAprendiz } from "../../hooks/useV2Dados";
+import { useCursosAprendiz, useEstatisticasAprendiz, useGamificacaoMe } from "../../hooks/useV2Dados";
 import { formatInt } from "../../lib/format";
 import { levelInfo } from "../../lib/levels";
 
@@ -20,6 +20,7 @@ function formatarData(iso: string) {
 export default function DashboardScreen() {
   const { usuario } = useAuth();
   const stats = useEstatisticasAprendiz();
+  const gamificacao = useGamificacaoMe();
   const cursos = useCursosAprendiz();
   const nome = usuario?.nome ?? "";
   const primeiroNome = nome.split(/\s+/)[0] ?? "";
@@ -71,7 +72,15 @@ export default function DashboardScreen() {
                 Não foi possível carregar o resumo. Tenta novamente dentro de instantes.
               </p>
             ) : (
-              <dl className="grid grid-cols-3 gap-3 sm:gap-4">
+              <dl className={`grid gap-3 sm:gap-4 ${gamificacao.data ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3"}`}>
+                {gamificacao.data && (
+                  <div className="flex flex-col justify-between gap-2 rounded-2xl border-2 border-border-cloud bg-surface-canvas p-4">
+                    <dt className="text-overline text-text-tertiary uppercase">XP total</dt>
+                    <dd className="font-montserrat text-headline-h3 font-extrabold text-on-surface tabular-nums sm:text-headline-h2">
+                      {formatInt(gamificacao.data.xpTotal)}
+                    </dd>
+                  </div>
+                )}
                 <div className="flex flex-col justify-between gap-2 rounded-2xl border-2 border-border-cloud bg-surface-canvas p-4">
                   <dt className="text-overline text-text-tertiary uppercase">XP neste espaço</dt>
                   <dd className="font-montserrat text-headline-h3 font-extrabold text-primary tabular-nums sm:text-headline-h2">
