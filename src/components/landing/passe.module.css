@@ -123,8 +123,9 @@
   --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 :global(.passe-root) { scroll-behavior: smooth; scroll-padding-top: 88px; }
-:global(.passe-root) a { color: var(--primary); text-underline-offset: 3px; }
-:global(.passe-root) a:hover { color: var(--brand-ocean-shadow); }
+/* :where() zera a especificidade: a cor dos links não pode vencer a dos botões (.kb-btn--primary) nem a do menu. */
+:where(:global(.passe-root) a) { color: var(--primary); text-underline-offset: 3px; }
+:where(:global(.passe-root) a:hover) { color: var(--brand-ocean-shadow); }
 
 /* ---------- base ---------- */
 .kb-page { position: relative; overflow-x: clip; background: var(--surface); color: var(--on-surface); font: 500 16px/1.5 var(--font-body); }
@@ -795,5 +796,7 @@
   .notes-grid { row-gap: 88px; }
 }
 @media (max-width: 480px) {
-  .hdr-login { display: none; }
+  /* "Entrar" fica visível no telemóvel; o botão compacta-se para caber ao lado do logótipo. */
+  .hdr-in { gap: 8px; }
+  .hdr-login { padding: 0 10px; font-size: 14px; }
 }
