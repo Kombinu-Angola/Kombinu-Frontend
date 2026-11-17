@@ -7,6 +7,7 @@
 @import "@fontsource/montserrat/800.css";
 @import "@fontsource/rubik/500.css";
 @import "@fontsource/rubik/700.css";
+@import "./styles/kombinu-fluxo.css";
 
 @config "../tailwind.config.js";
 
