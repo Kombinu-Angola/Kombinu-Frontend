@@ -1,6 +1,7 @@
 import { queryClient } from "@/lib/queryClient";
 import { api } from "./api";
 import { useWorkspaceStore, WORKSPACE_MARKETPLACE } from "@/stores/workspaceStore";
+import { escolherWorkspaceInicial } from "@/lib/workspaceInicial";
 import type { Membership } from "@/types";
 
 /**
@@ -25,6 +26,11 @@ export const workspaceService = {
 
   sincronizarMemberships(memberships: Membership[]): void {
     useWorkspaceStore.getState().definirMemberships(memberships);
+  },
+
+  /** Depois do login: quem tem escola abre na escola de maior papel (admin, professor, estudante), nunca no marketplace. */
+  activarWorkspaceInicial(memberships: Membership[]): void {
+    useWorkspaceStore.getState().definirAtivo(escolherWorkspaceInicial(memberships));
   },
 
   /** Após o login institucional, abre directamente o workspace da escola em que o aluno entrou. */

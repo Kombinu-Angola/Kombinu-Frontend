@@ -83,6 +83,7 @@ function processarLogin(data: Record<string, unknown>): Usuario {
 
   const memberships = mapearMemberships(user.memberships);
   workspaceService.sincronizarMemberships(memberships);
+  workspaceService.activarWorkspaceInicial(memberships);
 
   const email = texto(user.email) ?? null;
 
