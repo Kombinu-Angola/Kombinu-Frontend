@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { GamificationProvider } from '../contexts/GamificationContext';
+import { destinoPorPapel } from '../lib/destinoPosLogin';
 
 /**
  * As telas novas (features/*) navegam por <a href="/v2/..."> simples, não por <Link>
@@ -64,6 +65,16 @@ export default function V2Layout() {
     const eAdmin =
       usuario?.tipo === 'admin' || (usuario?.memberships ?? []).some((m) => m.papel === 'admin');
     if (!eAdmin) return <Navigate to="/v2/trilhas" replace />;
+  }
+
+  // O estúdio é de quem cria: conta de criador, ou professor/admin de uma escola. Um estudante
+  // que abra `/v2/estudio/*` à mão volta ao ecrã do seu papel (a API já recusa a criação).
+  if (pathname === '/v2/estudio' || pathname.startsWith('/v2/estudio/')) {
+    const podeCriar =
+      usuario?.tipo === 'criador' ||
+      usuario?.tipo === 'admin' ||
+      (usuario?.memberships ?? []).some((m) => m.papel === 'teacher' || m.papel === 'admin');
+    if (usuario && !podeCriar) return <Navigate to={destinoPorPapel(usuario)} replace />;
   }
 
   return (

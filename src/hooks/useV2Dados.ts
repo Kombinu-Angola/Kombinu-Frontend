@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useAuth } from "../contexts/AuthContext";
+import { gamificacaoService } from "../services/gamificacaoService";
 import { materialService, type FiltrosMateriais } from "../services/materialService";
 import { painelService } from "../services/painelService";
 import { quizService } from "../services/quizService";
@@ -17,6 +18,16 @@ export function useEstatisticasAprendiz() {
   return useQuery({
     queryKey: ["painel", workspace, utilizadorId, "aprendiz"],
     queryFn: painelService.estatisticasAprendiz,
+    enabled: activo,
+  });
+}
+
+/** XP total e XP do espaço activo (`GET /rankings/me/`). A chave inclui o workspace: o XP do espaço muda com ele. */
+export function useGamificacaoMe() {
+  const { workspace, activo, utilizadorId } = useContexto();
+  return useQuery({
+    queryKey: ["gamificacao", workspace, utilizadorId, "me"],
+    queryFn: gamificacaoService.me,
     enabled: activo,
   });
 }
