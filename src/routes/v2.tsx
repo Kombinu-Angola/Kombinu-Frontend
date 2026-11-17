@@ -54,6 +54,7 @@ import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
 import { EmBreve, EmBrevePagina } from '../components/EmBreve';
+import { destinoPorPapel } from '../lib/destinoPosLogin';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 import GlobalSearchScreen from '../features/search/GlobalSearchScreen';
 
@@ -90,6 +91,10 @@ function ComUtilizador({ children }: { children: (nome: string) => ReactNode }) 
 
 function OnboardingRoute() {
   const navigate = useNavigate();
+  const { usuario, loading } = useAuth();
+  // Com sessão iniciada, `/v2` leva ao ecrã do papel (admin: membros, professor: estúdio, estudante: painel), sem Onboarding.
+  if (loading) return null;
+  if (usuario) return <Navigate to={destinoPorPapel(usuario)} replace />;
   return (
     <OnboardingRoleScreen
       onSelectRole={(role) => navigate(role === 'creator' ? '/v2/credenciamento' : '/v2/onboarding/estudante')}

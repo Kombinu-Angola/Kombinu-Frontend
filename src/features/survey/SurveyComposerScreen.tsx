@@ -274,7 +274,7 @@ export default function SurveyComposerScreen({ creatorName, onSaveDraft, onPubli
                           id={`opt-${index}`}
                           value={option}
                           onChange={(e) => update({ options: draft.options.map((o, i) => (i === index ? e.target.value : o)) })}
-                          className="min-h-11 flex-1 rounded-lg border-2 border-border-input bg-surface-canvas px-3 text-body-md text-on-surface"
+                          className="min-h-11 min-w-0 flex-1 rounded-lg border-2 border-border-input bg-surface-canvas px-3 text-body-md text-on-surface"
                         />
                         {draft.options.length > 2 && (
                           <button
