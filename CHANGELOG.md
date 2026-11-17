@@ -38,6 +38,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Corrigido
 
+- Splash (`App.tsx`): deixa de durar 2,5 s fixos e aparece so enquanto a sessao carrega (`SessaoPronta` sobre o `AuthContext`); com a sessao resolvida a app abre logo.
 - Feed das trilhas (`/v2/trilhas`, `StudyFeedScreen`): deixa de cair no cartao ficticio do `MOCK_FEED` ("Macroeconomia I - UAN", "+40 XP", "86% concluido"). O cartao principal mostra a trilha em curso ou, se nao houver, a primeira trilha publicada do workspace com "Comecar"; sem trilhas ha um estado vazio com links para a biblioteca livre e o marketplace. "Modulos recentes" passa a "Materiais recentes" (`GET /contents/`); saem "As minhas cadeiras", "Recomendado para ti", a economia de dados e a liga de exemplo, e a sequencia/gemas de demonstracao do painel lateral (o nivel e o XP vem do `learner/stats`). `MOCK_FEED` e os tipos do feed apagados.
 - Depois do login (email, escola, registo e troca de senha), o aprendiz vai para `/v2/painel` e o criador para `/v2/estudio/materiais` (`lib/destinoPosLogin.ts`), respeitando o `from` do `ProtectedRoute` (so caminhos internos) e com a troca de senha obrigatoria sempre primeiro. `/dashboard/learner` e `/dashboard/creator` redireccionam para essas rotas; as paginas antigas ficam no repositorio sem rota.
 - Rotas `/v2/*`: sem sessao, as telas que precisam de utilizador vao para `/login` com o `from` certo em vez de ficarem em "A carregar...". Ficam publicas `/v2`, `/v2/entrar`, `/v2/onboarding/*` e `/v2/credenciamento`.
