@@ -15,7 +15,6 @@ import { MOCK_COURSE } from '../features/course/mockCourse';
 import { MOCK_DRAFT } from '../features/studio/mockDraft';
 import type { AccountSettings } from '../features/subscription/AccountSettingsScreen';
 
-import { LIBRARY_ITEMS, DOWNLOAD_PREFERENCES, OFFLINE_STORAGE } from '../features/library/mockLibrary';
 import { PURCHASES } from '../features/purchases/mockPurchases';
 
 import { MOCK_ACCOUNT } from '../features/account/mockAccount';
@@ -58,7 +57,6 @@ const StudioScreen = lazy(() => import('../features/studio/StudioScreen'));
 const SubscriptionFlow = lazy(() => import('../features/subscription/SubscriptionFlow'));
 const AccountSettingsScreen = lazy(() => import('../features/subscription/AccountSettingsScreen'));
 const AdminEstudantesScreen = lazy(() => import('../features/admin/AdminEstudantesScreen'));
-const OfflineDownloadsScreen = lazy(() => import('../features/library/OfflineDownloadsScreen'));
 const PurchaseHistoryScreen = lazy(() => import('../features/purchases/PurchaseHistoryScreen'));
 const CreatorContentHubScreen = lazy(() => import('../features/creator-content/CreatorContentHubScreen'));
 const StudentSettingsScreen = lazy(() => import('../features/account/StudentSettingsScreen'));
@@ -478,22 +476,7 @@ export const v2Routes: RouteObject = {
     { path: 'admin/gamificacao', element: <EmBrevePagina area="admin" nome="Gamificação e ligas" /> },
 
     { path: 'biblioteca', element: <EmBrevePagina area="aluno" nome="Biblioteca" /> },
-    {
-      path: 'biblioteca/descargas',
-      element: (
-        <ComUtilizador>
-          {(nome) => (
-            <OfflineDownloadsScreen
-              items={LIBRARY_ITEMS}
-              storage={OFFLINE_STORAGE}
-              preferences={DOWNLOAD_PREFERENCES}
-              userName={nome}
-              libraryHref="/v2/biblioteca"
-            />
-          )}
-        </ComUtilizador>
-      ),
-    },
+    { path: 'biblioteca/descargas', element: <EmBrevePagina area="aluno" nome="Descargas offline" /> },
     { path: 'perfil/compras', element: <ComUtilizador>{(nome) => <PurchaseHistoryScreen purchases={PURCHASES} userName={nome} profileHref="/v2/perfil" />}</ComUtilizador> },
     { path: 'estudio/materiais', element: <CreatorContentHubScreen /> },
 

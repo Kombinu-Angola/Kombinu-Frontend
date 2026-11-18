@@ -10,9 +10,9 @@ import { useDialogBehavior } from "../../hooks/useDialogBehavior";
 export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" | "definicoes";
 
 const NAV: ReadonlyArray<{ id: CreatorSection; label: string; href: string; icon: IconName; hint: string }> = [
-  { id: "estudio", label: "Estúdio de Criação", href: "/v2/estudio/criar", icon: "edit", hint: "Criar artigo, simulado ou trilha" },
-  { id: "materiais", label: "Meus Materiais", href: "/v2/estudio/materiais", icon: "file", hint: "Os teus conteúdos e simulados" },
-  { id: "definicoes", label: "Conta e Subscrição", href: "/v2/estudio/definicoes", icon: "gear", hint: "Perfil, notificações e plano" },
+  { id: "estudio", label: "Estúdio de criação", href: "/v2/estudio/criar", icon: "edit", hint: "Criar artigo, simulado ou trilha" },
+  { id: "materiais", label: "Os meus materiais", href: "/v2/estudio/materiais", icon: "file", hint: "Os teus conteúdos e simulados" },
+  { id: "definicoes", label: "Conta e subscrição", href: "/v2/estudio/definicoes", icon: "gear", hint: "Perfil, notificações e plano" },
 ];
 
 type CreatorShellProps = {
