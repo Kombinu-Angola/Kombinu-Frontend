@@ -1,54 +1,27 @@
+/* Ficheiro de rotas: exporta o objecto do router e declara telas locais; o Fast Refresh nao se aplica. */
+/* eslint-disable react-refresh/only-export-components */
 import type { RouteObject } from 'react-router-dom';
-import { useState, type ReactNode } from 'react';
+import { lazy, useState, type ReactNode } from 'react';
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import V2Layout from './V2Layout';
 
-import OnboardingRoleScreen from '../features/onboarding/OnboardingRoleScreen';
-import StudentOnboardingFlow from '../features/onboarding/StudentOnboardingFlow';
 import { mockRecommendation } from '../features/onboarding/mockRecommendation';
 import { MOCK_DIAGNOSTIC } from '../features/quiz/mockDiagnostic';
 
-import AuthScreen from '../features/auth/AuthScreen';
-import SchoolLoginScreen from '../features/auth/SchoolLoginScreen';
-
-
-import DashboardScreen from '../features/dashboard/DashboardScreen';
-import StudyFeedScreen from '../features/feed/StudyFeedScreen';
-import SimuladoFlow from '../features/challenge/SimuladoFlow';
-import MarketplaceScreen from '../features/marketplace/MarketplaceScreen';
-import CourseScreen from '../features/course/CourseScreen';
 import { AppShell } from '../components/layout/AppShell';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
-import Ranking from '../pages/Ranking';
 import { MOCK_COURSE } from '../features/course/mockCourse';
-import StudentProfileScreen from '../features/profile/StudentProfileScreen';
-import MaterialDetailScreen from '../features/marketplace/MaterialDetailScreen';
 
-import StudioScreen from '../features/studio/StudioScreen';
 import { MOCK_DRAFT } from '../features/studio/mockDraft';
-import SubscriptionFlow from '../features/subscription/SubscriptionFlow';
-import AccountSettingsScreen, { type AccountSettings } from '../features/subscription/AccountSettingsScreen';
+import type { AccountSettings } from '../features/subscription/AccountSettingsScreen';
 
-import AdminEstudantesScreen from '../features/admin/AdminEstudantesScreen';
-
-import OfflineDownloadsScreen from '../features/library/OfflineDownloadsScreen';
 import { LIBRARY_ITEMS, DOWNLOAD_PREFERENCES, OFFLINE_STORAGE } from '../features/library/mockLibrary';
-import PurchaseHistoryScreen from '../features/purchases/PurchaseHistoryScreen';
 import { PURCHASES } from '../features/purchases/mockPurchases';
-import CreatorContentHubScreen from '../features/creator-content/CreatorContentHubScreen';
 
-import StudentSettingsScreen from '../features/account/StudentSettingsScreen';
-import PhoneSecurityScreen from '../features/account/PhoneSecurityScreen';
 import { MOCK_ACCOUNT } from '../features/account/mockAccount';
-import LearningTrailScreen from '../features/trail/LearningTrailScreen';
-import AdaptiveTrailScreen from '../features/trail/AdaptiveTrailScreen';
 import { MOCK_TRAIL, MOCK_ADAPTIVE } from '../features/trail/mockTrail';
-import HomologationResultScreen, { type HomologationResult } from '../features/creator/HomologationResultScreen';
-import RenewalFailureScreen from '../features/subscription/RenewalFailureScreen';
+import type { HomologationResult } from '../features/creator/HomologationResultScreen';
 
-import { SessionExpiredScreen, NotFoundScreen } from '../features/system/RecoveryScreens';
-
-import NotificationCenterScreen from '../features/notifications/NotificationCenterScreen';
 import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
@@ -56,31 +29,60 @@ import { useAuth } from '../contexts/AuthContext';
 import { EmBreve, EmBrevePagina } from '../components/EmBreve';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
-import GlobalSearchScreen from '../features/search/GlobalSearchScreen';
 
-import MaterialQaScreen from '../features/qa/MaterialQaScreen';
 import { MOCK_QA } from '../features/qa/mockQa';
 
-import FreeLibraryScreen from '../features/library/FreeLibraryScreen';
-
-import CampusPageScreen from '../features/campus/CampusPageScreen';
 import { MOCK_CAMPUS } from '../features/campus/mockCampus';
-import PublicUniversityScreen from '../features/campus/PublicUniversityScreen';
 
-import PrivacyScreen from '../features/account/PrivacyScreen';
-import SessionsScreen from '../features/account/SessionsScreen';
 import { SESSIONS } from '../features/account/mockAccount';
 
-import SurveyComposerScreen from '../features/survey/SurveyComposerScreen';
-import SurveyResultsScreen from '../features/survey/SurveyResultsScreen';
-import SurveyListScreen from '../features/survey/SurveyListScreen';
 import { useAccoesEnquetes, useListaEnquetes, useResultadosEnquete } from '../hooks/useEnquetes';
 import { mensagemErroEnquete } from '../services/surveyService';
 
-import CreationHubScreen from '../features/authoring/CreationHubScreen';
-import StudioOnboardingScreen from '../features/authoring/StudioOnboardingScreen';
-import TrailComposerScreen from '../features/authoring/TrailComposerScreen';
 import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
+
+// Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
+const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
+const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
+const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
+const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
+const DashboardScreen = lazy(() => import('../features/dashboard/DashboardScreen'));
+const StudyFeedScreen = lazy(() => import('../features/feed/StudyFeedScreen'));
+const SimuladoFlow = lazy(() => import('../features/challenge/SimuladoFlow'));
+const MarketplaceScreen = lazy(() => import('../features/marketplace/MarketplaceScreen'));
+const CourseScreen = lazy(() => import('../features/course/CourseScreen'));
+const Ranking = lazy(() => import('../pages/Ranking'));
+const StudentProfileScreen = lazy(() => import('../features/profile/StudentProfileScreen'));
+const MaterialDetailScreen = lazy(() => import('../features/marketplace/MaterialDetailScreen'));
+const StudioScreen = lazy(() => import('../features/studio/StudioScreen'));
+const SubscriptionFlow = lazy(() => import('../features/subscription/SubscriptionFlow'));
+const AccountSettingsScreen = lazy(() => import('../features/subscription/AccountSettingsScreen'));
+const AdminEstudantesScreen = lazy(() => import('../features/admin/AdminEstudantesScreen'));
+const OfflineDownloadsScreen = lazy(() => import('../features/library/OfflineDownloadsScreen'));
+const PurchaseHistoryScreen = lazy(() => import('../features/purchases/PurchaseHistoryScreen'));
+const CreatorContentHubScreen = lazy(() => import('../features/creator-content/CreatorContentHubScreen'));
+const StudentSettingsScreen = lazy(() => import('../features/account/StudentSettingsScreen'));
+const PhoneSecurityScreen = lazy(() => import('../features/account/PhoneSecurityScreen'));
+const LearningTrailScreen = lazy(() => import('../features/trail/LearningTrailScreen'));
+const AdaptiveTrailScreen = lazy(() => import('../features/trail/AdaptiveTrailScreen'));
+const HomologationResultScreen = lazy(() => import('../features/creator/HomologationResultScreen'));
+const RenewalFailureScreen = lazy(() => import('../features/subscription/RenewalFailureScreen'));
+const SessionExpiredScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.SessionExpiredScreen })));
+const NotFoundScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.NotFoundScreen })));
+const NotificationCenterScreen = lazy(() => import('../features/notifications/NotificationCenterScreen'));
+const GlobalSearchScreen = lazy(() => import('../features/search/GlobalSearchScreen'));
+const MaterialQaScreen = lazy(() => import('../features/qa/MaterialQaScreen'));
+const FreeLibraryScreen = lazy(() => import('../features/library/FreeLibraryScreen'));
+const CampusPageScreen = lazy(() => import('../features/campus/CampusPageScreen'));
+const PublicUniversityScreen = lazy(() => import('../features/campus/PublicUniversityScreen'));
+const PrivacyScreen = lazy(() => import('../features/account/PrivacyScreen'));
+const SessionsScreen = lazy(() => import('../features/account/SessionsScreen'));
+const SurveyComposerScreen = lazy(() => import('../features/survey/SurveyComposerScreen'));
+const SurveyResultsScreen = lazy(() => import('../features/survey/SurveyResultsScreen'));
+const SurveyListScreen = lazy(() => import('../features/survey/SurveyListScreen'));
+const CreationHubScreen = lazy(() => import('../features/authoring/CreationHubScreen'));
+const StudioOnboardingScreen = lazy(() => import('../features/authoring/StudioOnboardingScreen'));
+const TrailComposerScreen = lazy(() => import('../features/authoring/TrailComposerScreen'));
 
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 /** Entrega o nome do utilizador autenticado às telas que ainda o recebem por prop. */
