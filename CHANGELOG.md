@@ -13,6 +13,10 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 <!-- Registar aqui as alteracoes que estao em desenvolvimento e ainda nao foram lancadas. -->
 <!-- Quando houver um release, mover esta seccao para um bloco com versao e data. -->
 
+### Alterado
+
+- Desempenho (P3): as telas `/v2` e as paginas `/courses`, `/quiz` e `/dashboard/admin` passam a carregar sob pedido (`lazy`). O ficheiro principal desce de 1163 kB (332 kB gzip) para 754 kB (239 kB gzip); cada tela vira o seu proprio ficheiro, pelo que aluno, estudio e admin so descarregam o que usam. Sem alteracao de comportamento: `V2Layout` mostra um indicador de carregamento enquanto o ficheiro da tela chega, e as guardas de sessao e de papel mantem-se.
+
 ### Adicionado
 
 - Documentos legais `/termos` (Termos e Condicoes v3.0, 12 de Novembro de 2026) e `/privacidade` (Politica de Privacidade v1.0, so a Parte I; a Parte II, dossie da APD, e interna e nao se publica), a partir do pacote `kombinu-fluxo-ts-pr` (`features/legal/`). O texto vive em `features/legal/data/*.ts` como dados tipados, transcrito sem alteracoes, para o juridico o editar sem tocar no layout. Pagina publica com indice por clausula e seccao activa, resumo em linguagem simples, ligacao directa por clausula (`/termos#sec-6`), barra de leitura, impressao e indice em folha no telemovel. Carregada a parte (`lazy` do router, ~64 kB) e substitui o texto provisorio da pagina `Legal.tsx`, que sai. Novos: `components/fluxo/` (icones, folha inferior, movimento, marca) e `styles/kombinu-fluxo.css` (tokens `kombinu-*`, sem colidir com os existentes). Por validar com o Orlando/juridico antes de publicar: os textos descrevem pagamentos, comissao de 70% e ligas que o MVP ainda nao tem, e `/privacidade` refere `/subcontratacao`, que nao existe.

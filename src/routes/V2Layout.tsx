@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { GamificationProvider } from '../contexts/GamificationContext';
@@ -31,6 +31,15 @@ function useInternalLinkInterceptor() {
     document.addEventListener('click', onClick);
     return () => document.removeEventListener('click', onClick);
   }, [navigate]);
+}
+
+/** Enquanto o ficheiro da tela (carregado sob pedido) chega. */
+function CarregarTela() {
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-background">
+      <div className="size-12 animate-spin rounded-full border-b-2 border-brand-ocean" role="status" aria-label="A carregar" />
+    </div>
+  );
 }
 
 /** Entradas de /v2 que não precisam de sessão (onboarding, credenciamento e a entrada de demonstração). */
@@ -79,7 +88,9 @@ export default function V2Layout() {
 
   return (
     <GamificationProvider initialXp={650} initialStreak={12} initialGems={450}>
-      <Outlet />
+      <Suspense fallback={<CarregarTela />}>
+        <Outlet />
+      </Suspense>
     </GamificationProvider>
   );
 }

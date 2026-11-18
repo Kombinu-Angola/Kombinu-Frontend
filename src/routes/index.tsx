@@ -1,20 +1,23 @@
+import type { ComponentType } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import BaseLayout from '../components/layout/BaseLayout';
 
 import Login from '../pages/Login';
 import ChangePasswordScreen from '../features/auth/ChangePasswordScreen';
 import Register from '../pages/Register';
-import Marketplace from '../pages/Marketplace';
-import Quiz from '../pages/Quiz';
-import CriarConteudo from '../pages/CriarConteudo';
-import VisualizarConteudo from '../pages/VisualizarConteudo';
-import PainelAdmin from '../pages/PainelAdmin';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import AuthLayout from '@/components/layout/authLayout';
 import { LandingPage } from '@/pages/LandingPage';
 import { Error } from '@/pages/error';
 import { NotFound } from '@/pages/notFound';
 import { v2Routes } from './v2';
+
+/** Pagina carregada sob pedido; `protegida` exige sessao (e papeis, se indicados) antes de a mostrar. */
+const pagina = (carregar: () => Promise<{ default: ComponentType }>) => async () => ({ Component: (await carregar()).default });
+const protegida = (carregar: () => Promise<{ default: ComponentType }>, allowedRoles?: Array<'admin'>) => async () => {
+  const { default: Pagina } = await carregar();
+  return { Component: () => <ProtectedRoute allowedRoles={allowedRoles}><Pagina /></ProtectedRoute> };
+};
 
 export const router = createBrowserRouter([
   {
@@ -62,7 +65,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'admin',
-            element: <ProtectedRoute allowedRoles={['admin']}><PainelAdmin /></ProtectedRoute>,
+            lazy: protegida(() => import('../pages/PainelAdmin'), ['admin']),
           },
         ],
       },
@@ -71,21 +74,21 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Marketplace />,
+            lazy: pagina(() => import('../pages/Marketplace')),
           },
           {
             path: 'create',
-            element: <ProtectedRoute><CriarConteudo /></ProtectedRoute>,
+            lazy: protegida(() => import('../pages/CriarConteudo')),
           },
           {
             path: ':id',
-            element: <ProtectedRoute><VisualizarConteudo /></ProtectedRoute>,
+            lazy: protegida(() => import('../pages/VisualizarConteudo')),
           },
         ],
       },
       {
         path: 'quiz/:id',
-        element: <ProtectedRoute><Quiz /></ProtectedRoute>,
+        lazy: protegida(() => import('../pages/Quiz')),
       },
       {
         path: 'ranking',
