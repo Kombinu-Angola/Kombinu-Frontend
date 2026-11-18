@@ -27,3 +27,6 @@ vite.config.*.timestamp-*.mjs
 
 # Claude Code: definições pessoais, nunca partilhadas com a equipa
 .claude/settings.local.json
+
+# Cache incremental do TypeScript
+*.tsbuildinfo
