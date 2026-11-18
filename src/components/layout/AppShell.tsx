@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
 import { DataSaverBadge } from "../ui/DataSaverBadge";
 import { NotificationBell } from "./NotificationBell";
+import { OfensivaChip } from "./OfensivaChip";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
@@ -31,7 +32,7 @@ type AppShellProps = {
 
 /**
  * Moldura da app com sessão iniciada: navegação em pílula no desktop, barra de separadores
- * fixa no telemóvel (polegar), sequência e gemas sempre visíveis, rodapé e selo de dados.
+ * fixa no telemóvel (polegar), ofensiva real sempre visível (sem gemas), rodapé e selo de dados.
  */
 export function AppShell({ active, campus, headerSlot, children }: AppShellProps) {
   const { usuario } = useAuth();
@@ -83,6 +84,7 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
 
           <div className="flex items-center gap-3 sm:gap-5">
             {headerSlot}
+            <OfensivaChip />
             <WorkspaceSwitcher />
             <NotificationBell />
             {nomeUtilizador && (
