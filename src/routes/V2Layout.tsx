@@ -45,7 +45,7 @@ function CarregarTela() {
 /** Entradas de /v2 que não precisam de sessão (onboarding, credenciamento e a entrada de demonstração). */
 const ROTAS_PUBLICAS = ['/v2/entrar', '/v2/onboarding', '/v2/credenciamento'];
 
-/** Moldura de /v2: sessão de demonstração (XP 650, sequência 12, 450 gemas) partilhada entre as telas novas. */
+/** Moldura de /v2. O estado de gamificação arranca a zeros: os números reais vêm da API (`useGamificacaoMe`). */
 export default function V2Layout() {
   useInternalLinkInterceptor();
   const { usuario, loading } = useAuth();
@@ -87,7 +87,7 @@ export default function V2Layout() {
   }
 
   return (
-    <GamificationProvider initialXp={650} initialStreak={12} initialGems={450}>
+    <GamificationProvider>
       <Suspense fallback={<CarregarTela />}>
         <Outlet />
       </Suspense>
