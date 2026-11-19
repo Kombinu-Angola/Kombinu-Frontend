@@ -164,6 +164,9 @@ export const authService = {
       password: data.senha,
       first_name: data.nome,
       user_type: userTypeMap[data.tipo],
+      ano_nascimento: data.anoNascimento,
+      aceita_termos: data.aceitaTermos,
+      marketing_opt_in: data.marketingOptIn ?? false,
     });
 
     return this.login(data.email, data.senha);
