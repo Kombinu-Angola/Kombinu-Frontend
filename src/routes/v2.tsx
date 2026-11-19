@@ -27,6 +27,7 @@ import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
 import { EmBreve, EmBrevePagina } from '../components/EmBreve';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
+import { FLUXO_MOCKS } from '../lib/fluxoFlags';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 
 import { MOCK_QA } from '../features/qa/mockQa';
@@ -42,6 +43,10 @@ import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
 
 // Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
 const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
+const B1Preparar = lazy(() => import('../features/preparar/B1Preparar'));
+const B3Calibrar = lazy(() => import('../features/preparar/B3Calibrar'));
+const B4Previa = lazy(() => import('../features/preparar/B4Previa'));
+const EmConstrucaoDev = lazy(() => import('../features/preparar/EmConstrucaoDev'));
 const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
 const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
 const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
@@ -561,6 +566,17 @@ export const v2Routes: RouteObject = {
     { path: 'admin/equipa', element: <EmBrevePagina area="admin" nome="Equipa e permissões" /> },
 
     { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
+
+    // Fluxo "Preparar a minha prova": só existe em desenvolvimento, com `VITE_FLUXO_MOCKS=true` (o backend ainda não tem a API).
+    ...(FLUXO_MOCKS
+      ? [
+          { path: 'preparar', element: <B1Preparar /> },
+          { path: 'preparar/calibrar', element: <B3Calibrar /> },
+          { path: 'preparar/previa', element: <B4Previa /> },
+          { path: 'preparar/materiais', element: <EmConstrucaoDev /> },
+          { path: 'preparar/modulo/:id', element: <EmConstrucaoDev /> },
+        ]
+      : []),
 
     { path: 'enquetes', element: <SurveyListRoute /> },
     { path: 'estudio/enquete', element: <SurveyComposerRoute /> },
