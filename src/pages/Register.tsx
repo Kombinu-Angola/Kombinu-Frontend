@@ -54,7 +54,8 @@ export default function Register() {
     try {
       const sucesso = await register({ nome: nome.trim(), email: email.trim(), senha, tipo });
       if (sucesso) {
-        navigate(destinoPorPapel({ tipo }));
+        // Quem se regista como criador segue para o credenciamento; o aprendiz, para o seu ecrã.
+        navigate(tipo === 'criador' ? '/v2/credenciamento' : destinoPorPapel({ tipo }));
       } else {
         setErros({ form: authError?.message ?? 'Este e-mail já está registado ou o servidor não respondeu.' });
       }
