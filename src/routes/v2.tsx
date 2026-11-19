@@ -42,6 +42,7 @@ import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
 
 // Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
 const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
+const OnboardingNovo = lazy(() => import('../features/onboarding-novo/OnboardingNovo'));
 const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
 const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
 const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
@@ -442,6 +443,7 @@ export const v2Routes: RouteObject = {
   element: <V2Layout />,
   children: [
     { index: true, element: <OnboardingRoute /> },
+    { path: 'onboarding', element: <OnboardingNovo /> },
     { path: 'onboarding/estudante', element: <StudentOnboardingRoute /> },
     { path: 'credenciamento', element: <CreatorApplicationRoute /> },
     { path: 'entrar', element: <AuthRoute /> },

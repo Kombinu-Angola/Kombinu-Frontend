@@ -1,6 +1,6 @@
 import {
   forwardRef, useId, useRef, useState,
-  type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode,
+  type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode, type SelectHTMLAttributes,
 } from "react";
 import { Link } from "react-router-dom";
 import { panelId, tabId } from "./ids";
@@ -164,6 +164,55 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
           {...props}
         />
         {trailing}
+      </div>
+      {hint && !error && <p id={hintId} className="mt-2 text-sm font-medium text-neutral-600">{hint}</p>}
+      {error && (
+        <p id={errorId} className="mt-2 flex items-start gap-1.5 text-sm font-medium text-red-700 motion-safe:animate-fade-in">
+          <AlertIcon className="mt-0.5 size-4 shrink-0" />
+          {error}
+        </p>
+      )}
+    </div>
+  );
+});
+
+type SelectFieldProps = SelectHTMLAttributes<HTMLSelectElement> & {
+  label: string;
+  aside?: ReactNode;
+  error?: string;
+  hint?: string;
+};
+
+/** Lista de escolha com o aspecto do `Field` (mesma altura, fundo, anel de foco e erro). */
+export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(function SelectField(
+  { label, aside, error, hint, id, children, className = "", ...props },
+  ref,
+) {
+  const autoId = useId();
+  const selectId = id ?? `s${autoId.replace(/:/g, "")}`;
+  const errorId = `${selectId}-error`;
+  const hintId = `${selectId}-hint`;
+  const describedBy = [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(" ") || undefined;
+  return (
+    <div>
+      <div className="mb-2 flex items-baseline justify-between gap-3">
+        <label htmlFor={selectId} className="text-[0.8rem] font-bold tracking-[0.06em] uppercase">{label}</label>
+        {aside}
+      </div>
+      <div className={`relative flex h-14 items-center rounded-2xl bg-kombinu-surface px-4 ring-inset ${error ? "ring-2 ring-red-600" : "focus-within:ring-2 focus-within:ring-kombinu-blue"}`}>
+        <select
+          ref={ref}
+          id={selectId}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy}
+          className={`h-full min-w-0 flex-1 cursor-pointer appearance-none bg-transparent pr-8 text-base text-kombinu-ink outline-none ${className}`}
+          {...props}
+        >
+          {children}
+        </select>
+        <span aria-hidden="true" className="pointer-events-none absolute right-4 text-neutral-500">
+          <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+        </span>
       </div>
       {hint && !error && <p id={hintId} className="mt-2 text-sm font-medium text-neutral-600">{hint}</p>}
       {error && (
