@@ -46,7 +46,9 @@ const OnboardingRoleScreen = lazy(() => import('../features/onboarding/Onboardin
 const B1Preparar = lazy(() => import('../features/preparar/B1Preparar'));
 const B3Calibrar = lazy(() => import('../features/preparar/B3Calibrar'));
 const B4Previa = lazy(() => import('../features/preparar/B4Previa'));
-const EmConstrucaoDev = lazy(() => import('../features/preparar/EmConstrucaoDev'));
+const MinhasPreparacoes = lazy(() => import('../features/preparar/MinhasPreparacoes'));
+const B6Modulo = lazy(() => import('../features/preparar/B6Modulo'));
+const SimuladoCompleto = lazy(() => import('../features/preparar/SimuladoCompleto'));
 const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
 const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
 const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
@@ -573,8 +575,9 @@ export const v2Routes: RouteObject = {
           { path: 'preparar', element: <B1Preparar /> },
           { path: 'preparar/calibrar', element: <B3Calibrar /> },
           { path: 'preparar/previa', element: <B4Previa /> },
-          { path: 'preparar/materiais', element: <EmConstrucaoDev /> },
-          { path: 'preparar/modulo/:id', element: <EmConstrucaoDev /> },
+          { path: 'preparar/materiais', element: <MinhasPreparacoes /> },
+          { path: 'preparar/modulo/:id', element: <B6Modulo /> },
+          { path: 'preparar/simulado/:id', element: <SimuladoCompleto /> },
         ]
       : []),
 

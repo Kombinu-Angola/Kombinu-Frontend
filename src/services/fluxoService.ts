@@ -103,6 +103,51 @@ export interface GuardianLink {
   expiresAt: string;
 }
 
+export type MaterialStatus = "preparing" | "failed" | "locked" | "unlocked" | "pending_review";
+
+export interface MaterialItem {
+  /** `contentId` do material. */
+  id: string;
+  title: string;
+  subjectName: string;
+  status: MaterialStatus;
+  createdAt: string;
+  previewContentId?: string;
+}
+
+export interface PlanDay {
+  day: number;
+  date: string;
+  task: string;
+}
+
+export interface FullModule {
+  id: string;
+  title: string;
+  subjectName: string;
+  status: MaterialStatus;
+  blocks: SebentaBlock[];
+  plan: PlanDay[];
+  questions: Question[];
+}
+
+export interface AuthorshipDeclaration {
+  fullName: string;
+  isAuthor: true;
+  noThirdPartyCopyright: true;
+}
+
+export interface GuardianOrderView {
+  studentFirstName: string;
+  subjectName: string;
+  materialTitle: string;
+  amountKz: number;
+  blocks: number;
+  questions: number;
+  planDays: number;
+  status: OrderStatus;
+}
+
 export class FluxoIndisponivel extends Error {
   constructor() {
     super("Esta área ainda não está disponível.");
@@ -130,6 +175,11 @@ interface JobRec {
   retried: boolean;
   readyAt: number;
   params?: CalibrationParams;
+  criadoEm?: number;
+  /** Submetido ao Marketplace (pendente de revisão). */
+  submetido?: boolean;
+  /** Nome da declaração de autoria. */
+  autor?: string;
 }
 
 interface Db {
@@ -240,8 +290,8 @@ function previaDe(rec: JobRec): PreviewContent {
     subjectName: cadeira?.name ?? "Cadeira",
     block: blocoDe(rec.title),
     questions: PERGUNTAS[rec.subjectId] ?? PERGUNTAS_GENERICAS(rec.title),
-    totalBlocks: 6,
-    totalQuestions: 40,
+    totalBlocks: TITULOS_BLOCOS.length,
+    totalQuestions: perguntasDoModulo(rec).length,
     planDays: diasDePlano(rec.params?.examDate),
   };
 }
@@ -255,6 +305,62 @@ function assentar() {
 }
 
 const semInterno = (o: OrderRec): Order => ({ id: o.id, contentId: o.contentId, planId: o.planId, amountKz: o.amountKz, status: o.status });
+
+const TITULOS_BLOCOS = [
+  "1. Ideia central e conceitos-base",
+  "2. Aplicação passo a passo",
+  "3. Armadilhas de exame",
+  "4. Casos práticos",
+  "5. Esquema-síntese",
+  "6. Revisão final",
+];
+
+/** Banco de perguntas do módulo: as 3 da prévia mais 6 de exemplo. */
+function perguntasDoModulo(rec: JobRec): Question[] {
+  const base = PERGUNTAS[rec.subjectId] ?? PERGUNTAS_GENERICAS(rec.title);
+  const extra: Question[] = Array.from({ length: 6 }, (_, i) => ({
+    id: `q${i + 4}`,
+    prompt: `Exemplo ${i + 4} sobre «${rec.title}»: qual é a afirmação correta?`,
+    options: opcoes("A primeira", "A segunda", "A terceira", "Nenhuma"),
+    correctOptionId: String.fromCharCode(97 + (i % 3)),
+    explanation: "Pergunta de exemplo do modo de desenvolvimento.",
+  }));
+  return [...base, ...extra];
+}
+
+function estadoMaterial(rec: JobRec): MaterialStatus {
+  assentar();
+  const j = estado(rec);
+  if (j.status !== "ready") return j.status === "failed" ? "failed" : "preparing";
+  const pago = Object.values(db().orders).some((o) => o.contentId === rec.job.contentId && o.status === "paid");
+  if (!pago) return "locked";
+  return rec.submetido ? "pending_review" : "unlocked";
+}
+
+function recDoMaterial(contentId: string): JobRec {
+  const rec = Object.values(db().jobs).find((r) => r.job.contentId === contentId);
+  if (!rec) throw new Error("Material não encontrado.");
+  return rec;
+}
+
+function modulo(rec: JobRec): FullModule {
+  const dias = diasDePlano(rec.params?.examDate);
+  const tarefas = ["Lê o bloco 1 e faz o checkpoint", "Bloco 2 + 5 perguntas", "Bloco 3: armadilhas de exame", "Casos práticos", "Esquema-síntese de memória", "Simulado parcial", "Revê os erros"];
+  const inicio = new Date();
+  return {
+    id: rec.job.contentId,
+    title: rec.title,
+    subjectName: SUBJECTS.find((x) => x.id === rec.subjectId)?.name ?? "Cadeira",
+    status: estadoMaterial(rec),
+    blocks: TITULOS_BLOCOS.map((t, i) => ({ ...blocoDe(rec.title), id: `blk-${i}`, title: t })),
+    plan: Array.from({ length: dias }, (_, i) => {
+      const d = new Date(inicio);
+      d.setDate(inicio.getDate() + i);
+      return { day: i + 1, date: d.toISOString().slice(0, 10), task: i === dias - 1 ? "Simulado completo + revisão final" : tarefas[i % tarefas.length] };
+    }),
+    questions: perguntasDoModulo(rec),
+  };
+}
 
 const apenasMock = () => {
   if (!FLUXO_MOCKS) throw new FluxoIndisponivel();
@@ -307,6 +413,7 @@ export const fluxoService = {
       willFail: /falha/i.test(input.title),
       retried: false,
       readyAt: Date.now() + (cacheHit ? 2500 : 14000),
+      criadoEm: Date.now(),
     };
     db().freeUsed += 1;
     gravar();
@@ -417,5 +524,68 @@ export const fluxoService = {
     apenasMock();
     await esperar();
     return { url: `${location.origin}/encarregado/${orderId}`, expiresAt: new Date(Date.now() + 7 * 86_400_000).toISOString() };
+  },
+
+  /** Tudo o que o estudante preparou, do mais recente para o mais antigo. */
+  async materials(): Promise<MaterialItem[]> {
+    apenasMock();
+    await esperar();
+    return Object.values(db().jobs)
+      .map((rec): MaterialItem => {
+        const status = estadoMaterial(rec);
+        return {
+          id: rec.job.contentId,
+          title: rec.title,
+          subjectName: SUBJECTS.find((x) => x.id === rec.subjectId)?.name ?? "Cadeira",
+          status,
+          createdAt: new Date(rec.criadoEm ?? Date.now()).toISOString(),
+          previewContentId: status === "preparing" || status === "failed" ? undefined : `p-${rec.job.contentId}`,
+        };
+      })
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  },
+
+  /** Módulo completo: sebenta, plano diário e simulado. Só se estiver pago; antes, vem com o estado "locked". */
+  async module(contentId: string): Promise<FullModule> {
+    apenasMock();
+    await esperar();
+    return modulo(recDoMaterial(contentId));
+  },
+
+  /** Submissão ao Marketplace com declaração de autoria (Lei n.º 15/14): fica pendente de revisão. */
+  async submitToMarketplace(contentId: string, declaracao: AuthorshipDeclaration): Promise<FullModule> {
+    apenasMock();
+    await esperar(400);
+    const rec = recDoMaterial(contentId);
+    rec.submetido = true;
+    rec.autor = declaracao.fullName;
+    gravar();
+    return modulo(rec);
+  },
+
+  /** Resumo público do pedido para o encarregado (o `token` é o do pedido). */
+  async guardianOrder(token: string): Promise<GuardianOrderView> {
+    apenasMock();
+    await esperar();
+    assentar();
+    const o = db().orders[token];
+    if (!o) throw new Error("Este link expirou ou não existe.");
+    const rec = recDoMaterial(o.contentId);
+    gravar();
+    return {
+      studentFirstName: "O teu educando",
+      subjectName: SUBJECTS.find((x) => x.id === rec.subjectId)?.name ?? "Cadeira",
+      materialTitle: rec.title,
+      amountKz: o.amountKz,
+      blocks: TITULOS_BLOCOS.length,
+      questions: perguntasDoModulo(rec).length,
+      planDays: diasDePlano(rec.params?.examDate),
+      status: o.status,
+    };
+  },
+
+  async guardianPay(token: string, phone: string): Promise<GuardianOrderView> {
+    await fluxoService.payExpress(token, phone);
+    return fluxoService.guardianOrder(token);
   },
 };
