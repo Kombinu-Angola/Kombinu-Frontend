@@ -23,3 +23,7 @@ export const dataLonga = (iso: string) =>
 
 export const mensagemDe = (err: unknown, omissao = "Algo correu mal. Tenta novamente.") =>
   err instanceof Error && err.message ? err.message : omissao;
+
+/** Telefone angolano: só dígitos ("923000302") e a forma legível ("923 000 302"). */
+export const formatarTelefone = (digitos: string) => digitos.replace(/\D/g, "").slice(0, 9).replace(/(\d{3})(?=\d)/g, "$1 ");
+export const telefoneValido = (digitos: string) => /^9\d{8}$/.test(digitos);

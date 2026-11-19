@@ -45,7 +45,8 @@ import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
 const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
 const B1Preparar = lazy(() => import('../features/preparar/B1Preparar'));
 const B3Calibrar = lazy(() => import('../features/preparar/B3Calibrar'));
-const PreviaPendente = lazy(() => import('../features/preparar/PreviaPendente'));
+const B4Previa = lazy(() => import('../features/preparar/B4Previa'));
+const EmConstrucaoDev = lazy(() => import('../features/preparar/EmConstrucaoDev'));
 const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
 const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
 const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
@@ -571,7 +572,9 @@ export const v2Routes: RouteObject = {
       ? [
           { path: 'preparar', element: <B1Preparar /> },
           { path: 'preparar/calibrar', element: <B3Calibrar /> },
-          { path: 'preparar/previa', element: <PreviaPendente /> },
+          { path: 'preparar/previa', element: <B4Previa /> },
+          { path: 'preparar/materiais', element: <EmConstrucaoDev /> },
+          { path: 'preparar/modulo/:id', element: <EmConstrucaoDev /> },
         ]
       : []),
 
