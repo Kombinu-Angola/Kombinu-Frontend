@@ -4,7 +4,7 @@ import { Avatar } from "../ui/Avatar";
 import { Button3D } from "../ui/Button3D";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
-import kombinuMark from "../assets/kombinu-mark.svg";
+import { LogoMark } from "../ui/LogoMark";
 import { useDialogBehavior } from "../../hooks/useDialogBehavior";
 
 export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" | "definicoes";
@@ -71,7 +71,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
         <div>
           <div className="flex h-16 items-center border-b-2 border-border-cloud px-5">
             <a href="/v2/estudio" aria-label="Kombinu Estúdio" className="flex items-center">
-              <img src={kombinuMark} alt="" className="size-10" />
+              <LogoMark />
             </a>
           </div>
           <div className="pt-4">
@@ -137,7 +137,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
                 <Icon name="menu" size={20} />
               </button>
               <a href="/v2/estudio" aria-label="Kombinu Estúdio" className="flex items-center lg:hidden">
-                <img src={kombinuMark} alt="" className="size-10" />
+                <LogoMark />
               </a>
             </div>
 

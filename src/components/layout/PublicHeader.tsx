@@ -1,4 +1,4 @@
-import logoProfile from "../assets/kombinu-mark.svg";
+import { LogoMark } from "../ui/LogoMark";
 
 import { Button3D } from "../ui/Button3D";
 import { Menu, X } from "lucide-react";
@@ -24,7 +24,8 @@ export function Header() {
 
         {/* Logo */}
         <Link className="flex items-center" to="/">
-          <motion.img
+          <motion.span
+            className="flex"
             whileHover={{
               scale: 1.04,
               transition: {
@@ -32,10 +33,9 @@ export function Header() {
                 ease: "easeOut",
               },
             }}
-            src={logoProfile}
-            className="size-10 object-contain"
-            alt="Kombinu"
-          />
+          >
+            <LogoMark label="Kombinu" />
+          </motion.span>
         </Link>
 
         {/* Navegação Desktop */}

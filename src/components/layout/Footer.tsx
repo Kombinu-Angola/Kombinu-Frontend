@@ -1,4 +1,4 @@
-import logoProfile from "../assets/kombinu-mark.svg"
+import { LogoMark } from "../ui/LogoMark"
 
 export default function Footer() {
   return (
@@ -123,7 +123,7 @@ export default function Footer() {
         {/* Barra Inferior: Logo, Links Rápidos e Copyright */}
         <div className="pt-8  flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-text-secondary">
           {/* Marca */}
-          <img src={logoProfile} className="size-10 object-contain" alt="Kombinu" />
+          <LogoMark label="Kombinu" />
 
 
           <div className="flex  justify-center gap-x-5 gap-y-2">
