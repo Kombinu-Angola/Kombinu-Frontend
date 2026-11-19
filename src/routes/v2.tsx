@@ -25,7 +25,7 @@ import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
-import { EmBreve, EmBrevePagina } from '../components/EmBreve';
+import { EmBrevePagina } from '../components/EmBreve';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 
@@ -42,6 +42,7 @@ import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
 
 // Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
 const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
+const CredenciamentoFlow = lazy(() => import('../features/credenciamento/CredenciamentoFlow'));
 const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
 const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
 const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
@@ -112,11 +113,6 @@ function StudentOnboardingRoute() {
       feedHref="/v2/trilhas"
     />
   );
-}
-
-/** O credenciamento de criador ainda não tem API (`POST /creators/applications/` não existe): mostra "Em breve" em vez de dar 404 ao submeter. */
-function CreatorApplicationRoute() {
-  return <EmBreve nome="Credenciamento de criador" />;
 }
 
 function NotificationsRoute() {
@@ -443,7 +439,7 @@ export const v2Routes: RouteObject = {
   children: [
     { index: true, element: <OnboardingRoute /> },
     { path: 'onboarding/estudante', element: <StudentOnboardingRoute /> },
-    { path: 'credenciamento', element: <CreatorApplicationRoute /> },
+    { path: 'credenciamento', element: <CredenciamentoFlow /> },
     { path: 'entrar', element: <AuthRoute /> },
 
     { path: 'painel', element: <DashboardScreen /> },
