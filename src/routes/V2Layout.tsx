@@ -1,8 +1,11 @@
 import { Suspense, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { GamificationProvider } from '../contexts/GamificationContext';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
+import { ONBOARDING_ACTIVO } from '../lib/fluxoFlags';
+import { perfilService } from '../services/perfilService';
 
 /**
  * As telas novas (features/*) navegam por <a href="/v2/..."> simples, não por <Link>
@@ -44,6 +47,16 @@ function CarregarTela() {
 
 /** Entradas de /v2 que não precisam de sessão (onboarding, credenciamento e a entrada de demonstração). */
 const ROTAS_PUBLICAS = ['/v2/entrar', '/v2/onboarding', '/v2/credenciamento'];
+
+/**
+ * Quem acabou de se registar (aprendiz sem escola) e ainda não fez o onboarding vai para `/v2/onboarding`
+ * ao chegar ao painel. Só corre com o onboarding novo activo; sem ele não há consulta nenhuma.
+ */
+function GuardaOnboarding({ uid }: { uid: string }) {
+  const perfil = useQuery({ queryKey: ['perfil', uid], queryFn: () => perfilService.obter(uid), retry: false });
+  if (perfil.data && perfil.data.onboardingConcluidoEm === null) return <Navigate to="/v2/onboarding" replace />;
+  return null;
+}
 
 /** Moldura de /v2. O estado de gamificação arranca a zeros: os números reais vêm da API (`useGamificacaoMe`). */
 export default function V2Layout() {
@@ -88,6 +101,9 @@ export default function V2Layout() {
 
   return (
     <GamificationProvider>
+      {ONBOARDING_ACTIVO && pathname === '/v2/painel' && usuario?.tipo === 'aprendiz' && (usuario.memberships ?? []).length === 0 && (
+        <GuardaOnboarding uid={usuario.id} />
+      )}
       <Suspense fallback={<CarregarTela />}>
         <Outlet />
       </Suspense>
