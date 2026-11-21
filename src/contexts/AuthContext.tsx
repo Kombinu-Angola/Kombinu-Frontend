@@ -6,7 +6,7 @@ import type { Usuario } from '@/types';
 
 
 /** Resultado de um login que o ecrã consegue apresentar sem apanhar excepções. */
-export type ResultadoLogin = { ok: true; usuario: Usuario } | { ok: false; codigo: CodigoErroLogin };
+export type ResultadoLogin = { ok: true; usuario: Usuario } | { ok: false; codigo: CodigoErroLogin; esperaSegundos?: number };
 
 interface AuthContextType {
   usuario: Usuario | null;
@@ -76,7 +76,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('kombinu_usuario', JSON.stringify(user));
       return { ok: true, usuario: user };
     } catch (err) {
-      return { ok: false, codigo: err instanceof ErroLogin ? err.codigo : 'indisponivel' };
+      return err instanceof ErroLogin
+        ? { ok: false, codigo: err.codigo, esperaSegundos: err.esperaSegundos }
+        : { ok: false, codigo: 'indisponivel' };
     }
   };
 

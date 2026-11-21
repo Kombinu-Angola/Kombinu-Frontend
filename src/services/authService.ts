@@ -17,10 +17,13 @@ export type CodigoErroLogin = "credenciais" | "senha_temporaria_expirada" | "lim
 /** Falha de login já traduzida; `codigo` decide a mensagem mostrada ao utilizador. */
 export class ErroLogin extends Error {
   readonly codigo: CodigoErroLogin;
+  /** Só no `limite`: segundos até poder tentar de novo (do `Retry-After` ou do texto do backend). */
+  readonly esperaSegundos?: number;
 
-  constructor(codigo: CodigoErroLogin) {
+  constructor(codigo: CodigoErroLogin, esperaSegundos?: number) {
     super(codigo);
     this.codigo = codigo;
+    this.esperaSegundos = esperaSegundos;
   }
 }
 
@@ -44,7 +47,13 @@ function traduzirErroLogin(err: unknown): ErroLogin {
       const expirada = err.response.data?.code === "temp_password_expired";
       return new ErroLogin(expirada ? "senha_temporaria_expirada" : "credenciais");
     }
-    if (err.response?.status === 429) return new ErroLogin("limite");
+    if (err.response?.status === 429) {
+      // `Retry-After` só chega ao browser se o backend o expuser por CORS; o texto "dentro de N segundos" serve de reserva.
+      const cabecalho = Number(err.response.headers?.["retry-after"]);
+      const doTexto = Number(String(err.response.data?.detail ?? "").match(/(\d+)\s*segundo/i)?.[1]);
+      const espera = [cabecalho, doTexto].find((n) => Number.isFinite(n) && n > 0);
+      return new ErroLogin("limite", espera);
+    }
   }
   return new ErroLogin("indisponivel");
 }
