@@ -12,7 +12,6 @@ import { AppShell } from '../components/layout/AppShell';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { MOCK_COURSE } from '../features/course/mockCourse';
 
-import { MOCK_DRAFT } from '../features/studio/mockDraft';
 
 import { PURCHASES } from '../features/purchases/mockPurchases';
 
@@ -37,7 +36,6 @@ import { SESSIONS } from '../features/account/mockAccount';
 import { useAccoesEnquetes, useListaEnquetes, useResultadosEnquete } from '../hooks/useEnquetes';
 import { mensagemErroEnquete } from '../services/surveyService';
 
-import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
 
 // Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
 const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
@@ -52,7 +50,6 @@ const CourseScreen = lazy(() => import('../features/course/CourseScreen'));
 const Ranking = lazy(() => import('../pages/Ranking'));
 const StudentProfileScreen = lazy(() => import('../features/profile/StudentProfileScreen'));
 const MaterialDetailScreen = lazy(() => import('../features/marketplace/MaterialDetailScreen'));
-const StudioScreen = lazy(() => import('../features/studio/StudioScreen'));
 const ContaCriadorScreen = lazy(() => import('../features/subscription/ContaCriadorScreen'));
 const AdminEstudantesScreen = lazy(() => import('../features/admin/AdminEstudantesScreen'));
 const PurchaseHistoryScreen = lazy(() => import('../features/purchases/PurchaseHistoryScreen'));
@@ -76,8 +73,6 @@ const SurveyComposerScreen = lazy(() => import('../features/survey/SurveyCompose
 const SurveyResultsScreen = lazy(() => import('../features/survey/SurveyResultsScreen'));
 const SurveyListScreen = lazy(() => import('../features/survey/SurveyListScreen'));
 const CreationHubScreen = lazy(() => import('../features/authoring/CreationHubScreen'));
-const StudioOnboardingScreen = lazy(() => import('../features/authoring/StudioOnboardingScreen'));
-const TrailComposerScreen = lazy(() => import('../features/authoring/TrailComposerScreen'));
 
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 /** Entrega o nome do utilizador autenticado às telas que ainda o recebem por prop. */
@@ -277,20 +272,6 @@ function SimuladoRoute() {
   return <SimuladoFlow quizId={params.get('quizId')} />;
 }
 
-function StudioRoute() {
-  const { usuario } = useAuth();
-  return (
-    <StudioScreen
-      initialDraft={MOCK_DRAFT}
-      authorName={usuario?.nome ?? ''}
-      courseName={MOCK_COURSE.hero.title}
-      onSave={async () => {
-        /* Backend de rascunhos ainda nao existe; useDraft guarda so em memoria. */
-      }}
-    />
-  );
-}
-
 function StudentSettingsRoute() {
   return (
     <StudentSettingsScreen
@@ -405,7 +386,7 @@ export const v2Routes: RouteObject = {
     { path: 'medalhas', element: <EmBrevePagina area="aluno" nome="Medalhas" /> },
     { path: 'criador', element: <EmBrevePagina area="criador" nome="Perfil público" /> },
 
-    { path: 'estudio', element: <StudioRoute /> },
+    { path: 'estudio', element: <Navigate to="/v2/estudio/materiais" replace /> },
     { path: 'estudio/financeiro', element: <EmBrevePagina area="criador" nome="Financeiro" /> },
     { path: 'estudio/plano', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
     { path: 'estudio/definicoes', element: <ContaCriadorScreen /> },
@@ -474,29 +455,11 @@ export const v2Routes: RouteObject = {
 
     { path: 'admin/suporte', element: <EmBrevePagina area="admin" nome="Suporte e disputas" /> },
 
-    { path: 'estudio/criar', element: <ComUtilizador>{(nome) => <CreationHubScreen creatorName={nome} questionCount={QUESTIONS.length} draftCount={2} />}</ComUtilizador> },
-    {
-      path: 'estudio/comecar',
-      element: (
-        <ComUtilizador>
-          {(nome) => (
-        <StudioOnboardingScreen
-          creatorName={nome}
-          university="UAN · Faculdade de Ciências"
-          steps={[
-            { id: 's1', label: 'Credenciais homologadas', detail: 'Aprovado pela equipa de auditoria.', done: true, href: '/v2/estudio/homologacao' },
-            { id: 's2', label: 'Publicar o primeiro material', detail: 'Começa por um modelo e adapta o conteúdo.', done: false, href: '/v2/estudio/criar' },
-            { id: 's3', label: 'Definir preço e visibilidade', detail: 'Entre 1.000 e 2.500 Kz na tua cadeira.', done: false, href: '/v2/estudio/materiais' },
-            { id: 's4', label: 'Confirmar o Multicaixa Express', detail: 'Teste de 1 Kz para validar a titularidade.', done: false, href: '/v2/estudio/financeiro' },
-          ]}
-        />
-          )}
-        </ComUtilizador>
-      ),
-    },
+    { path: 'estudio/criar', element: <ComUtilizador>{(nome) => <CreationHubScreen creatorName={nome} />}</ComUtilizador> },
+    { path: 'estudio/comecar', element: <EmBrevePagina area="criador" nome="Primeiros passos do estúdio" /> },
     { path: 'estudio/questoes', element: <EmBrevePagina area="criador" nome="Banco de questões" /> },
     { path: 'estudio/simulado', element: <EmBrevePagina area="criador" nome="Construtor de simulado" /> },
-    { path: 'estudio/trilha', element: <ComUtilizador>{(nome) => <TrailComposerScreen topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I" readersOnCurrent={83} />}</ComUtilizador> },
+    { path: 'estudio/trilha', element: <EmBrevePagina area="criador" nome="Compositor de trilha" /> },
     { path: 'estudio/importar', element: <EmBrevePagina area="criador" nome="Importação em massa" /> },
     { path: 'estudio/versoes', element: <EmBrevePagina area="criador" nome="Histórico de versões" /> },
 
