@@ -17,7 +17,7 @@ const FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "Como entro na minha conta?",
-    a: "Com o teu número de telemóvel. Recebes um código de 6 dígitos no WhatsApp e não precisas de palavra-passe.",
+    a: "Com o teu e-mail e a tua palavra-passe, ou com o código da tua escola, na página Entrar.",
   },
   {
     q: "Os resumos são legais?",
@@ -37,7 +37,7 @@ export function PasseFaq({ p }: { p: PasseLandingState }) {
           <h2 className={cx(styles.h2, styles.rv)} id="faq-h">
             Perguntas antes de comprar.
           </h2>
-          <p className={cx(styles.lead, styles.rv, styles["rv-2"])}>Não encontras a tua dúvida? Escreve-nos pelo WhatsApp depois de entrares.</p>
+          <p className={cx(styles.lead, styles.rv, styles["rv-2"])}>Não encontras a tua dúvida? Escreve-nos para suporte@kombinu.co.ao.</p>
         </div>
         <div className={styles["faq-list"]}>
           {FAQS.map((item, i) => {
