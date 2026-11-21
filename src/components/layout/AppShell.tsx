@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
-import { DataSaverBadge } from "../ui/DataSaverBadge";
 import { NotificationBell } from "./NotificationBell";
 import { OfensivaChip } from "./OfensivaChip";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
@@ -116,10 +115,7 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-4">
-            <DataSaverBadge megabytesToday={1.2} />
-            <p className="text-caption text-text-tertiary">© {new Date().getFullYear()} Kombinu</p>
-          </div>
+          <p className="text-caption text-text-tertiary">© {new Date().getFullYear()} Kombinu</p>
         </div>
       </footer>
 

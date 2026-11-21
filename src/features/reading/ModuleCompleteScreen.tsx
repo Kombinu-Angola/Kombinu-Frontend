@@ -1,7 +1,6 @@
 import { Asset3D } from "../../components/ui/Asset3D";
 import { Avatar } from "../../components/ui/Avatar";
 import { Button3D } from "../../components/ui/Button3D";
-import { DataSaverBadge } from "../../components/ui/DataSaverBadge";
 import { Icon } from "../../components/ui/Icon";
 import { useFocusOnMount } from "../../hooks/useFocusOnMount";
 import { useGamification } from "../../contexts/GamificationContext";
@@ -146,8 +145,6 @@ export default function ModuleCompleteScreen({ article, result, gemsEarned, onNe
             </a>
           </noscript>
         </div>
-
-        <DataSaverBadge megabytesToday={1.2} />
       </main>
     </div>
   );
