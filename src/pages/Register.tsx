@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Field, AuthLayout, EmailField, FormAlert, PasswordField, PrimaryButton, linkClass } from '../features/auth-novo/ui';
 import { UserIcon } from '../features/auth-novo/icons';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
+import { ErroRegisto } from '../services/authService';
 import { validarEmail } from '../utils/helpers';
 
 type Tipo = 'criador' | 'aprendiz';
@@ -30,7 +31,7 @@ export default function Register() {
   const confirmarRef = useRef<HTMLInputElement>(null);
   const termosRef = useRef<HTMLInputElement>(null);
 
-  const { register, clearError, error: authError } = useAuth();
+  const { register, clearError } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -40,7 +41,7 @@ export default function Register() {
     const proximos: Erros = {};
     if (nome.trim().split(/\s+/).filter(Boolean).length < 2) proximos.nome = 'Escreve o teu nome e apelido.';
     if (!validarEmail(email.trim())) proximos.email = 'Introduz um e-mail válido (ex.: teu@email.com).';
-    if (senha.length < 6) proximos.senha = 'A palavra-passe deve ter pelo menos 6 caracteres.';
+    if (senha.length < 8) proximos.senha = 'A palavra-passe deve ter pelo menos 8 caracteres.';
     else if (senha !== confirmarSenha) proximos.confirmar = 'As palavras-passe não coincidem.';
     if (!aceito) proximos.termos = 'Precisas de aceitar os Termos e a Política de Privacidade.';
     setErros(proximos);
@@ -56,10 +57,18 @@ export default function Register() {
       if (sucesso) {
         navigate(destinoPorPapel({ tipo }));
       } else {
-        setErros({ form: authError?.message ?? 'Este e-mail já está registado ou o servidor não respondeu.' });
+        setErros({ form: 'Não foi possível criar a conta. Tenta novamente.' });
       }
-    } catch {
-      setErros({ form: authError?.message ?? 'Não foi possível criar a conta. Tenta novamente.' });
+    } catch (err) {
+      if (err instanceof ErroRegisto) {
+        const { nome: msgNome, email: msgEmail, senha: msgSenha, geral } = err.campos;
+        setErros({ nome: msgNome, email: msgEmail, senha: msgSenha, form: geral });
+        if (msgNome) nomeRef.current?.focus();
+        else if (msgEmail) emailRef.current?.focus();
+        else if (msgSenha) senhaRef.current?.focus();
+      } else {
+        setErros({ form: 'Não foi possível criar a conta. Tenta novamente.' });
+      }
     } finally {
       setCarregando(false);
     }
@@ -112,7 +121,7 @@ export default function Register() {
           ref={senhaRef}
           label="Palavra-passe"
           autoComplete="new-password"
-          hint="Pelo menos 6 caracteres."
+          hint="Pelo menos 8 caracteres, não demasiado comum."
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
           error={erros.senha}
