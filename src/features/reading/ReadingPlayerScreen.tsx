@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Avatar } from "../../components/ui/Avatar";
 import { Button3D } from "../../components/ui/Button3D";
-import { DataSaverBadge } from "../../components/ui/DataSaverBadge";
 import { Icon } from "../../components/ui/Icon";
 import { Pill } from "../../components/ui/Pill";
 import { cn } from "@/lib/utils";
@@ -179,9 +178,6 @@ export default function ReadingPlayerScreen({
         </article>
       </main>
 
-      <div className="flex justify-center pb-8">
-        <DataSaverBadge megabytesToday={1.2} />
-      </div>
     </div>
   );
 }

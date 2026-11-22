@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { DataSaverBadge } from "../../components/ui/DataSaverBadge";
 import { Icon } from "../../components/ui/Icon";
 import { SegmentedProgress } from "../../components/ui/SegmentedProgress";
 import { XpBadge } from "../../components/ui/XpBadge";
@@ -51,7 +50,6 @@ export function OnboardingShell({ stepIndex, onBack, backLabel = "Voltar ao pass
         </header>
         {children}
       </main>
-      <DataSaverBadge megabytesToday={1.2} />
     </div>
   );
 }
