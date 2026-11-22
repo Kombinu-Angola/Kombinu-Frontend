@@ -13,7 +13,6 @@ import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { MOCK_COURSE } from '../features/course/mockCourse';
 
 import { MOCK_DRAFT } from '../features/studio/mockDraft';
-import type { AccountSettings } from '../features/subscription/AccountSettingsScreen';
 
 import { PURCHASES } from '../features/purchases/mockPurchases';
 
@@ -54,8 +53,7 @@ const Ranking = lazy(() => import('../pages/Ranking'));
 const StudentProfileScreen = lazy(() => import('../features/profile/StudentProfileScreen'));
 const MaterialDetailScreen = lazy(() => import('../features/marketplace/MaterialDetailScreen'));
 const StudioScreen = lazy(() => import('../features/studio/StudioScreen'));
-const SubscriptionFlow = lazy(() => import('../features/subscription/SubscriptionFlow'));
-const AccountSettingsScreen = lazy(() => import('../features/subscription/AccountSettingsScreen'));
+const ContaCriadorScreen = lazy(() => import('../features/subscription/ContaCriadorScreen'));
 const AdminEstudantesScreen = lazy(() => import('../features/admin/AdminEstudantesScreen'));
 const PurchaseHistoryScreen = lazy(() => import('../features/purchases/PurchaseHistoryScreen'));
 const CreatorContentHubScreen = lazy(() => import('../features/creator-content/CreatorContentHubScreen'));
@@ -64,7 +62,6 @@ const PhoneSecurityScreen = lazy(() => import('../features/account/PhoneSecurity
 const LearningTrailScreen = lazy(() => import('../features/trail/LearningTrailScreen'));
 const AdaptiveTrailScreen = lazy(() => import('../features/trail/AdaptiveTrailScreen'));
 const HomologationResultScreen = lazy(() => import('../features/creator/HomologationResultScreen'));
-const RenewalFailureScreen = lazy(() => import('../features/subscription/RenewalFailureScreen'));
 const SessionExpiredScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.SessionExpiredScreen })));
 const NotFoundScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.NotFoundScreen })));
 const NotificationCenterScreen = lazy(() => import('../features/notifications/NotificationCenterScreen'));
@@ -294,24 +291,6 @@ function StudioRoute() {
   );
 }
 
-const DEMO_SETTINGS: AccountSettings = {
-  name: '',
-  institution: 'uan-economia',
-  bio: 'Explico Economia e Macroeconomia de forma simples, com sebentas revistas e simulados semanais.',
-  phone: '923000302',
-  phoneVerified: true,
-  plan: 'pro',
-  planPriceKz: 5000,
-  renewsAt: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString(),
-  notifications: { streak: true, questions: true, sales: true },
-};
-
-function AccountSettingsRoute() {
-  const navigate = useNavigate();
-  const { usuario } = useAuth();
-  return <AccountSettingsScreen settings={{ ...DEMO_SETTINGS, name: usuario?.nome ?? '' }} onChangePlan={() => navigate('/v2/estudio/plano')} />;
-}
-
 function StudentSettingsRoute() {
   return (
     <StudentSettingsScreen
@@ -361,26 +340,6 @@ const HOMOLOGATION_CORRECAO: HomologationResult = {
   required: ['Declaração institucional com a validade legível, em PDF ou fotografia nítida.'],
 };
 
-function RenewalFailureRoute() {
-  const navigate = useNavigate();
-  const { usuario } = useAuth();
-  return (
-    <RenewalFailureScreen
-      creatorName={usuario?.nome ?? ''}
-      priceKz={5000}
-      phone="923891024"
-      failedAt={new Date(Date.now() - 2 * 86_400_000).toISOString()}
-      graceEndsAt={new Date(Date.now() + 5 * 86_400_000).toISOString()}
-      authorize={async () => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        return { reference: 'EXP-2026-9014', approvedAt: new Date().toISOString() };
-      }}
-      onDowngrade={() => navigate('/v2/estudio/definicoes')}
-      changePhoneHref="/v2/conta/telemovel"
-    />
-  );
-}
-
 function SessionExpiredRoute() {
   const navigate = useNavigate();
   return (
@@ -412,21 +371,6 @@ function NotFoundRoute() {
         { label: 'Marketplace de sebentas', href: '/v2/marketplace' },
         { label: 'Biblioteca livre', href: '/v2/biblioteca-livre' },
       ]}
-    />
-  );
-}
-
-function SubscriptionRoute() {
-  const { usuario } = useAuth();
-  return (
-    <SubscriptionFlow
-      creatorName={usuario?.nome ?? ''}
-      currentPlan="free"
-      studioHref="/v2/estudio"
-      authorize={async (_phone, _amountKz) => {
-        await new Promise((resolve) => setTimeout(resolve, 2500));
-        return { reference: `EXP-${Date.now()}`, approvedAt: new Date().toISOString() };
-      }}
     />
   );
 }
@@ -463,8 +407,8 @@ export const v2Routes: RouteObject = {
 
     { path: 'estudio', element: <StudioRoute /> },
     { path: 'estudio/financeiro', element: <EmBrevePagina area="criador" nome="Financeiro" /> },
-    { path: 'estudio/plano', element: <SubscriptionRoute /> },
-    { path: 'estudio/definicoes', element: <AccountSettingsRoute /> },
+    { path: 'estudio/plano', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
+    { path: 'estudio/definicoes', element: <ContaCriadorScreen /> },
 
     { path: 'admin', element: <EmBrevePagina area="admin" nome="Visão executiva" /> },
     { path: 'admin/estudantes', element: <Navigate to="/v2/admin/membros" replace /> },
@@ -486,7 +430,7 @@ export const v2Routes: RouteObject = {
     { path: 'trilha/mista', element: <ComUtilizador>{(nome) => <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={nome} diagnosticHref="/v2/painel" />}</ComUtilizador> },
     { path: 'estudio/homologacao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_APROVADO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
     { path: 'estudio/homologacao/correcao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_CORRECAO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
-    { path: 'estudio/renovacao', element: <RenewalFailureRoute /> },
+    { path: 'estudio/renovacao', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
 
     { path: 'offline', element: <EmBrevePagina area="aluno" nome="Estudo offline" /> },
     { path: 'sessao-expirada', element: <SessionExpiredRoute /> },
