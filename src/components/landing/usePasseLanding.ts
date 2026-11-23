@@ -28,7 +28,6 @@ export function usePasseLanding() {
   const [cadBump, setCadBump] = useState(false);
   const [pay, setPay] = useState<PassePayMethod>("enc");
   const [typed, setTyped] = useState(9999);
-  const [otpSent, setOtpSent] = useState(false);
   const [offline, setOffline] = useState(true);
   const [faq, setFaq] = useState(0);
   const [anchor, setAnchor] = useState(600);
@@ -335,8 +334,6 @@ export function usePasseLanding() {
     todayQ: q,
     todayLabel,
 
-    otpSent,
-    sendOtp: () => setOtpSent(true),
 
     offline,
     toggleOffline: () => setOffline((v) => !v),

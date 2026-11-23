@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Asset3D } from "../../components/ui/Asset3D";
 import { Button3D } from "../../components/ui/Button3D";
-import { DataSaverBadge } from "../../components/ui/DataSaverBadge";
 import { FieldError } from "../../components/ui/Field";
 import { Icon } from "../../components/ui/Icon";
 import { OtpInput } from "../../components/ui/OtpInput";
@@ -247,8 +246,6 @@ export default function AuthScreen({
           Ligação encriptada. A autenticação consome poucos kilobytes.
         </p>
       </main>
-
-      <DataSaverBadge megabytesToday={1.2} />
     </div>
   );
 }
