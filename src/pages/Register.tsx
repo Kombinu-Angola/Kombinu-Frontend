@@ -72,7 +72,8 @@ export default function Register() {
         marketingOptIn: marketing,
       });
       if (sucesso) {
-        navigate(destinoPorPapel({ tipo }));
+        // Quem se regista como criador segue para o credenciamento; o aprendiz, para o seu ecrã.
+        navigate(tipo === 'criador' ? '/v2/credenciamento' : destinoPorPapel({ tipo }));
       } else {
         setErros({ form: 'Não foi possível criar a conta. Tenta novamente.' });
       }

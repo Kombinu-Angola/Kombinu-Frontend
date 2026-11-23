@@ -38,7 +38,6 @@ import { mensagemErroEnquete } from '../services/surveyService';
 
 
 // Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
-const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
 const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
 const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
 const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
@@ -81,17 +80,15 @@ function ComUtilizador({ children }: { children: (nome: string) => ReactNode }) 
   return <>{children(usuario?.nome ?? '')}</>;
 }
 
-function OnboardingRoute() {
-  const navigate = useNavigate();
+/**
+ * Entrada de `/v2`: já não pergunta "estudante ou criador" (o onboarding vive depois do registo).
+ * Com sessão, leva ao ecrã do papel (admin: membros, professor: estúdio, estudante: painel); sem sessão, ao login.
+ */
+function EntradaV2Route() {
   const { usuario, loading } = useAuth();
-  // Com sessão iniciada, `/v2` leva ao ecrã do papel (admin: membros, professor: estúdio, estudante: painel), sem Onboarding.
   if (loading) return null;
   if (usuario) return <Navigate to={destinoPorPapel(usuario)} replace />;
-  return (
-    <OnboardingRoleScreen
-      onSelectRole={(role) => navigate(role === 'creator' ? '/v2/credenciamento' : '/v2/onboarding/estudante')}
-    />
-  );
+  return <Navigate to="/login" replace />;
 }
 
 function StudentOnboardingRoute() {
@@ -366,7 +363,7 @@ export const v2Routes: RouteObject = {
   path: 'v2',
   element: <V2Layout />,
   children: [
-    { index: true, element: <OnboardingRoute /> },
+    { index: true, element: <EntradaV2Route /> },
     { path: 'onboarding/estudante', element: <StudentOnboardingRoute /> },
     { path: 'credenciamento', element: <CreatorApplicationRoute /> },
     { path: 'entrar', element: <AuthRoute /> },
