@@ -95,8 +95,24 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
         )}
       >
         <div>
-          <div className="flex h-16 items-center border-b-2 border-border-cloud px-5">
-            <a href="/v2/estudio" aria-label="Kombinu Estúdio" className="flex items-center">
+          <div className="flex h-16 items-center gap-2 border-b-2 border-border-cloud px-3">
+            <button
+              type="button"
+              onClick={alternarFixo}
+              aria-pressed={pinned}
+              aria-label={pinned ? "Recolher o menu" : "Manter o menu aberto"}
+              className="flex size-12 shrink-0 items-center justify-center rounded-xl text-text-secondary transition-[background-color] duration-150 hover:bg-surface-soft"
+            >
+              <Icon name="menu" size={22} />
+            </button>
+            <a
+              href="/v2/estudio"
+              aria-label="Kombinu Estúdio"
+              className={cn(
+                "flex items-center transition-opacity duration-150 motion-reduce:transition-none",
+                pinned ? "opacity-100" : "opacity-0 group-hover/rail:opacity-100 group-focus-within/rail:opacity-100",
+              )}
+            >
               <LogoMark />
             </a>
           </div>
