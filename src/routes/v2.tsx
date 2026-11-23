@@ -17,7 +17,6 @@ import { PURCHASES } from '../features/purchases/mockPurchases';
 
 import { MOCK_ACCOUNT } from '../features/account/mockAccount';
 import { MOCK_TRAIL, MOCK_ADAPTIVE } from '../features/trail/mockTrail';
-import type { HomologationResult } from '../features/creator/HomologationResultScreen';
 
 import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
 import { useEffect, useMemo } from 'react';
@@ -59,7 +58,6 @@ const StudentSettingsScreen = lazy(() => import('../features/account/StudentSett
 const PhoneSecurityScreen = lazy(() => import('../features/account/PhoneSecurityScreen'));
 const LearningTrailScreen = lazy(() => import('../features/trail/LearningTrailScreen'));
 const AdaptiveTrailScreen = lazy(() => import('../features/trail/AdaptiveTrailScreen'));
-const HomologationResultScreen = lazy(() => import('../features/creator/HomologationResultScreen'));
 const SessionExpiredScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.SessionExpiredScreen })));
 const NotFoundScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.NotFoundScreen })));
 const NotificationCenterScreen = lazy(() => import('../features/notifications/NotificationCenterScreen'));
@@ -290,30 +288,6 @@ function PhoneSecurityRoute() {
   );
 }
 
-const HOMOLOGATION_CREATOR = {
-  name: '',
-  university: 'Universidade Agostinho Neto (UAN)',
-  faculty: 'Faculdade de Ciências',
-  specialty: 'Estruturas de Dados',
-  phone: '923456789',
-};
-
-const HOMOLOGATION_APROVADO: HomologationResult = {
-  status: 'aprovado',
-  protocol: 'PROT-CRE-2026-8942',
-  decidedAt: new Date().toISOString(),
-  creator: HOMOLOGATION_CREATOR,
-};
-
-const HOMOLOGATION_CORRECAO: HomologationResult = {
-  status: 'correcao',
-  protocol: 'PROT-CRE-2026-8944',
-  decidedAt: new Date(Date.now() - 86_400_000).toISOString(),
-  creator: HOMOLOGATION_CREATOR,
-  feedback:
-    'A declaração enviada tem a data de validade ilegível no canto inferior direito. A amostra está aprovada.',
-  required: ['Declaração institucional com a validade legível, em PDF ou fotografia nítida.'],
-};
 
 function SessionExpiredRoute() {
   const navigate = useNavigate();
@@ -404,8 +378,8 @@ export const v2Routes: RouteObject = {
     { path: 'conta/telemovel', element: <PhoneSecurityRoute /> },
     { path: 'trilha', element: <ComUtilizador>{(nome) => <LearningTrailScreen trail={MOCK_TRAIL} userName={nome} backHref="/v2/cadeira" />}</ComUtilizador> },
     { path: 'trilha/mista', element: <ComUtilizador>{(nome) => <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={nome} diagnosticHref="/v2/painel" />}</ComUtilizador> },
-    { path: 'estudio/homologacao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_APROVADO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
-    { path: 'estudio/homologacao/correcao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_CORRECAO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
+    { path: 'estudio/homologacao', element: <EmBrevePagina area="criador" nome="Homologação" /> },
+    { path: 'estudio/homologacao/correcao', element: <EmBrevePagina area="criador" nome="Homologação" /> },
     { path: 'estudio/renovacao', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
 
     { path: 'offline', element: <EmBrevePagina area="aluno" nome="Estudo offline" /> },
