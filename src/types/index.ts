@@ -13,6 +13,12 @@ export interface RegisterData {
   email: string;
   senha: string;
   tipo: 'criador' | 'aprendiz';
+  /** Ano em que nasceu (a API calcula a idade e o consentimento do encarregado). */
+  anoNascimento: number;
+  /** Aceitação dos Termos e da Política de Privacidade; a API exige `true`. */
+  aceitaTermos: true;
+  /** Receber dicas e novidades por e-mail (opcional; omisso = não). */
+  marketingOptIn?: boolean;
 }
 /** Pertença activa a uma organização (escola); `organizacaoId` é o UUID enviado em `X-Workspace`. */
 export interface Membership {

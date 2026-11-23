@@ -1,13 +1,13 @@
 import { Fragment, useCallback, useEffect, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion, useScroll } from "motion/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PRIVACIDADE } from "./data/privacidade";
 import { TERMOS } from "./data/termos";
 import type { Block, LegalDoc, Section, SummaryItem } from "./data/types";
 import { EASE_OUT } from "@/components/fluxo/motion";
 import { BottomSheet } from "@/components/fluxo/BottomSheet";
 import {
-  AlertIcon, ArrowRightIcon, ArrowUpIcon, BoltIcon, CheckIcon, ListIcon, LockIcon, MailIcon, PrinterIcon,
+  AlertIcon, ArrowRightIcon, ArrowUpIcon, BoltIcon, CheckIcon, ChevronLeftIcon, ListIcon, LockIcon, MailIcon, PrinterIcon,
   RefreshIcon, ScaleIcon, ShieldIcon, SparkIcon, StoreIcon, UserIcon, UsersIcon, WalletIcon,
 } from "@/components/fluxo/icons";
 import { Logo, ScreenTitle } from "@/components/fluxo/layout";
@@ -17,12 +17,12 @@ export const PrivacyScreen = () => <LegalPage doc={PRIVACIDADE} />;
 
 const CONTACTS: Record<LegalDoc["slug"], { label: string; email: string }[]> = {
   termos: [
-    { label: "Suporte e reembolsos", email: "suporte@kombinu.co.ao" },
-    { label: "Assuntos jurídicos e denúncias", email: "juridico@kombinu.co.ao" },
+    { label: "Suporte e reembolsos", email: "suporte@kombinu.com" },
+    { label: "Assuntos jurídicos e denúncias", email: "juridico@kombinu.com" },
   ],
   privacidade: [
-    { label: "Exercer os teus direitos", email: "privacidade@kombinu.co.ao" },
-    { label: "Suporte geral", email: "suporte@kombinu.co.ao" },
+    { label: "Exercer os teus direitos", email: "privacidade@kombinu.com" },
+    { label: "Suporte geral", email: "suporte@kombinu.com" },
   ],
 };
 
@@ -167,6 +167,10 @@ function LegalPage({ doc }: { doc: LegalDoc }) {
 
 function LegalHeader({ slug }: { slug: LegalDoc["slug"] }) {
   const { scrollYProgress } = useScroll();
+  const navigate = useNavigate();
+  const { key } = useLocation();
+  // Com histórico da app volta ao sítio de onde veio; aberto directamente (link externo), vai ao início.
+  const voltar = () => (key !== "default" ? navigate(-1) : navigate("/"));
   const tabs = [
     { slug: "termos", label: "Termos" },
     { slug: "privacidade", label: "Privacidade" },
@@ -174,6 +178,10 @@ function LegalHeader({ slug }: { slug: LegalDoc["slug"] }) {
   return (
     <header className="sticky top-0 z-30 border-b border-neutral-100 bg-white/90 pt-[env(safe-area-inset-top)] backdrop-blur print:static print:border-0">
       <div className="mx-auto flex h-16 w-full max-w-[1120px] items-center gap-3 px-5">
+        <button type="button" onClick={voltar} aria-label="Voltar"
+          className="-ml-2 grid size-11 shrink-0 place-items-center rounded-xl text-neutral-600 hover:bg-kombinu-surface hover:text-kombinu-ink focus-ring print:hidden">
+          <ChevronLeftIcon className="size-6" />
+        </button>
         <Link to="/" className="rounded-md focus-ring" aria-label="Kombinu — início"><Logo size="sm" /></Link>
         <nav aria-label="Documentos legais" className="ml-auto grid h-11 grid-cols-2 rounded-2xl bg-kombinu-surface p-1 print:hidden">
           {tabs.map((t) => {
