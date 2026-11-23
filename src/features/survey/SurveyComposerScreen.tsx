@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { CreatorShell } from "../../components/layout/CreatorShell";
 import { Button3D } from "../../components/ui/Button3D";
-import { SelectField } from "../../components/ui/Field";
+import { SelectField, TextField } from "../../components/ui/Field";
 import { Icon } from "../../components/ui/Icon";
 import { useToast } from "../../components/ui/Toast";
 import { cn } from "@/lib/utils";
@@ -25,34 +25,19 @@ const TRIGGERS: ReadonlyArray<{ value: SurveyTrigger; label: string }> = [
   { value: "fim-modulo", label: "Ao concluir um módulo da trilha" },
 ];
 
-const FACULTIES = [
-  { value: "uan-economia", label: "UAN — Faculdade de Economia" },
-  { value: "uan-engenharia", label: "UAN — Faculdade de Engenharia" },
-  { value: "todas", label: "Todas as faculdades onde publico" },
-];
-
-const SUBJECTS = [
-  { value: "macro1", label: "Macroeconomia I" },
-  { value: "macro2", label: "Macroeconomia II" },
-  { value: "todas", label: "Todas as minhas cadeiras" },
-];
-
 /** Ponto de partida do compositor; `segmentSize` só alimenta a estimativa de recolha. */
 const EMPTY_DRAFT: SurveyDraft = {
   decision: "",
   kind: "escala",
   question: "",
   options: KINDS[0].options,
-  faculty: "todas",
-  subject: "todas",
+  faculty: "",
+  subject: "",
   trigger: "fim-simulado",
   sampleTarget: 120,
   segmentSize: 540,
 };
 
-/** O servidor guarda texto livre: a escolha "todas" fica em branco e as restantes seguem com o rótulo. */
-const rotulo = (lista: ReadonlyArray<{ value: string; label: string }>, value: string) =>
-  value === "todas" ? "" : (lista.find((item) => item.value === value)?.label ?? "");
 
 type SurveyComposerScreenProps = {
   creatorName: string;
@@ -91,8 +76,8 @@ export default function SurveyComposerScreen({ creatorName, onSaveDraft, onPubli
 
   const paraEnviar = (): SurveyDraft => ({
     ...draft,
-    faculty: rotulo(FACULTIES, draft.faculty),
-    subject: rotulo(SUBJECTS, draft.subject),
+    faculty: draft.faculty.trim(),
+    subject: draft.subject.trim(),
   });
 
   const guardar = async () => {
@@ -274,7 +259,7 @@ export default function SurveyComposerScreen({ creatorName, onSaveDraft, onPubli
                           id={`opt-${index}`}
                           value={option}
                           onChange={(e) => update({ options: draft.options.map((o, i) => (i === index ? e.target.value : o)) })}
-                          className="min-h-11 flex-1 rounded-lg border-2 border-border-input bg-surface-canvas px-3 text-body-md text-on-surface"
+                          className="min-h-11 min-w-0 flex-1 rounded-lg border-2 border-border-input bg-surface-canvas px-3 text-body-md text-on-surface"
                         />
                         {draft.options.length > 2 && (
                           <button
@@ -309,8 +294,8 @@ export default function SurveyComposerScreen({ creatorName, onSaveDraft, onPubli
               </h2>
 
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <SelectField id="survey-faculty" label="Faculdade" options={FACULTIES} value={draft.faculty} onChange={(e) => update({ faculty: e.target.value })} />
-                <SelectField id="survey-subject" label="Cadeira" options={SUBJECTS} value={draft.subject} onChange={(e) => update({ subject: e.target.value })} />
+                <TextField id="survey-faculty" label="Faculdade (opcional)" hint="Em branco: aparece em todas." maxLength={80} value={draft.faculty} onChange={(e) => update({ faculty: e.target.value })} />
+                <TextField id="survey-subject" label="Cadeira (opcional)" hint="Em branco: aparece em todas." maxLength={80} value={draft.subject} onChange={(e) => update({ subject: e.target.value })} />
                 <div className="md:col-span-2">
                   <SelectField
                     id="survey-trigger"

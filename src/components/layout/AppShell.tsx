@@ -1,23 +1,21 @@
 import type { ReactNode } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useGamification } from "../../contexts/GamificationContext";
-import { formatInt } from "../../lib/format";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
-import { DataSaverBadge } from "../ui/DataSaverBadge";
 import { NotificationBell } from "./NotificationBell";
+import { OfensivaChip } from "./OfensivaChip";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
 
 export type AppSection = "trilhas" | "simulados" | "ligas" | "sebentas" | "biblioteca" | "painel";
 
+// Ligas e Biblioteca não têm API: saem do menu até existirem. Ofensiva e gemas ficam escondidas até sair `GET /api/rankings/me/` (nunca com valores fixos).
+
 const NAV: ReadonlyArray<{ id: AppSection; label: string; href: string; icon: IconName }> = [
   { id: "trilhas", label: "Trilhas", href: "/v2/trilhas", icon: "book" },
   { id: "simulados", label: "Simulados", href: "/v2/desafio", icon: "bolt" },
-  { id: "ligas", label: "Ligas", href: "/v2/ligas", icon: "trophy" },
   { id: "sebentas", label: "Sebentas", href: "/v2/marketplace", icon: "bag" },
-  { id: "biblioteca", label: "Biblioteca", href: "/v2/biblioteca", icon: "file" },
 ];
 
 type AppShellProps = {
@@ -33,10 +31,9 @@ type AppShellProps = {
 
 /**
  * Moldura da app com sessão iniciada: navegação em pílula no desktop, barra de separadores
- * fixa no telemóvel (polegar), sequência e gemas sempre visíveis, rodapé e selo de dados.
+ * fixa no telemóvel (polegar), ofensiva real sempre visível (sem gemas), rodapé e selo de dados.
  */
 export function AppShell({ active, campus, headerSlot, children }: AppShellProps) {
-  const { streakDays, gems } = useGamification();
   const { usuario } = useAuth();
   const nomeUtilizador = usuario?.nome;
 
@@ -86,17 +83,8 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
 
           <div className="flex items-center gap-3 sm:gap-5">
             {headerSlot}
+            <OfensivaChip />
             <WorkspaceSwitcher />
-            <p className="flex items-center gap-1.5 text-body-lg font-bold text-feedback-streak-ink tabular-nums">
-              <Icon name="flame" size={20} className="text-feedback-streak" />
-              <span aria-hidden="true">{streakDays}</span>
-              <span className="sr-only">Sequência de {streakDays} dias</span>
-            </p>
-            <p className="flex items-center gap-1.5 text-body-lg font-bold text-feedback-gem-ink tabular-nums">
-              <Icon name="gem" size={20} />
-              <span aria-hidden="true">{formatInt(gems)}</span>
-              <span className="sr-only">{formatInt(gems)} gemas</span>
-            </p>
             <NotificationBell />
             {nomeUtilizador && (
               <a href="/v2/painel" aria-label={`Painel e perfil de ${nomeUtilizador}`} className="relative rounded-full">
@@ -127,10 +115,7 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-4">
-            <DataSaverBadge megabytesToday={1.2} />
-            <p className="text-caption text-text-tertiary">© {new Date().getFullYear()} Kombinu</p>
-          </div>
+          <p className="text-caption text-text-tertiary">© {new Date().getFullYear()} Kombinu</p>
         </div>
       </footer>
 

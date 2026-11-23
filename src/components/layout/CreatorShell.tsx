@@ -11,9 +11,7 @@ export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" 
 
 const NAV: ReadonlyArray<{ id: CreatorSection; label: string; href: string; icon: IconName; hint: string }> = [
   { id: "estudio", label: "Estúdio de criação", href: "/v2/estudio/criar", icon: "edit", hint: "Criar artigo, simulado ou trilha" },
-  { id: "materiais", label: "Os meus materiais", href: "/v2/estudio/materiais", icon: "file", hint: "Preço, visibilidade e vendas" },
-  { id: "financeiro", label: "Financeiro e vendas", href: "/v2/estudio/financeiro", icon: "wallet", hint: "Saldo, levantamentos e histórico" },
-  { id: "publico", label: "Perfil público", href: "/v2/criador", icon: "users", hint: "Como os estudantes te veem" },
+  { id: "materiais", label: "Os meus materiais", href: "/v2/estudio/materiais", icon: "file", hint: "Os teus conteúdos e simulados" },
   { id: "definicoes", label: "Conta e subscrição", href: "/v2/estudio/definicoes", icon: "gear", hint: "Perfil, notificações e plano" },
 ];
 
@@ -143,7 +141,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
               </a>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
               {actions}
               <WorkspaceSwitcher />
               <a
@@ -153,7 +151,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
                 <Icon name="refresh" size={18} />
                 Modo estudante
               </a>
-              <a href="/v2/criador" aria-label={`Perfil público de ${creatorName}`} className="rounded-full">
+              <a href="/v2/estudio/materiais" aria-label={`Os materiais de ${creatorName}`} className="rounded-full">
                 <Avatar name={creatorName} />
               </a>
             </div>

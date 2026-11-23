@@ -17,10 +17,13 @@ export type CodigoErroLogin = "credenciais" | "senha_temporaria_expirada" | "lim
 /** Falha de login já traduzida; `codigo` decide a mensagem mostrada ao utilizador. */
 export class ErroLogin extends Error {
   readonly codigo: CodigoErroLogin;
+  /** Só no `limite`: segundos até poder tentar de novo (do `Retry-After` ou do texto do backend). */
+  readonly esperaSegundos?: number;
 
-  constructor(codigo: CodigoErroLogin) {
+  constructor(codigo: CodigoErroLogin, esperaSegundos?: number) {
     super(codigo);
     this.codigo = codigo;
+    this.esperaSegundos = esperaSegundos;
   }
 }
 
@@ -36,6 +39,49 @@ export class ErroTrocaSenha extends Error {
   }
 }
 
+export type CamposRegisto = Partial<Record<"nome" | "email" | "senha" | "geral", string>>;
+
+/** Registo recusado pelo backend: traz a mensagem de cada campo, já em português. */
+export class ErroRegisto extends Error {
+  readonly campos: CamposRegisto;
+
+  constructor(campos: CamposRegisto) {
+    super(Object.values(campos)[0] ?? "Registo recusado");
+    this.campos = campos;
+  }
+}
+
+const TRADUCOES_REGISTO: ReadonlyArray<[RegExp, string]> = [
+  [/valid email/i, "Introduz um e-mail válido."],
+  [/already exists|already registered|j[áa] (existe|est[áa] registado)/i, "Este e-mail já está registado."],
+  [/may not be blank|is required|n[ãa]o pode ficar em branco/i, "Preenche este campo."],
+  [/password.*(short|common|entirely numeric)/i, "Escolhe uma palavra-passe mais forte (pelo menos 8 caracteres, não demasiado comum)."],
+];
+
+/** Primeira mensagem de um campo do DRF (lista de textos ou texto), com as mensagens em inglês traduzidas. */
+function mensagemDoCampo(valor: unknown): string | undefined {
+  const bruto = Array.isArray(valor) ? valor.find((v): v is string => typeof v === "string") : typeof valor === "string" ? valor : undefined;
+  if (!bruto) return undefined;
+  return TRADUCOES_REGISTO.find(([re]) => re.test(bruto))?.[1] ?? bruto;
+}
+
+function traduzirErroRegisto(err: unknown): unknown {
+  if (!axios.isAxiosError(err)) return err;
+  const estado = err.response?.status;
+  if (!err.response) return new ErroRegisto({ geral: "Não foi possível contactar o servidor. Verifica a ligação e tenta outra vez." });
+  if (estado === 429) return new ErroRegisto({ geral: mensagemDoCampo(err.response.data?.detail) ?? "Demasiadas tentativas. Tenta novamente daqui a pouco." });
+  if (estado && estado >= 500) return new ErroRegisto({ geral: "O servidor não respondeu. Tenta novamente dentro de instantes." });
+  const d = err.response.data ?? {};
+  const campos: CamposRegisto = {
+    nome: mensagemDoCampo(d.first_name),
+    email: mensagemDoCampo(d.email),
+    senha: mensagemDoCampo(d.password),
+    geral: mensagemDoCampo(d.non_field_errors) ?? mensagemDoCampo(d.detail),
+  };
+  const preenchidos = Object.fromEntries(Object.entries(campos).filter(([, v]) => v)) as CamposRegisto;
+  return new ErroRegisto(Object.keys(preenchidos).length ? preenchidos : { geral: "Não foi possível criar a conta. Verifica os dados e tenta outra vez." });
+}
+
 function traduzirErroLogin(err: unknown): ErroLogin {
   if (err instanceof ErroLogin) return err;
   if (axios.isAxiosError(err)) {
@@ -44,7 +90,13 @@ function traduzirErroLogin(err: unknown): ErroLogin {
       const expirada = err.response.data?.code === "temp_password_expired";
       return new ErroLogin(expirada ? "senha_temporaria_expirada" : "credenciais");
     }
-    if (err.response?.status === 429) return new ErroLogin("limite");
+    if (err.response?.status === 429) {
+      // `Retry-After` só chega ao browser se o backend o expuser por CORS; o texto "dentro de N segundos" serve de reserva.
+      const cabecalho = Number(err.response.headers?.["retry-after"]);
+      const doTexto = Number(String(err.response.data?.detail ?? "").match(/(\d+)\s*segundo/i)?.[1]);
+      const espera = [cabecalho, doTexto].find((n) => Number.isFinite(n) && n > 0);
+      return new ErroLogin("limite", espera);
+    }
   }
   return new ErroLogin("indisponivel");
 }
@@ -83,6 +135,7 @@ function processarLogin(data: Record<string, unknown>): Usuario {
 
   const memberships = mapearMemberships(user.memberships);
   workspaceService.sincronizarMemberships(memberships);
+  workspaceService.activarWorkspaceInicial(memberships);
 
   const email = texto(user.email) ?? null;
 
@@ -158,12 +211,16 @@ export const authService = {
   },
 
   async register(data: RegisterData): Promise<Usuario> {
-    await api.post(`${API_URL}/register/`, {
-      email: data.email,
-      password: data.senha,
-      first_name: data.nome,
-      user_type: userTypeMap[data.tipo],
-    });
+    try {
+      await api.post(`${API_URL}/register/`, {
+        email: data.email,
+        password: data.senha,
+        first_name: data.nome,
+        user_type: userTypeMap[data.tipo],
+      });
+    } catch (err) {
+      throw traduzirErroRegisto(err);
+    }
 
     return this.login(data.email, data.senha);
   },

@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { GamificationProvider } from '../contexts/GamificationContext';
+import { destinoPorPapel } from '../lib/destinoPosLogin';
 
 /**
  * As telas novas (features/*) navegam por <a href="/v2/..."> simples, não por <Link>
@@ -32,10 +33,19 @@ function useInternalLinkInterceptor() {
   }, [navigate]);
 }
 
+/** Enquanto o ficheiro da tela (carregado sob pedido) chega. */
+function CarregarTela() {
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-background">
+      <div className="size-12 animate-spin rounded-full border-b-2 border-brand-ocean" role="status" aria-label="A carregar" />
+    </div>
+  );
+}
+
 /** Entradas de /v2 que não precisam de sessão (onboarding, credenciamento e a entrada de demonstração). */
 const ROTAS_PUBLICAS = ['/v2/entrar', '/v2/onboarding', '/v2/credenciamento'];
 
-/** Moldura de /v2: sessão de demonstração (XP 650, sequência 12, 450 gemas) partilhada entre as telas novas. */
+/** Moldura de /v2. O estado de gamificação arranca a zeros: os números reais vêm da API (`useGamificacaoMe`). */
 export default function V2Layout() {
   useInternalLinkInterceptor();
   const { usuario, loading } = useAuth();
@@ -66,9 +76,21 @@ export default function V2Layout() {
     if (!eAdmin) return <Navigate to="/v2/trilhas" replace />;
   }
 
+  // O estúdio é de quem cria: conta de criador, ou professor/admin de uma escola. Um estudante
+  // que abra `/v2/estudio/*` à mão volta ao ecrã do seu papel (a API já recusa a criação).
+  if (pathname === '/v2/estudio' || pathname.startsWith('/v2/estudio/')) {
+    const podeCriar =
+      usuario?.tipo === 'criador' ||
+      usuario?.tipo === 'admin' ||
+      (usuario?.memberships ?? []).some((m) => m.papel === 'teacher' || m.papel === 'admin');
+    if (usuario && !podeCriar) return <Navigate to={destinoPorPapel(usuario)} replace />;
+  }
+
   return (
-    <GamificationProvider initialXp={650} initialStreak={12} initialGems={450}>
-      <Outlet />
+    <GamificationProvider>
+      <Suspense fallback={<CarregarTela />}>
+        <Outlet />
+      </Suspense>
     </GamificationProvider>
   );
 }

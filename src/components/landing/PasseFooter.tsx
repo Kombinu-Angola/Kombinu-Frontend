@@ -41,13 +41,13 @@ export function PasseFooter() {
             <nav className={styles["ftr-legal"]} aria-label="Informação legal">
               <ul>
                 <li>
-                  <a href="#termos">Termos de utilização</a>
+                  <a href="/termos">Termos de utilização</a>
                 </li>
                 <li>
-                  <a href="#privacidade">Privacidade e dados (Lei n.º 22/11)</a>
+                  <a href="/privacidade">Privacidade e dados (Lei n.º 22/11)</a>
                 </li>
                 <li>
-                  <a href="#direitos">Direitos de autor e remoção</a>
+                  <a href="/termos#sec-8">Direitos de autor e remoção</a>
                 </li>
               </ul>
             </nav>

@@ -1,0 +1,31 @@
+/*
+ * Tokens dos ecrãs do fluxo de entrada (login, registo, páginas legais).
+ * Prefixo `kombinu-`: não colide com os tokens existentes (primary, brand-*, surface-*).
+ */
+@theme {
+  --color-kombinu-blue: #00418e;
+  --color-kombinu-blue-dark: #00336f;
+  --color-kombinu-blue-edge: #002a5c;
+  --color-kombinu-blue-soft: #e8eef7;
+  --color-kombinu-yellow: #f5c518;
+  --color-kombinu-yellow-soft: #fff7d6;
+  --color-kombinu-surface: #f3f2f0;
+  --color-kombinu-edge: #d9d8d5;
+  --color-kombinu-ink: #1a1a1a;
+  --color-kombinu-success-soft: #ebfbee;
+  --color-kombinu-danger: #c92a2a;
+  --color-kombinu-danger-soft: #fff5f5;
+
+  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@utility focus-ring {
+  &:focus-visible {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-kombinu-blue);
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+}

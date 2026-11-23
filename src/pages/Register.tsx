@@ -1,68 +1,73 @@
-import React, { useState } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { validarEmail } from '../utils/helpers';
+import { Field, AuthLayout, EmailField, FormAlert, PasswordField, PrimaryButton, linkClass } from '../features/auth-novo/ui';
+import { UserIcon } from '../features/auth-novo/icons';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
-import { BookOpen, Eye, EyeOff, Mail, Lock, User, UserCheck } from 'lucide-react';
+import { ErroRegisto } from '../services/authService';
+import { validarEmail } from '../utils/helpers';
+
+type Tipo = 'criador' | 'aprendiz';
+type Erros = Partial<Record<'nome' | 'email' | 'senha' | 'confirmar' | 'termos' | 'form', string>>;
+
+const TIPOS: { id: Tipo; titulo: string; texto: string }[] = [
+  { id: 'aprendiz', titulo: 'Aprendiz', texto: 'Quero estudar e fazer simulados' },
+  { id: 'criador', titulo: 'Criador', texto: 'Quero criar conteúdos' },
+];
 
 export default function Register() {
+  const [tipo, setTipo] = useState<Tipo>('aprendiz');
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [tipo, setTipo] = useState<'criador' | 'aprendiz'>('aprendiz');
-  const [mostrarSenha, setMostrarSenha] = useState(false);
-  const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
-  const [erro, setErro] = useState('');
+  const [aceito, setAceito] = useState(false);
+  const [erros, setErros] = useState<Erros>({});
   const [carregando, setCarregando] = useState(false);
 
-  const { register, clearError, error: authError } = useAuth();
+  const nomeRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const senhaRef = useRef<HTMLInputElement>(null);
+  const confirmarRef = useRef<HTMLInputElement>(null);
+  const termosRef = useRef<HTMLInputElement>(null);
+
+  const { register, clearError } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setCarregando(true);
-    setErro('');
     clearError();
 
-    // Validação do email no cliente
-    if (!validarEmail(email)) {
-      setErro('Por favor, insira um email válido.');
-      setCarregando(false);
-      return;
-    }
+    const proximos: Erros = {};
+    if (nome.trim().split(/\s+/).filter(Boolean).length < 2) proximos.nome = 'Escreve o teu nome e apelido.';
+    if (!validarEmail(email.trim())) proximos.email = 'Introduz um e-mail válido (ex.: teu@email.com).';
+    if (senha.length < 8) proximos.senha = 'A palavra-passe deve ter pelo menos 8 caracteres.';
+    else if (senha !== confirmarSenha) proximos.confirmar = 'As palavras-passe não coincidem.';
+    if (!aceito) proximos.termos = 'Precisas de aceitar os Termos e a Política de Privacidade.';
+    setErros(proximos);
+    if (proximos.nome) return nomeRef.current?.focus();
+    if (proximos.email) return emailRef.current?.focus();
+    if (proximos.senha) return senhaRef.current?.focus();
+    if (proximos.confirmar) return confirmarRef.current?.focus();
+    if (proximos.termos) return termosRef.current?.focus();
 
-    // Validações
-    if (senha !== confirmarSenha) {
-      setErro('As senhas não coincidem');
-      setCarregando(false);
-      return;
-    }
-
-    if (senha.length < 6) {
-      setErro('A senha deve ter pelo menos 6 caracteres');
-      setCarregando(false);
-      return;
-    }
-
+    setCarregando(true);
     try {
-      const sucesso = await register({ nome, email, senha, tipo });
+      const sucesso = await register({ nome: nome.trim(), email: email.trim(), senha, tipo });
       if (sucesso) {
         navigate(destinoPorPapel({ tipo }));
       } else {
-        // Usar erro específico do contexto se disponível
-        if (authError) {
-          setErro(authError.message);
-        } else {
-          setErro('Email já cadastrado ou erro no servidor');
-        }
+        setErros({ form: 'Não foi possível criar a conta. Tenta novamente.' });
       }
-    } catch (error) {
-      // Usar erro específico se disponível
-      if (authError) {
-        setErro(authError.message);
+    } catch (err) {
+      if (err instanceof ErroRegisto) {
+        const { nome: msgNome, email: msgEmail, senha: msgSenha, geral } = err.campos;
+        setErros({ nome: msgNome, email: msgEmail, senha: msgSenha, form: geral });
+        if (msgNome) nomeRef.current?.focus();
+        else if (msgEmail) emailRef.current?.focus();
+        else if (msgSenha) senhaRef.current?.focus();
       } else {
-        setErro('Erro ao criar conta. Tente novamente.');
+        setErros({ form: 'Não foi possível criar a conta. Tenta novamente.' });
       }
     } finally {
       setCarregando(false);
@@ -70,270 +75,88 @@ export default function Register() {
   };
 
   return (
-    <div className="h-screen flex " >
-      <div className='hidden lg:flex w-1/2 relative'>
-        <img src="/profile.png"
-          className='w-full '
-          alt="" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
-      </div>
+    <AuthLayout
+      title="Cria a tua conta grátis"
+      subtitle="Prepara-te com simulados e acede às sebentas da tua universidade."
+      footer={
+        <>
+          Já tens conta na Kombinu? <Link to="/login" className={`whitespace-nowrap ${linkClass}`}>Iniciar sessão</Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        {erros.form && <FormAlert>{erros.form}</FormAlert>}
 
-      <div className="w-full lg:w-1/2 flex  justify-center  px-6 py-12 overflow-y-auto">
-        <div className="max-w-md w-full space-y-8">
-          <Link to="/" className="flex items-center justify-center space-x-2 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-yellow-400 rounded-xl flex items-center justify-center">
-              <BookOpen className="w-7 h-7 text-white" />
-            </div>
-            <span className="text-3xl font-bold text-blue-600">KOMBINU</span>
-          </Link>
-
-          <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-            Crie sua conta
-          </h2>
-          <p className="text-gray-600 text-center">
-            Junte-se à maior plataforma de aprendizado gamificado
-          </p>
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            {/* Seleção de Tipo de Usuário */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Como você quer usar o KOMBINU?
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setTipo('aprendiz')}
-                  className={`p-4 border-2 rounded-lg text-left transition-all ${tipo === 'aprendiz'
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                    }`}
-                >
-                  <UserCheck className="w-6 h-6 text-blue-600 mb-2" />
-                  <div className="font-medium text-gray-900">Aprendiz</div>
-                  <div className="text-sm text-gray-500">Quero aprender e competir</div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setTipo('criador')}
-                  className={`p-4 border-2 rounded-lg text-left transition-all ${tipo === 'criador'
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                    }`}
-                >
-                  <User className="w-6 h-6 text-blue-600 mb-2" />
-                  <div className="font-medium text-gray-900">Criador</div>
-                  <div className="text-sm text-gray-500">Quero criar conteúdos</div>
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-1">
-                  Nome completo
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    id="nome"
-                    name="nome"
-                    type="text"
-                    required
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    className="
-        w-full
-        pl-10
-        pr-12
-        py-3
-        border
-        border-gray-300
-        bg-white
-        text-gray-900
-        rounded-lg
-        placeholder-gray-500
-        focus:outline-none
-        focus:ring-2
-        focus:ring-blue-500
-        focus:border-blue-500
-        sm:text-sm
-       
-        transition-all
-      "
-
-
-                    placeholder="Seu nome completo"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-3 py-3 border border-gray-300 bg-white text-gray-900 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent   dark:placeholder-gray-400"
-                    placeholder="seu@email.com"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="senha" className="block text-sm font-medium text-gray-700 mb-1">
-                  Senha
-                </label>
-
-                <div className="relative">
-                  {/* Ícone esquerda */}
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400" />
-                  </div>
-
-                  <input
-                    id="senha"
-                    name="senha"
-                    type={mostrarSenha ? 'text' : 'password'}
-                    autoComplete="current-password"
-                    required
-                    value={senha}
-                    onChange={(e) => setSenha(e.target.value)}
-                    placeholder="Sua senha"
-                    className="
-        w-full
-        pl-10
-        pr-12
-        py-3
-        border
-        border-gray-300
-        bg-white
-        text-gray-900
-        rounded-lg
-        placeholder-gray-500
-        focus:outline-none
-        focus:ring-2
-        focus:ring-blue-500
-        focus:border-blue-500
-        sm:text-sm
-       
-       
-        transition-all
-      "
-                  />
-
-                  {/* Botão mostrar senha */}
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition"
-                    onClick={() => setMostrarSenha(!mostrarSenha)}
-                  >
-                    {mostrarSenha ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="confirmarSenha" className="block text-sm font-medium text-gray-700 mb-1">
-                  Confirmar senha
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    id="confirmarSenha"
-                    name="confirmarSenha"
-                    type={mostrarConfirmarSenha ? 'text' : 'password'}
-                    required
-                    value={confirmarSenha}
-                    onChange={(e) => setConfirmarSenha(e.target.value)}
-                    className="
-        w-full
-        pl-10
-        pr-12
-        py-3
-        border
-        border-gray-300
-        bg-white
-        text-gray-900
-        rounded-lg
-        placeholder-gray-500
-        focus:outline-none
-        focus:ring-2
-        focus:ring-blue-500
-        focus:border-blue-500
-        sm:text-sm
-       
-        transition-all
-      "
-
-                    placeholder="Digite a senha novamente"
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                    onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
-                    aria-label="Mostrar ou ocultar senha"
-                  >
-                    {mostrarConfirmarSenha ? (
-                      <EyeOff className="h-5 w-5 text-gray-400" />
-                    ) : (
-                      <Eye className="h-5 w-5 text-gray-400" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {erro && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                {erro}
-              </div>
-            )}
-
-            <div>
-              <button
-                type="submit"
-                disabled={carregando}
-                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
+        <fieldset>
+          <legend className="mb-2 text-[0.8rem] font-bold tracking-[0.06em] uppercase">Como queres usar a Kombinu?</legend>
+          <div className="grid grid-cols-2 gap-3">
+            {TIPOS.map((t) => (
+              <label
+                key={t.id}
+                className={`flex cursor-pointer flex-col gap-1 rounded-2xl p-4 ring-2 ring-inset has-[:focus-visible]:ring-kombinu-blue ${
+                  tipo === t.id ? 'bg-kombinu-surface ring-kombinu-blue' : 'bg-white ring-neutral-200 hover:ring-neutral-300'
+                }`}
               >
-                {carregando ? 'Criando conta...' : 'Criar conta'}
-              </button>
-            </div>
+                <input type="radio" name="tipo" value={t.id} checked={tipo === t.id} onChange={() => setTipo(t.id)} className="sr-only" />
+                <span className="font-display font-bold">{t.titulo}</span>
+                <span className="text-sm font-medium text-neutral-600">{t.texto}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
 
-            <div className="text-center">
-              <p className="text-sm text-gray-600">
-                Já tem uma conta?{' '}
-                <Link
-                  to="/login"
-                  className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
-                >
-                  Faça login
-                </Link>
-              </p>
-            </div>
-          </form>
+        <Field
+          ref={nomeRef}
+          label="Nome completo"
+          autoComplete="name"
+          autoCapitalize="words"
+          placeholder="Ex.: Ana Domingos"
+          leading={<UserIcon className="size-5 shrink-0" />}
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          error={erros.nome}
+        />
+        <EmailField ref={emailRef} value={email} onChange={(e) => setEmail(e.target.value)} error={erros.email} />
+        <PasswordField
+          ref={senhaRef}
+          label="Palavra-passe"
+          autoComplete="new-password"
+          hint="Pelo menos 8 caracteres, não demasiado comum."
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          error={erros.senha}
+        />
+        <PasswordField
+          ref={confirmarRef}
+          label="Confirmar palavra-passe"
+          autoComplete="new-password"
+          value={confirmarSenha}
+          onChange={(e) => setConfirmarSenha(e.target.value)}
+          error={erros.confirmar}
+        />
+
+        <div>
+          <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed font-medium text-neutral-700">
+            <input
+              ref={termosRef}
+              type="checkbox"
+              checked={aceito}
+              onChange={(e) => setAceito(e.target.checked)}
+              aria-invalid={erros.termos ? true : undefined}
+              className="mt-0.5 size-5 shrink-0 cursor-pointer accent-kombinu-blue"
+            />
+            <span>
+              Li e aceito os <Link to="/termos" className={linkClass}>Termos de Uso</Link> e a{' '}
+              <Link to="/privacidade" className={linkClass}>Política de Privacidade</Link> da Kombinu Angola.
+            </span>
+          </label>
+          {erros.termos && <p className="mt-2 text-sm font-medium text-red-700">{erros.termos}</p>}
         </div>
 
-
-      </div>
-    </div >
+        <PrimaryButton type="submit" loading={carregando} loadingText="A criar a conta…">
+          Criar conta
+        </PrimaryButton>
+      </form>
+    </AuthLayout>
   );
 }
