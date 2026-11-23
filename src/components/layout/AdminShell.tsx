@@ -5,7 +5,7 @@ import { useWorkspaceStore, WORKSPACE_MARKETPLACE } from "../../stores/workspace
 import { NotificationBell } from "./NotificationBell";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
-import kombinuMark from "../assets/kombinu-mark.svg";
+import { LogoMark } from "../ui/LogoMark";
 
 export type AdminSection = "visao" | "membros" | "criadores" | "moderacao" | "insights" | "financeiro" | "gamificacao" | "catalogo" | "subscricoes" | "suporte" | "adaptativo" | "equipa" | "fiscal";
 
@@ -70,7 +70,7 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
         <div>
           <div className="flex h-16 items-center justify-between border-b-2 border-border-cloud px-5">
             <a href="/v2/admin" aria-label="Kombinu" className="flex items-center">
-              <img src={kombinuMark} alt="" className="size-10" />
+              <LogoMark />
             </a>
             <span className="rounded-full bg-brand-ocean px-2 py-0.5 text-overline text-white uppercase">Admin</span>
           </div>
@@ -99,7 +99,7 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
           >
             <div className="mb-4 flex items-center justify-between px-5">
               <span className="flex items-center" aria-label="Kombinu Admin">
-                <img src={kombinuMark} alt="" className="size-10" />
+                <LogoMark />
               </span>
               <button
                 type="button"

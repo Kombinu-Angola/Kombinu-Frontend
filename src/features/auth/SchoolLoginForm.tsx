@@ -3,7 +3,7 @@ import { Button3D } from "../../components/ui/Button3D";
 import { FieldError, TextField } from "../../components/ui/Field";
 import { useAuth } from "../../contexts/AuthContext";
 import type { Usuario } from "@/types";
-import { MENSAGENS_LOGIN } from "./mensagensLogin";
+import { mensagemDeLogin } from "./mensagensLogin";
 
 type SchoolLoginFormProps = {
   /** Chamado com o utilizador autenticado; o ecrã decide para onde seguir (ex.: troca de senha). */
@@ -31,7 +31,7 @@ export function SchoolLoginForm({ onAuthenticated }: SchoolLoginFormProps) {
     if ("usuario" in resultado) {
       onAuthenticated(resultado.usuario);
     } else {
-      setErro(MENSAGENS_LOGIN[resultado.codigo]);
+      setErro(mensagemDeLogin(resultado));
       setSenha("");
     }
   }

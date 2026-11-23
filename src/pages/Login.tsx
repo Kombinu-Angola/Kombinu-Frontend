@@ -7,7 +7,7 @@ import {
   type Method,
 } from '../features/auth-novo/ui';
 import { panelId, tabId } from '../features/auth-novo/ids';
-import { MENSAGENS_LOGIN } from '../features/auth/mensagensLogin';
+import { mensagemDeLogin } from '../features/auth/mensagensLogin';
 import { destinoPosLogin } from '../lib/destinoPosLogin';
 import { validarEmail } from '../utils/helpers';
 import type { Usuario } from '../types';
@@ -53,7 +53,7 @@ export default function Login() {
     if ('usuario' in resultado) {
       seguirParaDestino(resultado.usuario);
     } else {
-      setErros({ form: MENSAGENS_LOGIN[resultado.codigo] });
+      setErros({ form: mensagemDeLogin(resultado) });
     }
   };
 
