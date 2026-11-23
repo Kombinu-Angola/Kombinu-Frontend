@@ -76,7 +76,7 @@ function traduzirErroRegisto(err: unknown): unknown {
     nome: mensagemDoCampo(d.first_name),
     email: mensagemDoCampo(d.email),
     senha: mensagemDoCampo(d.password),
-    geral: mensagemDoCampo(d.non_field_errors) ?? mensagemDoCampo(d.detail),
+    geral: mensagemDoCampo(d.non_field_errors) ?? mensagemDoCampo(d.ano_nascimento) ?? mensagemDoCampo(d.aceita_termos) ?? mensagemDoCampo(d.detail),
   };
   const preenchidos = Object.fromEntries(Object.entries(campos).filter(([, v]) => v)) as CamposRegisto;
   return new ErroRegisto(Object.keys(preenchidos).length ? preenchidos : { geral: "Não foi possível criar a conta. Verifica os dados e tenta outra vez." });
@@ -217,6 +217,9 @@ export const authService = {
         password: data.senha,
         first_name: data.nome,
         user_type: userTypeMap[data.tipo],
+        ano_nascimento: data.anoNascimento,
+        aceita_termos: data.aceitaTermos,
+        marketing_opt_in: data.marketingOptIn ?? false,
       });
     } catch (err) {
       throw traduzirErroRegisto(err);

@@ -17,14 +17,14 @@ import { PURCHASES } from '../features/purchases/mockPurchases';
 
 import { MOCK_ACCOUNT } from '../features/account/mockAccount';
 import { MOCK_TRAIL, MOCK_ADAPTIVE } from '../features/trail/mockTrail';
-import type { HomologationResult } from '../features/creator/HomologationResultScreen';
 
 import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
-import { EmBreve, EmBrevePagina } from '../components/EmBreve';
+import { EmBrevePagina } from '../components/EmBreve';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
+import { FLUXO_MOCKS } from '../lib/fluxoFlags';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 
 import { MOCK_QA } from '../features/qa/mockQa';
@@ -38,7 +38,14 @@ import { mensagemErroEnquete } from '../services/surveyService';
 
 
 // Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
-const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
+const OnboardingNovo = lazy(() => import('../features/onboarding-novo/OnboardingNovo'));
+const CredenciamentoFlow = lazy(() => import('../features/credenciamento/CredenciamentoFlow'));
+const B1Preparar = lazy(() => import('../features/preparar/B1Preparar'));
+const B3Calibrar = lazy(() => import('../features/preparar/B3Calibrar'));
+const B4Previa = lazy(() => import('../features/preparar/B4Previa'));
+const MinhasPreparacoes = lazy(() => import('../features/preparar/MinhasPreparacoes'));
+const B6Modulo = lazy(() => import('../features/preparar/B6Modulo'));
+const SimuladoCompleto = lazy(() => import('../features/preparar/SimuladoCompleto'));
 const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
 const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
 const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
@@ -58,7 +65,6 @@ const StudentSettingsScreen = lazy(() => import('../features/account/StudentSett
 const PhoneSecurityScreen = lazy(() => import('../features/account/PhoneSecurityScreen'));
 const LearningTrailScreen = lazy(() => import('../features/trail/LearningTrailScreen'));
 const AdaptiveTrailScreen = lazy(() => import('../features/trail/AdaptiveTrailScreen'));
-const HomologationResultScreen = lazy(() => import('../features/creator/HomologationResultScreen'));
 const SessionExpiredScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.SessionExpiredScreen })));
 const NotFoundScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.NotFoundScreen })));
 const NotificationCenterScreen = lazy(() => import('../features/notifications/NotificationCenterScreen'));
@@ -81,17 +87,15 @@ function ComUtilizador({ children }: { children: (nome: string) => ReactNode }) 
   return <>{children(usuario?.nome ?? '')}</>;
 }
 
-function OnboardingRoute() {
-  const navigate = useNavigate();
+/**
+ * Entrada de `/v2`: já não pergunta "estudante ou criador" (o onboarding vive depois do registo).
+ * Com sessão, leva ao ecrã do papel (admin: membros, professor: estúdio, estudante: painel); sem sessão, ao login.
+ */
+function EntradaV2Route() {
   const { usuario, loading } = useAuth();
-  // Com sessão iniciada, `/v2` leva ao ecrã do papel (admin: membros, professor: estúdio, estudante: painel), sem Onboarding.
   if (loading) return null;
   if (usuario) return <Navigate to={destinoPorPapel(usuario)} replace />;
-  return (
-    <OnboardingRoleScreen
-      onSelectRole={(role) => navigate(role === 'creator' ? '/v2/credenciamento' : '/v2/onboarding/estudante')}
-    />
-  );
+  return <Navigate to="/login" replace />;
 }
 
 function StudentOnboardingRoute() {
@@ -104,11 +108,6 @@ function StudentOnboardingRoute() {
       feedHref="/v2/trilhas"
     />
   );
-}
-
-/** O credenciamento de criador ainda não tem API (`POST /creators/applications/` não existe): mostra "Em breve" em vez de dar 404 ao submeter. */
-function CreatorApplicationRoute() {
-  return <EmBreve nome="Credenciamento de criador" />;
 }
 
 function NotificationsRoute() {
@@ -296,30 +295,6 @@ function PhoneSecurityRoute() {
   );
 }
 
-const HOMOLOGATION_CREATOR = {
-  name: '',
-  university: 'Universidade Agostinho Neto (UAN)',
-  faculty: 'Faculdade de Ciências',
-  specialty: 'Estruturas de Dados',
-  phone: '923456789',
-};
-
-const HOMOLOGATION_APROVADO: HomologationResult = {
-  status: 'aprovado',
-  protocol: 'PROT-CRE-2026-8942',
-  decidedAt: new Date().toISOString(),
-  creator: HOMOLOGATION_CREATOR,
-};
-
-const HOMOLOGATION_CORRECAO: HomologationResult = {
-  status: 'correcao',
-  protocol: 'PROT-CRE-2026-8944',
-  decidedAt: new Date(Date.now() - 86_400_000).toISOString(),
-  creator: HOMOLOGATION_CREATOR,
-  feedback:
-    'A declaração enviada tem a data de validade ilegível no canto inferior direito. A amostra está aprovada.',
-  required: ['Declaração institucional com a validade legível, em PDF ou fotografia nítida.'],
-};
 
 function SessionExpiredRoute() {
   const navigate = useNavigate();
@@ -366,9 +341,10 @@ export const v2Routes: RouteObject = {
   path: 'v2',
   element: <V2Layout />,
   children: [
-    { index: true, element: <OnboardingRoute /> },
+    { index: true, element: <EntradaV2Route /> },
+    { path: 'onboarding', element: <OnboardingNovo /> },
     { path: 'onboarding/estudante', element: <StudentOnboardingRoute /> },
-    { path: 'credenciamento', element: <CreatorApplicationRoute /> },
+    { path: 'credenciamento', element: <CredenciamentoFlow /> },
     { path: 'entrar', element: <AuthRoute /> },
 
     { path: 'painel', element: <DashboardScreen /> },
@@ -409,8 +385,8 @@ export const v2Routes: RouteObject = {
     { path: 'conta/telemovel', element: <PhoneSecurityRoute /> },
     { path: 'trilha', element: <ComUtilizador>{(nome) => <LearningTrailScreen trail={MOCK_TRAIL} userName={nome} backHref="/v2/cadeira" />}</ComUtilizador> },
     { path: 'trilha/mista', element: <ComUtilizador>{(nome) => <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={nome} diagnosticHref="/v2/painel" />}</ComUtilizador> },
-    { path: 'estudio/homologacao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_APROVADO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
-    { path: 'estudio/homologacao/correcao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_CORRECAO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
+    { path: 'estudio/homologacao', element: <EmBrevePagina area="criador" nome="Homologação" /> },
+    { path: 'estudio/homologacao/correcao', element: <EmBrevePagina area="criador" nome="Homologação" /> },
     { path: 'estudio/renovacao', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
 
     { path: 'offline', element: <EmBrevePagina area="aluno" nome="Estudo offline" /> },
@@ -468,6 +444,18 @@ export const v2Routes: RouteObject = {
     { path: 'admin/equipa', element: <EmBrevePagina area="admin" nome="Equipa e permissões" /> },
 
     { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
+
+    // Fluxo "Preparar a minha prova": só existe em desenvolvimento, com `VITE_FLUXO_MOCKS=true` (o backend ainda não tem a API).
+    ...(FLUXO_MOCKS
+      ? [
+          { path: 'preparar', element: <B1Preparar /> },
+          { path: 'preparar/calibrar', element: <B3Calibrar /> },
+          { path: 'preparar/previa', element: <B4Previa /> },
+          { path: 'preparar/materiais', element: <MinhasPreparacoes /> },
+          { path: 'preparar/modulo/:id', element: <B6Modulo /> },
+          { path: 'preparar/simulado/:id', element: <SimuladoCompleto /> },
+        ]
+      : []),
 
     { path: 'enquetes', element: <SurveyListRoute /> },
     { path: 'estudio/enquete', element: <SurveyComposerRoute /> },
