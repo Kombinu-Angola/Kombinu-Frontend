@@ -12,8 +12,6 @@ import { AppShell } from '../components/layout/AppShell';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { MOCK_COURSE } from '../features/course/mockCourse';
 
-import { MOCK_DRAFT } from '../features/studio/mockDraft';
-import type { AccountSettings } from '../features/subscription/AccountSettingsScreen';
 
 import { PURCHASES } from '../features/purchases/mockPurchases';
 
@@ -38,7 +36,6 @@ import { SESSIONS } from '../features/account/mockAccount';
 import { useAccoesEnquetes, useListaEnquetes, useResultadosEnquete } from '../hooks/useEnquetes';
 import { mensagemErroEnquete } from '../services/surveyService';
 
-import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
 
 // Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
 const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
@@ -53,9 +50,7 @@ const CourseScreen = lazy(() => import('../features/course/CourseScreen'));
 const Ranking = lazy(() => import('../pages/Ranking'));
 const StudentProfileScreen = lazy(() => import('../features/profile/StudentProfileScreen'));
 const MaterialDetailScreen = lazy(() => import('../features/marketplace/MaterialDetailScreen'));
-const StudioScreen = lazy(() => import('../features/studio/StudioScreen'));
-const SubscriptionFlow = lazy(() => import('../features/subscription/SubscriptionFlow'));
-const AccountSettingsScreen = lazy(() => import('../features/subscription/AccountSettingsScreen'));
+const ContaCriadorScreen = lazy(() => import('../features/subscription/ContaCriadorScreen'));
 const AdminEstudantesScreen = lazy(() => import('../features/admin/AdminEstudantesScreen'));
 const PurchaseHistoryScreen = lazy(() => import('../features/purchases/PurchaseHistoryScreen'));
 const CreatorContentHubScreen = lazy(() => import('../features/creator-content/CreatorContentHubScreen'));
@@ -64,7 +59,6 @@ const PhoneSecurityScreen = lazy(() => import('../features/account/PhoneSecurity
 const LearningTrailScreen = lazy(() => import('../features/trail/LearningTrailScreen'));
 const AdaptiveTrailScreen = lazy(() => import('../features/trail/AdaptiveTrailScreen'));
 const HomologationResultScreen = lazy(() => import('../features/creator/HomologationResultScreen'));
-const RenewalFailureScreen = lazy(() => import('../features/subscription/RenewalFailureScreen'));
 const SessionExpiredScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.SessionExpiredScreen })));
 const NotFoundScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.NotFoundScreen })));
 const NotificationCenterScreen = lazy(() => import('../features/notifications/NotificationCenterScreen'));
@@ -79,8 +73,6 @@ const SurveyComposerScreen = lazy(() => import('../features/survey/SurveyCompose
 const SurveyResultsScreen = lazy(() => import('../features/survey/SurveyResultsScreen'));
 const SurveyListScreen = lazy(() => import('../features/survey/SurveyListScreen'));
 const CreationHubScreen = lazy(() => import('../features/authoring/CreationHubScreen'));
-const StudioOnboardingScreen = lazy(() => import('../features/authoring/StudioOnboardingScreen'));
-const TrailComposerScreen = lazy(() => import('../features/authoring/TrailComposerScreen'));
 
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 /** Entrega o nome do utilizador autenticado às telas que ainda o recebem por prop. */
@@ -280,38 +272,6 @@ function SimuladoRoute() {
   return <SimuladoFlow quizId={params.get('quizId')} />;
 }
 
-function StudioRoute() {
-  const { usuario } = useAuth();
-  return (
-    <StudioScreen
-      initialDraft={MOCK_DRAFT}
-      authorName={usuario?.nome ?? ''}
-      courseName={MOCK_COURSE.hero.title}
-      onSave={async () => {
-        /* Backend de rascunhos ainda nao existe; useDraft guarda so em memoria. */
-      }}
-    />
-  );
-}
-
-const DEMO_SETTINGS: AccountSettings = {
-  name: '',
-  institution: 'uan-economia',
-  bio: 'Explico Economia e Macroeconomia de forma simples, com sebentas revistas e simulados semanais.',
-  phone: '923000302',
-  phoneVerified: true,
-  plan: 'pro',
-  planPriceKz: 5000,
-  renewsAt: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString(),
-  notifications: { streak: true, questions: true, sales: true },
-};
-
-function AccountSettingsRoute() {
-  const navigate = useNavigate();
-  const { usuario } = useAuth();
-  return <AccountSettingsScreen settings={{ ...DEMO_SETTINGS, name: usuario?.nome ?? '' }} onChangePlan={() => navigate('/v2/estudio/plano')} />;
-}
-
 function StudentSettingsRoute() {
   return (
     <StudentSettingsScreen
@@ -361,26 +321,6 @@ const HOMOLOGATION_CORRECAO: HomologationResult = {
   required: ['Declaração institucional com a validade legível, em PDF ou fotografia nítida.'],
 };
 
-function RenewalFailureRoute() {
-  const navigate = useNavigate();
-  const { usuario } = useAuth();
-  return (
-    <RenewalFailureScreen
-      creatorName={usuario?.nome ?? ''}
-      priceKz={5000}
-      phone="923891024"
-      failedAt={new Date(Date.now() - 2 * 86_400_000).toISOString()}
-      graceEndsAt={new Date(Date.now() + 5 * 86_400_000).toISOString()}
-      authorize={async () => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        return { reference: 'EXP-2026-9014', approvedAt: new Date().toISOString() };
-      }}
-      onDowngrade={() => navigate('/v2/estudio/definicoes')}
-      changePhoneHref="/v2/conta/telemovel"
-    />
-  );
-}
-
 function SessionExpiredRoute() {
   const navigate = useNavigate();
   return (
@@ -416,21 +356,6 @@ function NotFoundRoute() {
   );
 }
 
-function SubscriptionRoute() {
-  const { usuario } = useAuth();
-  return (
-    <SubscriptionFlow
-      creatorName={usuario?.nome ?? ''}
-      currentPlan="free"
-      studioHref="/v2/estudio"
-      authorize={async (_phone, _amountKz) => {
-        await new Promise((resolve) => setTimeout(resolve, 2500));
-        return { reference: `EXP-${Date.now()}`, approvedAt: new Date().toISOString() };
-      }}
-    />
-  );
-}
-
 /**
  * Rotas paralelas das 39 telas novas (docs/INTEGRACAO-TELAS.md, passo 11).
  * Cada ecra usa o seu proprio mock (feature/mock*.ts); ligar aos servicos reais
@@ -461,10 +386,10 @@ export const v2Routes: RouteObject = {
     { path: 'medalhas', element: <EmBrevePagina area="aluno" nome="Medalhas" /> },
     { path: 'criador', element: <EmBrevePagina area="criador" nome="Perfil público" /> },
 
-    { path: 'estudio', element: <StudioRoute /> },
+    { path: 'estudio', element: <Navigate to="/v2/estudio/materiais" replace /> },
     { path: 'estudio/financeiro', element: <EmBrevePagina area="criador" nome="Financeiro" /> },
-    { path: 'estudio/plano', element: <SubscriptionRoute /> },
-    { path: 'estudio/definicoes', element: <AccountSettingsRoute /> },
+    { path: 'estudio/plano', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
+    { path: 'estudio/definicoes', element: <ContaCriadorScreen /> },
 
     { path: 'admin', element: <EmBrevePagina area="admin" nome="Visão executiva" /> },
     { path: 'admin/estudantes', element: <Navigate to="/v2/admin/membros" replace /> },
@@ -486,7 +411,7 @@ export const v2Routes: RouteObject = {
     { path: 'trilha/mista', element: <ComUtilizador>{(nome) => <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={nome} diagnosticHref="/v2/painel" />}</ComUtilizador> },
     { path: 'estudio/homologacao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_APROVADO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
     { path: 'estudio/homologacao/correcao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_CORRECAO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
-    { path: 'estudio/renovacao', element: <RenewalFailureRoute /> },
+    { path: 'estudio/renovacao', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
 
     { path: 'offline', element: <EmBrevePagina area="aluno" nome="Estudo offline" /> },
     { path: 'sessao-expirada', element: <SessionExpiredRoute /> },
@@ -530,29 +455,11 @@ export const v2Routes: RouteObject = {
 
     { path: 'admin/suporte', element: <EmBrevePagina area="admin" nome="Suporte e disputas" /> },
 
-    { path: 'estudio/criar', element: <ComUtilizador>{(nome) => <CreationHubScreen creatorName={nome} questionCount={QUESTIONS.length} draftCount={2} />}</ComUtilizador> },
-    {
-      path: 'estudio/comecar',
-      element: (
-        <ComUtilizador>
-          {(nome) => (
-        <StudioOnboardingScreen
-          creatorName={nome}
-          university="UAN · Faculdade de Ciências"
-          steps={[
-            { id: 's1', label: 'Credenciais homologadas', detail: 'Aprovado pela equipa de auditoria.', done: true, href: '/v2/estudio/homologacao' },
-            { id: 's2', label: 'Publicar o primeiro material', detail: 'Começa por um modelo e adapta o conteúdo.', done: false, href: '/v2/estudio/criar' },
-            { id: 's3', label: 'Definir preço e visibilidade', detail: 'Entre 1.000 e 2.500 Kz na tua cadeira.', done: false, href: '/v2/estudio/materiais' },
-            { id: 's4', label: 'Confirmar o Multicaixa Express', detail: 'Teste de 1 Kz para validar a titularidade.', done: false, href: '/v2/estudio/financeiro' },
-          ]}
-        />
-          )}
-        </ComUtilizador>
-      ),
-    },
+    { path: 'estudio/criar', element: <ComUtilizador>{(nome) => <CreationHubScreen creatorName={nome} />}</ComUtilizador> },
+    { path: 'estudio/comecar', element: <EmBrevePagina area="criador" nome="Primeiros passos do estúdio" /> },
     { path: 'estudio/questoes', element: <EmBrevePagina area="criador" nome="Banco de questões" /> },
     { path: 'estudio/simulado', element: <EmBrevePagina area="criador" nome="Construtor de simulado" /> },
-    { path: 'estudio/trilha', element: <ComUtilizador>{(nome) => <TrailComposerScreen topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I" readersOnCurrent={83} />}</ComUtilizador> },
+    { path: 'estudio/trilha', element: <EmBrevePagina area="criador" nome="Compositor de trilha" /> },
     { path: 'estudio/importar', element: <EmBrevePagina area="criador" nome="Importação em massa" /> },
     { path: 'estudio/versoes', element: <EmBrevePagina area="criador" nome="Histórico de versões" /> },
 
