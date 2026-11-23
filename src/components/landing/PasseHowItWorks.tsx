@@ -1,6 +1,6 @@
+import { Link } from "react-router-dom";
 import styles from "./passe.module.css";
 import { cx, KLogo } from "./PasseShared";
-import type { PasseLandingState } from "./usePasseLanding";
 
 type TrailState = "done" | "current" | "locked";
 
@@ -36,7 +36,7 @@ function GeometricTrail({ steps, label }: { steps: TrailState[]; label: string }
   );
 }
 
-export function PasseHowItWorks({ p }: { p: PasseLandingState }) {
+export function PasseHowItWorks() {
   return (
     <section className={styles.sec} id="como" aria-labelledby="como-h">
       <div className={cx(styles.wrap, styles["how-grid"])}>
@@ -54,7 +54,7 @@ export function PasseHowItWorks({ p }: { p: PasseLandingState }) {
             </div>
             <div className={cx(styles.step, styles.rv, styles["rv-2"])}>
               <h3 className={styles["step-t"]}>Ativa o passe</h3>
-              <p className={styles["step-d"]}>Entras com o número de WhatsApp e pagas como preferires: Express, voucher ou encarregado.</p>
+              <p className={styles["step-d"]}>Entras com o teu e-mail ou com o código da tua escola e pagas como preferires: Express, voucher ou encarregado.</p>
             </div>
             <div className={cx(styles.step, styles.rv, styles["rv-3"])}>
               <h3 className={styles["step-t"]}>Treina 5 minutos por dia</h3>
@@ -68,45 +68,17 @@ export function PasseHowItWorks({ p }: { p: PasseLandingState }) {
             <KLogo />
             <div>
               <h3 className={styles["login-t"]}>Entrar na Kombinu</h3>
-              <p className={styles["login-sub"]}>Sem palavra-passe para decorar.</p>
+              <p className={styles["login-sub"]}>Com o teu e-mail ou com o código da tua escola.</p>
             </div>
           </div>
-          <div className={styles["kb-input"]}>
-            <label className={styles["kb-input__label"]} htmlFor="tel">
-              Número de telemóvel
-            </label>
-            <input id="tel" className={styles["kb-input__field"]} type="tel" inputMode="tel" autoComplete="tel-national" placeholder="9XX XXX XXX" aria-describedby="tel-msg" />
-            <div className={styles["kb-input__msg"]} id="tel-msg">
-              Recebes um código de 6 dígitos no WhatsApp.
-            </div>
-          </div>
-          <button
-            type="button"
-            className={cx(styles["kb-btn"], styles["kb-btn--primary"], styles["kb-btn--block"])}
-            onClick={p.sendOtp}
-          >
-            {p.otpSent ? "Código enviado" : "Receber código no WhatsApp"}
-          </button>
-          <div className={cx(styles.otp, p.otpSent && styles["is-sent"])} role="group" aria-label="Código de 6 dígitos">
-            {["4", "8", "2", "9", "1", "3"].map((digit, i) => (
-              <div className={styles["otp-c"]} key={i}>
-                {p.otpSent && <span className={styles["otp-d"]}>{digit}</span>}
-                {i === 0 && !p.otpSent && <span className={styles["otp-caret"]} />}
-              </div>
-            ))}
-          </div>
-          <div aria-live="polite">
-            {p.otpSent && (
-              <p className={styles["otp-msg"]}>
-                <svg className={styles.ic} viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M4 5h16v11H9l-5 4z" />
-                </svg>
-                <span>O teu código Kombinu é 482 913. Não o partilhes com ninguém.</span>
-              </p>
-            )}
-          </div>
+          <Link to="/register" className={cx(styles["kb-btn"], styles["kb-btn--primary"], styles["kb-btn--block"])}>
+            Criar conta
+          </Link>
+          <Link to="/login" className={cx(styles["kb-btn"], styles["kb-btn--secondary"], styles["kb-btn--block"])}>
+            Entrar
+          </Link>
           <p className={styles["login-note"]}>
-            O código chega pelo WhatsApp, que é mais rápido e mais barato do que o SMS internacional. Se falhar, enviamos por SMS local.
+            Se a tua escola já está na Kombinu, usa o separador «Escola» ao entrar.
           </p>
         </div>
       </div>

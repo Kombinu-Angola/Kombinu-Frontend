@@ -1,11 +1,11 @@
-import logoTipo from "./assets/kombinu-mark.svg"
+import { LogoMark } from "./ui/LogoMark"
 
 export const SplashScreen = () => {
     return (
         <div className="fixed inset-0 z-[9999] bg-background flex flex-col items-center justify-center">
 
             <div className="animate-pulse">
-                <img src={logoTipo} className="w-40 h-40" alt="Kombinu" />
+                <LogoMark size={88} label="Kombinu" />
             </div>
 
             <p className="font-sans-landing text-lg text-text-secondary">
