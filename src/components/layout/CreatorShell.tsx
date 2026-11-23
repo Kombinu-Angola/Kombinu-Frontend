@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
-import { Button3D } from "../ui/Button3D";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import kombinuMark from "../assets/kombinu-mark.svg";
@@ -11,8 +10,8 @@ export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" 
 
 const NAV: ReadonlyArray<{ id: CreatorSection; label: string; href: string; icon: IconName; hint: string }> = [
   { id: "estudio", label: "Estúdio de criação", href: "/v2/estudio/criar", icon: "edit", hint: "Criar artigo, simulado ou trilha" },
-  { id: "materiais", label: "Os meus materiais", href: "/v2/estudio/materiais", icon: "file", hint: "Os teus conteúdos e simulados" },
-  { id: "definicoes", label: "Conta e subscrição", href: "/v2/estudio/definicoes", icon: "gear", hint: "Perfil, notificações e plano" },
+  { id: "materiais", label: "Os meus materiais", href: "/v2/estudio/materiais", icon: "book", hint: "Os teus conteúdos e simulados" },
+  { id: "definicoes", label: "Conta e subscrição", href: "/v2/estudio/definicoes", icon: "wallet", hint: "Perfil, notificações e plano" },
 ];
 
 type CreatorShellProps = {
@@ -23,7 +22,9 @@ type CreatorShellProps = {
   children: ReactNode;
 };
 
-function NavList({ active, onNavigate }: { active: CreatorSection; onNavigate?: () => void }) {
+/** `rail`: barra lateral recolhida (so icones); rotulos e descricoes aparecem ao abrir (hover, foco ou fixada). */
+function NavList({ active, onNavigate, rail, pinned }: { active: CreatorSection; onNavigate?: () => void; rail?: boolean; pinned?: boolean }) {
+  const textoRail = pinned ? "opacity-100" : "opacity-0 group-hover/rail:opacity-100 group-focus-within/rail:opacity-100";
   return (
     <ul className="flex flex-col gap-1 px-2">
       {NAV.map((item) => (
@@ -32,13 +33,15 @@ function NavList({ active, onNavigate }: { active: CreatorSection; onNavigate?: 
             href={item.href}
             onClick={onNavigate}
             aria-current={item.id === active ? "page" : undefined}
+            title={rail && !pinned ? item.label : undefined}
             className={cn(
-              "flex min-h-14 items-center gap-3 rounded-xl px-3 transition-[background-color,color] duration-150",
+              "flex min-h-14 items-center gap-3 rounded-xl transition-[background-color,color] duration-150",
+              rail ? "px-[17px]" : "px-3",
               item.id === active ? "bg-primary-fixed text-primary" : "text-text-secondary hover:bg-surface-soft",
             )}
           >
             <Icon name={item.icon} size={22} className="shrink-0" />
-            <span>
+            <span className={cn("min-w-0", rail && cn("whitespace-nowrap transition-opacity duration-150 motion-reduce:transition-none", textoRail))}>
               <span className={cn("block text-body-md", item.id === active && "font-bold")}>{item.label}</span>
               <span className={cn("block text-caption", item.id === active ? "text-primary" : "text-text-tertiary")}>{item.hint}</span>
             </span>
@@ -49,9 +52,29 @@ function NavList({ active, onNavigate }: { active: CreatorSection; onNavigate?: 
   );
 }
 
+const CHAVE_MENU = "kombinu:menu-criador-fixo";
+
+function lerFixo(): boolean {
+  try {
+    return localStorage.getItem(CHAVE_MENU) === "1";
+  } catch {
+    return false;
+  }
+}
+
 /** Moldura do modo criador: barra lateral fixa no desktop (lg:+), gaveta no telemóvel/tablet, e atalho para o modo estudante. */
 export function CreatorShell({ active, creatorName, actions, children }: CreatorShellProps) {
   const [open, setOpen] = useState(false);
+  const [pinned, setPinned] = useState(lerFixo);
+  const alternarFixo = () =>
+    setPinned((v) => {
+      try {
+        localStorage.setItem(CHAVE_MENU, v ? "0" : "1");
+      } catch {
+        /* sem armazenamento: so vale nesta sessao */
+      }
+      return !v;
+    });
   const drawerRef = useDialogBehavior<HTMLElement>(() => setOpen(false), open);
 
   return (
@@ -63,25 +86,56 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
         Saltar para o conteúdo
       </a>
 
-      {/* Navegação lateral (desktop) */}
+      {/* Navegação lateral (desktop): recolhida em ícones; abre por cima do conteúdo ao passar o rato ou focar, ou fica fixa. */}
       <nav
         aria-label="Modo criador"
-        className="fixed inset-y-0 left-0 z-40 hidden w-[260px] flex-col justify-between border-r-2 border-border-cloud bg-surface-canvas lg:flex"
+        className={cn(
+          "group/rail fixed inset-y-0 left-0 z-40 hidden flex-col justify-between overflow-hidden border-r-2 border-border-cloud bg-surface-canvas transition-[width] duration-200 motion-reduce:transition-none lg:flex",
+          pinned ? "w-[300px]" : "w-[72px] hover:w-[300px] hover:shadow-elevation-2 focus-within:w-[300px] focus-within:shadow-elevation-2",
+        )}
       >
         <div>
-          <div className="flex h-16 items-center border-b-2 border-border-cloud px-5">
-            <a href="/v2/estudio" aria-label="Kombinu Estúdio" className="flex items-center">
+          <div className="flex h-16 items-center gap-2 border-b-2 border-border-cloud px-3">
+            <button
+              type="button"
+              onClick={alternarFixo}
+              aria-pressed={pinned}
+              aria-label={pinned ? "Recolher o menu" : "Manter o menu aberto"}
+              className="flex size-12 shrink-0 items-center justify-center rounded-xl text-text-secondary transition-[background-color] duration-150 hover:bg-surface-soft"
+            >
+              <Icon name="menu" size={22} />
+            </button>
+            <a
+              href="/v2/estudio"
+              aria-label="Kombinu Estúdio"
+              className={cn(
+                "flex items-center transition-opacity duration-150 motion-reduce:transition-none",
+                pinned ? "opacity-100" : "opacity-0 group-hover/rail:opacity-100 group-focus-within/rail:opacity-100",
+              )}
+            >
               <img src={kombinuMark} alt="" className="size-10" />
             </a>
           </div>
           <div className="pt-4">
-            <NavList active={active} />
+            <NavList active={active} rail pinned={pinned} />
           </div>
         </div>
-        <div className="border-t-2 border-border-cloud p-4">
-          <Button3D variant="ghost" fullWidth onClick={() => (window.location.assign("/v2/trilhas"))}>
-            Voltar ao modo estudante
-          </Button3D>
+        <div className="border-t-2 border-border-cloud p-2">
+          <a
+            href="/v2/trilhas"
+            title={pinned ? undefined : "Voltar ao modo estudante"}
+            className="flex min-h-14 items-center gap-3 rounded-xl px-[17px] text-text-secondary transition-[background-color,color] duration-150 hover:bg-surface-soft hover:text-primary"
+          >
+            <Icon name="school" size={22} className="shrink-0" />
+            <span
+              className={cn(
+                "text-body-md whitespace-nowrap transition-opacity duration-150 motion-reduce:transition-none",
+                pinned ? "opacity-100" : "opacity-0 group-hover/rail:opacity-100 group-focus-within/rail:opacity-100",
+              )}
+            >
+              Voltar ao modo estudante
+            </span>
+          </a>
         </div>
       </nav>
 
@@ -115,15 +169,20 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
             <NavList active={active} onNavigate={() => setOpen(false)} />
 
             <div className="mt-auto border-t-2 border-border-cloud pt-4">
-              <Button3D variant="ghost" fullWidth onClick={() => (window.location.assign("/v2/trilhas"))}>
-                Voltar ao modo estudante
-              </Button3D>
+              <a
+                href="/v2/trilhas"
+                onClick={() => setOpen(false)}
+                className="flex min-h-14 items-center gap-3 rounded-xl px-3 text-text-secondary transition-[background-color,color] duration-150 hover:bg-surface-soft hover:text-primary"
+              >
+                <Icon name="school" size={22} className="shrink-0" />
+                <span className="text-body-md">Voltar ao modo estudante</span>
+              </a>
             </div>
           </nav>
         </div>
       )}
 
-      <div className="lg:pl-[260px]">
+      <div className={cn("transition-[padding] duration-200 motion-reduce:transition-none", pinned ? "lg:pl-[300px]" : "lg:pl-[72px]")}>
         <header className="sticky top-0 z-30 border-b-2 border-border-cloud bg-surface-canvas">
           <div className="mx-auto flex min-h-16 max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4 py-2 md:px-6">
             <div className="flex min-w-0 items-center gap-3">
@@ -146,9 +205,9 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
               <WorkspaceSwitcher />
               <a
                 href="/v2/trilhas"
-                className="hidden min-h-11 items-center gap-2 rounded-full border-2 border-border-cloud px-4 text-button text-text-secondary uppercase transition-[color,background-color] duration-150 hover:bg-surface-soft hover:text-primary sm:inline-flex lg:hidden"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-border-cloud px-4 text-button text-text-secondary uppercase transition-[color,background-color] duration-150 hover:bg-surface-soft hover:text-primary lg:hidden"
               >
-                <Icon name="refresh" size={18} />
+                <Icon name="school" size={18} />
                 Modo estudante
               </a>
               <a href="/v2/estudio/materiais" aria-label={`Os materiais de ${creatorName}`} className="rounded-full">

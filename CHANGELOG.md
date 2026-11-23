@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Alterado
 
+- F3: menu do modo criador em barra lateral recolhida em icones (72 px no desktop) que abre por cima do conteudo ao passar o rato ou focar, com nome e descricao de cada seccao, e que se pode fixar aberta no hamburger (a escolha fica guardada; sem armazenamento so vale na sessao). Icones revistos (livro, carteira). "Voltar ao modo estudante" passa a icone com rotulo visivel, na barra, na gaveta do telemovel e no topo a 375 px. O perfil publico do criador ja abre dentro do layout do criador.
 - F1: `/termos` e `/privacidade` ganham o botao "Voltar" no cabecalho. Volta ao ecra de onde o utilizador veio; se abriu o link directamente, vai para `/`.
 - Limpeza do sprint: menu do criador com maiuscula so na primeira palavra ("Estudio de criacao", "Os meus materiais", "Conta e subscricao"); `/v2/biblioteca/descargas` passa a "Em breve" (mostrava dados de exemplo); sai `pages/Legal.tsx` (sem uso desde as paginas legais novas); `tsconfig.node.tsbuildinfo` deixa de ser versionado e `*.tsbuildinfo` entra no `.gitignore`.
 - Ofensiva real no cabecalho do aluno (`GET /rankings/me/` via `useGamificacaoMe`), sem gemas (o backend nao as tem). Sem dados, ou se a API falhar, o cabecalho nao mostra nada. O `GamificationProvider` da `V2Layout` deixa de arrancar com `initialXp={650} initialStreak={12} initialGems={450}`: esses numeros falsos apareciam a toda a gente.
