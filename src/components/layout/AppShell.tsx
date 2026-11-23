@@ -6,7 +6,7 @@ import { NotificationBell } from "./NotificationBell";
 import { OfensivaChip } from "./OfensivaChip";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
-import kombinuMark from "../assets/kombinu-mark.svg";
+import { LogoMark } from "../ui/LogoMark";
 
 export type AppSection = "trilhas" | "simulados" | "ligas" | "sebentas" | "biblioteca" | "painel";
 
@@ -50,7 +50,7 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
         <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-4 px-4 md:h-20 md:px-6">
           <span className="flex min-w-0 items-center gap-3">
             <a href="/v2/trilhas" aria-label="Kombinu" className="flex items-center">
-              <img src={kombinuMark} alt="" className="size-10" />
+              <LogoMark />
             </a>
             {campus && (
               <span className="hidden items-center gap-1.5 rounded-full bg-surface-sky px-3 py-1 text-caption font-bold text-primary sm:inline-flex">
@@ -104,13 +104,20 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
       </main>
 
       <footer className="mt-16 border-t-2 border-border-cloud bg-surface-soft">
-        <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-4 px-4 py-8 md:flex-row md:px-6">
-          <span className="font-montserrat text-headline-h3 font-extrabold text-primary">Kombinu</span>
+        <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-2 px-4 py-4 md:flex-row md:px-6">
+          <span className="flex items-center gap-2 font-montserrat text-body-md font-extrabold text-primary">
+            <LogoMark size={24} />
+            Kombinu
+          </span>
           <ul className="flex flex-wrap justify-center gap-x-6 text-caption">
-            {["Sobre nós", "Termos de uso", "Privacidade", "Ajuda"].map((l) => (
-              <li key={l}>
-                <a href="#" className="flex min-h-11 items-center font-bold text-text-secondary hover:text-primary">
-                  {l}
+            {[
+              { label: "Termos", href: "/termos" },
+              { label: "Privacidade", href: "/privacidade" },
+              { label: "Ajuda", href: "mailto:suporte@kombinu.com" },
+            ].map((l) => (
+              <li key={l.label}>
+                <a href={l.href} className="flex min-h-11 items-center font-bold text-text-secondary hover:text-primary">
+                  {l.label}
                 </a>
               </li>
             ))}

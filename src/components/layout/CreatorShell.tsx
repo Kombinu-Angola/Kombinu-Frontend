@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
-import kombinuMark from "../assets/kombinu-mark.svg";
+import { LogoMark } from "../ui/LogoMark";
 import { useDialogBehavior } from "../../hooks/useDialogBehavior";
 
 export type CreatorSection = "estudio" | "materiais" | "financeiro" | "publico" | "definicoes";
@@ -113,7 +113,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
                 pinned ? "opacity-100" : "opacity-0 group-hover/rail:opacity-100 group-focus-within/rail:opacity-100",
               )}
             >
-              <img src={kombinuMark} alt="" className="size-10" />
+              <LogoMark />
             </a>
           </div>
           <div className="pt-4">
@@ -196,7 +196,7 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
                 <Icon name="menu" size={20} />
               </button>
               <a href="/v2/estudio" aria-label="Kombinu Estúdio" className="flex items-center lg:hidden">
-                <img src={kombinuMark} alt="" className="size-10" />
+                <LogoMark />
               </a>
             </div>
 
