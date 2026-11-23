@@ -40,7 +40,7 @@ export const TERMOS: LegalDoc = {
             { label: "Matrícula Comercial (Guiché Único da Empresa — GUE)", value: "n.º 14619-25 (registada em 29 de Abril de 2025)" },
             { label: "Sede Social", value: "Bairro Morro Bento, Distrito Urbano da Samba, Município de Luanda, Província de Luanda, República de Angola" },
             { label: "Registos de Propriedade Intelectual", value: "SENADIAC n.º 4.103/2025 (Marketplace de Conteúdos Gamificados) e n.º 3.973/2025 (Sistema Offline de E-Learning Gramática); Marca Nacional IAPI Processo n.º 92679 (AO/T/2025/092679)" },
-            { label: "Canal Oficial de Suporte e Assuntos Jurídicos", value: "suporte@kombinu.co.ao | juridico@kombinu.co.ao" },
+            { label: "Canal Oficial de Suporte e Assuntos Jurídicos", value: "suporte@kombinu.com | juridico@kombinu.com | +244 958 568 364" },
           ],
         },
       ],
@@ -157,7 +157,7 @@ export const TERMOS: LegalDoc = {
             },
           ],
         },
-        { type: "sub", number: "6.4", title: "Procedimento e prazo de estorno", blocks: [{ type: "p", text: "As solicitações de reembolso devem ser submetidas através do canal suporte@kombinu.co.ao com o comprovativo de transação do Multicaixa Express. Após validação técnica (em até 72 horas úteis), o estorno financeiro será executado para o IBAN ou conta associada ao Multicaixa Express do Estudante no prazo máximo de 10 (dez) dias úteis." }] },
+        { type: "sub", number: "6.4", title: "Procedimento e prazo de estorno", blocks: [{ type: "p", text: "As solicitações de reembolso devem ser submetidas através do canal suporte@kombinu.com com o comprovativo de transação do Multicaixa Express. Após validação técnica (em até 72 horas úteis), o estorno financeiro será executado para o IBAN ou conta associada ao Multicaixa Express do Estudante no prazo máximo de 10 (dez) dias úteis." }] },
       ],
     },
     {
@@ -233,7 +233,7 @@ export const TERMOS: LegalDoc = {
         {
           type: "sub", number: "8.4", title: "Procedimento de denúncia e remoção rápida (Notice & Takedown)",
           blocks: [
-            { type: "p", text: "Qualquer titular de direitos de autor, docente, editora ou instituição de ensino que identifique material que infrinja a Lei n.º 15/14 pode notificar o canal juridico@kombinu.co.ao indicando o link do conteúdo e prova de titularidade. A Kombinu compromete-se a:" },
+            { type: "p", text: "Qualquer titular de direitos de autor, docente, editora ou instituição de ensino que identifique material que infrinja a Lei n.º 15/14 pode notificar o canal juridico@kombinu.com indicando o link do conteúdo e prova de titularidade. A Kombinu compromete-se a:" },
             {
               type: "list", ordered: true, items: [
                 { text: "Suspender cautelarmente a exibição do conteúdo denunciado no prazo máximo de 24 (vinte e quatro) a 48 (quarenta e oito) horas;" },

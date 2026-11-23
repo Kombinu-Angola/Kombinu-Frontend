@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { CreatorShell } from "../../components/layout/CreatorShell";
 import { LinkButton3D } from "../../components/ui/Button3D";
-import { SelectField } from "../../components/ui/Field";
 import { Icon, type IconName } from "../../components/ui/Icon";
 import { cn } from "@/lib/utils";
 
@@ -78,18 +76,10 @@ const FORMATS: Format[] = [
   },
 ];
 
-const SUBJECTS = [
-  { value: "macro1", label: "Macroeconomia I — UAN, Economia, 2.º ano" },
-  { value: "macro2", label: "Macroeconomia II — UAN, Economia, 3.º ano" },
-  { value: "estat", label: "Estatística Aplicada — UAN, Economia, 2.º ano" },
-];
-
-type CreationHubScreenProps = { creatorName: string; questionCount: number; draftCount: number };
+type CreationHubScreenProps = { creatorName: string };
 
 /** Hub de criação: escolher o formato antes de abrir um editor. */
-export default function CreationHubScreen({ creatorName, questionCount, draftCount }: CreationHubScreenProps) {
-  const [subject, setSubject] = useState(SUBJECTS[0].value);
-
+export default function CreationHubScreen({ creatorName }: CreationHubScreenProps) {
   return (
     <CreatorShell active="materiais" creatorName={creatorName}>
       <div className="mx-auto max-w-[1080px] px-4 py-6 md:px-6 lg:py-8">
@@ -112,41 +102,6 @@ export default function CreationHubScreen({ creatorName, questionCount, draftCou
             reaproveitar no seguinte.
           </p>
         </header>
-
-        <section
-          aria-labelledby="target-title"
-          className="mb-7 flex flex-col justify-between gap-4 rounded-2xl border-2 border-border-cloud bg-surface-canvas p-4 md:flex-row md:items-end"
-        >
-          <div className="md:max-w-md md:flex-1">
-            <h2 id="target-title" className="sr-only">
-              Cadeira de destino
-            </h2>
-            <SelectField
-              id="target-subject"
-              label="Para que cadeira"
-              hint="Define a liga, o diagnóstico e os tópicos disponíveis."
-              options={SUBJECTS}
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            />
-          </div>
-          <p className="flex flex-wrap gap-2">
-            <a
-              href="/v2/estudio/questoes"
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-full border-2 border-border-cloud bg-surface-canvas px-3.5 text-caption font-bold text-text-secondary transition-[border-color,color] duration-150 hover:border-brand-ocean hover:text-primary"
-            >
-              <Icon name="file" size={16} />
-              {questionCount} questões no banco
-            </a>
-            <a
-              href="/v2/estudio/materiais"
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-full border-2 border-border-cloud bg-surface-canvas px-3.5 text-caption font-bold text-text-secondary transition-[border-color,color] duration-150 hover:border-brand-ocean hover:text-primary"
-            >
-              <Icon name="edit" size={16} />
-              {draftCount} rascunhos por terminar
-            </a>
-          </p>
-        </section>
 
         <section aria-label="Formatos disponíveis" className="grid grid-cols-1 gap-5 md:grid-cols-2">
           {FORMATS.map((format) => (
