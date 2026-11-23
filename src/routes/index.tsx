@@ -11,6 +11,7 @@ import { LandingPage } from '@/pages/LandingPage';
 import { Error } from '@/pages/error';
 import { NotFound } from '@/pages/notFound';
 import { v2Routes } from './v2';
+import { FLUXO_MOCKS } from '../lib/fluxoFlags';
 
 /** Pagina carregada sob pedido; `protegida` exige sessao (e papeis, se indicados) antes de a mostrar. */
 const pagina = (carregar: () => Promise<{ default: ComponentType }>) => async () => ({ Component: (await carregar()).default });
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
   // Documentos legais: carregados à parte (o texto pesa ~60 kB e só se lê quando se abre).
   { path: '/termos', lazy: async () => ({ Component: (await import('@/features/legal/LegalPage')).TermsScreen }), errorElement: <Error /> },
   { path: '/privacidade', lazy: async () => ({ Component: (await import('@/features/legal/LegalPage')).PrivacyScreen }), errorElement: <Error /> },
+  // Link público do encarregado (F7): só com os dados simulados, em desenvolvimento.
+  ...(FLUXO_MOCKS
+    ? [{ path: '/encarregado/:token', lazy: pagina(() => import('../features/preparar/PagamentoEncarregado')), errorElement: <Error /> }]
+    : []),
   {
     element: <AuthLayout />,
     children: [
