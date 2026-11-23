@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { useFocusOnMount } from "../../hooks/useFocusOnMount";
 import { Button3D } from "../../components/ui/Button3D";
-import { DataSaverBadge } from "../../components/ui/DataSaverBadge";
 import { Icon } from "../../components/ui/Icon";
 import { Pill } from "../../components/ui/Pill";
 import { Stepper } from "../../components/ui/Stepper";
@@ -60,7 +59,6 @@ export function CreatorStepLayout({ step, onBack, backLabel, eyebrow, title, lea
 
         {children}
       </main>
-      <DataSaverBadge megabytesToday={1.2} />
     </div>
   );
 }

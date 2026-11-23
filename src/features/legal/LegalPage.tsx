@@ -17,12 +17,12 @@ export const PrivacyScreen = () => <LegalPage doc={PRIVACIDADE} />;
 
 const CONTACTS: Record<LegalDoc["slug"], { label: string; email: string }[]> = {
   termos: [
-    { label: "Suporte e reembolsos", email: "suporte@kombinu.co.ao" },
-    { label: "Assuntos jurídicos e denúncias", email: "juridico@kombinu.co.ao" },
+    { label: "Suporte e reembolsos", email: "suporte@kombinu.com" },
+    { label: "Assuntos jurídicos e denúncias", email: "juridico@kombinu.com" },
   ],
   privacidade: [
-    { label: "Exercer os teus direitos", email: "privacidade@kombinu.co.ao" },
-    { label: "Suporte geral", email: "suporte@kombinu.co.ao" },
+    { label: "Exercer os teus direitos", email: "privacidade@kombinu.com" },
+    { label: "Suporte geral", email: "suporte@kombinu.com" },
   ],
 };
 

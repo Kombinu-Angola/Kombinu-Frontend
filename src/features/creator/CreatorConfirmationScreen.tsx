@@ -1,7 +1,6 @@
 import { useFocusOnMount } from "../../hooks/useFocusOnMount";
 import { Asset3D } from "../../components/ui/Asset3D";
 import { LinkButton3D } from "../../components/ui/Button3D";
-import { DataSaverBadge } from "../../components/ui/DataSaverBadge";
 import { Icon } from "../../components/ui/Icon";
 import { maskAOPhone } from "../../components/ui/PhoneInputAO";
 import { StatusTimeline, type TimelineItem } from "../../components/ui/StatusTimeline";
@@ -179,7 +178,6 @@ export function CreatorConfirmationScreen({ application: app, receipt, links }: 
           </a>
         </footer>
       </main>
-      <DataSaverBadge megabytesToday={1.2} />
     </div>
   );
 }

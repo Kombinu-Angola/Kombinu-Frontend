@@ -116,7 +116,7 @@ function RankingDoWorkspace() {
 
         {/* Pódio top 3 */}
         {top3.length >= 2 && (
-          <div className="flex items-end justify-center gap-4 mb-8">
+          <div className="flex items-end justify-center gap-2 mb-8 sm:gap-4">
             {podiumOrder.map((user, podiumIdx) => {
               const pos = user.position;
               const isFirst = pos === 1;
@@ -134,7 +134,7 @@ function RankingDoWorkspace() {
                 : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700';
 
               return (
-                <div key={user.id} className={`flex-1 max-w-[160px] flex flex-col items-center ${isFirst ? 'order-2' : podiumIdx === 0 ? 'order-1' : 'order-3'}`}>
+                <div key={user.id} className={`flex-1 min-w-0 max-w-[160px] flex flex-col items-center ${isFirst ? 'order-2' : podiumIdx === 0 ? 'order-1' : 'order-3'}`}>
                   {/* Coroa para o 1.º */}
                   {isFirst && <Crown className="w-8 h-8 text-yellow-500 mb-1" />}
 
@@ -177,11 +177,11 @@ function RankingDoWorkspace() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-12 px-6 py-4 bg-gray-50 dark:bg-gray-700/50 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700">
-                <div className="col-span-2 text-center">Posição</div>
+              <div className="grid grid-cols-12 px-3 py-4 sm:px-6 bg-gray-50 dark:bg-gray-700/50 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-gray-700">
+                <div className="col-span-2 text-center"><span className="sm:hidden">Pos.</span><span className="hidden sm:inline">Posição</span></div>
                 <div className="col-span-6">Utilizador</div>
                 <div className="col-span-2 text-center">XP</div>
-                <div className="col-span-2 text-center">Tendência</div>
+                <div className="col-span-2 text-center"><span className="sm:hidden">Tend.</span><span className="hidden sm:inline">Tendência</span></div>
               </div>
 
               {(top3.length >= 2 ? resto : rankingData).map((user) => {
@@ -191,7 +191,7 @@ function RankingDoWorkspace() {
                 return (
                   <div
                     key={user.id}
-                    className={`grid grid-cols-12 px-6 py-4 items-center border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors
+                    className={`grid grid-cols-12 px-3 py-4 sm:px-6 items-center border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors
                       ${isMe
                         ? 'bg-blue-50 dark:bg-blue-900/10 hover:bg-blue-100 dark:hover:bg-blue-900/20'
                         : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'}`}
