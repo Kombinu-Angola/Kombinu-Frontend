@@ -23,7 +23,7 @@ export const PRIVACIDADE: LegalDoc = {
     { icon: "spark", title: "A IA não te identifica", text: "Para gerar quizzes, a IA recebe o conteúdo da matéria, não o teu telefone, e-mail ou NIF.", ref: "sec-5" },
     { icon: "mail", title: "Mensagens só com autorização", text: "Lembretes e promoções no WhatsApp, SMS ou e-mail dependem do teu consentimento, que podes retirar quando quiseres.", ref: "sec-4" },
     { icon: "shield", title: "Protegidos e cifrados", text: "Ligações cifradas (TLS 1.3), dados cifrados em repouso e acessos separados por perfil.", ref: "sec-8" },
-    { icon: "users", title: "Os teus direitos", text: "Podes pedir acesso, correção, eliminação ou opor-te ao marketing. Escreve para privacidade@kombinu.co.ao: resposta em até 15 dias úteis.", ref: "sec-10" },
+    { icon: "users", title: "Os teus direitos", text: "Podes pedir acesso, correção, eliminação ou opor-te ao marketing. Escreve para privacidade@kombinu.com: resposta em até 15 dias úteis.", ref: "sec-10" },
   ],
   sections: [
     {
@@ -36,7 +36,7 @@ export const PRIVACIDADE: LegalDoc = {
             { label: "Número de Identificação Fiscal (NIF)", value: "5002488787" },
             { label: "Matrícula no Registo Comercial (GUE)", value: "n.º 14619-25" },
             { label: "Sede Social", value: "Bairro Morro Bento, Município da Samba, Luanda, República de Angola" },
-            { label: "Canal Oficial de Privacidade e Encarregado de Proteção de Dados (DPO)", value: "privacidade@kombinu.co.ao / suporte@kombinu.co.ao" },
+            { label: "Canal Oficial de Privacidade e Encarregado de Proteção de Dados (DPO)", value: "privacidade@kombinu.com / suporte@kombinu.com / +244 958 568 364" },
           ],
         },
       ],
@@ -215,7 +215,7 @@ export const PRIVACIDADE: LegalDoc = {
         {
           type: "sub", title: "Como exercer os seus direitos",
           blocks: [
-            { type: "p", text: "Basta enviar um pedido escrito para o correio eletrónico privacidade@kombinu.co.ao com o assunto «Exercício de Direitos — Lei n.º 22/11». A nossa equipa responderá ao seu pedido no prazo máximo de 15 (quinze) dias úteis." },
+            { type: "p", text: "Basta enviar um pedido escrito para o correio eletrónico privacidade@kombinu.com com o assunto «Exercício de Direitos — Lei n.º 22/11». A nossa equipa responderá ao seu pedido no prazo máximo de 15 (quinze) dias úteis." },
             { type: "callout", tone: "info", title: "Colaboradores de clientes B2B", text: "Se for colaborador de uma empresa cliente B2B, os pedidos de alteração ou eliminação de registos de formação corporativa deverão ser encaminhados ao Administrador/RH da sua própria organização, na qualidade de Responsável pelo Tratamento." },
           ],
         },

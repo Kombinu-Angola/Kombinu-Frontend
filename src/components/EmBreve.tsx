@@ -2,7 +2,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { destinoPorPapel } from "../lib/destinoPosLogin";
 import { AppShell } from "./layout/AppShell";
 import { AdminShell } from "./layout/AdminShell";
-import { CreatorShell } from "./layout/CreatorShell";
+import { CreatorShell, type CreatorSection } from "./layout/CreatorShell";
 import { LinkButton3D } from "./ui/Button3D";
 import { Icon } from "./ui/Icon";
 
@@ -43,12 +43,12 @@ export function EmBreve({ nome, texto = TEXTO_PADRAO }: EmBreveProps) {
 type Area = "aluno" | "criador" | "admin";
 
 /** `EmBreve` dentro da moldura da área, para a navegação continuar à mão. */
-export function EmBrevePagina({ area, nome, texto }: { area: Area; nome: string; texto?: string }) {
+export function EmBrevePagina({ area, nome, texto, secao = "materiais" }: { area: Area; nome: string; texto?: string; secao?: CreatorSection }) {
   const { usuario } = useAuth();
   const conteudo = <EmBreve nome={nome} texto={texto} />;
   if (area === "criador") {
     return (
-      <CreatorShell active="materiais" creatorName={usuario?.nome ?? ""}>
+      <CreatorShell active={secao} creatorName={usuario?.nome ?? ""}>
         {conteudo}
       </CreatorShell>
     );

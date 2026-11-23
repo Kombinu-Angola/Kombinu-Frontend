@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useErrorHandler } from '../hooks/useErrorHandler';
 import type { ReactNode } from "react";
-import { authService, ErroLogin, type CodigoErroLogin } from '../services/authService';
+import { authService, ErroLogin, ErroRegisto, type CodigoErroLogin } from '../services/authService';
 import type { RegisterData, Usuario } from '@/types';
 
 
 /** Resultado de um login que o ecrã consegue apresentar sem apanhar excepções. */
-export type ResultadoLogin = { ok: true; usuario: Usuario } | { ok: false; codigo: CodigoErroLogin };
+export type ResultadoLogin = { ok: true; usuario: Usuario } | { ok: false; codigo: CodigoErroLogin; esperaSegundos?: number };
 
 interface AuthContextType {
   usuario: Usuario | null;
@@ -71,7 +71,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('kombinu_usuario', JSON.stringify(user));
       return { ok: true, usuario: user };
     } catch (err) {
-      return { ok: false, codigo: err instanceof ErroLogin ? err.codigo : 'indisponivel' };
+      return err instanceof ErroLogin
+        ? { ok: false, codigo: err.codigo, esperaSegundos: err.esperaSegundos }
+        : { ok: false, codigo: 'indisponivel' };
     }
   };
 
@@ -92,14 +94,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // REGISTER
   const register = async (dadosUsuario: RegisterData) => {
-    return executeWithErrorHandling(async () => {
+    try {
       const user = await authService.register(dadosUsuario);
-
       setUsuario(user);
       localStorage.setItem('kombinu_usuario', JSON.stringify(user));
-
       return user;
-    }, 'register') ?? null;
+    } catch (err) {
+      // O formulário mostra os erros de cada campo (ErroRegisto); o resto segue o tratamento geral.
+      if (err instanceof ErroRegisto) throw err;
+      return executeWithErrorHandling(async () => { throw err; }, 'register') ?? null;
+    }
   };
 
   // LOGOUT
