@@ -113,7 +113,7 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
             {[
               { label: "Termos", href: "/termos" },
               { label: "Privacidade", href: "/privacidade" },
-              { label: "Ajuda", href: "mailto:suporte@kombinu.co.ao" },
+              { label: "Ajuda", href: "mailto:suporte@kombinu.com" },
             ].map((l) => (
               <li key={l.label}>
                 <a href={l.href} className="flex min-h-11 items-center font-bold text-text-secondary hover:text-primary">
