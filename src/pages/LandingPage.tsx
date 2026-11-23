@@ -27,7 +27,7 @@ export function LandingPage() {
       <main id="conteudo" tabIndex={-1}>
         <PasseHero p={p} />
         <PasseCalendar p={p} />
-        <PasseHowItWorks p={p} />
+        <PasseHowItWorks />
         <PasseDataSaving p={p} />
         <PassePricing p={p} />
         <PassePayment p={p} />

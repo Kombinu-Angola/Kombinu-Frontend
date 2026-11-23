@@ -1,7 +1,7 @@
 import { useRef, useState, type FormEvent } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import type { Usuario } from "@/types";
-import { MENSAGENS_LOGIN } from "../auth/mensagensLogin";
+import { mensagemDeLogin } from "../auth/mensagensLogin";
 import { Field, FormAlert, PasswordField, PrimaryButton } from "./ui";
 
 /** Login institucional (escola): código da escola, código do aluno e senha. Mesmo contrato de `SchoolLoginForm`. */
@@ -29,7 +29,7 @@ export function EscolaForm({ onAuthenticated }: { onAuthenticated: (usuario: Usu
     if ("usuario" in resultado) {
       onAuthenticated(resultado.usuario);
     } else {
-      setErro(MENSAGENS_LOGIN[resultado.codigo]);
+      setErro(mensagemDeLogin(resultado));
       setSenha("");
     }
   }
