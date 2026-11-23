@@ -37,7 +37,7 @@ export function PasseFaq({ p }: { p: PasseLandingState }) {
           <h2 className={cx(styles.h2, styles.rv)} id="faq-h">
             Perguntas antes de comprar.
           </h2>
-          <p className={cx(styles.lead, styles.rv, styles["rv-2"])}>Não encontras a tua dúvida? Escreve-nos para suporte@kombinu.co.ao.</p>
+          <p className={cx(styles.lead, styles.rv, styles["rv-2"])}>Não encontras a tua dúvida? Escreve-nos para suporte@kombinu.com ou contacta-nos pelo +244 958 568 364.</p>
         </div>
         <div className={styles["faq-list"]}>
           {FAQS.map((item, i) => {
