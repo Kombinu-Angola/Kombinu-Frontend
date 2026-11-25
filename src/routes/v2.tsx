@@ -12,21 +12,19 @@ import { AppShell } from '../components/layout/AppShell';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { MOCK_COURSE } from '../features/course/mockCourse';
 
-import { MOCK_DRAFT } from '../features/studio/mockDraft';
-import type { AccountSettings } from '../features/subscription/AccountSettingsScreen';
 
 import { PURCHASES } from '../features/purchases/mockPurchases';
 
 import { MOCK_ACCOUNT } from '../features/account/mockAccount';
 import { MOCK_TRAIL, MOCK_ADAPTIVE } from '../features/trail/mockTrail';
-import type { HomologationResult } from '../features/creator/HomologationResultScreen';
 
 import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
-import { EmBreve, EmBrevePagina } from '../components/EmBreve';
+import { EmBrevePagina } from '../components/EmBreve';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
+import { FLUXO_MOCKS } from '../lib/fluxoFlags';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 
 import { MOCK_QA } from '../features/qa/mockQa';
@@ -38,10 +36,16 @@ import { SESSIONS } from '../features/account/mockAccount';
 import { useAccoesEnquetes, useListaEnquetes, useResultadosEnquete } from '../hooks/useEnquetes';
 import { mensagemErroEnquete } from '../services/surveyService';
 
-import { TOPICS, QUESTIONS } from '../features/authoring/mockAuthoring';
 
 // Telas carregadas sob pedido: cada ecra vira o seu proprio ficheiro e so se descarrega quando a rota abre.
-const OnboardingRoleScreen = lazy(() => import('../features/onboarding/OnboardingRoleScreen'));
+const OnboardingNovo = lazy(() => import('../features/onboarding-novo/OnboardingNovo'));
+const CredenciamentoFlow = lazy(() => import('../features/credenciamento/CredenciamentoFlow'));
+const B1Preparar = lazy(() => import('../features/preparar/B1Preparar'));
+const B3Calibrar = lazy(() => import('../features/preparar/B3Calibrar'));
+const B4Previa = lazy(() => import('../features/preparar/B4Previa'));
+const MinhasPreparacoes = lazy(() => import('../features/preparar/MinhasPreparacoes'));
+const B6Modulo = lazy(() => import('../features/preparar/B6Modulo'));
+const SimuladoCompleto = lazy(() => import('../features/preparar/SimuladoCompleto'));
 const StudentOnboardingFlow = lazy(() => import('../features/onboarding/StudentOnboardingFlow'));
 const AuthScreen = lazy(() => import('../features/auth/AuthScreen'));
 const SchoolLoginScreen = lazy(() => import('../features/auth/SchoolLoginScreen'));
@@ -53,9 +57,7 @@ const CourseScreen = lazy(() => import('../features/course/CourseScreen'));
 const Ranking = lazy(() => import('../pages/Ranking'));
 const StudentProfileScreen = lazy(() => import('../features/profile/StudentProfileScreen'));
 const MaterialDetailScreen = lazy(() => import('../features/marketplace/MaterialDetailScreen'));
-const StudioScreen = lazy(() => import('../features/studio/StudioScreen'));
-const SubscriptionFlow = lazy(() => import('../features/subscription/SubscriptionFlow'));
-const AccountSettingsScreen = lazy(() => import('../features/subscription/AccountSettingsScreen'));
+const ContaCriadorScreen = lazy(() => import('../features/subscription/ContaCriadorScreen'));
 const AdminEstudantesScreen = lazy(() => import('../features/admin/AdminEstudantesScreen'));
 const PurchaseHistoryScreen = lazy(() => import('../features/purchases/PurchaseHistoryScreen'));
 const CreatorContentHubScreen = lazy(() => import('../features/creator-content/CreatorContentHubScreen'));
@@ -63,8 +65,6 @@ const StudentSettingsScreen = lazy(() => import('../features/account/StudentSett
 const PhoneSecurityScreen = lazy(() => import('../features/account/PhoneSecurityScreen'));
 const LearningTrailScreen = lazy(() => import('../features/trail/LearningTrailScreen'));
 const AdaptiveTrailScreen = lazy(() => import('../features/trail/AdaptiveTrailScreen'));
-const HomologationResultScreen = lazy(() => import('../features/creator/HomologationResultScreen'));
-const RenewalFailureScreen = lazy(() => import('../features/subscription/RenewalFailureScreen'));
 const SessionExpiredScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.SessionExpiredScreen })));
 const NotFoundScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.NotFoundScreen })));
 const NotificationCenterScreen = lazy(() => import('../features/notifications/NotificationCenterScreen'));
@@ -79,8 +79,6 @@ const SurveyComposerScreen = lazy(() => import('../features/survey/SurveyCompose
 const SurveyResultsScreen = lazy(() => import('../features/survey/SurveyResultsScreen'));
 const SurveyListScreen = lazy(() => import('../features/survey/SurveyListScreen'));
 const CreationHubScreen = lazy(() => import('../features/authoring/CreationHubScreen'));
-const StudioOnboardingScreen = lazy(() => import('../features/authoring/StudioOnboardingScreen'));
-const TrailComposerScreen = lazy(() => import('../features/authoring/TrailComposerScreen'));
 
 /** Nomes de sessão de demonstração (sem backend ligado ainda). */
 /** Entrega o nome do utilizador autenticado às telas que ainda o recebem por prop. */
@@ -89,17 +87,15 @@ function ComUtilizador({ children }: { children: (nome: string) => ReactNode }) 
   return <>{children(usuario?.nome ?? '')}</>;
 }
 
-function OnboardingRoute() {
-  const navigate = useNavigate();
+/**
+ * Entrada de `/v2`: já não pergunta "estudante ou criador" (o onboarding vive depois do registo).
+ * Com sessão, leva ao ecrã do papel (admin: membros, professor: estúdio, estudante: painel); sem sessão, ao login.
+ */
+function EntradaV2Route() {
   const { usuario, loading } = useAuth();
-  // Com sessão iniciada, `/v2` leva ao ecrã do papel (admin: membros, professor: estúdio, estudante: painel), sem Onboarding.
   if (loading) return null;
   if (usuario) return <Navigate to={destinoPorPapel(usuario)} replace />;
-  return (
-    <OnboardingRoleScreen
-      onSelectRole={(role) => navigate(role === 'creator' ? '/v2/credenciamento' : '/v2/onboarding/estudante')}
-    />
-  );
+  return <Navigate to="/login" replace />;
 }
 
 function StudentOnboardingRoute() {
@@ -112,11 +108,6 @@ function StudentOnboardingRoute() {
       feedHref="/v2/trilhas"
     />
   );
-}
-
-/** O credenciamento de criador ainda não tem API (`POST /creators/applications/` não existe): mostra "Em breve" em vez de dar 404 ao submeter. */
-function CreatorApplicationRoute() {
-  return <EmBreve nome="Credenciamento de criador" />;
 }
 
 function NotificationsRoute() {
@@ -280,38 +271,6 @@ function SimuladoRoute() {
   return <SimuladoFlow quizId={params.get('quizId')} />;
 }
 
-function StudioRoute() {
-  const { usuario } = useAuth();
-  return (
-    <StudioScreen
-      initialDraft={MOCK_DRAFT}
-      authorName={usuario?.nome ?? ''}
-      courseName={MOCK_COURSE.hero.title}
-      onSave={async () => {
-        /* Backend de rascunhos ainda nao existe; useDraft guarda so em memoria. */
-      }}
-    />
-  );
-}
-
-const DEMO_SETTINGS: AccountSettings = {
-  name: '',
-  institution: 'uan-economia',
-  bio: 'Explico Economia e Macroeconomia de forma simples, com sebentas revistas e simulados semanais.',
-  phone: '923000302',
-  phoneVerified: true,
-  plan: 'pro',
-  planPriceKz: 5000,
-  renewsAt: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString(),
-  notifications: { streak: true, questions: true, sales: true },
-};
-
-function AccountSettingsRoute() {
-  const navigate = useNavigate();
-  const { usuario } = useAuth();
-  return <AccountSettingsScreen settings={{ ...DEMO_SETTINGS, name: usuario?.nome ?? '' }} onChangePlan={() => navigate('/v2/estudio/plano')} />;
-}
-
 function StudentSettingsRoute() {
   return (
     <StudentSettingsScreen
@@ -336,50 +295,6 @@ function PhoneSecurityRoute() {
   );
 }
 
-const HOMOLOGATION_CREATOR = {
-  name: '',
-  university: 'Universidade Agostinho Neto (UAN)',
-  faculty: 'Faculdade de Ciências',
-  specialty: 'Estruturas de Dados',
-  phone: '923456789',
-};
-
-const HOMOLOGATION_APROVADO: HomologationResult = {
-  status: 'aprovado',
-  protocol: 'PROT-CRE-2026-8942',
-  decidedAt: new Date().toISOString(),
-  creator: HOMOLOGATION_CREATOR,
-};
-
-const HOMOLOGATION_CORRECAO: HomologationResult = {
-  status: 'correcao',
-  protocol: 'PROT-CRE-2026-8944',
-  decidedAt: new Date(Date.now() - 86_400_000).toISOString(),
-  creator: HOMOLOGATION_CREATOR,
-  feedback:
-    'A declaração enviada tem a data de validade ilegível no canto inferior direito. A amostra está aprovada.',
-  required: ['Declaração institucional com a validade legível, em PDF ou fotografia nítida.'],
-};
-
-function RenewalFailureRoute() {
-  const navigate = useNavigate();
-  const { usuario } = useAuth();
-  return (
-    <RenewalFailureScreen
-      creatorName={usuario?.nome ?? ''}
-      priceKz={5000}
-      phone="923891024"
-      failedAt={new Date(Date.now() - 2 * 86_400_000).toISOString()}
-      graceEndsAt={new Date(Date.now() + 5 * 86_400_000).toISOString()}
-      authorize={async () => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        return { reference: 'EXP-2026-9014', approvedAt: new Date().toISOString() };
-      }}
-      onDowngrade={() => navigate('/v2/estudio/definicoes')}
-      changePhoneHref="/v2/conta/telemovel"
-    />
-  );
-}
 
 function SessionExpiredRoute() {
   const navigate = useNavigate();
@@ -416,21 +331,6 @@ function NotFoundRoute() {
   );
 }
 
-function SubscriptionRoute() {
-  const { usuario } = useAuth();
-  return (
-    <SubscriptionFlow
-      creatorName={usuario?.nome ?? ''}
-      currentPlan="free"
-      studioHref="/v2/estudio"
-      authorize={async (_phone, _amountKz) => {
-        await new Promise((resolve) => setTimeout(resolve, 2500));
-        return { reference: `EXP-${Date.now()}`, approvedAt: new Date().toISOString() };
-      }}
-    />
-  );
-}
-
 /**
  * Rotas paralelas das 39 telas novas (docs/INTEGRACAO-TELAS.md, passo 11).
  * Cada ecra usa o seu proprio mock (feature/mock*.ts); ligar aos servicos reais
@@ -441,9 +341,10 @@ export const v2Routes: RouteObject = {
   path: 'v2',
   element: <V2Layout />,
   children: [
-    { index: true, element: <OnboardingRoute /> },
+    { index: true, element: <EntradaV2Route /> },
+    { path: 'onboarding', element: <OnboardingNovo /> },
     { path: 'onboarding/estudante', element: <StudentOnboardingRoute /> },
-    { path: 'credenciamento', element: <CreatorApplicationRoute /> },
+    { path: 'credenciamento', element: <CredenciamentoFlow /> },
     { path: 'entrar', element: <AuthRoute /> },
 
     { path: 'painel', element: <DashboardScreen /> },
@@ -461,10 +362,10 @@ export const v2Routes: RouteObject = {
     { path: 'medalhas', element: <EmBrevePagina area="aluno" nome="Medalhas" /> },
     { path: 'criador', element: <EmBrevePagina area="criador" nome="Perfil público" /> },
 
-    { path: 'estudio', element: <StudioRoute /> },
+    { path: 'estudio', element: <Navigate to="/v2/estudio/materiais" replace /> },
     { path: 'estudio/financeiro', element: <EmBrevePagina area="criador" nome="Financeiro" /> },
-    { path: 'estudio/plano', element: <SubscriptionRoute /> },
-    { path: 'estudio/definicoes', element: <AccountSettingsRoute /> },
+    { path: 'estudio/plano', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
+    { path: 'estudio/definicoes', element: <ContaCriadorScreen /> },
 
     { path: 'admin', element: <EmBrevePagina area="admin" nome="Visão executiva" /> },
     { path: 'admin/estudantes', element: <Navigate to="/v2/admin/membros" replace /> },
@@ -484,9 +385,9 @@ export const v2Routes: RouteObject = {
     { path: 'conta/telemovel', element: <PhoneSecurityRoute /> },
     { path: 'trilha', element: <ComUtilizador>{(nome) => <LearningTrailScreen trail={MOCK_TRAIL} userName={nome} backHref="/v2/cadeira" />}</ComUtilizador> },
     { path: 'trilha/mista', element: <ComUtilizador>{(nome) => <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={nome} diagnosticHref="/v2/painel" />}</ComUtilizador> },
-    { path: 'estudio/homologacao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_APROVADO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
-    { path: 'estudio/homologacao/correcao', element: <ComUtilizador>{(nome) => <HomologationResultScreen studioHref="/v2/estudio" publicProfileHref="/v2/criador" result={{ ...HOMOLOGATION_CORRECAO, creator: { ...HOMOLOGATION_CREATOR, name: nome } }} />}</ComUtilizador> },
-    { path: 'estudio/renovacao', element: <RenewalFailureRoute /> },
+    { path: 'estudio/homologacao', element: <EmBrevePagina area="criador" nome="Homologação" /> },
+    { path: 'estudio/homologacao/correcao', element: <EmBrevePagina area="criador" nome="Homologação" /> },
+    { path: 'estudio/renovacao', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
 
     { path: 'offline', element: <EmBrevePagina area="aluno" nome="Estudo offline" /> },
     { path: 'sessao-expirada', element: <SessionExpiredRoute /> },
@@ -530,29 +431,11 @@ export const v2Routes: RouteObject = {
 
     { path: 'admin/suporte', element: <EmBrevePagina area="admin" nome="Suporte e disputas" /> },
 
-    { path: 'estudio/criar', element: <ComUtilizador>{(nome) => <CreationHubScreen creatorName={nome} questionCount={QUESTIONS.length} draftCount={2} />}</ComUtilizador> },
-    {
-      path: 'estudio/comecar',
-      element: (
-        <ComUtilizador>
-          {(nome) => (
-        <StudioOnboardingScreen
-          creatorName={nome}
-          university="UAN · Faculdade de Ciências"
-          steps={[
-            { id: 's1', label: 'Credenciais homologadas', detail: 'Aprovado pela equipa de auditoria.', done: true, href: '/v2/estudio/homologacao' },
-            { id: 's2', label: 'Publicar o primeiro material', detail: 'Começa por um modelo e adapta o conteúdo.', done: false, href: '/v2/estudio/criar' },
-            { id: 's3', label: 'Definir preço e visibilidade', detail: 'Entre 1.000 e 2.500 Kz na tua cadeira.', done: false, href: '/v2/estudio/materiais' },
-            { id: 's4', label: 'Confirmar o Multicaixa Express', detail: 'Teste de 1 Kz para validar a titularidade.', done: false, href: '/v2/estudio/financeiro' },
-          ]}
-        />
-          )}
-        </ComUtilizador>
-      ),
-    },
+    { path: 'estudio/criar', element: <ComUtilizador>{(nome) => <CreationHubScreen creatorName={nome} />}</ComUtilizador> },
+    { path: 'estudio/comecar', element: <EmBrevePagina area="criador" nome="Primeiros passos do estúdio" /> },
     { path: 'estudio/questoes', element: <EmBrevePagina area="criador" nome="Banco de questões" /> },
     { path: 'estudio/simulado', element: <EmBrevePagina area="criador" nome="Construtor de simulado" /> },
-    { path: 'estudio/trilha', element: <ComUtilizador>{(nome) => <TrailComposerScreen topics={TOPICS} creatorName={nome} subjectName="Macroeconomia I" readersOnCurrent={83} />}</ComUtilizador> },
+    { path: 'estudio/trilha', element: <EmBrevePagina area="criador" nome="Compositor de trilha" /> },
     { path: 'estudio/importar', element: <EmBrevePagina area="criador" nome="Importação em massa" /> },
     { path: 'estudio/versoes', element: <EmBrevePagina area="criador" nome="Histórico de versões" /> },
 
@@ -561,6 +444,18 @@ export const v2Routes: RouteObject = {
     { path: 'admin/equipa', element: <EmBrevePagina area="admin" nome="Equipa e permissões" /> },
 
     { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
+
+    // Fluxo "Preparar a minha prova": só existe em desenvolvimento, com `VITE_FLUXO_MOCKS=true` (o backend ainda não tem a API).
+    ...(FLUXO_MOCKS
+      ? [
+          { path: 'preparar', element: <B1Preparar /> },
+          { path: 'preparar/calibrar', element: <B3Calibrar /> },
+          { path: 'preparar/previa', element: <B4Previa /> },
+          { path: 'preparar/materiais', element: <MinhasPreparacoes /> },
+          { path: 'preparar/modulo/:id', element: <B6Modulo /> },
+          { path: 'preparar/simulado/:id', element: <SimuladoCompleto /> },
+        ]
+      : []),
 
     { path: 'enquetes', element: <SurveyListRoute /> },
     { path: 'estudio/enquete', element: <SurveyComposerRoute /> },
