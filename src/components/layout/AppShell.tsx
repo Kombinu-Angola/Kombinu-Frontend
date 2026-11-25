@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
+import { BotaoSair } from "./BotaoSair";
 import { NotificationBell } from "./NotificationBell";
 import { OfensivaChip } from "./OfensivaChip";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
@@ -87,7 +88,7 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
             <WorkspaceSwitcher />
             <NotificationBell />
             {nomeUtilizador && (
-              <a href="/v2/painel" aria-label={`Painel e perfil de ${nomeUtilizador}`} className="relative rounded-full">
+              <a href="/v2/perfil" aria-label={`Perfil de ${nomeUtilizador}`} className="relative rounded-full">
                 <Avatar name={nomeUtilizador} />
                 <span
                   aria-hidden="true"
@@ -121,6 +122,14 @@ export function AppShell({ active, campus, headerSlot, children }: AppShellProps
                 </a>
               </li>
             ))}
+            {nomeUtilizador && (
+              <li>
+                <BotaoSair
+                  className="min-h-11 gap-1.5 text-caption font-bold text-text-secondary hover:text-primary"
+                  soIcone={false}
+                />
+              </li>
+            )}
           </ul>
           <p className="text-caption text-text-tertiary">© {new Date().getFullYear()} Kombinu</p>
         </div>
