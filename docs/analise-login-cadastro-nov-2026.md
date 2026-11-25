@@ -53,7 +53,7 @@ Ou seja, qualquer pessoa podia criar-se como criador e **publicar no marketplace
 | PR / branch | O que muda | Estado |
 |---|---|---|
 | `fix/b01-sair-e-perfil` | Botão «Sair» em todos os layouts `/v2` e avatar → `/v2/perfil` (B-01 do QA) | Pronto, por rever |
-| `feat/auth-registo-sem-papel` | Sai «Aprendiz / Criador». Toda a gente regista como `learner`. «Candidata-te a criador» (rodapé do registo) abre o credenciamento | Pronto, por rever (parte do `feat/c-f5-aviso-menores`) |
+| `feat/auth-registo-sem-papel` | Sai «Aprendiz / Criador». Toda a gente regista como `learner`; **deixa de ser possível criar conta como criador** (o tipo `criador` sai do `RegisterData` e do serviço, que envia sempre `learner`). Sem ligação de candidatura no registo | Pronto, por rever (parte do `feat/c-f5-aviso-menores`) |
 | `feat/auth-login-unico` | Sai o `tablist` «E-mail \| Escola». Um formulário «E-mail ou código de aluno» + palavra-passe; o **código da escola** só aparece quando se escreve um código de aluno (não um e-mail). Mesmos endpoints; sem escolha de «tipo de conta» | Pronto, por rever |
 
 **Como o login único decide:** se o primeiro campo tem `@` → login por e-mail; senão → login institucional (código de aluno + código da escola). O papel (estudante, professor, admin, criador) vem sempre da conta, nunca do formulário. Testado com A, B, E, F (e-mail) e C (código de aluno), palavra-passe errada, validações e regresso à página pedida (`from`).
@@ -65,7 +65,7 @@ Ou seja, qualquer pessoa podia criar-se como criador e **publicar no marketplace
 | Aluno de escola (sem e-mail) | `/login` → código de aluno + código da escola + palavra-passe | Painel da escola |
 | Aluno/professor/admin com e-mail | `/login` → e-mail + palavra-passe | Painel / estúdio / admin conforme o papel |
 | Novo utilizador | `/register` (um só formulário) | Painel (e onboarding, quando ligado) |
-| Quer ser criador | «Candidata-te a criador» → `/v2/credenciamento` | Formulário completo; envio «Em breve» |
+| Quer ser criador | `/v2/credenciamento` (sem ligação no registo; ponto de entrada a definir, ver secção 7) | Formulário completo; envio «Em breve» |
 
 ## 7. O que falta (decisões e backend)
 
@@ -78,6 +78,7 @@ Ou seja, qualquer pessoa podia criar-se como criador e **publicar no marketplace
 | **Ligar o onboarding em produção** (`VITE_ONBOARDING_API=true`) | **Anderson (decisão de release)** | O backend `main` já tem K1–K4; falta só a variável de ambiente. Sem ela o aprendiz não escolhe entre «Preparar a minha prova» e «Explorar» |
 | Botão do onboarding para **«Gerar conteúdo com IA»** (`/v2/preparar`) | **Backend (API de IA) + frontend** | Hoje só com mocks |
 | Checklist da palavra-passe do protótipo no registo (8+ / letra / número) | Frontend | Pequeno; o backend já valida (PT) |
+| **Ponto de entrada do criador** (onde se chega ao credenciamento: landing, perfil, convite) | **Produto (Orlando)** | Retirei a ligação do registo; hoje só se chega por URL |
 | Criador sem aprovação (conta antiga) | **Backend / admin** | Contas já criadas como `creator` mantêm acesso; rever as existentes |
 
 ## 8. Divisão do trabalho (um PR por ponto)
