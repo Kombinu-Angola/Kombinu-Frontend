@@ -3,6 +3,7 @@
 > **Base:** `develop` (a seguir ao release de 24 Nov), sem flags (`VITE_FLUXO_MOCKS` e `VITE_ONBOARDING_API` desligadas), backend local com `seed_demo`.
 > **Método:** (1) leitura da tabela de rotas `src/routes/v2.tsx`; (2) *crawl* automático em Chromium como os 6 papéis do QA (A admin, B professor, C e D estudantes de escola, E aprendiz de marketplace, F criador de marketplace), a 1280 px e a 375 px com o menu aberto, seguindo só os `<a href="/v2/...">` que um utilizador vê; (3) abertura directa de cada rota não alcançada para ver o que mostra; (4) procura de ficheiros `.tsx` em `features/` e `pages/` que nenhum outro ficheiro importa.
 > **Âmbito:** só as rotas `/v2/*`. As rotas antigas (`/dashboard`, `/courses`, …) não foram inventariadas.
+> **Correcção (C-F4):** na 1.ª versão desta lista `/v2/definicoes` e `/v2/conta/telemovel` estavam como ecrãs reais; usam dados de exemplo e passaram à secção 2.1. O inventário completo por rota está em `docs/inventario-rotas-v2-nov-2026.md`.
 > **Definição:** *órfão* = ecrã com rota, mas que nenhum link da interface alcança (só se chega escrevendo o endereço).
 
 ## 1. Resumo
@@ -27,10 +28,12 @@ O que merece decisão antes de anunciar: **dados de exemplo que um estudante vê
 
 Mostram dados inventados a utilizadores reais. É a mesma família do problema dos números falsos (650 XP, 12 dias, 450 gemas) e do chip «UAN · Economia».
 
-### 2.1 Alcançáveis pela interface (a partir de «Definições»)
+### 2.1 Alcançáveis pela interface (`/v2/definicoes` e o que sai dela)
 
 | Rota | O que mostra de inventado | Como se chega |
 |---|---|---|
+| `/v2/definicoes` | Filiação «verificada» na UAN, faculdade, ano e telemóvel `+244 923 ••• 024` iguais para toda a gente; as alterações só mudam o estado local (`MOCK_ACCOUNT`) | Link no rodapé das notificações e no menu de conta |
+| `/v2/conta/telemovel` | Número atual fixo e códigos de confirmação (`842913` e `100200`) validados no browser | `/v2/definicoes` → Segurança |
 | `/v2/conta/sessoes` | Lista de aparelhos com IPs, cidades e operadoras («Samsung Galaxy A14 · Luanda (Unitel)», «Tecno Spark 10 Pro · Talatona»), botões «Terminar sessão» que não fazem nada | `/v2/definicoes` → Segurança |
 | `/v2/privacidade` | Interruptores de privacidade e «Pedir o meu ficheiro de dados» sem backend; o texto da exportação promete recibos Multicaixa Express | `/v2/definicoes` → Privacidade |
 
@@ -89,7 +92,7 @@ Vários ainda têm o chip «UAN · Economia» escrito à mão (`StudentLibrarySc
 
 ## 8. Decisões que preciso do Anderson / Orlando
 
-1. **`/v2/conta/sessoes` e `/v2/privacidade`:** passar a «Em breve» até haver backend? (Recomendado: sim — mostram sessões e dados falsos.)
+1. **`/v2/conta/sessoes`, `/v2/privacidade` e `/v2/conta/telemovel`:** passar a «Em breve» até haver backend? (Recomendado: sim — mostram sessões e dados falsos.) `/v2/definicoes` pode ligar-se já ao `/api/me/` (instituição, curso, ano).
 2. **Rotas só-por-URL com dados de exemplo (2.2):** «Em breve» ou retirar da tabela? (Recomendado: retirar `/v2/u/:slug`, `/v2/sessao-expirada`, `/v2/entrar` e `/v2/onboarding/estudante`, e passar as restantes a «Em breve».)
 3. **Pontos de entrada em falta (secção 3):** avatar → `/v2/perfil` e um lugar para «Sair» (QA geral, B-01); pesquisa e biblioteca livre entram no menu ou ficam de fora?
 4. **Código morto:** apagar os 41 ficheiros num PR de limpeza?
