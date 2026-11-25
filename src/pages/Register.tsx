@@ -63,7 +63,6 @@ export default function Register() {
         nome: nome.trim(),
         email: email.trim(),
         senha,
-        // Toda a gente entra como utilizador normal (aprendiz). Criador só depois do credenciamento, aprovado pelo admin.
         tipo: 'aprendiz',
         anoNascimento: Number(ano),
         aceitaTermos: true,
@@ -97,9 +96,6 @@ export default function Register() {
       footer={
         <>
           Já tens conta na Kombinu? <Link to="/login" className={`whitespace-nowrap ${linkClass}`}>Iniciar sessão</Link>
-          <span className="mt-3 block text-[0.9rem] font-medium text-neutral-600">
-            Queres publicar conteúdos? <Link to="/v2/credenciamento" className={`whitespace-nowrap ${linkClass}`}>Candidata-te a criador</Link>
-          </span>
         </>
       }
     >
