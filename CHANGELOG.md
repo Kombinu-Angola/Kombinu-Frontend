@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Alterado
 
+- Relatorio de QA geral da plataforma sobre o `main` (`docs/qa/relatorio-qa-geral-nov-2026.md`): 153 verificacoes, 7 bugs (2 P1, 5 P2) e 8 observacoes, com evidencias.
 - Limpeza do sprint: menu do criador com maiuscula so na primeira palavra ("Estudio de criacao", "Os meus materiais", "Conta e subscricao"); `/v2/biblioteca/descargas` passa a "Em breve" (mostrava dados de exemplo); sai `pages/Legal.tsx` (sem uso desde as paginas legais novas); `tsconfig.node.tsbuildinfo` deixa de ser versionado e `*.tsbuildinfo` entra no `.gitignore`.
 - Ofensiva real no cabecalho do aluno (`GET /rankings/me/` via `useGamificacaoMe`), sem gemas (o backend nao as tem). Sem dados, ou se a API falhar, o cabecalho nao mostra nada. O `GamificationProvider` da `V2Layout` deixa de arrancar com `initialXp={650} initialStreak={12} initialGems={450}`: esses numeros falsos apareciam a toda a gente.
 - Desempenho (P3): as telas `/v2` e as paginas `/courses`, `/quiz` e `/dashboard/admin` passam a carregar sob pedido (`lazy`). O ficheiro principal desce de 1163 kB (332 kB gzip) para 754 kB (239 kB gzip); cada tela vira o seu proprio ficheiro, pelo que aluno, estudio e admin so descarregam o que usam. Sem alteracao de comportamento: `V2Layout` mostra um indicador de carregamento enquanto o ficheiro da tela chega, e as guardas de sessao e de papel mantem-se.
