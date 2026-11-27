@@ -14,7 +14,8 @@ type Format = {
   weight: string;
   money: string;
   cta: string;
-  href: string;
+  /** Sem `href` o formato ainda não tem ecrã: mostra «Em breve» em vez de um botão que leva a outro «Em breve». */
+  href?: string;
 };
 
 const FORMATS: Format[] = [
@@ -30,7 +31,8 @@ const FORMATS: Format[] = [
     weight: "Menos de 1 MB por artigo",
     money: "Venda avulsa ou acesso livre",
     cta: "Escrever no estúdio",
-    href: "/v2/estudio",
+    // Enquanto o compositor novo não existe, o formulário de criação é o `/courses/create` (cria o conteúdo e, se quiseres, um quiz).
+    href: "/courses/create",
   },
   {
     id: "simulado",
@@ -44,7 +46,6 @@ const FORMATS: Format[] = [
     weight: "Menos de 200 KB",
     money: "Maior volume de vendas por Express",
     cta: "Abrir compositor de simulado",
-    href: "/v2/estudio/simulado",
   },
   {
     id: "trilha",
@@ -58,7 +59,6 @@ const FORMATS: Format[] = [
     weight: "Reutiliza o que já publicaste",
     money: "Fideliza o estudante ao longo do semestre",
     cta: "Abrir compositor de trilha",
-    href: "/v2/estudio/trilha",
   },
   {
     id: "enquete",
@@ -98,8 +98,8 @@ export default function CreationHubScreen({ creatorName }: CreationHubScreenProp
             O que queres criar?
           </h1>
           <p className="mt-1 max-w-2xl text-body-md text-text-secondary">
-            Os quatro formatos partilham o mesmo banco de questões e os mesmos blocos. Podes começar por um e
-            reaproveitar no seguinte.
+            Por agora podes escrever artigos e preparar enquetes. O compositor de simulados, as trilhas e a importação
+            chegam em breve.
           </p>
         </header>
 
@@ -136,9 +136,16 @@ export default function CreationHubScreen({ creatorName }: CreationHubScreenProp
                 </ul>
               </div>
 
-              <LinkButton3D href={format.href} fullWidth className="mt-6" trailingIcon={<Icon name="arrow-right" size={18} />}>
-                {format.cta}
-              </LinkButton3D>
+              {format.href ? (
+                <LinkButton3D href={format.href} fullWidth className="mt-6" trailingIcon={<Icon name="arrow-right" size={18} />}>
+                  {format.cta}
+                </LinkButton3D>
+              ) : (
+                <p className="mt-6 flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-surface-soft px-4 text-button text-text-secondary uppercase">
+                  <Icon name="clock" size={18} />
+                  Em breve
+                </p>
+              )}
             </article>
           ))}
         </section>
@@ -153,9 +160,10 @@ export default function CreationHubScreen({ creatorName }: CreationHubScreenProp
               </span>
             </span>
           </p>
-          <LinkButton3D href="/v2/estudio/importar" variant="secondary" className="shrink-0">
-            Importar questões
-          </LinkButton3D>
+          <p className="flex min-h-12 shrink-0 items-center gap-2 rounded-2xl bg-surface-canvas px-4 text-button text-text-secondary uppercase">
+            <Icon name="clock" size={18} />
+            Em breve
+          </p>
         </section>
       </div>
     </CreatorShell>
