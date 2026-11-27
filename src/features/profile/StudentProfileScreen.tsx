@@ -1,4 +1,5 @@
 import { AppShell } from "../../components/layout/AppShell";
+import { BotaoSair } from "../../components/layout/BotaoSair";
 import { Avatar } from "../../components/ui/Avatar";
 import { LinkButton3D } from "../../components/ui/Button3D";
 import { Icon } from "../../components/ui/Icon";
@@ -87,9 +88,12 @@ export default function StudentProfileScreen() {
             </section>
           )}
 
-          <LinkButton3D href="/v2/painel" variant="secondary" className="mt-8" trailingIcon={<Icon name="arrow-right" size={18} />}>
-            Ir ao painel
-          </LinkButton3D>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <LinkButton3D href="/v2/painel" variant="secondary" trailingIcon={<Icon name="arrow-right" size={18} />}>
+              Ir ao painel
+            </LinkButton3D>
+            <BotaoSair className="min-h-11 rounded-full border-2 border-border-cloud px-5 text-button text-text-secondary uppercase transition-[background-color,color] duration-150 hover:bg-surface-soft hover:text-primary" />
+          </div>
         </div>
       </div>
     </AppShell>
