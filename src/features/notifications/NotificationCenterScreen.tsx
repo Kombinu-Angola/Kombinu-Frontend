@@ -25,7 +25,8 @@ const TONE: Record<NotificationTone, { card: string; icon: string }> = {
 type NotificationCenterScreenProps = {
   notifications: AppNotification[];
   userName: string;
-  settingsHref: string;
+  /** Ligação para escolher que avisos receber; sem ela o rodapé não aparece (a página ainda não existe). */
+  settingsHref?: string;
   /** Persistem a leitura no backend; sem elas o ecrã só muda o estado local (modo demonstração). */
   onMarkRead?: (id: string) => void;
   onMarkAllRead?: () => void;
@@ -33,6 +34,9 @@ type NotificationCenterScreenProps = {
   hasMore?: boolean;
   onLoadMore?: () => void;
   loadingMore?: boolean;
+  /** A lista não carregou: mostra o erro com «Tentar de novo» em vez de «Está tudo lido». */
+  erro?: boolean;
+  onRetry?: () => void;
 };
 
 /** Centro de notificações: um sítio para tudo o que a plataforma avisa por SMS ou no ecrã. */
@@ -45,6 +49,8 @@ export default function NotificationCenterScreen({
   hasMore,
   onLoadMore,
   loadingMore,
+  erro,
+  onRetry,
 }: NotificationCenterScreenProps) {
   const [notifications, setNotifications] = useState(initial);
 
@@ -78,7 +84,7 @@ export default function NotificationCenterScreen({
   };
 
   return (
-    <AppShell active="painel" userName={userName} campus="UAN · Economia">
+    <AppShell active="painel" userName={userName}>
       <div className="mx-auto max-w-[820px] px-4 py-6 md:px-6 lg:py-8">
         <header className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -87,14 +93,16 @@ export default function NotificationCenterScreen({
               Notificações
             </h1>
             <p className="mt-1 text-body-md text-text-secondary tabular-nums">
-              {counts["por-ler"] === 0
-                ? "Está tudo lido."
-                : `${counts["por-ler"]} ${counts["por-ler"] === 1 ? "aviso por ler" : "avisos por ler"}.`}
+              {erro
+                ? "Não foi possível carregar os avisos."
+                : counts["por-ler"] === 0
+                  ? "Está tudo lido neste espaço."
+                  : `${counts["por-ler"]} ${counts["por-ler"] === 1 ? "aviso por ler" : "avisos por ler"} neste espaço.`}
             </p>
           </div>
           <Button3D
             variant="ghost"
-            disabled={counts["por-ler"] === 0}
+            disabled={erro || counts["por-ler"] === 0}
             onClick={markAllRead}
             leadingIcon={<Icon name="check" size={18} strokeWidth={3} />}
           >
@@ -102,7 +110,12 @@ export default function NotificationCenterScreen({
           </Button3D>
         </header>
 
-        <div role="group" aria-label="Filtrar notificações" className="mb-6 flex gap-2 overflow-x-auto pb-1">
+        <div
+          role="group"
+          aria-label="Filtrar notificações"
+          hidden={erro}
+          className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0"
+        >
           {TABS.map((tab) => {
             const active = filter === tab.value;
             return (
@@ -125,9 +138,22 @@ export default function NotificationCenterScreen({
           })}
         </div>
 
-        {shown.length === 0 ? (
+        {erro ? (
+          <div role="alert" className="flex flex-col items-center gap-4 rounded-3xl border-2 border-dashed border-border-input p-10 text-center">
+            <p className="text-body-md text-text-secondary">Não foi possível carregar os avisos. Verifica a ligação e tenta de novo.</p>
+            {onRetry && (
+              <Button3D variant="ghost" onClick={onRetry}>
+                Tentar de novo
+              </Button3D>
+            )}
+          </div>
+        ) : shown.length === 0 ? (
           <p className="rounded-3xl border-2 border-dashed border-border-input p-10 text-center text-body-md text-text-secondary">
-            {filter === "por-ler" ? "Não tens avisos por ler." : "Nada nesta categoria, por agora."}
+            {filter === "todas"
+              ? "Ainda não tens avisos neste espaço."
+              : filter === "por-ler"
+                ? "Não tens avisos por ler."
+                : "Nada nesta categoria, por agora."}
           </p>
         ) : (
           <ul className="flex flex-col gap-3">
@@ -152,12 +178,12 @@ export default function NotificationCenterScreen({
                         <Icon name={n.icon} size={22} />
                       </span>
                       <div>
-                        <h2 className="flex items-center gap-2 text-headline-h3 text-on-surface">
+                        <h2 className="text-headline-h3 text-on-surface">
                           {n.title}
                           {!n.read && (
                             <>
-                              <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-brand-ocean" />
-                              <span className="sr-only">(por ler)</span>
+                              <span aria-hidden="true" className="ml-2 inline-block size-2 rounded-full bg-brand-ocean align-middle" />
+                              <span className="sr-only"> (por ler)</span>
                             </>
                           )}
                         </h2>
@@ -208,15 +234,17 @@ export default function NotificationCenterScreen({
           </div>
         )}
 
-        <footer className="mt-10 border-t-2 border-border-cloud pt-6 text-center">
-          <a
-            href={settingsHref}
-            className="inline-flex min-h-11 items-center gap-2 text-caption font-bold text-text-secondary hover:text-primary"
-          >
-            <Icon name="gear" size={18} />
-            Escolher que avisos queres receber, e por que canal
-          </a>
-        </footer>
+        {settingsHref && (
+          <footer className="mt-10 border-t-2 border-border-cloud pt-6 text-center">
+            <a
+              href={settingsHref}
+              className="inline-flex min-h-11 items-center gap-2 text-caption font-bold text-text-secondary hover:text-primary"
+            >
+              <Icon name="gear" size={18} />
+              Escolher que avisos queres receber, e por que canal
+            </a>
+          </footer>
+        )}
       </div>
     </AppShell>
   );
