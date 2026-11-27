@@ -44,7 +44,7 @@ Mostram dados inventados a utilizadores reais. É a mesma família do problema d
 | `/v2/perfil/compras` | Compras e recibos falsos («Sebenta: Macroeconomia I», 1 500 Kz, referências `TX-…`) e um número Multicaixa Express |
 | `/v2/duvidas` | Fórum com dúvidas e respostas de pessoas inventadas («Macroeconomia I») |
 | `/v2/polo` | Página de faculdade («Faculdade de Economia — UAN») com dados fixos |
-| `/v2/u/:slug` | O mesmo polo, **sem login** (página pública com «Começar grátis») |
+| `/v2/u/:slug` | O mesmo polo, com o layout público («Começar grátis»). **Exige sessão**: sem ela vai a `/login` (verificado depois; a 1.ª versão desta lista dizia «sem login» por engano) |
 | `/v2/trilha/mista` | «Trilha de recuperação» de «Contabilidade II» inventada |
 | `/v2/cadeira` (sem `?trilhaId`) | Aula de exemplo «Equilíbrio cambial e políticas fiscais em Angola». Com um item real de trilha mostra dados reais |
 | `/v2/sessao-expirada` | Pede um código SMS para «+244 923 ••• 024» (número fixo) |
