@@ -219,7 +219,7 @@ export const perfilService = {
 
   /**
    * Primeiro passo de estudo da cadeira: uma trilha publicada (`GET /trilhas/?cadeira=`, K4) ou, se não
-   * houver, um simulado dela (`GET /quizzes/?cadeira=`, K2). Devolve `null` se não há nada ou a API falha.
+   * houver, um simulado dela (conteúdo com quiz: `GET /contents/?cadeira=&has_quiz=true`, K2). Devolve `null` se não há nada ou a API falha.
    */
   async primeiroPasso(cadeiraId: number): Promise<ProximoPasso | null> {
     if (FLUXO_MOCKS) {
@@ -230,9 +230,9 @@ export const perfilService = {
       const trilhas = await api.get("/trilhas/", { params: { cadeira: cadeiraId } });
       const t = lista<{ id: string | number; title?: string; titulo?: string }>(trilhas.data)[0];
       if (t) return { tipo: "trilha", titulo: t.title ?? t.titulo ?? "Trilha", href: hrefDaTrilha(String(t.id)) };
-      const quizzes = await api.get("/quizzes/", { params: { cadeira: cadeiraId } });
-      const q = lista<{ id: string | number; title?: string; titulo?: string }>(quizzes.data)[0];
-      if (q) return { tipo: "simulado", titulo: q.title ?? q.titulo ?? "Simulado", href: `/v2/desafio?quizId=${encodeURIComponent(String(q.id))}` };
+      const simulados = await api.get("/contents/", { params: { cadeira: cadeiraId, has_quiz: "true" } });
+      const q = lista<{ title?: string; quiz_id?: string | null }>(simulados.data).find((c) => c.quiz_id);
+      if (q?.quiz_id) return { tipo: "simulado", titulo: q.title ?? "Simulado", href: `/v2/desafio?quizId=${encodeURIComponent(q.quiz_id)}` };
     } catch {
       /* sem trilha ou simulado: o ecrã final propõe explorar */
     }
