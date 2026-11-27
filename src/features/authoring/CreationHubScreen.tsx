@@ -10,9 +10,6 @@ type Format = {
   badge: string;
   title: string;
   description: string;
-  effort: string;
-  weight: string;
-  money: string;
   cta: string;
   /** Sem `href` o formato ainda não tem ecrã: mostra «Em breve» em vez de um botão que leva a outro «Em breve». */
   href?: string;
@@ -23,54 +20,38 @@ const FORMATS: Format[] = [
     id: "artigo",
     icon: "book",
     tone: "bg-primary-fixed text-primary",
-    badge: "Leitura com checkpoints",
-    title: "Artigo ou sebenta modular",
-    description:
-      "Texto estruturado em blocos, com destaques, diagramas e checkpoints de fixação ao longo da leitura.",
-    effort: "30 a 60 min a escrever",
-    weight: "Menos de 1 MB por artigo",
-    money: "Venda avulsa ou acesso livre",
+    badge: "Texto, vídeo ou quiz",
+    title: "Artigo ou sebenta",
+    description: "Escreve o texto, junta um vídeo ou monta um quiz com perguntas de escolha múltipla.",
     cta: "Escrever no estúdio",
-    // Enquanto o compositor novo não existe, o formulário de criação é o `/courses/create` (cria o conteúdo e, se quiseres, um quiz).
+    // Enquanto o compositor novo não existe, o formulário de criação é o `/courses/create`.
     href: "/courses/create",
   },
   {
     id: "simulado",
     icon: "bolt",
     tone: "bg-secondary-fixed text-brand-sunbeam-ink",
-    badge: "Procura alta em época de frequências",
+    badge: "Em breve",
     title: "Simulado de exame",
-    description:
-      "Entre 5 e 20 questões do teu banco, com cronómetro, XP para a liga e explicação por alternativa.",
-    effort: "15 min, a partir do banco",
-    weight: "Menos de 200 KB",
-    money: "Maior volume de vendas por Express",
+    description: "Um compositor só para simulados. Por agora, junta um quiz ao teu artigo.",
     cta: "Abrir compositor de simulado",
   },
   {
     id: "trilha",
     icon: "target",
     tone: "bg-feedback-gem/20 text-feedback-gem-ink",
-    badge: "Acompanha o semestre inteiro",
-    title: "Trilha sequencial da cadeira",
-    description:
-      "Organiza artigos e simulados numa sequência com pré-requisitos, progresso por nó e exame final.",
-    effort: "2 a 3 h a montar",
-    weight: "Reutiliza o que já publicaste",
-    money: "Fideliza o estudante ao longo do semestre",
+    badge: "Em breve",
+    title: "Trilha de estudo",
+    description: "Junta artigos e simulados numa sequência de estudo.",
     cta: "Abrir compositor de trilha",
   },
   {
     id: "enquete",
     icon: "comment",
     tone: "bg-surface-forest text-feedback-success",
-    badge: "Uma pergunta, dez segundos",
+    badge: "Pergunta rápida",
     title: "Micro-enquete",
-    description:
-      "Uma pergunta curta no fim de um material, para perceber o que ficou por explicar antes do exame.",
-    effort: "5 min a preparar",
-    weight: "Sem custo de dados relevante",
-    money: "Não é vendável: serve para melhorar o que vendes",
+    description: "Uma pergunta curta para os estudantes responderem.",
     cta: "Preparar enquete",
     href: "/v2/estudio/enquete",
   },
@@ -122,18 +103,6 @@ export default function CreationHubScreen({ creatorName }: CreationHubScreenProp
                 <h2 className="font-montserrat text-headline-h2 text-on-surface">{format.title}</h2>
                 <p className="mt-2 text-body-md text-text-secondary">{format.description}</p>
 
-                <ul className="mt-4 flex flex-col gap-2 rounded-xl bg-surface-soft p-3.5">
-                  {[
-                    { icon: "clock" as const, text: format.effort, tone: "text-text-tertiary" },
-                    { icon: "bolt" as const, text: format.weight, tone: "text-feedback-success-ink" },
-                    { icon: "wallet" as const, text: format.money, tone: "text-text-tertiary" },
-                  ].map((meta) => (
-                    <li key={meta.text} className="flex items-start gap-2 text-caption text-text-secondary">
-                      <Icon name={meta.icon} size={15} className={cn("mt-0.5 shrink-0", meta.tone)} />
-                      {meta.text}
-                    </li>
-                  ))}
-                </ul>
               </div>
 
               {format.href ? (
