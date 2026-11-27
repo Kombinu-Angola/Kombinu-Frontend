@@ -25,7 +25,8 @@ const TONE: Record<NotificationTone, { card: string; icon: string }> = {
 type NotificationCenterScreenProps = {
   notifications: AppNotification[];
   userName: string;
-  settingsHref: string;
+  /** Ligação para escolher que avisos receber; sem ela o rodapé não aparece (a página ainda não existe). */
+  settingsHref?: string;
   /** Persistem a leitura no backend; sem elas o ecrã só muda o estado local (modo demonstração). */
   onMarkRead?: (id: string) => void;
   onMarkAllRead?: () => void;
@@ -233,15 +234,17 @@ export default function NotificationCenterScreen({
           </div>
         )}
 
-        <footer className="mt-10 border-t-2 border-border-cloud pt-6 text-center">
-          <a
-            href={settingsHref}
-            className="inline-flex min-h-11 items-center gap-2 text-caption font-bold text-text-secondary hover:text-primary"
-          >
-            <Icon name="gear" size={18} />
-            Escolher que avisos queres receber, e por que canal
-          </a>
-        </footer>
+        {settingsHref && (
+          <footer className="mt-10 border-t-2 border-border-cloud pt-6 text-center">
+            <a
+              href={settingsHref}
+              className="inline-flex min-h-11 items-center gap-2 text-caption font-bold text-text-secondary hover:text-primary"
+            >
+              <Icon name="gear" size={18} />
+              Escolher que avisos queres receber, e por que canal
+            </a>
+          </footer>
+        )}
       </div>
     </AppShell>
   );
