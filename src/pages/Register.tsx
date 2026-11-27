@@ -14,6 +14,9 @@ type Erros = Partial<Record<'nome' | 'email' | 'ano' | 'senha' | 'confirmar' | '
 const ANO_ACTUAL = new Date().getFullYear();
 const ANOS = Array.from({ length: 61 }, (_, i) => ANO_ACTUAL - 10 - i);
 
+/** Mesma regra do backend (K3): idade = ano actual - ano de nascimento; abaixo de 18 o consentimento do encarregado fica pendente. */
+const IDADE_LIMITE_CONSENTIMENTO = 18;
+
 const TIPOS: { id: Tipo; titulo: string; texto: string }[] = [
   { id: 'aprendiz', titulo: 'Aprendiz', texto: 'Quero estudar e fazer simulados' },
   { id: 'criador', titulo: 'Criador', texto: 'Quero criar conteúdos' },
@@ -29,6 +32,7 @@ export default function Register() {
   const [aceito, setAceito] = useState(false);
   const [marketing, setMarketing] = useState(false);
   const [erros, setErros] = useState<Erros>({});
+  const menor = ano !== '' && ANO_ACTUAL - Number(ano) < IDADE_LIMITE_CONSENTIMENTO;
   const [carregando, setCarregando] = useState(false);
 
   const nomeRef = useRef<HTMLInputElement>(null);
@@ -146,6 +150,11 @@ export default function Register() {
           <option value="" disabled>Escolhe o ano</option>
           {ANOS.map((a) => <option key={a} value={a}>{a}</option>)}
         </SelectField>
+        {menor && (
+          <p role="status" className="-mt-2 rounded-xl bg-kombinu-yellow-soft px-3 py-2 text-sm leading-relaxed font-medium text-neutral-700">
+            Tens menos de 18 anos, por isso a tua conta precisa da autorização de um encarregado de educação (Lei n.º 22/11). Ainda estamos a preparar esse pedido; por agora, podes criar a conta.
+          </p>
+        )}
         <PasswordField
           ref={senhaRef}
           label="Palavra-passe"
