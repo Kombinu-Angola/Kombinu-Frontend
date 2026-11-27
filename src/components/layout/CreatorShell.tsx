@@ -182,7 +182,8 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
         </div>
       )}
 
-      <div className={cn("transition-[padding] duration-200 motion-reduce:transition-none", pinned ? "lg:pl-[300px]" : "lg:pl-[72px]")}>
+      {/* Sem transição no `padding`: animá-lo recalcula o layout da página inteira a cada frame (fixar a barra é raro). */}
+      <div className={cn(pinned ? "lg:pl-[300px]" : "lg:pl-[72px]")}>
         <header className="sticky top-0 z-30 border-b-2 border-border-cloud bg-surface-canvas">
           <div className="mx-auto flex min-h-16 max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4 py-2 md:px-6">
             <div className="flex min-w-0 items-center gap-3">
