@@ -7,6 +7,7 @@ import { Icon } from "../../components/ui/Icon";
 import { useListaMateriais, useSimulado } from "../../hooks/useV2Dados";
 import { quizService, type QuizResult } from "../../services/quizService";
 import { QuizOption } from "../quiz/QuizOption";
+import { ProximoPasso } from "./ProximoPasso";
 
 const LETRAS = "ABCDEFGHIJ";
 
@@ -129,7 +130,9 @@ function Simulado({ quizId }: { quizId: string }) {
           {resultado["xp earned"] === 0 && (
             <p className="mt-2 text-caption text-text-tertiary">O XP só é atribuído na primeira tentativa.</p>
           )}
-          <ol className="mt-6 flex flex-col gap-3">
+          <ProximoPasso quizIdActual={quizId} />
+          <h2 className="mt-8 text-overline text-text-tertiary uppercase">As tuas respostas</h2>
+          <ol className="mt-3 flex flex-col gap-3">
             {perguntas.map((p, i) => {
               const d = detalhe.get(p.id);
               const certa = d?.correct ?? false;
@@ -148,8 +151,9 @@ function Simulado({ quizId }: { quizId: string }) {
               );
             })}
           </ol>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-3">
             <Button3D
+              variant="secondary"
               onClick={() => {
                 setResultado(null);
                 setRespostas({});

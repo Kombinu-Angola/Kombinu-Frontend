@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/Avatar";
+import { BotaoSair } from "./BotaoSair";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
 import { LogoMark } from "../ui/LogoMark";
@@ -136,6 +137,14 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
               Voltar ao modo estudante
             </span>
           </a>
+          <BotaoSair
+            title={pinned ? undefined : "Sair"}
+            className="min-h-14 w-full rounded-xl px-[17px] text-left text-text-secondary transition-[background-color,color] duration-150 hover:bg-surface-soft hover:text-primary"
+            rotuloClassName={cn(
+              "text-body-md whitespace-nowrap transition-opacity duration-150 motion-reduce:transition-none",
+              pinned ? "opacity-100" : "opacity-0 group-hover/rail:opacity-100 group-focus-within/rail:opacity-100",
+            )}
+          />
         </div>
       </nav>
 
@@ -177,6 +186,11 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
                 <Icon name="school" size={22} className="shrink-0" />
                 <span className="text-body-md">Voltar ao modo estudante</span>
               </a>
+              <BotaoSair
+                onAntes={() => setOpen(false)}
+                className="min-h-14 w-full rounded-xl px-3 text-left text-text-secondary transition-[background-color,color] duration-150 hover:bg-surface-soft hover:text-primary"
+                rotuloClassName="text-body-md"
+              />
             </div>
           </nav>
         </div>
