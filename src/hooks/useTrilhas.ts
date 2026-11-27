@@ -17,7 +17,7 @@ export function useListaTrilhas() {
 
   return useQuery({
     queryKey: chaves.lista(workspace),
-    queryFn: trilhaService.listarTrilhas,
+    queryFn: () => trilhaService.listarTrilhas(),
     enabled: usuario !== null,
   });
 }
