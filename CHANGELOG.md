@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Alterado
 
+- Registo: ao escolher um ano de nascimento que da menos de 18 anos (mesma regra do backend: ano actual - ano de nascimento), aparece um aviso a explicar que a conta precisa da autorizacao de um encarregado de educacao e que esse pedido ainda esta a ser preparado; a conta continua a poder ser criada (C-F5). O backend guarda `consentimento_encarregado = pendente`, mas ainda nao expoe o estado nem tem o fluxo de pedido.
 - Notificacoes (F9/C-F2): sai o chip "UAN · Economia" escrito a mao no cabecalho (aparecia a todos, mesmo noutra escola ou no marketplace); o ponto de "por ler" fica colado ao titulo em vez de solto quando o titulo parte em duas linhas; textos "neste espaco" (as notificacoes sao por espaco) e mensagem propria quando nao ha avisos; se a API falhar mostra o erro com "Tentar de novo" em vez de "Esta tudo lido"; os filtros sangram ate ao bordo do ecra a 375 px.
 - Painel do estudante: seccao "Do meu curso" com as trilhas e os simulados da cadeira em foco (`cadeira_foco` do `/api/me/`), filtrados por `?cadeira=` dentro do espaco activo (escola ou marketplace). Sem cadeira em foco, ou se a API falhar, a seccao nao aparece; sem conteudo no espaco mostra "Ainda nao ha trilhas nem simulados de ... neste espaco" (C-F1).
 - Correccao: o "primeiro passo" do onboarding procurava simulados em `GET /quizzes/?cadeira=` (nao existe, devolve 404, por isso ficava sempre vazio); passa a usar `GET /contents/?cadeira=&has_quiz=true`.
