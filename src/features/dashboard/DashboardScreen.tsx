@@ -6,6 +6,7 @@ import { ProgressBar } from "../../components/ui/ProgressBar";
 import { SectionCard } from "../../components/ui/SectionCard";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCursosAprendiz, useEstatisticasAprendiz, useGamificacaoMe } from "../../hooks/useV2Dados";
+import { DoMeuCurso } from "./DoMeuCurso";
 import { formatInt } from "../../lib/format";
 import { levelInfo } from "../../lib/levels";
 
@@ -102,6 +103,8 @@ export default function DashboardScreen() {
               </dl>
             )}
           </section>
+
+          <DoMeuCurso />
 
           <SectionCard title="Os teus cursos">
             {cursos.isPending ? (
