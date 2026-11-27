@@ -13,25 +13,20 @@ import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { MOCK_COURSE } from '../features/course/mockCourse';
 
 
-import { PURCHASES } from '../features/purchases/mockPurchases';
 
-import { MOCK_ACCOUNT } from '../features/account/mockAccount';
-import { MOCK_TRAIL, MOCK_ADAPTIVE } from '../features/trail/mockTrail';
+import { MOCK_TRAIL } from '../features/trail/mockTrail';
 
 import { NOTIFICATIONS } from '../features/notifications/mockNotifications';
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
-import { EmBrevePagina } from '../components/EmBreve';
+import { EmBreve, EmBrevePagina } from '../components/EmBreve';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
 import { FLUXO_MOCKS } from '../lib/fluxoFlags';
 import { useAccoesNotificacoes, useListaNotificacoes } from '../hooks/useNotificacoes';
 
-import { MOCK_QA } from '../features/qa/mockQa';
 
-import { MOCK_CAMPUS } from '../features/campus/mockCampus';
 
-import { SESSIONS } from '../features/account/mockAccount';
 
 import { useAccoesEnquetes, useListaEnquetes, useResultadosEnquete } from '../hooks/useEnquetes';
 import { mensagemErroEnquete } from '../services/surveyService';
@@ -59,22 +54,13 @@ const StudentProfileScreen = lazy(() => import('../features/profile/StudentProfi
 const MaterialDetailScreen = lazy(() => import('../features/marketplace/MaterialDetailScreen'));
 const ContaCriadorScreen = lazy(() => import('../features/subscription/ContaCriadorScreen'));
 const AdminEstudantesScreen = lazy(() => import('../features/admin/AdminEstudantesScreen'));
-const PurchaseHistoryScreen = lazy(() => import('../features/purchases/PurchaseHistoryScreen'));
 const CreatorContentHubScreen = lazy(() => import('../features/creator-content/CreatorContentHubScreen'));
-const StudentSettingsScreen = lazy(() => import('../features/account/StudentSettingsScreen'));
-const PhoneSecurityScreen = lazy(() => import('../features/account/PhoneSecurityScreen'));
 const LearningTrailScreen = lazy(() => import('../features/trail/LearningTrailScreen'));
-const AdaptiveTrailScreen = lazy(() => import('../features/trail/AdaptiveTrailScreen'));
 const SessionExpiredScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.SessionExpiredScreen })));
 const NotFoundScreen = lazy(() => import('../features/system/RecoveryScreens').then((m) => ({ default: m.NotFoundScreen })));
 const NotificationCenterScreen = lazy(() => import('../features/notifications/NotificationCenterScreen'));
 const GlobalSearchScreen = lazy(() => import('../features/search/GlobalSearchScreen'));
-const MaterialQaScreen = lazy(() => import('../features/qa/MaterialQaScreen'));
 const FreeLibraryScreen = lazy(() => import('../features/library/FreeLibraryScreen'));
-const CampusPageScreen = lazy(() => import('../features/campus/CampusPageScreen'));
-const PublicUniversityScreen = lazy(() => import('../features/campus/PublicUniversityScreen'));
-const PrivacyScreen = lazy(() => import('../features/account/PrivacyScreen'));
-const SessionsScreen = lazy(() => import('../features/account/SessionsScreen'));
 const SurveyComposerScreen = lazy(() => import('../features/survey/SurveyComposerScreen'));
 const SurveyResultsScreen = lazy(() => import('../features/survey/SurveyResultsScreen'));
 const SurveyListScreen = lazy(() => import('../features/survey/SurveyListScreen'));
@@ -122,7 +108,7 @@ function NotificationsRoute() {
 
   // Sem sessão iniciada continua a demonstração com dados de exemplo.
   if (!usuario) {
-    return <NotificationCenterScreen notifications={NOTIFICATIONS} userName="" settingsHref="/v2/definicoes" />;
+    return <NotificationCenterScreen notifications={NOTIFICATIONS} userName="" />;
   }
 
   if (lista.isPending) {
@@ -139,7 +125,6 @@ function NotificationsRoute() {
     <NotificationCenterScreen
       notifications={itens}
       userName={usuario.nome}
-      settingsHref="/v2/definicoes"
       onMarkRead={(id) => void marcarLida(id).catch(falhou)}
       onMarkAllRead={() => void marcarTodasLidas().catch(falhou)}
       hasMore={lista.hasNextPage}
@@ -271,30 +256,6 @@ function SimuladoRoute() {
   return <SimuladoFlow quizId={params.get('quizId')} />;
 }
 
-function StudentSettingsRoute() {
-  return (
-    <StudentSettingsScreen
-      account={MOCK_ACCOUNT}
-      phoneHref="/v2/conta/telemovel"
-      downloadsHref="/v2/biblioteca/descargas"
-    />
-  );
-}
-
-function PhoneSecurityRoute() {
-  return (
-    <PhoneSecurityScreen
-      currentPhone={MOCK_ACCOUNT.phone}
-      institutionalEmail={MOCK_ACCOUNT.institutionalEmail}
-      emailVerified={MOCK_ACCOUNT.emailVerified}
-      university={MOCK_ACCOUNT.university}
-      userName={MOCK_ACCOUNT.name}
-      settingsHref="/v2/definicoes"
-      onChangePhone={async (_novo, codeNew, codeCurrent) => codeNew === '842913' && codeCurrent === '100200'}
-    />
-  );
-}
-
 
 function SessionExpiredRoute() {
   const navigate = useNavigate();
@@ -378,13 +339,13 @@ export const v2Routes: RouteObject = {
 
     { path: 'biblioteca', element: <EmBrevePagina area="aluno" nome="Biblioteca" /> },
     { path: 'biblioteca/descargas', element: <EmBrevePagina area="aluno" nome="Descargas offline" /> },
-    { path: 'perfil/compras', element: <ComUtilizador>{(nome) => <PurchaseHistoryScreen purchases={PURCHASES} userName={nome} profileHref="/v2/perfil" />}</ComUtilizador> },
+    { path: 'perfil/compras', element: <EmBrevePagina area="aluno" nome="Compras e recibos" /> },
     { path: 'estudio/materiais', element: <CreatorContentHubScreen /> },
 
-    { path: 'definicoes', element: <StudentSettingsRoute /> },
-    { path: 'conta/telemovel', element: <PhoneSecurityRoute /> },
+    { path: 'definicoes', element: <EmBrevePagina area="aluno" nome="Definições" /> },
+    { path: 'conta/telemovel', element: <EmBrevePagina area="aluno" nome="Número de telemóvel" /> },
     { path: 'trilha', element: <ComUtilizador>{(nome) => <LearningTrailScreen trail={MOCK_TRAIL} userName={nome} backHref="/v2/cadeira" />}</ComUtilizador> },
-    { path: 'trilha/mista', element: <ComUtilizador>{(nome) => <AdaptiveTrailScreen trail={MOCK_ADAPTIVE} userName={nome} diagnosticHref="/v2/painel" />}</ComUtilizador> },
+    { path: 'trilha/mista', element: <EmBrevePagina area="aluno" nome="Trilha mista" /> },
     { path: 'estudio/homologacao', element: <EmBrevePagina area="criador" nome="Homologação" /> },
     { path: 'estudio/homologacao/correcao', element: <EmBrevePagina area="criador" nome="Homologação" /> },
     { path: 'estudio/renovacao', element: <EmBrevePagina area="criador" nome="Subscrição" secao="definicoes" /> },
@@ -397,7 +358,7 @@ export const v2Routes: RouteObject = {
     { path: 'pesquisa', element: <SearchRoute /> },
 
     { path: 'estudio/analitica', element: <EmBrevePagina area="criador" nome="Analítica" /> },
-    { path: 'duvidas', element: <ComUtilizador>{(nome) => <MaterialQaScreen board={MOCK_QA} userName={nome} />}</ComUtilizador> },
+    { path: 'duvidas', element: <EmBrevePagina area="aluno" nome="Dúvidas" /> },
     { path: 'revisao', element: <EmBrevePagina area="aluno" nome="Revisão" /> },
 
     { path: 'admin/catalogo', element: <EmBrevePagina area="admin" nome="Catálogo curricular" /> },
@@ -406,28 +367,11 @@ export const v2Routes: RouteObject = {
     { path: 'biblioteca-livre', element: <FreeLibraryScreen /> },
 
     { path: 'audio', element: <EmBrevePagina area="aluno" nome="Áudio" /> },
-    { path: 'polo', element: <ComUtilizador>{(nome) => <CampusPageScreen page={MOCK_CAMPUS} userName={nome} />}</ComUtilizador> },
+    { path: 'polo', element: <EmBrevePagina area="aluno" nome="Página da faculdade" /> },
 
     { path: 'convidar', element: <EmBrevePagina area="aluno" nome="Convidar amigos" /> },
-    { path: 'conta/sessoes', element: <SessionsScreen sessions={SESSIONS} userName={MOCK_ACCOUNT.name} securityHref="/v2/definicoes" /> },
-    {
-      path: 'privacidade',
-      element: (
-        <PrivacyScreen
-          userName={MOCK_ACCOUNT.name}
-          settings={{ ranking: true, recommendations: true, telemetry: true }}
-          walletKz={0}
-          settingsHref="/v2/definicoes"
-          financeHref="/v2/estudio/financeiro"
-          exportContents={[
-            'Histórico de simulados, respostas e XP',
-            'Comprovativos e recibos Multicaixa Express em PDF',
-            'Sebentas compradas e notas guardadas no leitor',
-            'Extrato de criador, quando aplicável',
-          ]}
-        />
-      ),
-    },
+    { path: 'conta/sessoes', element: <EmBrevePagina area="aluno" nome="Sessões e dispositivos" /> },
+    { path: 'privacidade', element: <EmBrevePagina area="aluno" nome="Privacidade e dados" /> },
 
     { path: 'admin/suporte', element: <EmBrevePagina area="admin" nome="Suporte e disputas" /> },
 
@@ -443,7 +387,7 @@ export const v2Routes: RouteObject = {
     { path: 'admin/fiscal', element: <EmBrevePagina area="admin" nome="Exportação fiscal" /> },
     { path: 'admin/equipa', element: <EmBrevePagina area="admin" nome="Equipa e permissões" /> },
 
-    { path: 'u/:slug', element: <PublicUniversityScreen page={MOCK_CAMPUS} signUpHref="/v2/entrar" signInHref="/v2/entrar" /> },
+    { path: 'u/:slug', element: <EmBreve nome="Páginas das universidades" /> },
 
     // Fluxo "Preparar a minha prova": só existe em desenvolvimento, com `VITE_FLUXO_MOCKS=true` (o backend ainda não tem a API).
     ...(FLUXO_MOCKS
