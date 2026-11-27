@@ -191,13 +191,13 @@ export interface AlvoDeTrilha {
  */
 export const trilhaService = {
   /** Trilhas publicadas e visíveis no workspace, mais as do próprio criador. */
-  async listarTrilhas(): Promise<Trilha[]> {
+  async listarTrilhas(cadeiraId?: number): Promise<Trilha[]> {
     const lista: Trilha[] = [];
     let pagina = 1;
     // Percorre as páginas (20 por página): o feed precisa da lista completa.
     for (;;) {
       const { data } = await api.get<{ results?: RawTrilha[]; next?: string | null } | RawTrilha[]>("/trilhas/", {
-        params: { page: pagina },
+        params: cadeiraId === undefined ? { page: pagina } : { page: pagina, cadeira: cadeiraId },
       });
       const resultados = Array.isArray(data) ? data : (data?.results ?? []);
       lista.push(...resultados.map(mapearTrilha));
