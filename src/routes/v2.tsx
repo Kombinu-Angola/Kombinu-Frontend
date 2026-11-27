@@ -134,6 +134,7 @@ function NotificationsRoute() {
   }
 
   const falhou = () => toast.error('Não foi possível actualizar a notificação.', { id: 'erro-notificacao-leitura' });
+  const semDados = lista.isError && itens.length === 0;
 
   return (
     <NotificationCenterScreen
@@ -145,6 +146,8 @@ function NotificationsRoute() {
       hasMore={lista.hasNextPage}
       onLoadMore={() => void lista.fetchNextPage()}
       loadingMore={lista.isFetchingNextPage}
+      erro={semDados}
+      onRetry={() => void lista.refetch()}
     />
   );
 }
