@@ -15,6 +15,7 @@ e este projecto adere ao [Versionamento Semantico](https://semver.org/lang/pt-BR
 
 ### Alterado
 
+- Documentacao: analise do login e do cadastro contra o prototipo `kombinu-auth.1` (`docs/analise-login-cadastro-nov-2026.md`): o que estava certo e errado, falha de seguranca (registo como criador sem aprovacao), o que foi corrigido e o que depende do backend.
 - Documentacao: inventario das rotas `/v2` (`docs/inventario-rotas-v2-nov-2026.md`, C-F4): 79 rotas por estado (22 reais, 2 hibridas, 12 com dados de exemplo, 35 "Em breve", 6 so com flag), fonte dos dados e contratos de backend em falta.
 - Documentacao: lista de ecras orfaos e rotas `/v2` (`docs/ecras-orfaos-nov-2026.md`, C-F3): 79 rotas, 27 alcancaveis pela interface, 52 orfas (8 com dados de exemplo), 41 ficheiros de ecra mortos.
 - Hub de criacao e formulario `/courses/create` (continuacao do F-01): saem as frases sem base dos cartoes ("Procura alta em epoca de frequencias", "Venda avulsa ou acesso livre", "Menos de 1 MB por artigo", tempos e metricas) e as descricoes passam a dizer so o que existe. O formulario passa a PT-PT ("Escreve", "Cola aqui a ligacao", "estudantes", "Criar conteudo"). Corrige uma promessa falsa: a caixa "Publicar no marketplace" nunca era enviada e "Salvar Rascunho" dizia que so o criador via o conteudo, mas o backend nao tem rascunhos e o conteudo fica logo visivel; a caixa sai e o ecra avisa que o conteudo fica visivel ao criar.
