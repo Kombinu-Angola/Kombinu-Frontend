@@ -19,7 +19,6 @@ export default function CriarConteudo() {
   const [dificuldade, setDificuldade] = useState<'Iniciante' | 'Intermediário' | 'Avançado'>('Iniciante');
   const [tags, setTags] = useState<string[]>([]);
   const [novaTag, setNovaTag] = useState('');
-  const [publico, setPublico] = useState(false);
   const [quiz, setQuiz] = useState([
     {
       id: '1',
@@ -78,7 +77,7 @@ export default function CriarConteudo() {
 
     // Validate
     if (tipo === 'quiz' && quiz.some(q => !q.question.trim())) {
-      alert('Por favor, preencha todas as perguntas do quiz.');
+      alert('Preenche todas as perguntas do quiz.');
       return;
     }
 
@@ -103,7 +102,7 @@ export default function CriarConteudo() {
       navigate('/dashboard/creator');
     } catch (error) {
       console.error("Failed to create content", error);
-      alert("Erro ao criar conteúdo. Tente novamente.");
+      alert("Não foi possível criar o conteúdo. Tenta novamente.");
     }
   };
 
@@ -113,10 +112,10 @@ export default function CriarConteudo() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Criar Novo Conteúdo
+            Criar novo conteúdo
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Crie conteúdos incríveis e gamificados para engajar sua audiência
+            Escreve o texto, junta um vídeo ou monta um quiz. O conteúdo fica visível para os estudantes do teu espaço assim que o criares.
           </p>
         </div>
 
@@ -128,7 +127,7 @@ export default function CriarConteudo() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Título do Conteúdo
+                  Título do conteúdo
                 </label>
                 <input
                   type="text"
@@ -136,7 +135,7 @@ export default function CriarConteudo() {
                   value={titulo}
                   onChange={(e) => setTitulo(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Digite um título atrativo para seu conteúdo"
+                  placeholder="Escreve um título claro para o teu conteúdo"
                 />
               </div>
 
@@ -150,7 +149,7 @@ export default function CriarConteudo() {
                   onChange={(e) => setDescricao(e.target.value)}
                   rows={4}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Descreva o que os aprendizes vão aprender com este conteúdo"
+                  placeholder="Descreve o que os estudantes vão aprender com este conteúdo"
                 />
               </div>
 
@@ -172,7 +171,7 @@ export default function CriarConteudo() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Tipo de Conteúdo
+                  Tipo de conteúdo
                 </label>
                 <div className="grid grid-cols-3 gap-3">
                   <button
@@ -216,7 +215,7 @@ export default function CriarConteudo() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   <Clock className="w-4 h-4 inline mr-1" />
-                  Tempo Estimado (horas)
+                  Tempo estimado (horas)
                 </label>
                 <input
                   type="number"
@@ -275,7 +274,7 @@ export default function CriarConteudo() {
                   onChange={(e) => setNovaTag(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), adicionarTag())}
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Digite uma tag e pressione Enter"
+                  placeholder="Escreve uma etiqueta e carrega em Enter"
                 />
                 <button
                   type="button"
@@ -308,8 +307,8 @@ export default function CriarConteudo() {
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   placeholder={
                     tipo === 'video'
-                      ? 'Cole aqui o link do YouTube, Vimeo ou outro serviço de vídeo'
-                      : 'Escreva aqui o conteúdo educacional que será apresentado aos aprendizes'
+                      ? 'Cola aqui a ligação do YouTube, Vimeo ou outro serviço de vídeo'
+                      : 'Escreve aqui o conteúdo que vai ser apresentado aos estudantes'
                   }
                 />
               </div>
@@ -342,13 +341,13 @@ export default function CriarConteudo() {
                           value={pergunta.question}
                           onChange={(e) => atualizarPergunta(pergunta.id, 'question', e.target.value)}
                           className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                          placeholder="Digite a pergunta"
+                          placeholder="Escreve a pergunta"
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Opções de Resposta
+                          Opções de resposta
                         </label>
                         <div className="space-y-2">
                           {pergunta.options.map((opcao, opcaoIndex) => (
@@ -371,7 +370,7 @@ export default function CriarConteudo() {
                           ))}
                         </div>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                          Selecione a opção correta marcando o círculo correspondente
+                          Escolhe a opção certa, marcando o círculo correspondente
                         </p>
                       </div>
 
@@ -400,31 +399,15 @@ export default function CriarConteudo() {
                   className="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-colors flex items-center justify-center space-x-2"
                 >
                   <Plus className="w-5 h-5" />
-                  <span>Adicionar Nova Pergunta</span>
+                  <span>Adicionar nova pergunta</span>
                 </button>
               </div>
             )}
           </div>
 
-          {/* Configurações de Publicação */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Configurações de Publicação</h2>
-
-            <div className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                id="publico"
-                checked={publico}
-                onChange={(e) => setPublico(e.target.checked)}
-                className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
-              />
-              <label htmlFor="publico" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Publicar no marketplace (visível para todos os usuários)
-              </label>
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              Se não marcado, o conteúdo ficará como rascunho e só você poderá vê-lo
-            </p>
+          {/* Publicação: o backend não tem rascunho, o conteúdo fica visível ao criar. */}
+          <div className="rounded-xl border border-gray-100 bg-white p-6 text-sm text-gray-600 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+            Ao criar, o conteúdo fica logo visível para os estudantes do teu espaço (a tua escola ou o marketplace). Ainda não há rascunhos.
           </div>
 
           {/* Botões de Ação */}
@@ -441,7 +424,7 @@ export default function CriarConteudo() {
               className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg hover:from-blue-600 hover:to-blue-800 transition-all transform hover:scale-105 flex items-center space-x-2"
             >
               <Save className="w-5 h-5" />
-              <span>{publico ? 'Publicar Conteúdo' : 'Salvar Rascunho'}</span>
+              <span>Criar conteúdo</span>
             </button>
           </div>
         </form>

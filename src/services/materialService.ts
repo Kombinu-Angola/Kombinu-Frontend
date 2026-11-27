@@ -42,6 +42,8 @@ export interface FiltrosMateriais {
   /** Id do criador (`?creator=`). */
   criador?: string;
   comQuiz?: boolean;
+  /** Id da cadeira (`?cadeira=`, K2). */
+  cadeira?: number;
 }
 
 const rotulos: Record<string, string> = Object.fromEntries(CATEGORIAS.map((c) => [c.valor, c.rotulo]));
@@ -83,6 +85,7 @@ export const materialService = {
     if (filtros.busca) params.search = filtros.busca;
     if (filtros.criador) params.creator = filtros.criador;
     if (filtros.comQuiz !== undefined) params.has_quiz = String(filtros.comQuiz);
+    if (filtros.cadeira !== undefined) params.cadeira = filtros.cadeira;
     const { data } = await api.get("/contents/", { params });
     const resultados: unknown[] = Array.isArray(data?.results) ? data.results : [];
     return {
