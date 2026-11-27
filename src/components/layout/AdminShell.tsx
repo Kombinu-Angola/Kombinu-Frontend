@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "../../contexts/AuthContext";
 import { useWorkspaceStore, WORKSPACE_MARKETPLACE } from "../../stores/workspaceStore";
+import { BotaoSair } from "./BotaoSair";
 import { NotificationBell } from "./NotificationBell";
 import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { Icon, type IconName } from "../ui/Icon";
@@ -137,6 +138,13 @@ export function AdminShell({ active, title, description, actions, eyebrow, child
                 <span className="block text-button text-on-surface">{usuario.nome}</span>
                 <span className="block text-caption text-text-secondary">{usuario.email ?? contexto}</span>
               </p>
+            )}
+            {usuario && (
+              <BotaoSair
+                soIcone
+                title="Sair"
+                className="size-11 justify-center rounded-full border-2 border-border-cloud text-text-secondary transition-[background-color,color] duration-150 hover:bg-surface-soft hover:text-primary"
+              />
             )}
           </div>
         </header>

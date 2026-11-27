@@ -1,10 +1,9 @@
 import {
-  forwardRef, useId, useRef, useState,
-  type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent, type ReactNode, type SelectHTMLAttributes,
+  forwardRef, useId, useState,
+  type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes,
 } from "react";
 import { Link } from "react-router-dom";
-import { panelId, tabId } from "./ids";
-import { AlertIcon, ArrowRightIcon, EyeIcon, EyeOffIcon, LockIcon, MailIcon, SchoolIcon } from "./icons";
+import { AlertIcon, ArrowRightIcon, EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "./icons";
 
 const focusRing = "outline-none focus-visible:ring-2 focus-visible:ring-kombinu-blue focus-visible:ring-offset-2";
 export const linkClass = `rounded-sm font-semibold text-kombinu-blue underline-offset-4 hover:underline ${focusRing}`;
@@ -73,59 +72,6 @@ export function PrimaryButton({ children, loading = false, loadingText = "A proc
         </>
       )}
     </button>
-  );
-}
-
-export type Method = "email" | "escola";
-
-const METHODS: { id: Method; label: string; Icon: typeof MailIcon }[] = [
-  { id: "email", label: "E-mail", Icon: MailIcon },
-  { id: "escola", label: "Escola", Icon: SchoolIcon },
-];
-
-/** Separadores acessíveis (setas, Home, End). "Escola" é o login institucional e fica sempre visível. */
-export function MethodTabs({ idPrefix, value, onChange }: { idPrefix: string; value: Method; onChange: (m: Method) => void }) {
-  const refs = useRef<(HTMLButtonElement | null)[]>([]);
-  const index = METHODS.findIndex((m) => m.id === value);
-
-  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
-    const last = METHODS.length - 1;
-    const next =
-      e.key === "ArrowRight" ? (index === last ? 0 : index + 1)
-      : e.key === "ArrowLeft" ? (index === 0 ? last : index - 1)
-      : e.key === "Home" ? 0
-      : e.key === "End" ? last
-      : null;
-    if (next === null) return;
-    e.preventDefault();
-    onChange(METHODS[next].id);
-    refs.current[next]?.focus();
-  }
-
-  return (
-    <div role="tablist" aria-label="Tipo de conta" onKeyDown={onKeyDown} className="relative grid grid-cols-2 rounded-2xl bg-kombinu-surface p-1">
-      <span aria-hidden="true" className="absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-xl bg-kombinu-blue shadow-sm transition-transform duration-200 ease-out-strong" style={{ transform: `translateX(${index * 100}%)` }} />
-      {METHODS.map(({ id, label, Icon }, i) => {
-        const selected = id === value;
-        return (
-          <button
-            key={id}
-            ref={(el) => { refs.current[i] = el; }}
-            type="button"
-            role="tab"
-            id={tabId(idPrefix, id)}
-            aria-selected={selected}
-            aria-controls={panelId(idPrefix, id)}
-            tabIndex={selected ? 0 : -1}
-            onClick={() => onChange(id)}
-            className={`relative z-10 flex h-11 items-center justify-center gap-2 rounded-xl px-2 text-sm ${focusRing} ${selected ? "font-bold text-white" : "font-medium text-neutral-600 hover:text-kombinu-ink"}`}
-          >
-            <Icon className="size-4 shrink-0" />
-            {label}
-          </button>
-        );
-      })}
-    </div>
   );
 }
 
