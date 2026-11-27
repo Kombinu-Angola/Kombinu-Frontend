@@ -19,7 +19,7 @@ export function PasseHeader() {
           <a className={styles["hdr-login"]} href="/login">
             Entrar
           </a>
-          <a className={cx(styles["kb-btn"], styles["kb-btn--primary"], styles["btn-sm"], styles["hdr-cta"])} href="#simulado">
+          <a className={cx(styles["kb-btn"], styles["kb-btn--primary"], styles["btn-sm"], styles["hdr-cta"])} href="/register">
             Começar grátis
           </a>
         </div>
