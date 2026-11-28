@@ -12,7 +12,8 @@ export interface RegisterData {
   nome: string;
   email: string;
   senha: string;
-  tipo: 'criador' | 'aprendiz';
+  /** O registo público só cria aprendizes; criador só por credenciamento aprovado. */
+  tipo: 'aprendiz';
   /** Ano em que nasceu (a API calcula a idade e o consentimento do encarregado). */
   anoNascimento: number;
   /** Aceitação dos Termos e da Política de Privacidade; a API exige `true`. */

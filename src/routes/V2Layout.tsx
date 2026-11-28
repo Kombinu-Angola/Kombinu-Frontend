@@ -1,6 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { EsqueletoPagina } from '../components/layout/EsqueletoPagina';
 import { useAuth } from '../contexts/AuthContext';
 import { GamificationProvider } from '../contexts/GamificationContext';
 import { destinoPorPapel } from '../lib/destinoPosLogin';
@@ -36,15 +37,6 @@ function useInternalLinkInterceptor() {
   }, [navigate]);
 }
 
-/** Enquanto o ficheiro da tela (carregado sob pedido) chega. */
-function CarregarTela() {
-  return (
-    <div className="flex min-h-dvh items-center justify-center bg-background">
-      <div className="size-12 animate-spin rounded-full border-b-2 border-brand-ocean" role="status" aria-label="A carregar" />
-    </div>
-  );
-}
-
 /** Entradas de /v2 que não precisam de sessão (onboarding, credenciamento e a entrada de demonstração). */
 const ROTAS_PUBLICAS = ['/v2/entrar', '/v2/onboarding', '/v2/credenciamento'];
 
@@ -72,11 +64,7 @@ export default function V2Layout() {
   const publica = pathname === '/v2' || pathname === '/v2/' || ROTAS_PUBLICAS.some((r) => pathname === r || pathname.startsWith(`${r}/`));
   if (!publica) {
     if (loading) {
-      return (
-        <div className="flex min-h-dvh items-center justify-center bg-background">
-          <div className="size-12 animate-spin rounded-full border-b-2 border-brand-ocean" />
-        </div>
-      );
+      return <EsqueletoPagina />;
     }
     if (!usuario) return <Navigate to="/login" state={{ from: { pathname, search } }} replace />;
   }
@@ -104,7 +92,7 @@ export default function V2Layout() {
       {ONBOARDING_ACTIVO && pathname === '/v2/painel' && usuario?.tipo === 'aprendiz' && (usuario.memberships ?? []).length === 0 && (
         <GuardaOnboarding uid={usuario.id} />
       )}
-      <Suspense fallback={<CarregarTela />}>
+      <Suspense fallback={<EsqueletoPagina />}>
         <Outlet />
       </Suspense>
     </GamificationProvider>
