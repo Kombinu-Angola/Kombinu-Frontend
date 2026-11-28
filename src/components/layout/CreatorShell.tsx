@@ -220,10 +220,11 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
               <WorkspaceSwitcher />
               <a
                 href="/v2/trilhas"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-border-cloud px-4 text-button text-text-secondary uppercase transition-[color,background-color] duration-150 hover:bg-surface-soft hover:text-primary lg:hidden"
+                title="Modo estudante"
+                className="hidden min-h-11 items-center gap-2 rounded-full border-2 border-border-cloud px-3 text-button text-text-secondary uppercase transition-[color,background-color] duration-150 hover:bg-surface-soft hover:text-primary sm:inline-flex lg:hidden"
               >
                 <Icon name="school" size={18} />
-                Modo estudante
+                <span className="sr-only">Modo estudante</span>
               </a>
               <a href="/v2/estudio/materiais" aria-label={`Os materiais de ${creatorName}`} className="rounded-full">
                 <Avatar name={creatorName} />
