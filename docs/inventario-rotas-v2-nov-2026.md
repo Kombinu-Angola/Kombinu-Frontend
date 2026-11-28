@@ -47,7 +47,7 @@ Contratos de backend em falta (secção 5): **sessões de login, exportação/el
 
 ## 3. Rotas com dados de exemplo (❌)
 
-### 3.1 Alcançáveis pela interface ou públicas
+### 3.1 Alcançáveis pela interface ou com layout público
 
 | Rota | O que é inventado | Fonte | Contrato que falta | Acção proposta |
 |---|---|---|---|---|
@@ -55,7 +55,7 @@ Contratos de backend em falta (secção 5): **sessões de login, exportação/el
 | `/v2/conta/telemovel` | Número atual fixo e códigos de confirmação `842913`/`100200` validados no browser | `MOCK_ACCOUNT` + função fixa | Alteração de telefone com SMS (verificação em dois passos) | «Em breve» |
 | `/v2/conta/sessoes` | Aparelhos, IPs, cidades e operadoras; «Terminar sessão» sem efeito | `SESSIONS` | Listar/revogar sessões (refresh tokens por dispositivo) | «Em breve» |
 | `/v2/privacidade` | Interruptores sem efeito; «Pedir o meu ficheiro» sem backend | `MOCK_ACCOUNT` | Exportação (LPD, Lei 22/11), preferências de privacidade, eliminação de conta | «Em breve» |
-| `/v2/u/:slug` | Faculdade de Economia da UAN com dados fixos, **sem login** | `MOCK_CAMPUS` | Polos/universidades públicas (`/instituicoes/` só dá nome, sigla e província) | Retirar a rota |
+| `/v2/u/:slug` | Faculdade de Economia da UAN com dados fixos, com o layout público; **exige sessão** (sem ela vai a `/login`; a 1.ª versão dizia «sem login» por engano) | `MOCK_CAMPUS` | Polos/universidades públicas (`/instituicoes/` só dá nome, sigla e província) | Retirar a rota |
 | `/v2/entrar` | Login por SMS/Google em demonstração (não é o login real) | `AuthScreen` | Login por SMS | Retirar a rota |
 | `/v2/sessao-expirada` | Pede código para «+244 923 ••• 024» | `SessionExpiredScreen` | — | Retirar (o interceptor já leva ao `/login`) |
 
