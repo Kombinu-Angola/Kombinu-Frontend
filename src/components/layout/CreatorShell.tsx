@@ -196,7 +196,8 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
         </div>
       )}
 
-      <div className={cn("transition-[padding] duration-200 motion-reduce:transition-none", pinned ? "lg:pl-[300px]" : "lg:pl-[72px]")}>
+      {/* Sem transição no `padding`: animá-lo recalcula o layout da página inteira a cada frame (fixar a barra é raro). */}
+      <div className={cn(pinned ? "lg:pl-[300px]" : "lg:pl-[72px]")}>
         <header className="sticky top-0 z-30 border-b-2 border-border-cloud bg-surface-canvas">
           <div className="mx-auto flex min-h-16 max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4 py-2 md:px-6">
             <div className="flex min-w-0 items-center gap-3">
@@ -219,10 +220,11 @@ export function CreatorShell({ active, creatorName, actions, children }: Creator
               <WorkspaceSwitcher />
               <a
                 href="/v2/trilhas"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-border-cloud px-4 text-button text-text-secondary uppercase transition-[color,background-color] duration-150 hover:bg-surface-soft hover:text-primary lg:hidden"
+                title="Modo estudante"
+                className="hidden min-h-11 items-center gap-2 rounded-full border-2 border-border-cloud px-3 text-button text-text-secondary uppercase transition-[color,background-color] duration-150 hover:bg-surface-soft hover:text-primary sm:inline-flex lg:hidden"
               >
                 <Icon name="school" size={18} />
-                Modo estudante
+                <span className="sr-only">Modo estudante</span>
               </a>
               <a href="/v2/estudio/materiais" aria-label={`Os materiais de ${creatorName}`} className="rounded-full">
                 <Avatar name={creatorName} />

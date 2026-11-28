@@ -5,10 +5,8 @@ import { workspaceService } from "./workspaceService";
 
 const API_URL = "/auth";
 
-const userTypeMap: Record<RegisterData["tipo"], string> = {
-  criador: "creator",
-  aprendiz: "learner",
-};
+/** O registo público só cria utilizadores normais (`learner`). Criador só pelo credenciamento, aprovado pelo admin. */
+const TIPO_NO_REGISTO = "learner";
 
 const PAPEIS: ReadonlyArray<Membership["papel"]> = ["student", "teacher", "admin"];
 
@@ -216,7 +214,7 @@ export const authService = {
         email: data.email,
         password: data.senha,
         first_name: data.nome,
-        user_type: userTypeMap[data.tipo],
+        user_type: TIPO_NO_REGISTO,
         ano_nascimento: data.anoNascimento,
         aceita_termos: data.aceitaTermos,
         marketing_opt_in: data.marketingOptIn ?? false,
