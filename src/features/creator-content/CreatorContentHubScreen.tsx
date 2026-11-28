@@ -27,8 +27,13 @@ export default function CreatorContentHubScreen() {
       active="materiais"
       creatorName={usuario?.nome ?? ""}
       actions={
-        <Button3D onClick={() => window.location.assign("/v2/estudio/criar")} leadingIcon={<Icon name="plus" size={18} />}>
-          Novo material
+        <Button3D
+          onClick={() => window.location.assign("/v2/estudio/criar")}
+          leadingIcon={<Icon name="plus" size={18} />}
+          title="Novo material"
+          className="max-md:gap-0 max-md:px-3"
+        >
+          <span className="max-md:sr-only">Novo material</span>
         </Button3D>
       }
     >
