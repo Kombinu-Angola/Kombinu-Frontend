@@ -7,7 +7,6 @@ import { destinoPorPapel } from '../lib/destinoPosLogin';
 import { ErroRegisto } from '../services/authService';
 import { validarEmail } from '../utils/helpers';
 
-type Tipo = 'criador' | 'aprendiz';
 type Erros = Partial<Record<'nome' | 'email' | 'ano' | 'senha' | 'confirmar' | 'termos' | 'form', string>>;
 
 /** Anos de nascimento oferecidos: de há 10 anos para trás, 60 anos (como no E1 do fluxo). */
@@ -17,13 +16,7 @@ const ANOS = Array.from({ length: 61 }, (_, i) => ANO_ACTUAL - 10 - i);
 /** Mesma regra do backend (K3): idade = ano actual - ano de nascimento; abaixo de 18 o consentimento do encarregado fica pendente. */
 const IDADE_LIMITE_CONSENTIMENTO = 18;
 
-const TIPOS: { id: Tipo; titulo: string; texto: string }[] = [
-  { id: 'aprendiz', titulo: 'Aprendiz', texto: 'Quero estudar e fazer simulados' },
-  { id: 'criador', titulo: 'Criador', texto: 'Quero criar conteúdos' },
-];
-
 export default function Register() {
-  const [tipo, setTipo] = useState<Tipo>('aprendiz');
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -70,14 +63,14 @@ export default function Register() {
         nome: nome.trim(),
         email: email.trim(),
         senha,
-        tipo,
+        tipo: 'aprendiz',
         anoNascimento: Number(ano),
         aceitaTermos: true,
         marketingOptIn: marketing,
       });
       if (sucesso) {
-        // Quem se regista como criador segue para o credenciamento; o aprendiz, para o seu ecrã.
-        navigate(tipo === 'criador' ? '/v2/credenciamento' : destinoPorPapel({ tipo }));
+        // O ecrã do aprendiz (o painel) manda para o onboarding quem ainda o não fez (ver V2Layout).
+        navigate(destinoPorPapel({ tipo: 'aprendiz' }));
       } else {
         setErros({ form: 'Não foi possível criar a conta. Tenta novamente.' });
       }
@@ -108,24 +101,6 @@ export default function Register() {
     >
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
         {erros.form && <FormAlert>{erros.form}</FormAlert>}
-
-        <fieldset>
-          <legend className="mb-2 text-[0.8rem] font-bold tracking-[0.06em] uppercase">Como queres usar a Kombinu?</legend>
-          <div className="grid grid-cols-2 gap-3">
-            {TIPOS.map((t) => (
-              <label
-                key={t.id}
-                className={`flex cursor-pointer flex-col gap-1 rounded-2xl p-4 ring-2 ring-inset has-[:focus-visible]:ring-kombinu-blue ${
-                  tipo === t.id ? 'bg-kombinu-surface ring-kombinu-blue' : 'bg-white ring-neutral-200 hover:ring-neutral-300'
-                }`}
-              >
-                <input type="radio" name="tipo" value={t.id} checked={tipo === t.id} onChange={() => setTipo(t.id)} className="sr-only" />
-                <span className="font-display font-bold">{t.titulo}</span>
-                <span className="text-sm font-medium text-neutral-600">{t.texto}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
 
         <Field
           ref={nomeRef}
